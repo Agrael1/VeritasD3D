@@ -1,5 +1,6 @@
 #include "Engine\Window.h"
 #include <sstream>
+#include "resource.h"
 Window::WindowClass Window::WindowClass::wndClass;
 
 Window::WindowClass::WindowClass() noexcept
@@ -13,7 +14,7 @@ Window::WindowClass::WindowClass() noexcept
 	wcWindow.cbWndExtra = 0;
 	wcWindow.hInstance = GetInstance();
 	wcWindow.hCursor = NULL;
-	wcWindow.hIcon = NULL;
+	wcWindow.hIcon = LoadIcon(wcWindow.hInstance,MAKEINTRESOURCE(IDI_ICON2));
 	wcWindow.hbrBackground = NULL;
 	wcWindow.lpszMenuName = NULL;
 	wcWindow.hIconSm = NULL;

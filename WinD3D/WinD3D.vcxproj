@@ -133,8 +133,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Exception.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WinSetup.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="WinD3D.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="TheLostReality.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

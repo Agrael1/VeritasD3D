@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Engine\Window.h"
 #include "Engine\Exception.h"
 
@@ -27,7 +28,7 @@ private:
 	private:
 		WindowClass() noexcept;
 		~WindowClass();
-		WindowClass(const WindowClass&) = delete;
+		WindowClass(const WindowClass&) = delete;				// non copyable class
 		WindowClass& operator=(const WindowClass&) = delete;
 		static constexpr const char* wndClassName = "Veritas Direct3D Window";
 		static Window::WindowClass wndClass;
