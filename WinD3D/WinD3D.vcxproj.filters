@@ -30,19 +30,34 @@
     <ClCompile Include="Exception.cpp">
       <Filter>Файлы исходного кода\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Keyboard.cpp">
+      <Filter>Файлы исходного кода\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>Файлы исходного кода\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Window.h">
-      <Filter>Заголовочные файлы\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="WinSetup.h">
-      <Filter>Заголовочные файлы\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Exception.h">
-      <Filter>Заголовочные файлы\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Window.h">
+      <Filter>Заголовочные файлы\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Keyboard.h">
+      <Filter>Заголовочные файлы\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\WinSetup.h">
+      <Filter>Заголовочные файлы\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Exception.h">
+      <Filter>Заголовочные файлы\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>Заголовочные файлы\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Заголовочные файлы\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

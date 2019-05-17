@@ -129,13 +129,18 @@
   <ItemGroup>
     <ClCompile Include="EntryMain.c" />
     <ClCompile Include="Exception.cpp" />
+    <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Exception.h" />
+    <ClInclude Include="Engine\Exception.h" />
+    <ClInclude Include="Engine\Keyboard.h" />
+    <ClInclude Include="Engine\Window.h" />
+    <ClInclude Include="Engine\WinSetup.h" />
+    <ClInclude Include="Mouse.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Window.h" />
-    <ClInclude Include="WinSetup.h" />
+    <ClInclude Include="Types.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc" />

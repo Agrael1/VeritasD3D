@@ -19,7 +19,7 @@ Window::WindowClass::WindowClass() noexcept
 	wcWindow.lpszMenuName = NULL;
 	wcWindow.hIconSm = NULL;
 	wcWindow.lpszClassName = GetName();
-	RegisterClassEx(&wcWindow);
+	RegisterClassExA(&wcWindow);
 }
 Window::WindowClass::~WindowClass()
 {
@@ -43,9 +43,12 @@ Window::Window(unsigned int width, unsigned int height, const char * name)
 	rWindow.top = 100;
 	rWindow.bottom = height + rWindow.top;
 	// Automatic calculation of window height and width to client region
-	AdjustWindowRect(&rWindow, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
+	if (!AdjustWindowRect(&rWindow, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE))
+	{
+		throw WND_EXCEPT_AUTO();
+	}
 
-	hWnd = CreateWindow(
+	hWnd = CreateWindowA(
 		WindowClass::GetName(), name,
 		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
 		CW_USEDEFAULT, CW_USEDEFAULT, 
@@ -59,11 +62,21 @@ Window::Window(unsigned int width, unsigned int height, const char * name)
 	if (hWnd == nullptr)
 		throw(WND_EXCEPT_AUTO());
 
+
+	mouse.InitializeMouse(hWnd);
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
+	//ShowWindow(hWnd, SW_HIDE);
 }
 Window::~Window()
 {
 	DestroyWindow(hWnd);
+}
+void Window::SetTitle(const std::string & title)
+{
+	if (!SetWindowText(this->hWnd, title.c_str()))
+	{
+		throw WND_EXCEPT_AUTO();
+	}
 }
 LRESULT __stdcall Window::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -96,6 +109,40 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 	case WM_CLOSE:
 		PostQuitMessage(0);
 		return 0;
+	// if the focus is lost, clear all zombie keys
+	case WM_KILLFOCUS:
+		kbd.ClearState();
+		break;
+	//Keyboard messages
+	case WM_KEYDOWN:
+	case WM_SYSKEYDOWN:
+		if (!(lParam & 0x40000000))
+		{
+			kbd.OnKeyPressed(static_cast<unsigned char>(wParam));
+		}
+		break;
+	case WM_KEYUP:
+	case WM_SYSKEYUP:
+		kbd.OnKeyReleased(static_cast<unsigned char>(wParam));
+		break;
+	case WM_CHAR:
+		kbd.OnChar(static_cast<unsigned char>(wParam));
+		break;
+	case WM_INPUT:
+	{
+		dword dwSize = 48;
+		RAWINPUT raw;
+
+		if (GetRawInputData((HRAWINPUT)lParam, RID_INPUT, &raw, &dwSize,
+			sizeof(RAWINPUTHEADER)) != dwSize)
+			OutputDebugString(TEXT("GetRawInputData does not return correct size !\n"));
+
+		if (raw.header.dwType == RIM_TYPEMOUSE)
+		{
+			this->mouse.TranslateMouseInput(raw.data.mouse);
+		}
+		break;
+	}
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }

@@ -1,5 +1,5 @@
 #include "Engine\Window.h"
-
+#include <sstream>
 int __stdcall WinMain(
 	HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
@@ -9,7 +9,7 @@ int __stdcall WinMain(
 {
 	try
 	{
-		Window wnd(1920, 1080, "Kutik mur mur mur");
+		Window wnd(1920, 1080, "Veritas 3D");
 
 		MSG msg;
 		BOOL gResult;
@@ -17,6 +17,29 @@ int __stdcall WinMain(
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+
+			while (!wnd.mouse.IsEmpty())
+			{
+				const auto e = wnd.mouse.Read();
+				if (e.GetType() == Mouse::Event::Type::Move)
+				{
+					std::ostringstream oss;
+					oss << "Mouse pos delta: " << "(" << e.GetRelativeX() << ":" << e.GetRelativeY() << ")";
+					wnd.SetTitle(oss.str());
+				}
+				if (e.GetType() == Mouse::Event::Type::MWDown)
+				{
+					std::ostringstream oss;
+					oss << "Mouse wheel delta: " << "(" << e.GetDelta()  << ")";
+					wnd.SetTitle(oss.str());
+				}
+				if (e.GetType() == Mouse::Event::Type::MWUp)
+				{
+					std::ostringstream oss;
+					oss << "Mouse wheelup delta: " << "(" << e.GetDelta() << ")";
+					wnd.SetTitle(oss.str());
+				}
+			}
 		}
 		if (gResult == -1)
 		{
