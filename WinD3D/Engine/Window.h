@@ -3,22 +3,36 @@
 #include "Exception.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "Graphics.h"
+#include <memory>
 
 class Window 
 {
 public:
 	class WindowException :public Exception
 	{
+		using Exception::Exception;
 	public:
-		WindowException(int line, const char* file,HRESULT hr);
-		const char* what() const noexcept override;
-		virtual const char* GetType()const noexcept override;
 		static std::string TranslateErrorCode(HRESULT hr)noexcept;
+	};
+	class HrException :public WindowException
+	{
+	public:
+		HrException(int line, const char* file, HRESULT hr);
+		const char* what() const noexcept override;
+		const char* GetType()const noexcept override;
 		HRESULT GetErrorCode() const noexcept;
-		std::string GetErrorString() const noexcept;
+		std::string GetErrorDescription() const noexcept;
 	private:
 		HRESULT hResult;
 	};
+	class NoGfxException :public WindowException
+	{
+	public:
+		using WindowException::WindowException;
+		const char* GetType()const noexcept override;
+	};
+
 private:
 	// Registration of window
 	class WindowClass
@@ -41,6 +55,8 @@ public:
 	Window(const Window&) = delete;
 	Window& operator=(const Window&) = delete;
 	void SetTitle(const std::string& title);
+	static std::pair<bool, WPARAM> ProcessMessages()noexcept;
+	Graphics& Gfx();
 private:
 	static LRESULT __stdcall HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	static LRESULT __stdcall HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -52,7 +68,9 @@ private:
 	int width;
 	int height;
 	HWND hWnd;
+	std::unique_ptr<Graphics> pGfx;
 };
 
-#define WND_EXCEPT(hr) Window::WindowException(__LINE__,__FILE__,hr)
-#define WND_EXCEPT_AUTO() Window::WindowException(__LINE__,__FILE__,GetLastError())
+#define WND_EXCEPT( hr ) Window::HrException( __LINE__,__FILE__,(hr) )
+#define WND_LAST_EXCEPT() Window::HrException( __LINE__,__FILE__,GetLastError() )
+#define WND_NOGFX_EXCEPT() Window::NoGfxException( __LINE__,__FILE__ )

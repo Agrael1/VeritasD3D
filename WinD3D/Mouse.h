@@ -56,7 +56,7 @@ public:
 	bool ButtonPressed(byte code)const noexcept;
 	bool IsEmpty()const noexcept;
 private:
-	void InitializeMouse(HWND hWnd)noexcept;
+	void InitializeMouse(const HWND hWnd)noexcept;
 	void TranslateMouseInput(const RAWMOUSE& mouse)noexcept;
 	void OnButtonPress(USHORT buttons)noexcept;
 private:

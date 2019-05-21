@@ -36,6 +36,15 @@
     <ClCompile Include="Mouse.cpp">
       <Filter>Файлы исходного кода\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="App.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics.cpp">
+      <Filter>Файлы исходного кода\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="dxerr.cpp">
+      <Filter>Файлы исходного кода\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -59,6 +68,15 @@
     <ClInclude Include="Types.h">
       <Filter>Заголовочные файлы\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="App.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics.h">
+      <Filter>Заголовочные файлы\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="dxerr.h">
+      <Filter>Заголовочные файлы\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc">
@@ -69,5 +87,16 @@
     <Image Include="TheLostReality.ico">
       <Filter>Файлы ресурсов</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DXGetErrorString.inl">
+      <Filter>Файлы исходного кода\Engine</Filter>
+    </None>
+    <None Include="DXTrace.inl">
+      <Filter>Файлы исходного кода\Engine</Filter>
+    </None>
+    <None Include="DXGetErrorDescription.inl">
+      <Filter>Файлы исходного кода\Engine</Filter>
+    </None>
   </ItemGroup>
 </Project>

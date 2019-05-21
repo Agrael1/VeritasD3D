@@ -97,7 +97,7 @@ bool Mouse::IsEmpty() const noexcept
 {
 	return this->MouseBuffer.empty();
 }
-void Mouse::InitializeMouse(HWND hWnd) noexcept
+void Mouse::InitializeMouse(const HWND hWnd) noexcept
 {
 	Rid.usUsagePage = HID_USAGE_PAGE_GENERIC;
 	Rid.usUsage = HID_USAGE_GENERIC_MOUSE;

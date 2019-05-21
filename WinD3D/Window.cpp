@@ -35,7 +35,7 @@ HINSTANCE Window::WindowClass::GetInstance() noexcept
 }
 
 // Window namespace
-Window::Window(unsigned int width, unsigned int height, const char * name)
+Window::Window(unsigned int width, unsigned int height, const char * name):width(width),height(height)
 {
 	RECT rWindow;
 	rWindow.left = 100;
@@ -45,7 +45,7 @@ Window::Window(unsigned int width, unsigned int height, const char * name)
 	// Automatic calculation of window height and width to client region
 	if (!AdjustWindowRect(&rWindow, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE))
 	{
-		throw WND_EXCEPT_AUTO();
+		throw WND_LAST_EXCEPT();
 	}
 
 	hWnd = CreateWindowA(
@@ -60,12 +60,13 @@ Window::Window(unsigned int width, unsigned int height, const char * name)
 
 	// Error checks
 	if (hWnd == nullptr)
-		throw(WND_EXCEPT_AUTO());
+		throw WND_LAST_EXCEPT();
 
 
 	mouse.InitializeMouse(hWnd);
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 	//ShowWindow(hWnd, SW_HIDE);
+	pGfx = std::make_unique<Graphics>(hWnd);
 }
 Window::~Window()
 {
@@ -75,8 +76,27 @@ void Window::SetTitle(const std::string & title)
 {
 	if (!SetWindowText(this->hWnd, title.c_str()))
 	{
-		throw WND_EXCEPT_AUTO();
+		throw WND_LAST_EXCEPT();
 	}
+}
+std::pair<bool,WPARAM> Window::ProcessMessages()noexcept
+{
+	MSG msg;
+	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+	{
+		if (msg.message == WM_QUIT)
+		{
+			return{ true,msg.wParam };
+		}
+
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+	return{ false,0 };
+}
+Graphics & Window::Gfx()
+{
+	return *pGfx;
 }
 LRESULT __stdcall Window::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -129,27 +149,28 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 		kbd.OnChar(static_cast<unsigned char>(wParam));
 		break;
 	case WM_INPUT:
-	{
-		dword dwSize = 48;
-		RAWINPUT raw;
-
-		if (GetRawInputData((HRAWINPUT)lParam, RID_INPUT, &raw, &dwSize,
-			sizeof(RAWINPUTHEADER)) != dwSize)
-			OutputDebugString(TEXT("GetRawInputData does not return correct size !\n"));
-
-		if (raw.header.dwType == RIM_TYPEMOUSE)
+		if (wParam == RIM_INPUT)
 		{
-			this->mouse.TranslateMouseInput(raw.data.mouse);
+			dword dwSize = 48;
+			RAWINPUT raw;
+
+			if (GetRawInputData((HRAWINPUT)lParam, RID_INPUT, &raw, &dwSize,
+				sizeof(RAWINPUTHEADER)) != dwSize)
+				OutputDebugString(TEXT("GetRawInputData does not return correct size !\n"));
+
+			if (raw.header.dwType == RIM_TYPEMOUSE)
+			{
+				this->mouse.TranslateMouseInput(raw.data.mouse);
+			}
+			break;
 		}
-		break;
-	}
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
 //Window Exception
-Window::WindowException::WindowException(int line, const char * file, HRESULT hr)
-	:Exception(line,file),hResult(hr)
+Window::HrException::HrException(int line, const char * file, HRESULT hr)
+	:WindowException(line,file),hResult(hr)
 {}
 std::string Window::WindowException::TranslateErrorCode(HRESULT hr) noexcept
 {
@@ -166,25 +187,30 @@ std::string Window::WindowException::TranslateErrorCode(HRESULT hr) noexcept
 	LocalFree(pMsgBuf);
 	return errorString;
 }
-HRESULT Window::WindowException::GetErrorCode() const noexcept
+HRESULT Window::HrException::GetErrorCode() const noexcept
 {
 	return hResult;
 }
-std::string Window::WindowException::GetErrorString() const noexcept
+std::string Window::HrException::GetErrorDescription() const noexcept
 {
-	return TranslateErrorCode(hResult);
+	return WindowException::TranslateErrorCode(hResult);
 }
-const char* Window::WindowException::GetType()const noexcept
+const char* Window::HrException::GetType()const noexcept
 {
-	return "Window Exception";
+	return "Vertas Window Exception";
 }
-const char* Window::WindowException::what() const noexcept
+const char* Window::HrException::what() const noexcept
 {
 	std::ostringstream oss;
 	oss << GetType() << std::endl
-		<< "[Error Code] " << GetErrorCode() << std::endl
-		<< "[Description] " << GetErrorString() << std::endl
+		<< "[Error Code] 0x" << std::hex << std::uppercase << GetErrorCode()
+		<< std::dec << " (" << (unsigned long)GetErrorCode() << ")" << std::endl
+		<< "[Description] " << GetErrorDescription() << std::endl
 		<< GetOriginString();
 	whatBuffer = oss.str();
 	return whatBuffer.c_str();
+}
+const char* Window::NoGfxException::GetType() const noexcept
+{
+	return "Veritas Window Exception [No Graphics]";
 }
