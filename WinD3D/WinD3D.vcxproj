@@ -101,7 +101,7 @@
       <SDLCheck>true</SDLCheck>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions):NDEBUG</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);NDEBUG</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <CompileAs>CompileAsC</CompileAs>
     </ClCompile>
@@ -120,6 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <CompileAs>CompileAsCpp</CompileAs>
       <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);NDEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -129,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="dxerr.cpp" />
+    <ClCompile Include="DXGIInfoManager.cpp" />
     <ClCompile Include="EntryMain.c" />
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="Graphics.cpp" />
@@ -139,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="dxerr.h" />
+    <ClInclude Include="DXGIInfoManager.h" />
     <ClInclude Include="Engine\Exception.h" />
     <ClInclude Include="Engine\Keyboard.h" />
     <ClInclude Include="Engine\Window.h" />
@@ -158,6 +161,9 @@
     <None Include="DXGetErrorDescription.inl" />
     <None Include="DXGetErrorString.inl" />
     <None Include="DXTrace.inl" />
+    <None Include="GraphicsThrows.m">
+      <FileType>CppHeader</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

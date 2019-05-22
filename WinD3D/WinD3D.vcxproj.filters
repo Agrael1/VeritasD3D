@@ -45,6 +45,9 @@
     <ClCompile Include="dxerr.cpp">
       <Filter>Файлы исходного кода\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="DXGIInfoManager.cpp">
+      <Filter>Файлы исходного кода\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -77,6 +80,9 @@
     <ClInclude Include="dxerr.h">
       <Filter>Заголовочные файлы\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="DXGIInfoManager.h">
+      <Filter>Заголовочные файлы\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc">
@@ -97,6 +103,9 @@
     </None>
     <None Include="DXGetErrorDescription.inl">
       <Filter>Файлы исходного кода\Engine</Filter>
+    </None>
+    <None Include="GraphicsThrows.m">
+      <Filter>Заголовочные файлы\Engine</Filter>
     </None>
   </ItemGroup>
 </Project>
