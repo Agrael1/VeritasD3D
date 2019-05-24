@@ -7,8 +7,6 @@
 #include "DXGIInfoManager.h"
 #endif
 
-#include "GraphicsThrows.m"
-
 class Graphics
 {
 public: 
@@ -38,6 +36,16 @@ public:
 	private:
 		std::string reason;
 	};
+	class ContextException : public GException
+	{
+	public:
+		ContextException(int line, const char* file, std::vector<std::string> messages = {})noexcept;
+		const char* what()const noexcept override;
+		const char* GetType()const noexcept override;
+		std::string GetErrorInfo()const noexcept;
+	private:
+		std::string info;
+	};
 public:
 	Graphics( HWND hWnd);
 	Graphics(const Graphics&) = delete;
@@ -45,6 +53,8 @@ public:
 	~Graphics() = default;
 	void EndFrame();
 	void ClearBuffer(float r, float g, float b)noexcept;
+	void DrawTestTriangle();
+	
 private:
 #ifndef NDEBUG
 	DXGIInfoManager infoManager;

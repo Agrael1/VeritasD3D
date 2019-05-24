@@ -19,6 +19,9 @@
     <Filter Include="Файлы исходного кода\Engine">
       <UniqueIdentifier>{3e5fe48e-64ab-48b0-bfad-ffcef5385d25}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{5f9f9b20-2379-49e0-96f5-da73b309d79e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryMain.c">
@@ -107,5 +110,13 @@
     <None Include="GraphicsThrows.m">
       <Filter>Заголовочные файлы\Engine</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="VertexShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PixelShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

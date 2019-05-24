@@ -20,11 +20,12 @@ int App::Go()
 			return (int)a.second;
 		}
 		DoFrame();
-		wnd.Gfx().EndFrame();
 	}
 }
 
 void App::DoFrame()
 {
 	wnd.Gfx().ClearBuffer(0.5f, 0, 0.5f);
+	wnd.Gfx().DrawTestTriangle();
+	wnd.Gfx().EndFrame();
 }

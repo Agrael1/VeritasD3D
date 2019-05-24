@@ -3,6 +3,7 @@
 #include "Graphics.h"
 #include <memory>
 
+#include "GraphicsThrows.m"
 // GUID manual init (lib seems to be obsolete)
 
 extern "C"
