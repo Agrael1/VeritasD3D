@@ -3,6 +3,8 @@
 #include <sstream>
 #include <d3dcompiler.h>
 
+#include "IndexBuffer.h"
+
 #include "GraphicsThrows.m"
 
 #pragma comment(lib,"d3d11.lib")
@@ -195,29 +197,33 @@ void Graphics::DrawTestTriangle()
 	pContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
 
 	//create an index buffer
-	const WORD indicies[] = 
+	const std::vector<WORD> indicies = 
 	{
 		0,1,2,
 		0,2,3,
 		0,4,1,
 		2,1,5
 	};
-	Microsoft::WRL::ComPtr<ID3D11Buffer> pIndexBuffer;
 
-	D3D11_BUFFER_DESC ibufDesc = {};
-	ibufDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	ibufDesc.Usage = D3D11_USAGE_DEFAULT;
-	ibufDesc.CPUAccessFlags = 0u;
-	ibufDesc.MiscFlags = 0u;
-	ibufDesc.ByteWidth = sizeof(indicies);
-	ibufDesc.StructureByteStride = sizeof(WORD);
+	IndexBuffer ib(*this, indicies);
+	ib.Bind(*this);
 
-	D3D11_SUBRESOURCE_DATA isubResData = {};
-	isubResData.pSysMem = indicies;
-	GFX_THROW_INFO(pDevice->CreateBuffer(&ibufDesc, &isubResData, &pIndexBuffer));
+	//Microsoft::WRL::ComPtr<ID3D11Buffer> pIndexBuffer;
 
-	// Bind index buffer to a pipeline
-	pContext->IASetIndexBuffer(pIndexBuffer.Get(),DXGI_FORMAT::DXGI_FORMAT_R16_UINT,0u);
+	//D3D11_BUFFER_DESC ibufDesc = {};
+	//ibufDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	//ibufDesc.Usage = D3D11_USAGE_DEFAULT;
+	//ibufDesc.CPUAccessFlags = 0u;
+	//ibufDesc.MiscFlags = 0u;
+	//ibufDesc.ByteWidth = sizeof(indicies);
+	//ibufDesc.StructureByteStride = sizeof(WORD);
+
+	//D3D11_SUBRESOURCE_DATA isubResData = {};
+	//isubResData.pSysMem = indicies;
+	//GFX_THROW_INFO(pDevice->CreateBuffer(&ibufDesc, &isubResData, &pIndexBuffer));
+
+	//// Bind index buffer to a pipeline
+	//pContext->IASetIndexBuffer(pIndexBuffer.Get(),DXGI_FORMAT::DXGI_FORMAT_R16_UINT,0u);
 
 
 	// Create a pixel shader 

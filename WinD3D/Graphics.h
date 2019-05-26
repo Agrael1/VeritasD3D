@@ -9,6 +9,7 @@
 
 class Graphics
 {
+	friend class Bindable;
 public: 
 	class GException :public Exception
 	{
