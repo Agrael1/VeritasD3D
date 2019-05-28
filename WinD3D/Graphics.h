@@ -3,6 +3,7 @@
 #include "Engine\Exception.h"
 #include <d3d11.h>
 #include <wrl.h>
+#include <d3dcompiler.h>
 #ifndef NDEBUG
 #include "DXGIInfoManager.h"
 #endif
@@ -55,7 +56,7 @@ public:
 	void EndFrame();
 	void ClearBuffer(float r, float g, float b)noexcept;
 	void DrawTestTriangle();
-	
+	void DrawIndexed(UINT count)noexcept(!IS_DEBUG);
 private:
 #ifndef NDEBUG
 	DXGIInfoManager infoManager;

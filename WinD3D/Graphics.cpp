@@ -1,9 +1,13 @@
 #include "Graphics.h"
 #include "dxerr.h"
 #include <sstream>
-#include <d3dcompiler.h>
 
 #include "IndexBuffer.h"
+#include "VertexBuffer.h"
+#include "InputLayout.h"
+#include "PixelShader.h"
+#include "VertexShader.h"
+#include "Topology.h"
 
 #include "GraphicsThrows.m"
 
@@ -165,7 +169,7 @@ void Graphics::DrawTestTriangle()
 		}color;
 	};
 
-	struct Vertex2D verticies[] =
+	std::vector<struct Vertex2D> verticies =
 	{
 		{ 0.0f, 0.5f, 255 , 0, 0 },
 		{ 0.5f, -0.5f, 0, 255, 0 },
@@ -177,24 +181,8 @@ void Graphics::DrawTestTriangle()
 	verticies[0].color.g = 255;
 
 	// Create a vertex buffer
-	Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
-
-	D3D11_BUFFER_DESC bufDesc = {};
-	bufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bufDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufDesc.CPUAccessFlags = 0u;
-	bufDesc.MiscFlags = 0u;
-	bufDesc.ByteWidth = sizeof(verticies);
-	bufDesc.StructureByteStride = sizeof(struct Vertex2D);
-
-	D3D11_SUBRESOURCE_DATA subResData = {};
-	subResData.pSysMem = verticies;
-	GFX_THROW_INFO(pDevice->CreateBuffer(&bufDesc, &subResData, &pVertexBuffer));
-
-	// Bind vertex buffer to a pipeline
-	const UINT stride = sizeof(struct Vertex2D);
-	const UINT offset = 0u;
-	pContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
+	VertexBuffer vb(*this, verticies);
+	vb.Bind(*this);
 
 	//create an index buffer
 	const std::vector<WORD> indicies = 
@@ -208,44 +196,16 @@ void Graphics::DrawTestTriangle()
 	IndexBuffer ib(*this, indicies);
 	ib.Bind(*this);
 
-	//Microsoft::WRL::ComPtr<ID3D11Buffer> pIndexBuffer;
-
-	//D3D11_BUFFER_DESC ibufDesc = {};
-	//ibufDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	//ibufDesc.Usage = D3D11_USAGE_DEFAULT;
-	//ibufDesc.CPUAccessFlags = 0u;
-	//ibufDesc.MiscFlags = 0u;
-	//ibufDesc.ByteWidth = sizeof(indicies);
-	//ibufDesc.StructureByteStride = sizeof(WORD);
-
-	//D3D11_SUBRESOURCE_DATA isubResData = {};
-	//isubResData.pSysMem = indicies;
-	//GFX_THROW_INFO(pDevice->CreateBuffer(&ibufDesc, &isubResData, &pIndexBuffer));
-
-	//// Bind index buffer to a pipeline
-	//pContext->IASetIndexBuffer(pIndexBuffer.Get(),DXGI_FORMAT::DXGI_FORMAT_R16_UINT,0u);
-
-
 	// Create a pixel shader 
-	Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
-	Microsoft::WRL::ComPtr<ID3D10Blob> pBlob;
-	GFX_THROW_INFO(D3DReadFileToBlob(L"PixelShader.cso", &pBlob));
-	GFX_THROW_INFO(pDevice->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pPixelShader));
-
-	// Bind pixel shader
-	pContext->PSSetShader(pPixelShader.Get(), nullptr, 0u);
+	PixelShader ps(*this, L"PixelShader.cso");
+	ps.Bind(*this);
 
 	// Create vertex shader
-	Microsoft::WRL::ComPtr<ID3D11VertexShader> pVertexShader;
-	GFX_THROW_INFO( D3DReadFileToBlob(L"VertexShader.cso", &pBlob));
-	GFX_THROW_INFO( pDevice->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader));
-
-	// Bind vertex shader
-	pContext->VSSetShader(pVertexShader.Get(), nullptr, 0u);
+	VertexShader vs(*this, L"VertexShader.cso");
+	vs.Bind(*this);
 
 	// input layout (connections with shaders)
-	Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
-	const D3D11_INPUT_ELEMENT_DESC ied[] =
+	std::vector< D3D11_INPUT_ELEMENT_DESC> ied =
 	{
 		{
 			"Position",
@@ -267,22 +227,15 @@ void Graphics::DrawTestTriangle()
 		}
 	};
 
-	// bind InputLayout
-	GFX_THROW_INFO(pDevice->CreateInputLayout
-	(
-		ied, (UINT)std::size(ied),
-		pBlob->GetBufferPointer(),
-		pBlob->GetBufferSize(),
-		&pInputLayout
-	));
-
-	pContext->IASetInputLayout(pInputLayout.Get());
+	InputLayout il(*this, ied, vs.GetBytecode());
+	il.Bind(*this);
 
 	// Bind render target
 	pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), nullptr);
 
 	// Setting primitive topology
-	pContext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	Topology tp(*this, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	tp.Bind(*this);
 
 	// Configure a viewport
 	D3D11_VIEWPORT vp = {};
@@ -296,6 +249,12 @@ void Graphics::DrawTestTriangle()
 
 	GFX_THROW_INFO_ONLY( pContext->DrawIndexed((UINT)std::size(indicies), 0u, 0u));
 }
+
+void Graphics::DrawIndexed(UINT count) noexcept(!IS_DEBUG)
+{
+	GFX_THROW_INFO_ONLY(pContext->DrawIndexed(count, 0u, 0u));
+}
+
 
 Graphics::ContextException::ContextException(int line, const char * file, std::vector<std::string> messages) noexcept
 	:GException(line, file)

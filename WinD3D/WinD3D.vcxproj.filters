@@ -81,6 +81,24 @@
     <ClCompile Include="IndexBuffer.cpp">
       <Filter>Файлы исходного кода\Engine\Bindable</Filter>
     </ClCompile>
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>Файлы исходного кода\Engine\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="InputLayout.cpp">
+      <Filter>Файлы исходного кода\Engine\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="PixelShader.cpp">
+      <Filter>Файлы исходного кода\Engine\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexShader.cpp">
+      <Filter>Файлы исходного кода\Engine\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Topology.cpp">
+      <Filter>Файлы исходного кода\Engine\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawable.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -122,6 +140,27 @@
     <ClInclude Include="IndexBuffer.h">
       <Filter>Заголовочные файлы\Engine\Bindable</Filter>
     </ClInclude>
+    <ClInclude Include="InputLayout.h">
+      <Filter>Заголовочные файлы\Engine\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBuffer.h">
+      <Filter>Заголовочные файлы\Engine\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="PixelShader.h">
+      <Filter>Заголовочные файлы\Engine\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexShader.h">
+      <Filter>Заголовочные файлы\Engine\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Topology.h">
+      <Filter>Заголовочные файлы\Engine\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBuffer.h">
+      <Filter>Заголовочные файлы\Engine\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawable.h">
+      <Filter>Заголовочные файлы\Engine\Drawable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc">
@@ -134,9 +173,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GraphicsThrows.m">
-      <Filter>Заголовочные файлы\Engine\Exceptions\Macros</Filter>
-    </None>
     <None Include="DXGetErrorDescription.inl">
       <Filter>Файлы исходного кода\Engine\Exceptions\Inline</Filter>
     </None>
@@ -145,6 +181,9 @@
     </None>
     <None Include="DXTrace.inl">
       <Filter>Файлы исходного кода\Engine\Exceptions\Inline</Filter>
+    </None>
+    <None Include="GraphicsThrows.m">
+      <Filter>Заголовочные файлы\Engine\Exceptions\Macros</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
