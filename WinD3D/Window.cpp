@@ -1,6 +1,10 @@
 #include "Engine\Window.h"
 #include <sstream>
 #include "resource.h"
+
+#define GET_X_LPARAM(lp)                        ((int)(short)LOWORD(lp))
+#define GET_Y_LPARAM(lp)                        ((int)(short)HIWORD(lp))
+
 Window::WindowClass Window::WindowClass::wndClass;
 
 Window::WindowClass::WindowClass() noexcept
@@ -79,6 +83,15 @@ void Window::SetTitle(const std::string & title)
 		throw WND_LAST_EXCEPT();
 	}
 }
+
+void Window::ScanMouse()noexcept
+{
+	POINT _out = mouse.GetAbsolute();
+	std::ostringstream oss;
+	oss << "Cur pos: (" << _out.x << ":" << _out.y << ")";
+	SetTitle(oss.str());
+}
+
 std::pair<bool,WPARAM> Window::ProcessMessages()noexcept
 {
 	MSG msg;
@@ -164,6 +177,9 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 			}
 			break;
 		}
+	case WM_MOUSEMOVE:
+		mouse.absX = GET_X_LPARAM(lParam);
+		mouse.absY = GET_Y_LPARAM(lParam);
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }

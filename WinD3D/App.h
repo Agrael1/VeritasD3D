@@ -9,9 +9,8 @@ public:
 public:
 	int Go();
 private:
-	void DoFrame();
+	void DoFrame(float dt);
 private:
 	Window wnd;
-	bool bDirectInput;
 };
 

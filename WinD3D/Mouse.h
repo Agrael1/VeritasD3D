@@ -63,6 +63,8 @@ private:
 	static constexpr unsigned char nKeys = 5u;
 	static constexpr unsigned int bufferSize = 16u;
 
+	int absX = 0, absY = 0;
+
 	RAWINPUTDEVICE Rid;
 	std::queue<Event> MouseBuffer;
 	std::bitset<nKeys> MBStates;

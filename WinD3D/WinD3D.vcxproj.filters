@@ -99,6 +99,9 @@
     <ClCompile Include="Drawable.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="TransformCBuf.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -160,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="Drawable.h">
       <Filter>Заголовочные файлы\Engine\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformCBuf.h">
+      <Filter>Заголовочные файлы\Engine\Bindable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

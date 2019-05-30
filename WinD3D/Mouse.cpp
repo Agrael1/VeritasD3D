@@ -85,9 +85,7 @@ Mouse::Event Mouse::Read() noexcept
 
 POINT Mouse::GetAbsolute()const noexcept
 {
-	POINT _out;
-	GetCursorPos(&_out);
-	return _out;
+	return {absX,absY};
 }
 bool Mouse::ButtonPressed(byte code) const noexcept
 {

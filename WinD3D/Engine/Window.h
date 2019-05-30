@@ -54,7 +54,9 @@ public:
 	~Window();
 	Window(const Window&) = delete;
 	Window& operator=(const Window&) = delete;
+public:
 	void SetTitle(const std::string& title);
+	void ScanMouse() noexcept;
 	static std::pair<bool, WPARAM> ProcessMessages()noexcept;
 	Graphics& Gfx();
 private:
