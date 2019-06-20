@@ -59,6 +59,7 @@ public:
 	void DrawTestTriangle(float angle, float x, float y);
 	void DrawIndexed(UINT count)noexcept(!IS_DEBUG);
 	DirectX::XMMATRIX GetProjection() const noexcept;
+	void SetProjection(DirectX::FXMMATRIX proj) noexcept;
 private:
 	DirectX::XMMATRIX projection;
 #ifndef NDEBUG

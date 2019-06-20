@@ -12,5 +12,6 @@ private:
 	void DoFrame(float dt);
 private:
 	Window wnd;
+	std::vector<std::unique_ptr<class Box>> boxes;
 };
 

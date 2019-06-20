@@ -46,6 +46,12 @@
     <Filter Include="Заголовочные файлы\Engine\Exceptions\Macros">
       <UniqueIdentifier>{c8a13912-72eb-4044-9736-2eae0cc9524f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы исходного кода\Engine\Drawable\Meshes">
+      <UniqueIdentifier>{9c5c4754-49af-4513-ae97-1cd21bf035ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\Engine\Drawable\Meshes">
+      <UniqueIdentifier>{94aff4cb-88aa-491b-b187-a862018a77ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryMain.c">
@@ -97,10 +103,13 @@
       <Filter>Файлы исходного кода\Engine\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="Drawable.cpp">
-      <Filter>Файлы исходного кода</Filter>
+      <Filter>Файлы исходного кода\Engine\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="Box.cpp">
+      <Filter>Файлы исходного кода\Engine\Drawable\Meshes</Filter>
     </ClCompile>
     <ClCompile Include="TransformCBuf.cpp">
-      <Filter>Файлы исходного кода</Filter>
+      <Filter>Файлы исходного кода\Engine\Bindable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +174,15 @@
       <Filter>Заголовочные файлы\Engine\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="TransformCBuf.h">
+      <Filter>Заголовочные файлы\Engine\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawableBase.h">
+      <Filter>Заголовочные файлы\Engine\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="Box.h">
+      <Filter>Заголовочные файлы\Engine\Drawable\Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="BindableBase.h">
       <Filter>Заголовочные файлы\Engine\Bindable</Filter>
     </ClInclude>
   </ItemGroup>

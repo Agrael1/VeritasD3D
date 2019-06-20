@@ -32,7 +32,6 @@ public:
 		using WindowException::WindowException;
 		const char* GetType()const noexcept override;
 	};
-
 private:
 	// Registration of window
 	class WindowClass

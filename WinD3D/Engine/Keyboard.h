@@ -1,7 +1,6 @@
 #pragma once
 #include <queue>
 #include <bitset>
-#include "..\Mouse.h"
 
 class Keyboard
 {
