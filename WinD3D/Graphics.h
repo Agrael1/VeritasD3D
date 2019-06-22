@@ -5,9 +5,9 @@
 #include <wrl.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
-#ifndef NDEBUG
+//#ifndef NDEBUG
 #include "DXGIInfoManager.h"
-#endif
+//#endif
 
 class Graphics
 {

@@ -1,7 +1,6 @@
 #include "TransformCBuf.h"
 
 TransformCbuf::TransformCbuf(Graphics & gfx, const Drawable& parent)
-
 	:
 	parent(parent)
 {

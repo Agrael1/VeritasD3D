@@ -22,168 +22,210 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{5f9f9b20-2379-49e0-96f5-da73b309d79e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Bindable">
-      <UniqueIdentifier>{67aa1cea-d71a-4ddd-8e53-f1683d9a51a9}</UniqueIdentifier>
+    <Filter Include="Файлы исходного кода\Engine\Internal">
+      <UniqueIdentifier>{96c6a4ef-9569-4b2e-81f2-4b6f1ec57f66}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Drawable">
-      <UniqueIdentifier>{c7bafcde-4da9-4674-b4cd-49c791274e62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Bindable">
+    <Filter Include="Файлы исходного кода\Engine\Internal\Bindable">
       <UniqueIdentifier>{096266d9-3160-48a2-9b3b-747e5b9c5d85}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Drawable">
+    <Filter Include="Файлы исходного кода\Engine\Internal\Drawable">
       <UniqueIdentifier>{546ff5c6-ffc0-4bd8-a1ef-7eaa8feff8a3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Exceptions">
+    <Filter Include="Файлы исходного кода\Engine\Internal\Exceptions">
       <UniqueIdentifier>{48e6c941-810c-4f44-9b7b-65abefa5c7f8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Exceptions\Inline">
+    <Filter Include="Файлы исходного кода\Engine\Internal\Exceptions\Inline">
       <UniqueIdentifier>{5e2e8e3b-d781-4384-a6bf-c65a57d8b206}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Exceptions">
+    <Filter Include="Файлы исходного кода\Engine\Window">
+      <UniqueIdentifier>{eddc15d2-7938-479f-a159-a8b9d64b3776}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\Engine\Internal">
+      <UniqueIdentifier>{8a1dccec-54a8-48dd-8502-619f48a1b07e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\Engine\Internal\Bindable">
+      <UniqueIdentifier>{67aa1cea-d71a-4ddd-8e53-f1683d9a51a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\Engine\Internal\Drawable">
+      <UniqueIdentifier>{c7bafcde-4da9-4674-b4cd-49c791274e62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\Engine\Internal\Exceptions">
       <UniqueIdentifier>{bf2cc866-e6be-4316-8d7e-2295ae3c988a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Exceptions\Macros">
+    <Filter Include="Заголовочные файлы\Engine\Internal\Exceptions\Macros">
       <UniqueIdentifier>{c8a13912-72eb-4044-9736-2eae0cc9524f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Drawable\Meshes">
-      <UniqueIdentifier>{9c5c4754-49af-4513-ae97-1cd21bf035ba}</UniqueIdentifier>
+    <Filter Include="Заголовочные файлы\Engine\Window">
+      <UniqueIdentifier>{cf3ff23a-ad75-4fae-beb1-eaed3b03d628}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Drawable\Meshes">
-      <UniqueIdentifier>{94aff4cb-88aa-491b-b187-a862018a77ef}</UniqueIdentifier>
+    <Filter Include="Заголовочные файлы\Engine\Internal\Drawable\Geometry">
+      <UniqueIdentifier>{ca4a024b-375e-43b6-9397-79a5d2a469dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\Engine\Internal\Drawable\Geometry\Bases">
+      <UniqueIdentifier>{074124c2-941a-462e-a829-03cffe266e35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Engine\Internal\Drawable\Geometry">
+      <UniqueIdentifier>{8880a2e9-6d74-4f13-a7f7-8327dd278fe5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryMain.c">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>Файлы исходного кода\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Keyboard.cpp">
-      <Filter>Файлы исходного кода\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Mouse.cpp">
-      <Filter>Файлы исходного кода\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="App.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics.cpp">
-      <Filter>Файлы исходного кода\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Bindable.cpp">
-      <Filter>Файлы исходного кода\Engine\Bindable</Filter>
+      <Filter>Файлы исходного кода\Engine\Internal\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="Exception.cpp">
-      <Filter>Файлы исходного кода\Engine\Exceptions</Filter>
+      <Filter>Файлы исходного кода\Engine\Internal\Exceptions</Filter>
     </ClCompile>
     <ClCompile Include="dxerr.cpp">
-      <Filter>Файлы исходного кода\Engine\Exceptions</Filter>
+      <Filter>Файлы исходного кода\Engine\Internal\Exceptions</Filter>
     </ClCompile>
     <ClCompile Include="DXGIInfoManager.cpp">
-      <Filter>Файлы исходного кода\Engine\Exceptions</Filter>
+      <Filter>Файлы исходного кода\Engine\Internal\Exceptions</Filter>
     </ClCompile>
     <ClCompile Include="IndexBuffer.cpp">
-      <Filter>Файлы исходного кода\Engine\Bindable</Filter>
+      <Filter>Файлы исходного кода\Engine\Internal\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="VertexBuffer.cpp">
-      <Filter>Файлы исходного кода\Engine\Bindable</Filter>
+      <Filter>Файлы исходного кода\Engine\Internal\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="InputLayout.cpp">
-      <Filter>Файлы исходного кода\Engine\Bindable</Filter>
+      <Filter>Файлы исходного кода\Engine\Internal\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="PixelShader.cpp">
-      <Filter>Файлы исходного кода\Engine\Bindable</Filter>
+      <Filter>Файлы исходного кода\Engine\Internal\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="VertexShader.cpp">
-      <Filter>Файлы исходного кода\Engine\Bindable</Filter>
+      <Filter>Файлы исходного кода\Engine\Internal\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="Topology.cpp">
-      <Filter>Файлы исходного кода\Engine\Bindable</Filter>
+      <Filter>Файлы исходного кода\Engine\Internal\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="Drawable.cpp">
-      <Filter>Файлы исходного кода\Engine\Drawable</Filter>
-    </ClCompile>
-    <ClCompile Include="Box.cpp">
-      <Filter>Файлы исходного кода\Engine\Drawable\Meshes</Filter>
+      <Filter>Файлы исходного кода\Engine\Internal\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="TransformCBuf.cpp">
-      <Filter>Файлы исходного кода\Engine\Bindable</Filter>
+      <Filter>Файлы исходного кода\Engine\Internal\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics.cpp">
+      <Filter>Файлы исходного кода\Engine\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Keyboard.cpp">
+      <Filter>Файлы исходного кода\Engine\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>Файлы исходного кода\Engine\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Файлы исходного кода\Engine\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Pyramid.cpp">
+      <Filter>Файлы исходного кода\Engine\Internal\Drawable\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Box.cpp">
+      <Filter>Файлы исходного кода\Engine\Internal\Drawable\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Melon.cpp">
+      <Filter>Файлы исходного кода\Engine\Internal\Drawable\Geometry</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Window.h">
-      <Filter>Заголовочные файлы\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Keyboard.h">
-      <Filter>Заголовочные файлы\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\WinSetup.h">
-      <Filter>Заголовочные файлы\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Mouse.h">
-      <Filter>Заголовочные файлы\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Types.h">
-      <Filter>Заголовочные файлы\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="App.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics.h">
-      <Filter>Заголовочные файлы\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Bindable.h">
-      <Filter>Заголовочные файлы\Engine\Bindable</Filter>
+      <Filter>Заголовочные файлы\Engine\Internal\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="dxerr.h">
-      <Filter>Заголовочные файлы\Engine\Exceptions</Filter>
+      <Filter>Заголовочные файлы\Engine\Internal\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="DXGIInfoManager.h">
-      <Filter>Заголовочные файлы\Engine\Exceptions</Filter>
+      <Filter>Заголовочные файлы\Engine\Internal\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Exception.h">
-      <Filter>Заголовочные файлы\Engine\Exceptions</Filter>
+      <Filter>Заголовочные файлы\Engine\Internal\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="IndexBuffer.h">
-      <Filter>Заголовочные файлы\Engine\Bindable</Filter>
+      <Filter>Заголовочные файлы\Engine\Internal\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="InputLayout.h">
-      <Filter>Заголовочные файлы\Engine\Bindable</Filter>
+      <Filter>Заголовочные файлы\Engine\Internal\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="VertexBuffer.h">
-      <Filter>Заголовочные файлы\Engine\Bindable</Filter>
+      <Filter>Заголовочные файлы\Engine\Internal\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="PixelShader.h">
-      <Filter>Заголовочные файлы\Engine\Bindable</Filter>
+      <Filter>Заголовочные файлы\Engine\Internal\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="VertexShader.h">
-      <Filter>Заголовочные файлы\Engine\Bindable</Filter>
+      <Filter>Заголовочные файлы\Engine\Internal\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="Topology.h">
-      <Filter>Заголовочные файлы\Engine\Bindable</Filter>
+      <Filter>Заголовочные файлы\Engine\Internal\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBuffer.h">
-      <Filter>Заголовочные файлы\Engine\Bindable</Filter>
+      <Filter>Заголовочные файлы\Engine\Internal\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="Drawable.h">
-      <Filter>Заголовочные файлы\Engine\Drawable</Filter>
+      <Filter>Заголовочные файлы\Engine\Internal\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="TransformCBuf.h">
-      <Filter>Заголовочные файлы\Engine\Bindable</Filter>
+      <Filter>Заголовочные файлы\Engine\Internal\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="DrawableBase.h">
-      <Filter>Заголовочные файлы\Engine\Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="Box.h">
-      <Filter>Заголовочные файлы\Engine\Drawable\Meshes</Filter>
+      <Filter>Заголовочные файлы\Engine\Internal\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="BindableBase.h">
-      <Filter>Заголовочные файлы\Engine\Bindable</Filter>
+      <Filter>Заголовочные файлы\Engine\Internal\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Cone.h">
+      <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry\Bases</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry\Bases</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexedTriangleList.h">
+      <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry\Bases</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry\Bases</Filter>
+    </ClInclude>
+    <ClInclude Include="Melon.h">
+      <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Pyramid.h">
+      <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics.h">
+      <Filter>Заголовочные файлы\Engine\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Keyboard.h">
+      <Filter>Заголовочные файлы\Engine\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>Заголовочные файлы\Engine\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Window.h">
+      <Filter>Заголовочные файлы\Engine\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\WinSetup.h">
+      <Filter>Заголовочные файлы\Engine\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Prism.h">
+      <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry\Bases</Filter>
+    </ClInclude>
+    <ClInclude Include="Box.h">
+      <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineBase.h">
+      <Filter>Заголовочные файлы\Engine\Window</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -198,23 +240,29 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="DXGetErrorDescription.inl">
-      <Filter>Файлы исходного кода\Engine\Exceptions\Inline</Filter>
+      <Filter>Файлы исходного кода\Engine\Internal\Exceptions\Inline</Filter>
     </None>
     <None Include="DXGetErrorString.inl">
-      <Filter>Файлы исходного кода\Engine\Exceptions\Inline</Filter>
+      <Filter>Файлы исходного кода\Engine\Internal\Exceptions\Inline</Filter>
     </None>
     <None Include="DXTrace.inl">
-      <Filter>Файлы исходного кода\Engine\Exceptions\Inline</Filter>
+      <Filter>Файлы исходного кода\Engine\Internal\Exceptions\Inline</Filter>
     </None>
     <None Include="GraphicsThrows.m">
-      <Filter>Заголовочные файлы\Engine\Exceptions\Macros</Filter>
+      <Filter>Заголовочные файлы\Engine\Internal\Exceptions\Macros</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="VertexShader.hlsl">
+    <FxCompile Include="ColorBlendPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="PixelShader.hlsl">
+    <FxCompile Include="ColorBlendVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="ColorIndexPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="ColorIndexVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

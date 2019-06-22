@@ -1,7 +1,7 @@
 #pragma once
 #include <queue>
 #include <bitset>
-#include "Types.h"
+#include "EngineBase.h"
 #include "Engine\WinSetup.h"
 
 #ifndef HID_USAGE_PAGE_GENERIC
