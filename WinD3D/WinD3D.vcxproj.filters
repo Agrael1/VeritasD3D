@@ -132,6 +132,12 @@
     <ClCompile Include="Melon.cpp">
       <Filter>Файлы исходного кода\Engine\Internal\Drawable\Geometry</Filter>
     </ClCompile>
+    <ClCompile Include="RePrism.cpp">
+      <Filter>Файлы исходного кода\Engine\Internal\Drawable\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Icosahedron.cpp">
+      <Filter>Файлы исходного кода\Engine\Internal\Drawable\Geometry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -226,6 +232,15 @@
     </ClInclude>
     <ClInclude Include="EngineBase.h">
       <Filter>Заголовочные файлы\Engine\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="RePrism.h">
+      <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Icosphere.h">
+      <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry\Bases</Filter>
+    </ClInclude>
+    <ClInclude Include="Icosahedron.h">
+      <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

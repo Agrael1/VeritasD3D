@@ -139,6 +139,7 @@
     <ClCompile Include="EntryMain.c" />
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="Icosahedron.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="InputLayout.cpp" />
     <ClCompile Include="Keyboard.cpp" />
@@ -146,6 +147,7 @@
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="Pyramid.cpp" />
+    <ClCompile Include="RePrism.cpp" />
     <ClCompile Include="Topology.cpp" />
     <ClCompile Include="TransformCBuf.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
@@ -169,6 +171,8 @@
     <ClInclude Include="Engine\Window.h" />
     <ClInclude Include="Engine\WinSetup.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="Icosahedron.h" />
+    <ClInclude Include="Icosphere.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="IndexedTriangleList.h" />
     <ClInclude Include="InputLayout.h" />
@@ -177,6 +181,7 @@
     <ClInclude Include="PixelShader.h" />
     <ClInclude Include="Prism.h" />
     <ClInclude Include="Pyramid.h" />
+    <ClInclude Include="RePrism.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Topology.h" />

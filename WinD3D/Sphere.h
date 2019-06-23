@@ -17,7 +17,7 @@ public:
 		const auto base = dx::XMVectorSet(0.0f, 0.0f, radius, 0.0f);
 		const float lattitudeAngle = PI / latDiv;
 		const float longitudeAngle = 2.0f * PI / longDiv;
-
+		
 		std::vector<V> vertices;
 		for (dword iLat = 1; iLat < latDiv; iLat++)
 		{
