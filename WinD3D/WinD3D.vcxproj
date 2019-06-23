@@ -138,6 +138,7 @@
     <ClCompile Include="DXGIInfoManager.cpp" />
     <ClCompile Include="EntryMain.c" />
     <ClCompile Include="Exception.cpp" />
+    <ClCompile Include="GDIPlusManager.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Icosahedron.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="TransformCBuf.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VertexShader.cpp" />
+    <ClCompile Include="VFileDialog.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +172,7 @@
     <ClInclude Include="Engine\Keyboard.h" />
     <ClInclude Include="Engine\Window.h" />
     <ClInclude Include="Engine\WinSetup.h" />
+    <ClInclude Include="GDIPlusManager.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Icosahedron.h" />
     <ClInclude Include="Icosphere.h" />
@@ -184,11 +187,13 @@
     <ClInclude Include="RePrism.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Surface.h" />
     <ClInclude Include="Topology.h" />
     <ClInclude Include="TransformCBuf.h" />
     <ClInclude Include="EngineBase.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexShader.h" />
+    <ClInclude Include="VFileDialog.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc" />

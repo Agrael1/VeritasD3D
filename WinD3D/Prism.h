@@ -7,7 +7,7 @@ class Prism
 {
 public:
 	template<class V>
-	static IndexedTriangleList<V> MakeTesselated(int longDiv)
+	static IndexedTriangleList<V> MakeTesselated(dword longDiv)
 	{
 		namespace dx = DirectX;
 		assert(longDiv >= 3);
@@ -27,7 +27,7 @@ public:
 		const auto iCenterFar = (unsigned short)(vertices.size() - 1);
 
 		// base vertices
-		for (int iLong = 0; iLong < longDiv; iLong++)
+		for (dword iLong = 0; iLong < longDiv; iLong++)
 		{
 			// near base
 			{

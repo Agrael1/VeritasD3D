@@ -67,6 +67,15 @@
     <Filter Include="Файлы исходного кода\Engine\Internal\Drawable\Geometry">
       <UniqueIdentifier>{8880a2e9-6d74-4f13-a7f7-8327dd278fe5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Заголовочные файлы\Engine\File">
+      <UniqueIdentifier>{6112d352-0803-46a0-b2e4-9a278b6355fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Engine\File">
+      <UniqueIdentifier>{c06b2447-0d18-440d-8264-658c4acfc9de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\Engine\Internal\Storage">
+      <UniqueIdentifier>{95121d9c-d1d0-414e-9b5e-a27e83f87231}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryMain.c">
@@ -137,6 +146,12 @@
     </ClCompile>
     <ClCompile Include="Icosahedron.cpp">
       <Filter>Файлы исходного кода\Engine\Internal\Drawable\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="VFileDialog.cpp">
+      <Filter>Файлы исходного кода\Engine\File</Filter>
+    </ClCompile>
+    <ClCompile Include="GDIPlusManager.cpp">
+      <Filter>Файлы исходного кода\Engine\File</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -241,6 +256,15 @@
     </ClInclude>
     <ClInclude Include="Icosahedron.h">
       <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="VFileDialog.h">
+      <Filter>Заголовочные файлы\Engine\File</Filter>
+    </ClInclude>
+    <ClInclude Include="GDIPlusManager.h">
+      <Filter>Заголовочные файлы\Engine\File</Filter>
+    </ClInclude>
+    <ClInclude Include="Surface.h">
+      <Filter>Заголовочные файлы\Engine\Internal\Storage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

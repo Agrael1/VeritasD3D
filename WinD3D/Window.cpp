@@ -84,14 +84,6 @@ void Window::SetTitle(const std::string & title)
 	}
 }
 
-void Window::ScanMouse()noexcept
-{
-	POINT _out = mouse.GetAbsolute();
-	std::ostringstream oss;
-	oss << "Cur pos: (" << _out.x << ":" << _out.y << ")";
-	SetTitle(oss.str());
-}
-
 std::pair<bool,WPARAM> Window::ProcessMessages()noexcept
 {
 	MSG msg;
