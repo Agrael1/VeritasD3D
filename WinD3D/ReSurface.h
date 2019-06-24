@@ -1,6 +1,6 @@
 #pragma once
-#include "Engine\Exception.h"
 #include "GdiSetup.h"
+#include "Engine\Exception.h"
 
 class ReSurface
 {
@@ -23,3 +23,5 @@ private:
 	Gdiplus::Bitmap bitmap;
 	Gdiplus::BitmapData buffer;
 };
+
+#undef FULL_WINOPT

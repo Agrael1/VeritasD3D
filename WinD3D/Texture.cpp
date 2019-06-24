@@ -1,3 +1,4 @@
+#include "ReSurface.h"
 #include "Texture.h"
 #include "GraphicsThrows.m"
 
@@ -21,7 +22,7 @@ Texture::Texture(Graphics & gfx, ReSurface & s)
 
 	D3D11_SUBRESOURCE_DATA sd = {};
 	sd.pSysMem = s.GetBufferPtr().Scan0;
-	sd.SysMemPitch = s.GetBufferPtr().Width * 4;
+	sd.SysMemPitch = s.GetBufferPtr().Stride;
 
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> pTexture;
 	GFX_THROW_INFO(GetDevice(gfx)->CreateTexture2D(

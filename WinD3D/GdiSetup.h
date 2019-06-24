@@ -8,5 +8,3 @@ namespace Gdiplus
 	using std::max;
 }
 #include <gdiplus.h>
-
-#pragma comment( lib,"gdiplus.lib" )

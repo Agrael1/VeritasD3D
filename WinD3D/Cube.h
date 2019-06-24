@@ -10,23 +10,18 @@ public:
 	{
 		constexpr float side = 1.0f / 2.0f;
 
-		std::vector<DirectX::XMFLOAT3> vertices;
-		vertices.emplace_back(-side, -side, -side); // 0
-		vertices.emplace_back(side, -side, -side); // 1
-		vertices.emplace_back(-side, side, -side); // 2
-		vertices.emplace_back(side, side, -side); // 3
-		vertices.emplace_back(-side, -side, side); // 4
-		vertices.emplace_back(side, -side, side); // 5
-		vertices.emplace_back(-side, side, side); // 6
-		vertices.emplace_back(side, side, side); // 7
+		std::vector<V> vertices(8);
+		vertices[0].pos = { -side, -side, -side }; // 0
+		vertices[1].pos = {side, -side, -side}; // 1
+		vertices[2].pos = {-side, side, -side}; // 2
+		vertices[3].pos = {side, side, -side}; // 3
+		vertices[4].pos = {-side, -side, side}; // 4
+		vertices[5].pos = {side, -side, side}; // 5
+		vertices[6].pos = {-side, side, side}; // 6
+		vertices[7].pos = {side, side, side}; // 7
 
-		std::vector<V> verts(vertices.size());
-		for (size_t i = 0; i < vertices.size(); i++)
-		{
-			verts[i].pos = vertices[i];
-		}
 		return{
-			std::move(verts),{
+			std::move(vertices),{
 				0,2,1, 2,3,1,
 				1,3,5, 3,7,5,
 				2,6,3, 3,6,7,

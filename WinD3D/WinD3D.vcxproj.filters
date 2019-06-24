@@ -79,6 +79,9 @@
     <Filter Include="Файлы исходного кода\Engine\Internal\Storage">
       <UniqueIdentifier>{510fadf1-db83-4526-98ee-8e644be3ac2f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы ресурсов\Images">
+      <UniqueIdentifier>{904b3ac4-0756-475d-8141-d73632901c89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryMain.c">
@@ -167,6 +170,9 @@
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Файлы исходного кода\Engine\Internal\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Sheet.cpp">
+      <Filter>Файлы исходного кода\Engine\Internal\Drawable\Geometry</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -278,9 +284,6 @@
     <ClInclude Include="GDIPlusManager.h">
       <Filter>Заголовочные файлы\Engine\File</Filter>
     </ClInclude>
-    <ClInclude Include="Surface.h">
-      <Filter>Заголовочные файлы\Engine\Internal\Storage</Filter>
-    </ClInclude>
     <ClInclude Include="ReSurface.h">
       <Filter>Заголовочные файлы\Engine\Internal\Storage</Filter>
     </ClInclude>
@@ -293,6 +296,12 @@
     <ClInclude Include="Sampler.h">
       <Filter>Заголовочные файлы\Engine\Internal\Bindable</Filter>
     </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry\Bases</Filter>
+    </ClInclude>
+    <ClInclude Include="Sheet.h">
+      <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc">
@@ -302,6 +311,12 @@
   <ItemGroup>
     <Image Include="TheLostReality.ico">
       <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Desktop\Marble.jpg">
+      <Filter>Файлы ресурсов\Images</Filter>
+    </Image>
+    <Image Include="Images\kappa50.png">
+      <Filter>Файлы ресурсов\Images</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
@@ -329,6 +344,12 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="ColorIndexVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="TexturePS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

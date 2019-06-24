@@ -1,13 +1,5 @@
 #include "GDIPlusManager.h"
-#include <algorithm>
-namespace Gdiplus
-{
-	using std::min;
-	using std::max;
-}
-#include <gdiplus.h>
-
-#pragma comment(lib, "gdiplus.lib")
+#include "GdiSetup.h"
 
 ULONG_PTR GDIPlusManager::token = 0;
 int GDIPlusManager::refCount = 0;
