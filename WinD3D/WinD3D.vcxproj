@@ -149,6 +149,10 @@
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="Pyramid.cpp" />
     <ClCompile Include="RePrism.cpp" />
+    <ClCompile Include="ReSurface.cpp" />
+    <ClCompile Include="Sampler.cpp" />
+    <ClCompile Include="Surface.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Topology.cpp" />
     <ClCompile Include="TransformCBuf.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
@@ -173,6 +177,7 @@
     <ClInclude Include="Engine\Window.h" />
     <ClInclude Include="Engine\WinSetup.h" />
     <ClInclude Include="GDIPlusManager.h" />
+    <ClInclude Include="GdiSetup.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Icosahedron.h" />
     <ClInclude Include="Icosphere.h" />
@@ -186,8 +191,11 @@
     <ClInclude Include="Pyramid.h" />
     <ClInclude Include="RePrism.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="ReSurface.h" />
+    <ClInclude Include="Sampler.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Surface.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Topology.h" />
     <ClInclude Include="TransformCBuf.h" />
     <ClInclude Include="EngineBase.h" />

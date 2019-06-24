@@ -76,6 +76,9 @@
     <Filter Include="Заголовочные файлы\Engine\Internal\Storage">
       <UniqueIdentifier>{95121d9c-d1d0-414e-9b5e-a27e83f87231}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы исходного кода\Engine\Internal\Storage">
+      <UniqueIdentifier>{510fadf1-db83-4526-98ee-8e644be3ac2f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryMain.c">
@@ -152,6 +155,18 @@
     </ClCompile>
     <ClCompile Include="GDIPlusManager.cpp">
       <Filter>Файлы исходного кода\Engine\File</Filter>
+    </ClCompile>
+    <ClCompile Include="Surface.cpp">
+      <Filter>Файлы исходного кода\Engine\File</Filter>
+    </ClCompile>
+    <ClCompile Include="ReSurface.cpp">
+      <Filter>Файлы исходного кода\Engine\Internal\Storage</Filter>
+    </ClCompile>
+    <ClCompile Include="Sampler.cpp">
+      <Filter>Файлы исходного кода\Engine\Internal\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Файлы исходного кода\Engine\Internal\Bindable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -265,6 +280,18 @@
     </ClInclude>
     <ClInclude Include="Surface.h">
       <Filter>Заголовочные файлы\Engine\Internal\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="ReSurface.h">
+      <Filter>Заголовочные файлы\Engine\Internal\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="GdiSetup.h">
+      <Filter>Заголовочные файлы\Engine\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Заголовочные файлы\Engine\Internal\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Sampler.h">
+      <Filter>Заголовочные файлы\Engine\Internal\Bindable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
