@@ -82,6 +82,24 @@
     <Filter Include="Файлы ресурсов\Images">
       <UniqueIdentifier>{904b3ac4-0756-475d-8141-d73632901c89}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Заголовочные файлы\Engine\ImGUI">
+      <UniqueIdentifier>{0079a7bd-0263-4eec-9138-32d5a697c26b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\Engine\ImGUI\Core">
+      <UniqueIdentifier>{74100ba4-094b-4881-a94d-ddc59b4b30cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\Engine\ImGUI\Impl">
+      <UniqueIdentifier>{6596a14e-efa5-45a3-8722-55736808dd37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Engine\ImGUI">
+      <UniqueIdentifier>{dd306305-cba0-47a3-9a8d-bea44eff7c06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Engine\ImGUI\Core">
+      <UniqueIdentifier>{bc0eb6d9-9ab8-459c-bc20-d91e252f58e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Engine\ImGUI\Impl">
+      <UniqueIdentifier>{6a47bf79-e6f6-411b-82d3-4e29bf596653}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryMain.c">
@@ -159,9 +177,6 @@
     <ClCompile Include="GDIPlusManager.cpp">
       <Filter>Файлы исходного кода\Engine\File</Filter>
     </ClCompile>
-    <ClCompile Include="Surface.cpp">
-      <Filter>Файлы исходного кода\Engine\File</Filter>
-    </ClCompile>
     <ClCompile Include="ReSurface.cpp">
       <Filter>Файлы исходного кода\Engine\Internal\Storage</Filter>
     </ClCompile>
@@ -172,6 +187,30 @@
       <Filter>Файлы исходного кода\Engine\Internal\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="Sheet.cpp">
+      <Filter>Файлы исходного кода\Engine\Internal\Drawable\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUI\imgui.cpp">
+      <Filter>Файлы исходного кода\Engine\ImGUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUI\imgui_demo.cpp">
+      <Filter>Файлы исходного кода\Engine\ImGUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUI\imgui_draw.cpp">
+      <Filter>Файлы исходного кода\Engine\ImGUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUI\imgui_widgets.cpp">
+      <Filter>Файлы исходного кода\Engine\ImGUI\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUI\imgui_impl_dx11.cpp">
+      <Filter>Файлы исходного кода\Engine\ImGUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUI\imgui_impl_win32.cpp">
+      <Filter>Файлы исходного кода\Engine\ImGUI\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUIManager.cpp">
+      <Filter>Файлы исходного кода\Engine\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinnedBox.cpp">
       <Filter>Файлы исходного кода\Engine\Internal\Drawable\Geometry</Filter>
     </ClCompile>
   </ItemGroup>
@@ -301,6 +340,36 @@
     </ClInclude>
     <ClInclude Include="Sheet.h">
       <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinnedBox.h">
+      <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUI\imconfig.h">
+      <Filter>Заголовочные файлы\Engine\ImGUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUI\imgui.h">
+      <Filter>Заголовочные файлы\Engine\ImGUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUI\imgui_internal.h">
+      <Filter>Заголовочные файлы\Engine\ImGUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUI\imstb_rectpack.h">
+      <Filter>Заголовочные файлы\Engine\ImGUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUI\imstb_textedit.h">
+      <Filter>Заголовочные файлы\Engine\ImGUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUI\imstb_truetype.h">
+      <Filter>Заголовочные файлы\Engine\ImGUI\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUI\imgui_impl_dx11.h">
+      <Filter>Заголовочные файлы\Engine\ImGUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUI\imgui_impl_win32.h">
+      <Filter>Заголовочные файлы\Engine\ImGUI\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUIManager.h">
+      <Filter>Заголовочные файлы\Engine\ImGUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

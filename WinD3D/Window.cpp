@@ -1,6 +1,7 @@
 #include "Engine\Window.h"
 #include <sstream>
 #include "resource.h"
+#include "ImGUI\imgui_impl_win32.h"
 
 #define GET_X_LPARAM(lp)                        ((int)(short)LOWORD(lp))
 #define GET_Y_LPARAM(lp)                        ((int)(short)HIWORD(lp))
@@ -69,11 +70,16 @@ Window::Window(unsigned int width, unsigned int height, const char * name):width
 
 	mouse.InitializeMouse(hWnd);
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
-	//ShowWindow(hWnd, SW_HIDE);
+	
+	// Init GUI (only one window supported)
+	ImGui_ImplWin32_Init(hWnd);
+
+	// Create Graphics object
 	pGfx = std::make_unique<Graphics>(hWnd);
 }
 Window::~Window()
 {
+	ImGui_ImplWin32_Shutdown();
 	DestroyWindow(hWnd);
 }
 void Window::SetTitle(const std::string & title)
@@ -101,6 +107,10 @@ std::pair<bool,WPARAM> Window::ProcessMessages()noexcept
 }
 Graphics & Window::Gfx()
 {
+	if (!pGfx)
+	{
+		throw WND_NOGFX_EXCEPT();
+	}
 	return *pGfx;
 }
 LRESULT __stdcall Window::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -129,6 +139,10 @@ LRESULT __stdcall Window::HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPA
 }
 LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+	{
+		return true;
+	}
 	switch (msg)
 	{
 	case WM_CLOSE:

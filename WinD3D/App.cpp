@@ -6,8 +6,9 @@
 #include "Pyramid.h"
 #include "Box.h"
 #include "Icosahedron.h"
-#include "Sheet.h"
+#include "SkinnedBox.h"
 #include "GDIPlusManager.h"
+#include "ImGUI\imgui.h"
 
 GDIPlusManager gdipm;
 
@@ -45,9 +46,9 @@ App::App() : wnd(800,600,"VTest")
 					odist, rdist
 					);
 			case 4:
-				return std::make_unique<Sheet>(
+				return std::make_unique<SkinnedBox>(
 					gfx, rng, adist, ddist,
-					odist, rdist
+					odist, rdist, bdist
 					);
 			default:
 				assert(false && "bad drawable type in factory");
@@ -93,12 +94,23 @@ int App::Go()
 
 void App::DoFrame(float dt)
 {
-	wnd.Gfx().ClearBuffer(0.07f, 0.0f, 0.12f);
+	const auto s = dt*speed;
+
+	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
 	for (auto& d : drawables)
 	{
-		d->Update(dt);
+		d->Update(s);
 		d->Draw(wnd.Gfx());
 	}
+
+	if (ImGui::Begin("Simulation speed"))
+	{
+		ImGui::SliderFloat("Speed Factor", &speed, 0.0f, 3.0f);
+		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	}
+	ImGui::End();
+
+	// Present
 	wnd.Gfx().EndFrame();
 }
 

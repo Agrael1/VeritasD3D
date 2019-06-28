@@ -53,9 +53,14 @@ public:
 	Graphics( HWND hWnd);
 	Graphics(const Graphics&) = delete;
 	Graphics& operator=(const Graphics&) = delete;
-	~Graphics() = default;
+	~Graphics();
+public:
+	void EnableImgui()noexcept;
+	void DisableImgui()noexcept;
+	bool IsImguiEnabled()const noexcept;
+	void BeginFrame(float r, float g, float b)noexcept;
 	void EndFrame();
-	void ClearBuffer(float r, float g, float b)noexcept;
+	//void ClearBuffer(float r, float g, float b)noexcept;
 	void DrawTestFigure(float angle, float x, float y);
 	void DrawIndexed(UINT count)noexcept(!IS_DEBUG);
 	DirectX::XMMATRIX GetProjection() const noexcept;
@@ -65,6 +70,7 @@ private:
 #ifndef NDEBUG
 	DXGIInfoManager infoManager;
 #endif
+	bool imguiEnabled;
 private:
 	Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> pSwap;

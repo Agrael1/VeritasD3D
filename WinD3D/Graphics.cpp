@@ -1,14 +1,8 @@
 #include "Graphics.h"
 #include "dxerr.h"
 #include <sstream>
-
-#include "IndexBuffer.h"
-#include "VertexBuffer.h"
-#include "InputLayout.h"
-#include "PixelShader.h"
-#include "VertexShader.h"
-#include "Topology.h"
-#include "ConstantBuffer.h"
+#include "ImGUI\imgui_impl_dx11.h"
+#include "ImGUI\imgui_impl_win32.h"
 
 #include "GraphicsThrows.m"
 
@@ -78,6 +72,7 @@ const char* Graphics::DeviceRemovedException::GetType()const noexcept
 
 // Graphics
 Graphics::Graphics(HWND hWnd)
+	:imguiEnabled(true)
 {
 	DXGI_SWAP_CHAIN_DESC DSwapDesc = {};
 	DSwapDesc.BufferDesc.Width = 0;
@@ -178,10 +173,49 @@ Graphics::Graphics(HWND hWnd)
 	vp.TopLeftX = 0.0f;
 	vp.TopLeftY = 0.0f;
 	pContext->RSSetViewports(1u, &vp);
+
+	// init imgui d3d impl
+	ImGui_ImplDX11_Init(pDevice.Get(), pContext.Get());
+}
+Graphics::~Graphics()
+{
+	ImGui_ImplDX11_Shutdown();
 }
 
+void Graphics::EnableImgui() noexcept
+{
+	imguiEnabled = true;
+}
+void Graphics::DisableImgui() noexcept
+{
+	imguiEnabled = false;
+}
+bool Graphics::IsImguiEnabled() const noexcept
+{
+	return imguiEnabled;
+}
+
+void Graphics::BeginFrame(float r, float g, float b) noexcept
+{
+	if (imguiEnabled)
+	{
+		ImGui_ImplDX11_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+	}
+	const float color[] = { r,g,b,1.0f };
+	pContext->ClearRenderTargetView(pTarget.Get(), color);
+	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
+}
 void Graphics::EndFrame()
 {
+	// imgui render
+	if (imguiEnabled)
+	{
+		ImGui::Render();
+		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	}
+
 	HRESULT hr;
 #ifndef NDEBUG
 	infoManager.Set();
@@ -198,12 +232,6 @@ void Graphics::EndFrame()
 			throw GFX_EXCEPT(hr);
 		}
 	}
-}
-void Graphics::ClearBuffer(float r, float g, float b) noexcept
-{
-	const float color[] = { r,g,b,1.0f };
-	pContext->ClearRenderTargetView(pTarget.Get(), color);
-	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
 }
 void Graphics::DrawTestFigure(float angle, float x, float y)
 {
