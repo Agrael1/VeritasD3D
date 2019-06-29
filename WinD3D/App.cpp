@@ -71,6 +71,7 @@ App::App() : wnd(800,600,"VTest")
 	Factory f(wnd.Gfx());
 	drawables.reserve(nDrawables);
 	std::generate_n(std::back_inserter(drawables), nDrawables, f);
+
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
 }
 App::~App()
@@ -97,6 +98,8 @@ void App::DoFrame(float dt)
 	const auto s = dt*speed;
 
 	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
+	wnd.Gfx().SetCamera(cam.GetViewMatrix());
+
 	for (auto& d : drawables)
 	{
 		d->Update(s);
@@ -109,6 +112,7 @@ void App::DoFrame(float dt)
 		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	}
 	ImGui::End();
+	cam.SpawnControlWindow();
 
 	// Present
 	wnd.Gfx().EndFrame();

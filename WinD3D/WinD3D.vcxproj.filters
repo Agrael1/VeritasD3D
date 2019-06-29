@@ -100,6 +100,9 @@
     <Filter Include="Файлы исходного кода\Engine\ImGUI\Impl">
       <UniqueIdentifier>{6a47bf79-e6f6-411b-82d3-4e29bf596653}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Заголовочные файлы\Engine\Window\Setups">
+      <UniqueIdentifier>{82407619-4271-4b18-b3ed-6a9d275fbdd4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryMain.c">
@@ -213,6 +216,9 @@
     <ClCompile Include="SkinnedBox.cpp">
       <Filter>Файлы исходного кода\Engine\Internal\Drawable\Geometry</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -296,17 +302,11 @@
     <ClInclude Include="Engine\Window.h">
       <Filter>Заголовочные файлы\Engine\Window</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\WinSetup.h">
-      <Filter>Заголовочные файлы\Engine\Window</Filter>
-    </ClInclude>
     <ClInclude Include="Prism.h">
       <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry\Bases</Filter>
     </ClInclude>
     <ClInclude Include="Box.h">
       <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineBase.h">
-      <Filter>Заголовочные файлы\Engine\Window</Filter>
     </ClInclude>
     <ClInclude Include="RePrism.h">
       <Filter>Заголовочные файлы\Engine\Internal\Drawable\Geometry</Filter>
@@ -325,9 +325,6 @@
     </ClInclude>
     <ClInclude Include="ReSurface.h">
       <Filter>Заголовочные файлы\Engine\Internal\Storage</Filter>
-    </ClInclude>
-    <ClInclude Include="GdiSetup.h">
-      <Filter>Заголовочные файлы\Engine\Window</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Заголовочные файлы\Engine\Internal\Bindable</Filter>
@@ -370,6 +367,18 @@
     </ClInclude>
     <ClInclude Include="ImGUIManager.h">
       <Filter>Заголовочные файлы\Engine\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\WinSetup.h">
+      <Filter>Заголовочные файлы\Engine\Window\Setups</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineBase.h">
+      <Filter>Заголовочные файлы\Engine\Window\Setups</Filter>
+    </ClInclude>
+    <ClInclude Include="GdiSetup.h">
+      <Filter>Заголовочные файлы\Engine\Window\Setups</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Заголовочные файлы\Engine\Window</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

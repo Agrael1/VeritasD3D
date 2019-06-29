@@ -233,9 +233,13 @@ void Graphics::EndFrame()
 		}
 	}
 }
-void Graphics::DrawTestFigure(float angle, float x, float y)
+DirectX::XMMATRIX Graphics::GetCamera() const noexcept
 {
-	
+	return camera;
+}
+void Graphics::SetCamera(DirectX::XMMATRIX Camera)noexcept
+{
+	camera = Camera;
 }
 void Graphics::SetProjection(DirectX::FXMMATRIX proj) noexcept
 {

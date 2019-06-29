@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine\Window.h"
 #include "ImGUIManager.h"
+#include "Camera.h"
 
 class App
 {
@@ -14,6 +15,7 @@ private:
 private:
 	ImGUIManager imgui;
 	Window wnd;
+	Camera cam;
 
 	float speed = 1.0f;
 	std::vector<std::unique_ptr<class Drawable>> drawables;

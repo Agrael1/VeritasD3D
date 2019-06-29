@@ -2,7 +2,13 @@
 #include "Prism.h"
 #include "BindableBase.h"
 
-RePrism::RePrism(Graphics & gfx, std::mt19937 & rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist)
+RePrism::RePrism(Graphics & gfx, std::mt19937 & rng, 
+	std::uniform_real_distribution<float>& adist, 
+	std::uniform_real_distribution<float>& ddist, 
+	std::uniform_real_distribution<float>& odist, 
+	std::uniform_real_distribution<float>& rdist,
+	std::uniform_real_distribution<float>& bdist,
+	std::uniform_int_distribution<int>& longdist)
 	:
 	r(rdist(rng)),
 	droll(ddist(rng)),
@@ -15,9 +21,9 @@ RePrism::RePrism(Graphics & gfx, std::mt19937 & rng, std::uniform_real_distribut
 	theta(adist(rng)),
 	phi(adist(rng))
 {
+	namespace dx = DirectX;
 	if (!IsStaticInitialized())
 	{
-		namespace dx = DirectX;
 		struct Vertex
 		{
 			dx::XMFLOAT3 pos;
@@ -29,7 +35,7 @@ RePrism::RePrism(Graphics & gfx, std::mt19937 & rng, std::uniform_real_distribut
 				unsigned char a;
 			} color;
 		};
-		auto model = Prism::MakeTesselated<Vertex>(3);
+		auto model = Prism::MakeTesselated<Vertex>(longdist(rng));
 		// set vertex colors for mesh
 		model.vertices[0].color = { 255,255,0 };
 		model.vertices[1].color = { 255,255,0 };
@@ -66,6 +72,11 @@ RePrism::RePrism(Graphics & gfx, std::mt19937 & rng, std::uniform_real_distribut
 	}
 
 	AddBind(std::make_unique<TransformCbuf>(gfx, *this));
+	// store deformation
+	dx::XMStoreFloat3x3(
+		&mt,
+		dx::XMMatrixScaling(1.0f, 1.0f, bdist(rng))
+	);
 }
 
 void RePrism::Update(float dt) noexcept
@@ -81,8 +92,8 @@ void RePrism::Update(float dt) noexcept
 DirectX::XMMATRIX RePrism::GetTransformXM() const noexcept
 {
 	namespace dx = DirectX;
-	return dx::XMMatrixRotationRollPitchYaw(pitch, yaw, roll) *
+	return dx::XMLoadFloat3x3(&mt)*
+		dx::XMMatrixRotationRollPitchYaw(pitch, yaw, roll) *
 		dx::XMMatrixTranslation(r, 0.0f, 0.0f) *
-		dx::XMMatrixRotationRollPitchYaw(theta, phi, chi) *
-		dx::XMMatrixTranslation(0.0f, 0.0f, 20.0f);
+		dx::XMMatrixRotationRollPitchYaw(theta, phi, chi);
 }
