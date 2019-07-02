@@ -25,7 +25,7 @@ App::App() : wnd(800,600,"VTest"), light(wnd.Gfx())
 		{
 			return std::make_unique<Icosahedron>(
 				gfx, rng, adist, ddist,
-				odist, rdist
+				odist, rdist, bdist
 				);
 		}
 	private:
@@ -35,7 +35,7 @@ App::App() : wnd(800,600,"VTest"), light(wnd.Gfx())
 		std::uniform_real_distribution<float> ddist{ 0.0f,PI * 0.5f };
 		std::uniform_real_distribution<float> odist{ 0.0f,PI * 0.08f };
 		std::uniform_real_distribution<float> rdist{ 6.0f,20.0f };
-		std::uniform_real_distribution<float> bdist{ 0.4f,3.0f };
+		std::uniform_real_distribution<float> bdist{ 0.4f,2.0f };
 		//std::uniform_int_distribution<int> latdist{ 5,20 };
 		//std::uniform_int_distribution<int> longdist{ 10,40 };
 		//std::uniform_int_distribution<int> typedist{ 0,4 };
