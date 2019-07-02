@@ -2,6 +2,7 @@
 #include "IndexedTriangleList.h"
 #include <DirectXMath.h>
 #include "EngineBase.h"
+#include <numeric>
 
 class Icosphere
 {
@@ -40,5 +41,21 @@ public:
 				4, 9, 5,	2, 4,11,	6, 2,10,	8, 6, 7,	9, 8, 1
 			}
 		};
+	}
+	template<class V>
+	static IndexedTriangleList<V> MakeIndependent()
+	{
+		auto temp = Make<V>();
+
+		std::vector<V> ReVertices(temp.indices.size());
+		UINT j = 0;
+		for (auto i : temp.indices)
+		{
+			ReVertices[j++] = temp.vertices[i];
+		}
+		std::vector<unsigned short> ReIndices(temp.indices.size());
+		std::iota(ReIndices.begin(), ReIndices.end(), 0);
+
+		return{ std::move(ReVertices), std::move(ReIndices) };
 	}
 };
