@@ -2,7 +2,8 @@
 #include "BindableBase.h"
 #include "Sphere.h"
 
-SolidSphere::SolidSphere(Graphics & gfx, float radius)
+SolidSphere::SolidSphere(Graphics & gfx, float radius, DirectX::XMFLOAT3 color)
+	:color(color)
 {
 	namespace dx = DirectX;
 
@@ -25,9 +26,10 @@ SolidSphere::SolidSphere(Graphics & gfx, float radius)
 
 		struct PSColorConstant
 		{
-			dx::XMFLOAT3 color = { 1.0,1.0,1.0 };
+			dx::XMFLOAT3 color;
 			float padding;
 		} colorConst;
+		colorConst.color = color;
 		
 		AddStaticBind(std::make_unique<PixelConstantBuffer<PSColorConstant>>(gfx, colorConst));
 
@@ -49,6 +51,10 @@ SolidSphere::SolidSphere(Graphics & gfx, float radius)
 void SolidSphere::SetPos(DirectX::XMFLOAT3 pos) noexcept
 {
 	this->pos = pos;
+}
+void SolidSphere::SetColor(DirectX::XMFLOAT3 color) noexcept
+{
+	this->color = color;
 }
 void SolidSphere::Update(float dt) noexcept
 {

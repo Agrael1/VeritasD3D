@@ -2,7 +2,7 @@
 #include "Icosphere.h"
 #include "BindableBase.h"
 
-Icosahedron::Icosahedron(Graphics & gfx, std::mt19937 & rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist, std::uniform_real_distribution<float>& bdist)
+Icosahedron::Icosahedron(Graphics & gfx, std::mt19937 & rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist, std::uniform_real_distribution<float>& bdist, DirectX::XMFLOAT3 material)
 	:
 	r(rdist(rng)),
 	droll(ddist(rng)),
@@ -57,6 +57,16 @@ Icosahedron::Icosahedron(Graphics & gfx, std::mt19937 & rng, std::uniform_real_d
 
 	AddBind(std::make_unique<TransformCbuf>(gfx, *this));
 	
+	struct PSMaterialConstant
+	{
+		alignas(16)DirectX::XMFLOAT3 color;
+		float specularIntensity = 0.6f;
+		float specularPower = 30.0f;
+		float padding[2];
+	}colorConst;
+	colorConst.color = material;
+	AddBind(std::make_unique<PixelConstantBuffer<PSMaterialConstant>>(gfx, colorConst, 1u));
+
 	// Per instance scaling
 	dx::XMStoreFloat3x3(
 		&mt,

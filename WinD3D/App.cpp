@@ -23,9 +23,10 @@ App::App() : wnd(800,600,"VTest"), light(wnd.Gfx())
 		{}
 		std::unique_ptr<Drawable> operator()()
 		{
+			const DirectX::XMFLOAT3 mat = { cdist(rng),cdist(rng) ,cdist(rng) };
 			return std::make_unique<Icosahedron>(
 				gfx, rng, adist, ddist,
-				odist, rdist, bdist
+				odist, rdist, bdist, mat
 				);
 		}
 	private:
@@ -36,6 +37,7 @@ App::App() : wnd(800,600,"VTest"), light(wnd.Gfx())
 		std::uniform_real_distribution<float> odist{ 0.0f,PI * 0.08f };
 		std::uniform_real_distribution<float> rdist{ 6.0f,20.0f };
 		std::uniform_real_distribution<float> bdist{ 0.4f,2.0f };
+		std::uniform_real_distribution<float> cdist{ 0.0f,1.0f };
 		//std::uniform_int_distribution<int> latdist{ 5,20 };
 		//std::uniform_int_distribution<int> longdist{ 10,40 };
 		//std::uniform_int_distribution<int> typedist{ 0,4 };
@@ -72,7 +74,7 @@ void App::DoFrame(float dt)
 
 	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
 	wnd.Gfx().SetCamera(cam.GetViewMatrix());
-	light.Bind(wnd.Gfx());
+	light.Bind(wnd.Gfx(), cam.GetViewMatrix());
 
 	for (auto& d : drawables)
 	{
