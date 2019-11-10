@@ -8,7 +8,7 @@
 // Development of this library was sponsored by RAD Game Tools
 //
 // This C header file implements the guts of a multi-line text-editing
-// widget; you implement display, word-wrapping, and low-level string
+// widget; you implement display, unsigned short-wrapping, and low-level string
 // insertion/deletion, and stb_textedit will map user inputs into
 // insertions & deletions, plus updates to the cursor position,
 // selection state, and undo state.
@@ -39,7 +39,7 @@
 //   1.12 (2018-01-29) user can change STB_TEXTEDIT_KEYTYPE, fix redo to avoid crash
 //   1.11 (2017-03-03) fix HOME on last line, dragging off single-line textfield
 //   1.10 (2016-10-25) supress warnings about casting away const with -Wcast-qual
-//   1.9  (2016-08-27) customizable move-by-word
+//   1.9  (2016-08-27) customizable move-by-unsigned short
 //   1.8  (2016-04-02) better keyboard handling when mouse button is down
 //   1.7  (2015-09-13) change y range handling in case baseline is non-0
 //   1.6  (2015-04-15) allow STB_TEXTEDIT_memmove
@@ -47,7 +47,7 @@
 //   1.4  (2014-08-17) fix signed/unsigned warnings
 //   1.3  (2014-06-19) fix mouse clicking to round to nearest char boundary
 //   1.2  (2014-05-27) fix some RAD types that had crept into the new code
-//   1.1  (2013-12-15) move-by-word (requires STB_TEXTEDIT_IS_SPACE )
+//   1.1  (2013-12-15) move-by-unsigned short (requires STB_TEXTEDIT_IS_SPACE )
 //   1.0  (2012-07-26) improve documentation, initial public release
 //   0.3  (2012-02-24) bugfixes, single-line mode; insert mode
 //   0.2  (2011-11-28) fixes to undo/redo
@@ -55,7 +55,7 @@
 //
 // ADDITIONAL CONTRIBUTORS
 //
-//   Ulf Winklemann: move-by-word in 1.1
+//   Ulf Winklemann: move-by-unsigned short in 1.1
 //   Fabian Giesen: secondary key inputs in 1.5
 //   Martins Mozeiko: STB_TEXTEDIT_memmove in 1.6
 //
@@ -137,7 +137,7 @@
 //                                        (return type is int, -1 means not valid to insert)
 //    STB_TEXTEDIT_GETCHAR(obj,i)       returns the i'th character of obj, 0-based
 //    STB_TEXTEDIT_NEWLINE              the character returned by _GETCHAR() we recognize
-//                                        as manually wordwrapping for end-of-line positioning
+//                                        as manually unsigned shortwrapping for end-of-line positioning
 //
 //    STB_TEXTEDIT_DELETECHARS(obj,i,n)      delete n characters starting at i
 //    STB_TEXTEDIT_INSERTCHARS(obj,i,c*,n)   insert n characters at i (pointed to by STB_TEXTEDIT_CHARTYPE*)
@@ -163,8 +163,8 @@
 //                                          required for default WORDLEFT/WORDRIGHT handlers
 //    STB_TEXTEDIT_MOVEWORDLEFT(obj,i)   custom handler for WORDLEFT, returns index to move cursor to
 //    STB_TEXTEDIT_MOVEWORDRIGHT(obj,i)  custom handler for WORDRIGHT, returns index to move cursor to
-//    STB_TEXTEDIT_K_WORDLEFT            keyboard input to move cursor left one word // e.g. ctrl-LEFT
-//    STB_TEXTEDIT_K_WORDRIGHT           keyboard input to move cursor right one word // e.g. ctrl-RIGHT
+//    STB_TEXTEDIT_K_WORDLEFT            keyboard input to move cursor left one unsigned short // e.g. ctrl-LEFT
+//    STB_TEXTEDIT_K_WORDRIGHT           keyboard input to move cursor right one unsigned short // e.g. ctrl-RIGHT
 //    STB_TEXTEDIT_K_LINESTART2          secondary keyboard input to move cursor to start of line
 //    STB_TEXTEDIT_K_LINEEND2            secondary keyboard input to move cursor to end of line
 //    STB_TEXTEDIT_K_TEXTSTART2          secondary keyboard input to move cursor to start of text
@@ -191,7 +191,7 @@
 // STB_TEXTEDIT_LAYOUTROW returns information about the shape of one displayed
 // row of characters assuming they start on the i'th character--the width and
 // the height and the number of characters consumed. This allows this library
-// to traverse the entire layout incrementally. You need to compute word-wrapping
+// to traverse the entire layout incrementally. You need to compute unsigned short-wrapping
 // here.
 //
 // Each textfield keeps its own insert mode state, which is not how normal
@@ -643,16 +643,16 @@ static void stb_textedit_move_to_last(STB_TEXTEDIT_STRING *str, STB_TexteditStat
 }
 
 #ifdef STB_TEXTEDIT_IS_SPACE
-static int is_word_boundary( STB_TEXTEDIT_STRING *str, int idx )
+static int is_unsigned short_boundary( STB_TEXTEDIT_STRING *str, int idx )
 {
    return idx > 0 ? (STB_TEXTEDIT_IS_SPACE( STB_TEXTEDIT_GETCHAR(str,idx-1) ) && !STB_TEXTEDIT_IS_SPACE( STB_TEXTEDIT_GETCHAR(str, idx) ) ) : 1;
 }
 
 #ifndef STB_TEXTEDIT_MOVEWORDLEFT
-static int stb_textedit_move_to_word_previous( STB_TEXTEDIT_STRING *str, int c )
+static int stb_textedit_move_to_unsigned short_previous( STB_TEXTEDIT_STRING *str, int c )
 {
    --c; // always move at least one character
-   while( c >= 0 && !is_word_boundary( str, c ) )
+   while( c >= 0 && !is_unsigned short_boundary( str, c ) )
       --c;
 
    if( c < 0 )
@@ -660,15 +660,15 @@ static int stb_textedit_move_to_word_previous( STB_TEXTEDIT_STRING *str, int c )
 
    return c;
 }
-#define STB_TEXTEDIT_MOVEWORDLEFT stb_textedit_move_to_word_previous
+#define STB_TEXTEDIT_MOVEWORDLEFT stb_textedit_move_to_unsigned short_previous
 #endif
 
 #ifndef STB_TEXTEDIT_MOVEWORDRIGHT
-static int stb_textedit_move_to_word_next( STB_TEXTEDIT_STRING *str, int c )
+static int stb_textedit_move_to_unsigned short_next( STB_TEXTEDIT_STRING *str, int c )
 {
    const int len = STB_TEXTEDIT_STRINGLEN(str);
    ++c; // always move at least one character
-   while( c < len && !is_word_boundary( str, c ) )
+   while( c < len && !is_unsigned short_boundary( str, c ) )
       ++c;
 
    if( c > len )
@@ -676,7 +676,7 @@ static int stb_textedit_move_to_word_next( STB_TEXTEDIT_STRING *str, int c )
 
    return c;
 }
-#define STB_TEXTEDIT_MOVEWORDRIGHT stb_textedit_move_to_word_next
+#define STB_TEXTEDIT_MOVEWORDRIGHT stb_textedit_move_to_unsigned short_next
 #endif
 
 #endif

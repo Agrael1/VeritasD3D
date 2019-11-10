@@ -1,6 +1,5 @@
 #pragma once
-#define FULL_WINOPT
-#include "Engine\WinSetup.h"
+#include <Framework\WinSetup.h>
 
 class GDIPlusManager
 {

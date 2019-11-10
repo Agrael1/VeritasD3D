@@ -1,6 +1,6 @@
 #pragma once
-#include "GdiSetup.h"
-#include "Engine\Exception.h"
+#include <Framework\GdiSetup.h>
+#include <Framework\Exception.h>
 
 class ReSurface
 {

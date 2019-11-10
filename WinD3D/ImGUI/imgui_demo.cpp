@@ -13,7 +13,7 @@
 // Thank you,
 // -Your beloved friend, imgui_demo.cpp (that you won't delete)
 
-// Message to beginner C/C++ programmers about the meaning of the 'static' keyword:
+// Message to beginner C/C++ programmers about the meaning of the 'static' keyunsigned short:
 // In this demo code, we frequently we use 'static' variables inside functions. A static variable persist across calls, so it is
 // essentially like a global variable but declared inside the scope of the function. We do this as a way to gather code and data
 // in the same place, to make the demo source code faster to read, faster to write, and smaller in size.
@@ -163,7 +163,7 @@ void ImGui::ShowUserGuide()
     ImGui::BulletText("While editing text:\n");
     ImGui::Indent();
     ImGui::BulletText("Hold SHIFT or use mouse to select text.");
-    ImGui::BulletText("CTRL+Left/Right to word jump.");
+    ImGui::BulletText("CTRL+Left/Right to unsigned short jump.");
     ImGui::BulletText("CTRL+A or double-click to select all.");
     ImGui::BulletText("CTRL+X,CTRL+C,CTRL+V to use clipboard.");
     ImGui::BulletText("CTRL+Z,CTRL+Y to undo/redo.");
@@ -184,7 +184,7 @@ static void ShowDemoWindowColumns();
 static void ShowDemoWindowMisc();
 
 // Demonstrate most Dear ImGui features (this is big function!)
-// You may execute this function to experiment with the UI and understand what it does. You may then search for keywords in the code when you are interested by a specific feature.
+// You may execute this function to experiment with the UI and understand what it does. You may then search for keyunsigned shorts in the code when you are interested by a specific feature.
 void ImGui::ShowDemoWindow(bool* p_open)
 {
     IM_ASSERT(ImGui::GetCurrentContext() != NULL && "Missing dear imgui context. Refer to examples app!"); // Exceptionally add an extra assert here for people confused with initial dear imgui setup
@@ -496,7 +496,7 @@ static void ShowDemoWindowWidgets()
         {
             static char str0[128] = "Hello, world!";
             ImGui::InputText("input text", str0, IM_ARRAYSIZE(str0));
-            ImGui::SameLine(); HelpMarker("USER:\nHold SHIFT or use mouse to select text.\n" "CTRL+Left/Right to word jump.\n" "CTRL+A or double-click to select all.\n" "CTRL+X,CTRL+C,CTRL+V clipboard.\n" "CTRL+Z,CTRL+Y undo/redo.\n" "ESCAPE to revert.\n\nPROGRAMMER:\nYou can use the ImGuiInputTextFlags_CallbackResize facility if you need to wire InputText() to a dynamic string type. See misc/cpp/imgui_stdlib.h for an example (this is not demonstrated in imgui_demo.cpp).");
+            ImGui::SameLine(); HelpMarker("USER:\nHold SHIFT or use mouse to select text.\n" "CTRL+Left/Right to unsigned short jump.\n" "CTRL+A or double-click to select all.\n" "CTRL+X,CTRL+C,CTRL+V clipboard.\n" "CTRL+Z,CTRL+Y undo/redo.\n" "ESCAPE to revert.\n\nPROGRAMMER:\nYou can use the ImGuiInputTextFlags_CallbackResize facility if you need to wire InputText() to a dynamic string type. See misc/cpp/imgui_stdlib.h for an example (this is not demonstrated in imgui_demo.cpp).");
 
             static char str1[128] = "";
             ImGui::InputTextWithHint("input text (w/ hint)", "enter text here", str1, IM_ARRAYSIZE(str1));
@@ -704,7 +704,7 @@ static void ShowDemoWindowWidgets()
             ImVec2 pos = ImGui::GetCursorScreenPos();
             ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(pos.x + wrap_width, pos.y), ImVec2(pos.x + wrap_width + 10, pos.y + ImGui::GetTextLineHeight()), IM_COL32(255,0,255,255));
             ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + wrap_width);
-            ImGui::Text("The lazy dog is a good dog. This paragraph is made to fit within %.0f pixels. Testing a 1 character word. The quick brown fox jumps over the lazy dog.", wrap_width);
+            ImGui::Text("The lazy dog is a good dog. This paragraph is made to fit within %.0f pixels. Testing a 1 character unsigned short. The quick brown fox jumps over the lazy dog.", wrap_width);
             ImGui::GetWindowDrawList()->AddRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax(), IM_COL32(255,255,0,255));
             ImGui::PopTextWrapPos();
 
@@ -982,12 +982,12 @@ static void ShowDemoWindowWidgets()
             struct TextFilters { static int FilterImGuiLetters(ImGuiInputTextCallbackData* data) { if (data->EventChar < 256 && strchr("imgui", (char)data->EventChar)) return 0; return 1; } };
             static char buf6[64] = ""; ImGui::InputText("\"imgui\" letters", buf6, 64, ImGuiInputTextFlags_CallbackCharFilter, TextFilters::FilterImGuiLetters);
 
-            ImGui::Text("Password input");
-            static char bufpass[64] = "password123";
-            ImGui::InputText("password", bufpass, 64, ImGuiInputTextFlags_Password | ImGuiInputTextFlags_CharsNoBlank);
+            ImGui::Text("Passunsigned short input");
+            static char bufpass[64] = "passunsigned short123";
+            ImGui::InputText("passunsigned short", bufpass, 64, ImGuiInputTextFlags_Password | ImGuiInputTextFlags_CharsNoBlank);
             ImGui::SameLine(); HelpMarker("Display all characters as '*'.\nDisable clipboard cut and copy.\nDisable logging.\n");
-            ImGui::InputTextWithHint("password (w/ hint)", "<password>", bufpass, 64, ImGuiInputTextFlags_Password | ImGuiInputTextFlags_CharsNoBlank);
-            ImGui::InputText("password (clear)", bufpass, 64, ImGuiInputTextFlags_CharsNoBlank);
+            ImGui::InputTextWithHint("passunsigned short (w/ hint)", "<passunsigned short>", bufpass, 64, ImGuiInputTextFlags_Password | ImGuiInputTextFlags_CharsNoBlank);
+            ImGui::InputText("passunsigned short (clear)", bufpass, 64, ImGuiInputTextFlags_CharsNoBlank);
             ImGui::TreePop();
         }
 
@@ -2614,7 +2614,7 @@ static void ShowDemoWindowColumns()
     // Word wrapping
     if (ImGui::TreeNode("Word-wrapping"))
     {
-        ImGui::Columns(2, "word-wrapping");
+        ImGui::Columns(2, "unsigned short-wrapping");
         ImGui::Separator();
         ImGui::TextWrapped("The quick brown fox jumps over the lazy dog.");
         ImGui::TextWrapped("Hello Left");
@@ -3615,7 +3615,7 @@ struct ExampleAppConsole
             {
                 // Example of TEXT COMPLETION
 
-                // Locate beginning of current word
+                // Locate beginning of current unsigned short
                 const char* word_end = data->Buf + data->CursorPos;
                 const char* word_start = word_end;
                 while (word_start > data->Buf)
@@ -3639,7 +3639,7 @@ struct ExampleAppConsole
                 }
                 else if (candidates.Size == 1)
                 {
-                    // Single match. Delete the beginning of the word and replace it entirely so we've got nice casing
+                    // Single match. Delete the beginning of the unsigned short and replace it entirely so we've got nice casing
                     data->DeleteChars((int)(word_start-data->Buf), (int)(word_end-word_start));
                     data->InsertChars(data->CursorPos, candidates[0]);
                     data->InsertChars(data->CursorPos, " ");
@@ -3860,7 +3860,7 @@ static void ShowExampleAppLog(bool* p_open)
         {
             const char* categories[3] = { "info", "warn", "error" };
             const char* words[] = { "Bumfuzzled", "Cattywampus", "Snickersnee", "Abibliophobia", "Absquatulate", "Nincompoop", "Pauciloquent" };
-            log.AddLog("[%05d] [%s] Hello, current time is %.1f, here's a word: '%s'\n",
+            log.AddLog("[%05d] [%s] Hello, current time is %.1f, here's a unsigned short: '%s'\n",
                 ImGui::GetFrameCount(), categories[counter % IM_ARRAYSIZE(categories)], ImGui::GetTime(), words[counter % IM_ARRAYSIZE(words)]);
             counter++;
         }

@@ -109,11 +109,11 @@
     <Filter Include="Файлы исходного кода\Engine\Graphics\Objects\Geometry">
       <UniqueIdentifier>{8880a2e9-6d74-4f13-a7f7-8327dd278fe5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Заголовочные файлы\Framework">
+      <UniqueIdentifier>{d3da98c1-aa1e-429d-b424-648b856b4867}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EntryMain.c">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="App.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
@@ -230,6 +230,9 @@
     </ClCompile>
     <ClCompile Include="SolidSphere.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Objects\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="EntryMain.cpp">
+      <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -380,15 +383,6 @@
     <ClInclude Include="ImGUIManager.h">
       <Filter>Заголовочные файлы\Engine\ImGUI</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\WinSetup.h">
-      <Filter>Заголовочные файлы\Engine\Window\Setups</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineBase.h">
-      <Filter>Заголовочные файлы\Engine\Window\Setups</Filter>
-    </ClInclude>
-    <ClInclude Include="GdiSetup.h">
-      <Filter>Заголовочные файлы\Engine\Window\Setups</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Заголовочные файлы\Engine\Window</Filter>
     </ClInclude>
@@ -397,6 +391,15 @@
     </ClInclude>
     <ClInclude Include="SolidSphere.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Objects\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\optional.h">
+      <Filter>Заголовочные файлы\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\WinSetup.h">
+      <Filter>Заголовочные файлы\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="GdiSetup.h">
+      <Filter>Заголовочные файлы\Framework</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

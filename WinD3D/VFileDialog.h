@@ -1,7 +1,5 @@
 #pragma once
 #define FULL_WINOPT
-#include "Engine\WinSetup.h"
-
 #include "Engine\Window.h"
 #include <ShObjIdl.h>
 #include <wrl.h>

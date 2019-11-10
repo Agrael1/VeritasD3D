@@ -1,71 +1,113 @@
 #pragma once
 #include <queue>
-#include <bitset>
-#include "EngineBase.h"
-#include "Engine\WinSetup.h"
-
-#ifndef HID_USAGE_PAGE_GENERIC
-#define HID_USAGE_PAGE_GENERIC         ((USHORT) 0x01)
-#endif
-#ifndef HID_USAGE_GENERIC_MOUSE
-#define HID_USAGE_GENERIC_MOUSE        ((USHORT) 0x02)
-#endif
+#include <Framework\optional.h>
 
 class Mouse
 {
 	friend class Window;
 public:
+	struct RawDelta
+	{
+		int x, y;
+	};
 	class Event
 	{
 	public:
 		enum class Type
 		{
-			Press,
-			Release,
-			Invalid,
+			LPress,
+			LRelease,
+			RPress,
+			RRelease,
+			WheelUp,
+			WheelDown,
 			Move,
-			MWUp,
-			MWDown
+			Enter,
+			Leave,
 		};
 	private:
 		Type type;
-		byte code;
-		long dX, dY;
-		short delta;
+		bool leftIsPressed;
+		bool rightIsPressed;
+		int x;
+		int y;
 	public:
-		Event()noexcept;
-		Event(Type type, byte code)noexcept;
-		Event(short delta)noexcept;
-		Event(long dx, long dy)noexcept;
-
-		Type GetType()const noexcept;
-		bool IsInvalid()const noexcept;
-		byte GetCode()const noexcept;
-		int GetDelta()const noexcept;
-		long GetRelativeX()const noexcept;
-		long GetRelativeY()const noexcept;
+		Event(Type type, const Mouse& parent) noexcept
+			:
+			type(type),
+			leftIsPressed(parent.leftIsPressed),
+			rightIsPressed(parent.rightIsPressed),
+			x(parent.x),
+			y(parent.y)
+		{}
+		Type GetType() const noexcept
+		{
+			return type;
+		}
+		std::pair<int, int> GetPos() const noexcept
+		{
+			return{ x,y };
+		}
+		int GetPosX() const noexcept
+		{
+			return x;
+		}
+		int GetPosY() const noexcept
+		{
+			return y;
+		}
+		bool LeftIsPressed() const noexcept
+		{
+			return leftIsPressed;
+		}
+		bool RightIsPressed() const noexcept
+		{
+			return rightIsPressed;
+		}
 	};
-
 public:
 	Mouse() = default;
 	Mouse(const Mouse&) = delete;
 	Mouse& operator=(const Mouse&) = delete;
-public:
-	Mouse::Event Read() noexcept;
-	POINT GetAbsolute() const noexcept;
-	bool ButtonPressed(byte code)const noexcept;
-	bool IsEmpty()const noexcept;
+	std::pair<int, int> GetPos() const noexcept;
+	std::experimental::optional<RawDelta> ReadRawDelta() noexcept;
+	int GetPosX() const noexcept;
+	int GetPosY() const noexcept;
+	bool IsInWindow() const noexcept;
+	bool LeftIsPressed() const noexcept;
+	bool RightIsPressed() const noexcept;
+	std::experimental::optional<Mouse::Event> Read() noexcept;
+	bool IsEmpty() const noexcept
+	{
+		return buffer.empty();
+	}
+	void Flush() noexcept;
+	void EnableRaw() noexcept;
+	void DisableRaw() noexcept;
+	bool RawEnabled() const noexcept;
 private:
-	void InitializeMouse(const HWND hWnd)noexcept;
-	void TranslateMouseInput(const RAWMOUSE& mouse)noexcept;
-	void OnButtonPress(USHORT buttons)noexcept;
+	void OnMouseMove(int x, int y) noexcept;
+	void OnMouseLeave() noexcept;
+	void OnMouseEnter() noexcept;
+	void OnRawDelta(int dx, int dy) noexcept;
+	void OnLeftPressed(int x, int y) noexcept;
+	void OnLeftReleased(int x, int y) noexcept;
+	void OnRightPressed(int x, int y) noexcept;
+	void OnRightReleased(int x, int y) noexcept;
+	void OnWheelUp(int x, int y) noexcept;
+	void OnWheelDown(int x, int y) noexcept;
+	void TrimBuffer() noexcept;
+	void TrimRawInputBuffer() noexcept;
+	void OnWheelDelta(int x, int y, int delta) noexcept;
 private:
-	static constexpr unsigned char nKeys = 5u;
 	static constexpr unsigned int bufferSize = 16u;
-
-	int absX = 0, absY = 0;
-
-	RAWINPUTDEVICE Rid;
-	std::queue<Event> MouseBuffer;
-	std::bitset<nKeys> MBStates;
+	int x;
+	int y;
+	bool leftIsPressed = false;
+	bool rightIsPressed = false;
+	bool isInWindow = false;
+	int wheelDeltaCarry = 0;
+	bool rawEnabled = false;
+	std::queue<Event> buffer;
+	std::queue<RawDelta> rawDeltaBuffer;
 };

@@ -1,13 +1,13 @@
 #pragma once
 #include "IndexedTriangleList.h"
-#include "EngineBase.h"
+
 #include <array>
 
 class Plane
 {
 public:
 	template<class V>
-	static IndexedTriangleList<V> MakeTesselated(dword divX, dword divY)
+	static IndexedTriangleList<V> MakeTesselated(unsigned divX, unsigned divY)
 	{
 		assert(divX > 0);
 		assert(divY > 0);
@@ -15,8 +15,8 @@ public:
 		constexpr float height = 2.0f;
 
 		// number of verticies
-		const dword nVertX = divX + 1;
-		const dword nVertY = divY + 1;
+		const unsigned nVertX = divX + 1;
+		const unsigned nVertY = divY + 1;
 
 		// place in middle
 		const float side_x = width / 2.0f;
@@ -30,10 +30,10 @@ public:
 		// arrange Verticies
 		std::vector<V> vertices(nVertX*nVertY);
 		{
-			for (dword y = 0, i = 0; y < nVertY; y++)
+			for (unsigned y = 0, i = 0; y < nVertY; y++)
 			{
 				const float y_pos = float(y) * divisionSize_y;
-				for (dword x = 0; x < nVertX; x++, i++)
+				for (unsigned x = 0; x < nVertX; x++, i++)
 				{
 					const auto v = DirectX::XMVectorAdd(
 						bottomLeft,
@@ -45,7 +45,7 @@ public:
 		}
 
 		//arrange Indicies
-		std::vector<word> indices(divX * divY * divX * divY * 6);
+		std::vector<unsigned short> indices(divX * divY * divX * divY * 6);
 		{
 			const auto vxy2i = [nVertX](size_t x, size_t y)
 			{

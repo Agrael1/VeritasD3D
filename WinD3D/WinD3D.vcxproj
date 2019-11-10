@@ -92,6 +92,7 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
       <PreprocessorDefinitions>IS_DEBUG=true;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\aa\Documents\Visual Studio 2015\ProjectsKR\WinD3D\WinD3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -123,6 +124,7 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);NDEBUG;IS_DEBUG=false</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\aa\Documents\Visual Studio 2015\ProjectsKR\WinD3D\WinD3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -137,7 +139,7 @@
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="dxerr.cpp" />
     <ClCompile Include="DXGIInfoManager.cpp" />
-    <ClCompile Include="EntryMain.c" />
+    <ClCompile Include="EntryMain.cpp" />
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="GDIPlusManager.cpp" />
     <ClCompile Include="Graphics.cpp" />
@@ -188,6 +190,7 @@
     <ClInclude Include="Engine\Keyboard.h" />
     <ClInclude Include="Engine\Window.h" />
     <ClInclude Include="Engine\WinSetup.h" />
+    <ClInclude Include="Framework\optional.h" />
     <ClInclude Include="GDIPlusManager.h" />
     <ClInclude Include="GdiSetup.h" />
     <ClInclude Include="Graphics.h" />
@@ -223,7 +226,6 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Topology.h" />
     <ClInclude Include="TransformCBuf.h" />
-    <ClInclude Include="EngineBase.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexShader.h" />
     <ClInclude Include="VFileDialog.h" />

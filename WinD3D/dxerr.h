@@ -13,7 +13,7 @@
 //--------------------------------------------------------------------------------------
 
 #pragma once
-#include "Engine\WinSetup.h"
+#include <Framework\WinSetup.h>
 #include <sal.h>
 
 #ifdef __cplusplus

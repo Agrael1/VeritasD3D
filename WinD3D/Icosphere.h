@@ -1,7 +1,7 @@
 #pragma once
 #include "IndexedTriangleList.h"
 #include <DirectXMath.h>
-#include "EngineBase.h"
+
 #include <numeric>
 
 class Icosphere

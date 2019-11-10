@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "../Engine/WinSetup.h"
+#include <Framework\WinSetup.h>
 #include "../Graphics.h"
 #include "imgui.h"
 

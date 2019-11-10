@@ -7,8 +7,8 @@
 #include "Box.h"
 #include "Icosahedron.h"
 #include "SkinnedBox.h"
-#include "GDIPlusManager.h"
 #include "ImGUI\imgui.h"
+#include "GDIPlusManager.h"
 
 GDIPlusManager gdipm;
 
@@ -32,12 +32,12 @@ App::App() : wnd(800,600,"VTest"), light(wnd.Gfx())
 	private:
 		Graphics& gfx;
 		std::mt19937 rng{ std::random_device{}() };
-		std::uniform_real_distribution<float> adist{ 0.0f,PI * 2.0f };
-		std::uniform_real_distribution<float> ddist{ 0.0f,PI * 0.5f };
-		std::uniform_real_distribution<float> odist{ 0.0f,PI * 0.08f };
-		std::uniform_real_distribution<float> rdist{ 6.0f,20.0f };
-		std::uniform_real_distribution<float> bdist{ 0.4f,2.0f };
-		std::uniform_real_distribution<float> cdist{ 0.0f,1.0f };
+		std::uniform_real_distribution<float> adist{ 0.0f, DirectX::XM_PI * 2.0f };
+		std::uniform_real_distribution<float> ddist{ 0.0f, DirectX::XM_PI * 0.5f };
+		std::uniform_real_distribution<float> odist{ 0.0f, DirectX::XM_PI * 0.08f };
+		std::uniform_real_distribution<float> rdist{ 6.0f, 20.0f };
+		std::uniform_real_distribution<float> bdist{ 0.4f, 2.0f };
+		std::uniform_real_distribution<float> cdist{ 0.0f, 1.0f };
 		//std::uniform_int_distribution<int> latdist{ 5,20 };
 		//std::uniform_int_distribution<int> longdist{ 10,40 };
 		//std::uniform_int_distribution<int> typedist{ 0,4 };
@@ -60,9 +60,9 @@ int App::Go()
 	{
 		//dt += 0.05f;
 		const auto a = Window::ProcessMessages();
-		if (a.first)
+		if (a)
 		{
-			return (int)a.second;
+			return (int)a.value();
 		}
 		DoFrame(dt);
 	}

@@ -120,8 +120,8 @@ CODE
  - Use mouse wheel to scroll.
  - Text editor:
    - Hold SHIFT or use mouse to select text.
-   - CTRL+Left/Right to word jump.
-   - CTRL+Shift+Left/Right to select words.
+   - CTRL+Left/Right to unsigned short jump.
+   - CTRL+Shift+Left/Right to select unsigned shorts.
    - CTRL+A our Double-Click to select all.
    - CTRL+X,CTRL+C,CTRL+V to use OS clipboard/
    - CTRL+Z,CTRL+Y to undo/redo.
@@ -1109,7 +1109,7 @@ static void             RenderWindowTitleBarContents(ImGuiWindow* window, const 
 //          struct ImGuiContext;
 //          extern thread_local ImGuiContext* MyImGuiTLS;
 //          #define GImGui MyImGuiTLS
-//      And then define MyImGuiTLS in one of your cpp file. Note that thread_local is a C++11 keyword, earlier C++ uses compiler-specific keyword.
+//      And then define MyImGuiTLS in one of your cpp file. Note that thread_local is a C++11 keyunsigned short, earlier C++ uses compiler-specific keyunsigned short.
 //    - Future development aim to make this context pointer explicit to all calls. Also read https://github.com/ocornut/imgui/issues/586
 //    - If you need a finite number of contexts, you may compile and use multiple instances of the ImGui code from different namespace.
 #ifndef GImGui

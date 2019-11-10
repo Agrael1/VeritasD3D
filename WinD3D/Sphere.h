@@ -1,13 +1,12 @@
 #pragma once
 #include "IndexedTriangleList.h"
 #include <DirectXMath.h>
-#include "EngineBase.h"
 
 class Sphere
 {
 public:
 	template<class V>
-	static IndexedTriangleList<V> MakeTesselated(dword latDiv, dword longDiv)
+	static IndexedTriangleList<V> MakeTesselated(unsigned latDiv, unsigned longDiv)
 	{
 		namespace dx = DirectX;
 		assert(latDiv >= 3);
@@ -15,17 +14,17 @@ public:
 
 		constexpr float radius = 1.0f;
 		const auto base = dx::XMVectorSet(0.0f, 0.0f, radius, 0.0f);
-		const float lattitudeAngle = PI / latDiv;
-		const float longitudeAngle = 2.0f * PI / longDiv;
+		const float lattitudeAngle = DirectX::XM_PI / latDiv;
+		const float longitudeAngle = 2.0f * DirectX::XM_PI / longDiv;
 		
 		std::vector<V> vertices;
-		for (dword iLat = 1; iLat < latDiv; iLat++)
+		for (unsigned iLat = 1; iLat < latDiv; iLat++)
 		{
 			const auto latBase = dx::XMVector3Transform(
 				base,
 				dx::XMMatrixRotationX(lattitudeAngle * iLat)
 			);
-			for (dword iLong = 0; iLong < longDiv; iLong++)
+			for (unsigned iLong = 0; iLong < longDiv; iLong++)
 			{
 				vertices.emplace_back();
 				auto v = dx::XMVector3Transform(

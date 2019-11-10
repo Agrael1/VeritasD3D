@@ -1,23 +1,21 @@
 #pragma once
 #include "IndexedTriangleList.h"
 #include <DirectXMath.h>
-#include "EngineBase.h"
-
 
 class Cone
 {
 public:
 	template<class V>
-	static IndexedTriangleList<V> MakeTesselated(word longDiv)
+	static IndexedTriangleList<V> MakeTesselated(unsigned short longDiv)
 	{
 		assert(longDiv >= 3);
 
 		const auto base = DirectX::XMVectorSet(1.0f, 0.0f, -1.0f, 0.0f);
-		const float longitudeAngle = 2.0f * PI / longDiv;
+		const float longitudeAngle = DirectX::XM_2PI / longDiv;
 
 		// base vertices
 		std::vector<V> vertices;
-		for (word iLong = 0; iLong < longDiv; iLong++)
+		for (unsigned short iLong = 0; iLong < longDiv; iLong++)
 		{
 			vertices.emplace_back();
 			auto v = DirectX::XMVector3Transform(
@@ -29,16 +27,16 @@ public:
 		// the center
 		vertices.emplace_back();
 		vertices.back().pos = { 0.0f,0.0f,-1.0f };
-		const auto iCenter = (word)(vertices.size() - 1);
+		const auto iCenter = (unsigned short)(vertices.size() - 1);
 		// the tip :darkness:
 		vertices.emplace_back();
 		vertices.back().pos = { 0.0f,0.0f,1.0f };
-		const auto iTip = (word)(vertices.size() - 1);
+		const auto iTip = (unsigned short)(vertices.size() - 1);
 
 
 		// base indices
-		std::vector<word> indices;
-		for (word iLong = 0; iLong < longDiv; iLong++)
+		std::vector<unsigned short> indices;
+		for (unsigned short iLong = 0; iLong < longDiv; iLong++)
 		{
 			indices.push_back(iCenter);
 			indices.push_back((iLong + 1) % longDiv);
@@ -46,7 +44,7 @@ public:
 		}
 
 		// cone indices
-		for (word iLong = 0; iLong < longDiv; iLong++)
+		for (unsigned short iLong = 0; iLong < longDiv; iLong++)
 		{
 			indices.push_back(iLong);
 			indices.push_back((iLong + 1) % longDiv);

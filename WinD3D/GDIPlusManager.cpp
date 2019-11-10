@@ -1,5 +1,6 @@
+#include <Framework\GdiSetup.h>
 #include "GDIPlusManager.h"
-#include "GdiSetup.h"
+
 
 ULONG_PTR GDIPlusManager::token = 0;
 int GDIPlusManager::refCount = 0;

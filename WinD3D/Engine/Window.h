@@ -1,6 +1,7 @@
 #pragma once
-#include "WinSetup.h"
-#include "Exception.h"
+#include <Framework\Exception.h>
+#include <Framework\optional.h>
+
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Graphics.h"
@@ -54,23 +55,36 @@ public:
 	Window(const Window&) = delete;
 	Window& operator=(const Window&) = delete;
 public:
+	void EnableCursor() noexcept;
+	void DisableCursor() noexcept;
+	bool CursorEnabled() const noexcept;
 	void SetTitle(const std::string& title);
-	static std::pair<bool, WPARAM> ProcessMessages()noexcept;
+	static std::experimental::optional<WPARAM> ProcessMessages()noexcept;
 	Graphics& Gfx();
 private:
-	static LRESULT __stdcall HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	static LRESULT __stdcall HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	static LRESULT WINAPI HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	static LRESULT WINAPI HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
+
+	void ConfineCursor() noexcept;
+	void FreeCursor() noexcept;
+	void ShowCursor() noexcept;
+	void HideCursor() noexcept;
+	void EnableImGuiMouse() noexcept;
+	void DisableImGuiMouse() noexcept;
 public:
 	Keyboard kbd;
 	Mouse mouse;
 private:
+	bool cursorEnabled = true;
 	int width;
 	int height;
 	HWND hWnd;
 	std::unique_ptr<Graphics> pGfx;
+	std::vector<BYTE> rawBuffer;
 };
 
 #define WND_EXCEPT( hr ) Window::HrException( __LINE__,__FILE__,(hr) )
 #define WND_LAST_EXCEPT() Window::HrException( __LINE__,__FILE__,GetLastError() )
 #define WND_NOGFX_EXCEPT() Window::NoGfxException( __LINE__,__FILE__ )
+#define WND_CALL_INFO(call) if(!(call)) throw(WND_LAST_EXCEPT())

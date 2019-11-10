@@ -145,7 +145,7 @@ void ImGui::TextEx(const char* text, const char* text_end, ImGuiTextFlags flags)
     {
         // Long text!
         // Perform manual coarse clipping to optimize for long multi-line text
-        // - From this point we will only compute the width of lines that are visible. Optimization only available when word-wrapping is disabled.
+        // - From this point we will only compute the width of lines that are visible. Optimization only available when unsigned short-wrapping is disabled.
         // - We also don't vertically center the text within the line full height, which is unlikely to matter because we are likely the biggest and only item on the line.
         // - We use memchr(), pay attention that well optimized versions of those str/mem functions are much faster than a casually written loop.
         const char* line = text;
@@ -3202,8 +3202,8 @@ static bool STB_TEXTEDIT_INSERTCHARS(STB_TEXTEDIT_STRING* obj, int pos, const Im
 #define STB_TEXTEDIT_K_BACKSPACE    0x10009 // keyboard input to delete selection or character left of cursor
 #define STB_TEXTEDIT_K_UNDO         0x1000A // keyboard input to perform undo
 #define STB_TEXTEDIT_K_REDO         0x1000B // keyboard input to perform redo
-#define STB_TEXTEDIT_K_WORDLEFT     0x1000C // keyboard input to move cursor left one word
-#define STB_TEXTEDIT_K_WORDRIGHT    0x1000D // keyboard input to move cursor right one word
+#define STB_TEXTEDIT_K_WORDLEFT     0x1000C // keyboard input to move cursor left one unsigned short
+#define STB_TEXTEDIT_K_WORDRIGHT    0x1000D // keyboard input to move cursor right one unsigned short
 #define STB_TEXTEDIT_K_SHIFT        0x20000
 
 #define STB_TEXTEDIT_IMPLEMENTATION
@@ -3511,7 +3511,7 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
     const bool buf_display_from_state = (render_cursor || render_selection || g.ActiveId == id) && !is_readonly && state && state->TextAIsValid;
     const bool is_displaying_hint = (hint != NULL && (buf_display_from_state ? state->TextA.Data : buf)[0] == 0);
 
-    // Password pushes a temporary font with only a fallback glyph
+    // Passunsigned short pushes a temporary font with only a fallback glyph
     if (is_password && !is_displaying_hint)
     {
         const ImFontGlyph* glyph = g.Font->FindGlyph('*');
@@ -3556,7 +3556,7 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
         }
         else if (hovered && is_osx && io.MouseDoubleClicked[0])
         {
-            // Double-click select a word only, OS X style (by simulating keystrokes)
+            // Double-click select a unsigned short only, OS X style (by simulating keystrokes)
             state->OnKeyPressed(STB_TEXTEDIT_K_WORDLEFT);
             state->OnKeyPressed(STB_TEXTEDIT_K_WORDRIGHT | STB_TEXTEDIT_K_SHIFT);
         }

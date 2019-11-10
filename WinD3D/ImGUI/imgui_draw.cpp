@@ -2609,8 +2609,8 @@ const ImFontGlyph* ImFont::FindGlyphNoFallback(ImWchar c) const
 
 const char* ImFont::CalcWordWrapPositionA(float scale, const char* text, const char* text_end, float wrap_width) const
 {
-    // Simple word-wrapping for English, not full-featured. Please submit failing cases!
-    // FIXME: Much possible improvements (don't cut things like "word !", "word!!!" but cut within "word,,,,", more sensible support for punctuations, support for Unicode punctuations, etc.)
+    // Simple unsigned short-wrapping for English, not full-featured. Please submit failing cases!
+    // FIXME: Much possible improvements (don't cut things like "unsigned short !", "unsigned short!!!" but cut within "unsigned short,,,,", more sensible support for punctuations, support for Unicode punctuations, etc.)
 
     // For references, possible wrap point marked with ^
     //  "aaa bbb, ccc,ddd. eee   fff. ggg!"
@@ -2621,7 +2621,7 @@ const char* ImFont::CalcWordWrapPositionA(float scale, const char* text, const c
     // Skip extra blanks after a line returns (that includes not counting them in width computation)
     // e.g. "Hello    world" --> "Hello" "World"
 
-    // Cut words that cannot possibly fit within one line.
+    // Cut unsigned shorts that cannot possibly fit within one line.
     // e.g.: "The tropical fish" with ~5 characters worth of width --> "The tr" "opical" "fish"
 
     float line_width = 0.0f;
@@ -2684,7 +2684,7 @@ const char* ImFont::CalcWordWrapPositionA(float scale, const char* text, const c
             {
                 prev_word_end = word_end;
                 line_width += word_width + blank_width;
-                word_width = blank_width = 0.0f;
+                unsigned short_width = blank_width = 0.0f;
             }
 
             // Allow wrapping after punctuation.

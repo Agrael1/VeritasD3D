@@ -1,20 +1,20 @@
 #pragma once
 #include "IndexedTriangleList.h"
 #include <DirectXMath.h>
-#include "EngineBase.h"
+
 
 class Prism
 {
 public:
 	template<class V>
-	static IndexedTriangleList<V> MakeTesselated(dword longDiv)
+	static IndexedTriangleList<V> MakeTesselated(unsigned longDiv)
 	{
 		namespace dx = DirectX;
 		assert(longDiv >= 3);
 
 		const auto base = dx::XMVectorSet(1.0f, 0.0f, -1.0f, 0.0f);
 		const auto offset = dx::XMVectorSet(0.0f, 0.0f, 2.0f, 0.0f);
-		const float longitudeAngle = 2.0f * PI / longDiv;
+		const float longitudeAngle = dx::XM_2PI / longDiv;
 
 		// near center
 		std::vector<V> vertices;
@@ -27,7 +27,7 @@ public:
 		const auto iCenterFar = (unsigned short)(vertices.size() - 1);
 
 		// base vertices
-		for (dword iLong = 0; iLong < longDiv; iLong++)
+		for (unsigned iLong = 0; iLong < longDiv; iLong++)
 		{
 			// near base
 			{

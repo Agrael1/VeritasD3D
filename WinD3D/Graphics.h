@@ -1,6 +1,6 @@
 #pragma once
-#include "Engine\WinSetup.h"
-#include "Engine\Exception.h"
+#include <Framework\WinSetup.h>
+#include <Framework\Exception.h>
 #include <d3d11.h>
 #include <wrl.h>
 #include <d3dcompiler.h>
