@@ -2684,7 +2684,7 @@ const char* ImFont::CalcWordWrapPositionA(float scale, const char* text, const c
             {
                 prev_word_end = word_end;
                 line_width += word_width + blank_width;
-                unsigned short_width = blank_width = 0.0f;
+                word_width = blank_width = 0.0f;
             }
 
             // Allow wrapping after punctuation.

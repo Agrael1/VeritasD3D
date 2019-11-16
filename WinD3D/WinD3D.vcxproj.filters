@@ -55,9 +55,6 @@
     <Filter Include="Файлы исходного кода\Engine\ImGUI\Impl">
       <UniqueIdentifier>{6a47bf79-e6f6-411b-82d3-4e29bf596653}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Window\Setups">
-      <UniqueIdentifier>{82407619-4271-4b18-b3ed-6a9d275fbdd4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Заголовочные файлы\Engine\Graphics">
       <UniqueIdentifier>{8a1dccec-54a8-48dd-8502-619f48a1b07e}</UniqueIdentifier>
     </Filter>
@@ -66,12 +63,6 @@
     </Filter>
     <Filter Include="Заголовочные файлы\Engine\Graphics\Drawable">
       <UniqueIdentifier>{c7bafcde-4da9-4674-b4cd-49c791274e62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Graphics\Exceptions">
-      <UniqueIdentifier>{bf2cc866-e6be-4316-8d7e-2295ae3c988a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Graphics\Exceptions\Macros">
-      <UniqueIdentifier>{c8a13912-72eb-4044-9736-2eae0cc9524f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Заголовочные файлы\Engine\Graphics\Storage">
       <UniqueIdentifier>{95121d9c-d1d0-414e-9b5e-a27e83f87231}</UniqueIdentifier>
@@ -94,12 +85,6 @@
     <Filter Include="Файлы исходного кода\Engine\Graphics\Drawable">
       <UniqueIdentifier>{546ff5c6-ffc0-4bd8-a1ef-7eaa8feff8a3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Graphics\Exceptions">
-      <UniqueIdentifier>{48e6c941-810c-4f44-9b7b-65abefa5c7f8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Graphics\Exceptions\Inline">
-      <UniqueIdentifier>{5e2e8e3b-d781-4384-a6bf-c65a57d8b206}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Файлы исходного кода\Engine\Graphics\Storage">
       <UniqueIdentifier>{510fadf1-db83-4526-98ee-8e644be3ac2f}</UniqueIdentifier>
     </Filter>
@@ -112,6 +97,21 @@
     <Filter Include="Заголовочные файлы\Framework">
       <UniqueIdentifier>{d3da98c1-aa1e-429d-b424-648b856b4867}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Заголовочные файлы\Framework\Exceptions">
+      <UniqueIdentifier>{bf2cc866-e6be-4316-8d7e-2295ae3c988a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\Framework\Exceptions\Macros">
+      <UniqueIdentifier>{c8a13912-72eb-4044-9736-2eae0cc9524f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Engine\Framework">
+      <UniqueIdentifier>{e4bac827-b181-4ad7-bda0-785319e06cb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Engine\Framework\Exceptions">
+      <UniqueIdentifier>{48e6c941-810c-4f44-9b7b-65abefa5c7f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Engine\Framework\Exceptions\Inline">
+      <UniqueIdentifier>{5e2e8e3b-d781-4384-a6bf-c65a57d8b206}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">
@@ -119,15 +119,6 @@
     </ClCompile>
     <ClCompile Include="Bindable.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Exception.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Exceptions</Filter>
-    </ClCompile>
-    <ClCompile Include="dxerr.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Exceptions</Filter>
-    </ClCompile>
-    <ClCompile Include="DXGIInfoManager.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Exceptions</Filter>
     </ClCompile>
     <ClCompile Include="IndexBuffer.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
@@ -152,15 +143,6 @@
     </ClCompile>
     <ClCompile Include="TransformCBuf.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics.cpp">
-      <Filter>Файлы исходного кода\Engine\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="Keyboard.cpp">
-      <Filter>Файлы исходного кода\Engine\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="Mouse.cpp">
-      <Filter>Файлы исходного кода\Engine\Window</Filter>
     </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Файлы исходного кода\Engine\Window</Filter>
@@ -234,6 +216,27 @@
     <ClCompile Include="EntryMain.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Keyboard.cpp">
+      <Filter>Файлы исходного кода\Engine\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Mouse.cpp">
+      <Filter>Файлы исходного кода\Engine\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\dxerr.cpp">
+      <Filter>Файлы исходного кода\Engine\Framework\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\DXGIInfoManager.cpp">
+      <Filter>Файлы исходного кода\Engine\Framework\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Exception.cpp">
+      <Filter>Файлы исходного кода\Engine\Framework\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics.cpp">
+      <Filter>Файлы исходного кода\Engine\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Файлы исходного кода\Engine\Graphics\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -244,15 +247,6 @@
     </ClInclude>
     <ClInclude Include="Bindable.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="dxerr.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="DXGIInfoManager.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Exception.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="IndexBuffer.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
@@ -305,13 +299,7 @@
     <ClInclude Include="Pyramid.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Objects\Geometry</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics.h">
-      <Filter>Заголовочные файлы\Engine\Window</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Keyboard.h">
-      <Filter>Заголовочные файлы\Engine\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="Mouse.h">
       <Filter>Заголовочные файлы\Engine\Window</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Window.h">
@@ -395,11 +383,32 @@
     <ClInclude Include="Framework\optional.h">
       <Filter>Заголовочные файлы\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\WinSetup.h">
+    <ClInclude Include="Framework\GdiSetup.h">
       <Filter>Заголовочные файлы\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="GdiSetup.h">
+    <ClInclude Include="Framework\Exception.h">
       <Filter>Заголовочные файлы\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\WinSetup.h">
+      <Filter>Заголовочные файлы\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Mouse.h">
+      <Filter>Заголовочные файлы\Engine\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\dxerr.h">
+      <Filter>Заголовочные файлы\Framework\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\DXGIInfoManager.h">
+      <Filter>Заголовочные файлы\Framework\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Заголовочные файлы\Engine\Graphics\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics.h">
+      <Filter>Заголовочные файлы\Engine\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="TestObject.h">
+      <Filter>Заголовочные файлы\Engine\Graphics\Objects\Bases</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -419,17 +428,17 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DXGetErrorDescription.inl">
-      <Filter>Файлы исходного кода\Engine\Graphics\Exceptions\Inline</Filter>
-    </None>
-    <None Include="DXGetErrorString.inl">
-      <Filter>Файлы исходного кода\Engine\Graphics\Exceptions\Inline</Filter>
-    </None>
-    <None Include="DXTrace.inl">
-      <Filter>Файлы исходного кода\Engine\Graphics\Exceptions\Inline</Filter>
-    </None>
     <None Include="GraphicsThrows.m">
-      <Filter>Заголовочные файлы\Engine\Graphics\Exceptions\Macros</Filter>
+      <Filter>Заголовочные файлы\Framework\Exceptions\Macros</Filter>
+    </None>
+    <None Include="Framework\DXGetErrorDescription.inl">
+      <Filter>Файлы исходного кода\Engine\Framework\Exceptions\Inline</Filter>
+    </None>
+    <None Include="Framework\DXGetErrorString.inl">
+      <Filter>Файлы исходного кода\Engine\Framework\Exceptions\Inline</Filter>
+    </None>
+    <None Include="Framework\DXTrace.inl">
+      <Filter>Файлы исходного кода\Engine\Framework\Exceptions\Inline</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

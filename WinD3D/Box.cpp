@@ -1,4 +1,3 @@
-
 #include "Box.h"
 #include "BindableBase.h"
 #include "Cube.h"

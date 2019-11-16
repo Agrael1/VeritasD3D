@@ -9,6 +9,7 @@
 #include "SkinnedBox.h"
 #include "ImGUI\imgui.h"
 #include "GDIPlusManager.h"
+#include "Model.h"
 
 GDIPlusManager gdipm;
 
@@ -23,10 +24,10 @@ App::App() : wnd(800,600,"VTest"), light(wnd.Gfx())
 		{}
 		std::unique_ptr<Drawable> operator()()
 		{
-			const DirectX::XMFLOAT3 mat = { cdist(rng),cdist(rng) ,cdist(rng) };
-			return std::make_unique<Icosahedron>(
+			const DirectX::XMFLOAT3 mat = { cdist(rng), cdist(rng), cdist(rng) };
+			return std::make_unique<Model>(
 				gfx, rng, adist, ddist,
-				odist, rdist, bdist, mat
+				odist, rdist, mat, 1.5f
 				);
 		}
 	private:

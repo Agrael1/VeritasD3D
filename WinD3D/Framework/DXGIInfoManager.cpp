@@ -1,6 +1,6 @@
 #include "DXGIInfoManager.h"
-#include "Engine\Window.h"
-#include "Graphics.h"
+#include <Engine/Window.h>
+#include <Engine/Graphics.h>
 #include <memory>
 
 #include "GraphicsThrows.m"

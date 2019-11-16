@@ -12,7 +12,7 @@
 #pragma once
 
 #include <Framework\WinSetup.h>
-#include "../Graphics.h"
+#include <Engine/Graphics.h>
 #include "imgui.h"
 
 IMGUI_IMPL_API bool     ImGui_ImplDX11_Init(ID3D11Device* device, ID3D11DeviceContext* device_context);

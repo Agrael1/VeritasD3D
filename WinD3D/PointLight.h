@@ -1,5 +1,5 @@
 #pragma once
-#include "Graphics.h"
+#include <Engine/Graphics.h>
 #include "ConstantBuffer.h"
 #include "SolidSphere.h"
 
