@@ -103,14 +103,20 @@
     <Filter Include="Заголовочные файлы\Framework\Exceptions\Macros">
       <UniqueIdentifier>{c8a13912-72eb-4044-9736-2eae0cc9524f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Framework">
+    <Filter Include="Файлы исходного кода\Framework">
       <UniqueIdentifier>{e4bac827-b181-4ad7-bda0-785319e06cb4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Framework\Exceptions">
+    <Filter Include="Файлы исходного кода\Framework\Exceptions">
       <UniqueIdentifier>{48e6c941-810c-4f44-9b7b-65abefa5c7f8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Framework\Exceptions\Inline">
+    <Filter Include="Файлы исходного кода\Framework\Exceptions\Inline">
       <UniqueIdentifier>{5e2e8e3b-d781-4384-a6bf-c65a57d8b206}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\Framework\Fmt">
+      <UniqueIdentifier>{80ca9775-97c4-4f16-b84f-76b2958f37bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Framework\Fmt">
+      <UniqueIdentifier>{a500ef43-2332-40f3-9c0f-770f755c45d9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -223,19 +229,25 @@
       <Filter>Файлы исходного кода\Engine\Window</Filter>
     </ClCompile>
     <ClCompile Include="Framework\dxerr.cpp">
-      <Filter>Файлы исходного кода\Engine\Framework\Exceptions</Filter>
+      <Filter>Файлы исходного кода\Framework\Exceptions</Filter>
     </ClCompile>
     <ClCompile Include="Framework\DXGIInfoManager.cpp">
-      <Filter>Файлы исходного кода\Engine\Framework\Exceptions</Filter>
+      <Filter>Файлы исходного кода\Framework\Exceptions</Filter>
     </ClCompile>
     <ClCompile Include="Framework\Exception.cpp">
-      <Filter>Файлы исходного кода\Engine\Framework\Exceptions</Filter>
+      <Filter>Файлы исходного кода\Framework\Exceptions</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Graphics.cpp">
       <Filter>Файлы исходного кода\Engine\Window</Filter>
     </ClCompile>
     <ClCompile Include="Model.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Fmtlib\src\format.cc">
+      <Filter>Файлы исходного кода\Framework\Fmt</Filter>
+    </ClCompile>
+    <ClCompile Include="Fmtlib\src\posix.cc">
+      <Filter>Файлы исходного кода\Framework\Fmt</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -410,6 +422,48 @@
     <ClInclude Include="TestObject.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Objects\Bases</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Graphics\VertexLayout.h">
+      <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\noexcept_if.h">
+      <Filter>Файлы исходного кода\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Fmtlib\include\fmt\chrono.h">
+      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="Fmtlib\include\fmt\color.h">
+      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="Fmtlib\include\fmt\compile.h">
+      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="Fmtlib\include\fmt\core.h">
+      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="Fmtlib\include\fmt\format.h">
+      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="Fmtlib\include\fmt\format-inl.h">
+      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="Fmtlib\include\fmt\locale.h">
+      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="Fmtlib\include\fmt\ostream.h">
+      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="Fmtlib\include\fmt\posix.h">
+      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="Fmtlib\include\fmt\printf.h">
+      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="Fmtlib\include\fmt\ranges.h">
+      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="Fmtlib\include\fmt\safe-duration-cast.h">
+      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc">
@@ -432,13 +486,13 @@
       <Filter>Заголовочные файлы\Framework\Exceptions\Macros</Filter>
     </None>
     <None Include="Framework\DXGetErrorDescription.inl">
-      <Filter>Файлы исходного кода\Engine\Framework\Exceptions\Inline</Filter>
+      <Filter>Файлы исходного кода\Framework\Exceptions\Inline</Filter>
     </None>
     <None Include="Framework\DXGetErrorString.inl">
-      <Filter>Файлы исходного кода\Engine\Framework\Exceptions\Inline</Filter>
+      <Filter>Файлы исходного кода\Framework\Exceptions\Inline</Filter>
     </None>
     <None Include="Framework\DXTrace.inl">
-      <Filter>Файлы исходного кода\Engine\Framework\Exceptions\Inline</Filter>
+      <Filter>Файлы исходного кода\Framework\Exceptions\Inline</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

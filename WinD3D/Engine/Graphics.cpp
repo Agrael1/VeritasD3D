@@ -72,7 +72,9 @@ const char* Graphics::DeviceRemovedException::GetType()const noexcept
 
 // Graphics
 Graphics::Graphics(HWND hWnd)
-	:imguiEnabled(true)
+	:imguiEnabled(true), 
+	projection(DirectX::XMMatrixIdentity()), 
+	camera(DirectX::XMMatrixIdentity())
 {
 	DXGI_SWAP_CHAIN_DESC DSwapDesc = {};
 	DSwapDesc.BufferDesc.Width = 0;
@@ -90,7 +92,7 @@ Graphics::Graphics(HWND hWnd)
 	DSwapDesc.BufferCount = 1;
 	DSwapDesc.OutputWindow = hWnd;
 	DSwapDesc.Windowed = TRUE;
-	DSwapDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	DSwapDesc.SwapEffect = DXGI_SWAP_EFFECT::DXGI_SWAP_EFFECT_DISCARD;
 	DSwapDesc.Flags = 0;
 
 	UINT swapCreateFlags = 0u;

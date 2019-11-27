@@ -21,32 +21,32 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5B8D4183-3174-4F07-96AB-2A29C29EEA85}</ProjectGuid>
     <RootNamespace>WinD3D</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -92,7 +92,8 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
       <PreprocessorDefinitions>IS_DEBUG=true;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\aa\Documents\Visual Studio 2015\ProjectsKR\WinD3D\WinD3D\Assimp\Include;C:\Users\aa\Documents\Visual Studio 2015\ProjectsKR\WinD3D\WinD3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\aa\Documents\Visual Studio 2015\ProjectsKR\WinD3D\WinD3D\Assimp\Include;C:\Users\aa\Documents\Visual Studio 2015\ProjectsKR\WinD3D\WinD3D\Fmtlib\include;C:\Users\aa\Documents\Visual Studio 2015\ProjectsKR\WinD3D\WinD3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Assimp/assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -127,7 +128,7 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);NDEBUG;IS_DEBUG=false</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\aa\Documents\Visual Studio 2015\ProjectsKR\WinD3D\WinD3D\Assimp\Include;C:\Users\aa\Documents\Visual Studio 2015\ProjectsKR\WinD3D\WinD3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\aa\Documents\Visual Studio 2015\ProjectsKR\WinD3D\WinD3D\Assimp\Include;C:\Users\aa\Documents\Visual Studio 2015\ProjectsKR\WinD3D\WinD3D\Fmtlib\include;C:\Users\aa\Documents\Visual Studio 2015\ProjectsKR\WinD3D\WinD3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -145,6 +146,8 @@
     <ClCompile Include="Engine\Keyboard.cpp" />
     <ClCompile Include="Engine\Mouse.cpp" />
     <ClCompile Include="EntryMain.cpp" />
+    <ClCompile Include="Fmtlib\src\format.cc" />
+    <ClCompile Include="Fmtlib\src\posix.cc" />
     <ClCompile Include="Framework\dxerr.cpp" />
     <ClCompile Include="Framework\DXGIInfoManager.cpp" />
     <ClCompile Include="Framework\Exception.cpp" />
@@ -190,13 +193,27 @@
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="DrawableBase.h" />
     <ClInclude Include="Engine\Graphics.h" />
+    <ClInclude Include="Engine\Graphics\VertexLayout.h" />
     <ClInclude Include="Engine\Keyboard.h" />
     <ClInclude Include="Engine\Mouse.h" />
     <ClInclude Include="Engine\Window.h" />
+    <ClInclude Include="Fmtlib\include\fmt\chrono.h" />
+    <ClInclude Include="Fmtlib\include\fmt\color.h" />
+    <ClInclude Include="Fmtlib\include\fmt\compile.h" />
+    <ClInclude Include="Fmtlib\include\fmt\core.h" />
+    <ClInclude Include="Fmtlib\include\fmt\format-inl.h" />
+    <ClInclude Include="Fmtlib\include\fmt\format.h" />
+    <ClInclude Include="Fmtlib\include\fmt\locale.h" />
+    <ClInclude Include="Fmtlib\include\fmt\ostream.h" />
+    <ClInclude Include="Fmtlib\include\fmt\posix.h" />
+    <ClInclude Include="Fmtlib\include\fmt\printf.h" />
+    <ClInclude Include="Fmtlib\include\fmt\ranges.h" />
+    <ClInclude Include="Fmtlib\include\fmt\safe-duration-cast.h" />
     <ClInclude Include="Framework\dxerr.h" />
     <ClInclude Include="Framework\DXGIInfoManager.h" />
     <ClInclude Include="Framework\Exception.h" />
     <ClInclude Include="Framework\GdiSetup.h" />
+    <ClInclude Include="Framework\noexcept_if.h" />
     <ClInclude Include="Framework\optional.h" />
     <ClInclude Include="Framework\WinSetup.h" />
     <ClInclude Include="GDIPlusManager.h" />
