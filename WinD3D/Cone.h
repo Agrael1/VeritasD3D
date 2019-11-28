@@ -5,8 +5,7 @@
 class Cone
 {
 public:
-	template<class V>
-	static IndexedTriangleList<V> MakeTesselated(unsigned short longDiv)
+	static IndexedTriangleList MakeTesselated(unsigned short longDiv)
 	{
 		assert(longDiv >= 3);
 
@@ -53,9 +52,8 @@ public:
 
 		return{ std::move(vertices),std::move(indices) };
 	}
-	template<class V>
-	static IndexedTriangleList<V> Make()
+	static IndexedTriangleList Make()
 	{
-		return MakeTesselated<V>(24);
+		return MakeTesselated(24);
 	}
 };

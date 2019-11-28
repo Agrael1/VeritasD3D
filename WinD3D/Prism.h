@@ -1,13 +1,13 @@
 #pragma once
 #include "IndexedTriangleList.h"
 #include <DirectXMath.h>
+#include <optional>
 
 
 class Prism
 {
 public:
-	template<class V>
-	static IndexedTriangleList<V> MakeTesselated(unsigned longDiv)
+	static IndexedTriangleList MakeTesselated(unsigned longDiv = 3u, std::optional<DV::VertexLayout> layout = std::nullopt)
 	{
 		namespace dx = DirectX;
 		assert(longDiv >= 3);
@@ -16,37 +16,37 @@ public:
 		const auto offset = dx::XMVectorSet(0.0f, 0.0f, 2.0f, 0.0f);
 		const float longitudeAngle = dx::XM_2PI / longDiv;
 
+		DV::VertexBuffer vertices{ std::move(*layout) };
+		vertices.Reserve(2 * longDiv + 2);
 		// near center
-		std::vector<V> vertices;
-		vertices.emplace_back();
-		vertices.back().pos = { 0.0f,0.0f,-1.0f };
-		const auto iCenterNear = (unsigned short)(vertices.size() - 1);
+		vertices[0].Set<DV::Type::Position3D>({ 0.0f,0.0f,-1.0f });
+		const auto iCenterNear = (unsigned short)(vertices.Count() - 1);
 		// far center
-		vertices.emplace_back();
-		vertices.back().pos = { 0.0f,0.0f,1.0f };
-		const auto iCenterFar = (unsigned short)(vertices.size() - 1);
+		vertices[1].Set<DV::Type::Position3D>({ 0.0f,0.0f,1.0f });
+		const auto iCenterFar = (unsigned short)(vertices.Count() - 1);
 
+		DirectX::XMFLOAT3 pos{};
 		// base vertices
 		for (unsigned iLong = 0; iLong < longDiv; iLong++)
 		{
 			// near base
 			{
-				vertices.emplace_back();
 				auto v = dx::XMVector3Transform(
 					base,
 					dx::XMMatrixRotationZ(longitudeAngle * iLong)
 				);
-				dx::XMStoreFloat3(&vertices.back().pos, v);
+				DirectX::XMStoreFloat3(&pos, v);
+				vertices[2 * iLong].Set<DV::Type::Position3D>(std::move(pos));
 			}
 			// far base
 			{
-				vertices.emplace_back();
 				auto v = dx::XMVector3Transform(
 					base,
 					dx::XMMatrixRotationZ(longitudeAngle * iLong)
 				);
 				v = dx::XMVectorAdd(v, offset);
-				dx::XMStoreFloat3(&vertices.back().pos, v);
+				DirectX::XMStoreFloat3(&pos, v);
+				vertices[2 * iLong + 1].Set<DV::Type::Position3D>(std::move(pos));
 			}
 		}
 
@@ -79,9 +79,14 @@ public:
 
 		return{ std::move(vertices),std::move(indices) };
 	}
-	template<class V>
-	static IndexedTriangleList<V> Make()
+	static IndexedTriangleList Make(std::optional<DV::VertexLayout> layout = std::nullopt)
 	{
-		return MakeTesselated<V>(24);
+		using Element = DV::VertexLayout::ElementType;
+		if (!layout)
+		{
+			layout = DV::VertexLayout{}
+			+Element::Position3D;
+		}
+		return MakeTesselated(24, std::move(layout));
 	}
 };

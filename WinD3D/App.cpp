@@ -10,7 +10,6 @@
 #include "ImGUI\imgui.h"
 #include "GDIPlusManager.h"
 #include "Model.h"
-#include <Engine\Graphics\VertexLayout.h>
 
 GDIPlusManager gdipm;
 

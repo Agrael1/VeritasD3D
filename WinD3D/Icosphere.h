@@ -1,40 +1,43 @@
 #pragma once
 #include "IndexedTriangleList.h"
 #include <DirectXMath.h>
-
 #include <numeric>
+#include <optional>
 
 class Icosphere
 {
 public:
-	template<class V>
-	static IndexedTriangleList<V> Make()
+	static IndexedTriangleList Make(std::optional<DV::VertexLayout> layout = std::nullopt)
 	{
-		const float t = (1.0f + std::sqrtf(5.0f)) / 2.0f;
-
-		std::vector<DirectX::XMFLOAT3> vertices;
-		vertices.emplace_back(-1.0f, t, 0.0f); // 0
-		vertices.emplace_back(1.0f, t, 0.0f); // 1
-		vertices.emplace_back(-1.0f, -t, 0.0f); // 2
-		vertices.emplace_back(1.0f, -t, -0.0f); // 3
-
-		vertices.emplace_back(0.0f, -1.0f, t); // 4
-		vertices.emplace_back(0.0f, 1.0f, t); // 5
-		vertices.emplace_back(0.0f, -1.0f, -t); // 6
-		vertices.emplace_back(0.0f, 1.0f, -t); // 7
-
-		vertices.emplace_back(t, 0.0f, -1.0f); // 8
-		vertices.emplace_back(t, 0.0f, 1.0f); // 9
-		vertices.emplace_back(-t, 0.0f, -1.0f); // 10
-		vertices.emplace_back(-t, 0.0f, 1.0f); // 11
-
-		std::vector<V> verts(vertices.size());
-		for (size_t i = 0; i < vertices.size(); i++)
+		using Element = DV::VertexLayout::ElementType;
+		using namespace DirectX;
+		if (!layout)
 		{
-			verts[i].pos = vertices[i];
+			layout = DV::VertexLayout{}
+			+Element::Position3D;
 		}
+		DV::VertexBuffer vb{ std::move(*layout) };
+		vb.Reserve(12);
+
+		const float t = (1.0f + std::sqrtf(5.0f)) / 2.0f;
+		
+		vb[0].Set<Element::Position3D>({ -1.0f, t, 0.0f });
+		vb[1].Set<Element::Position3D>({ 1.0f, t, 0.0f });
+		vb[2].Set<Element::Position3D>({ -1.0f, -t, 0.0f });
+		vb[3].Set<Element::Position3D>({ 1.0f, -t, -0.0f });
+		  
+		vb[4].Set<Element::Position3D>({ 0.0f, -1.0f, t });
+		vb[5].Set<Element::Position3D>({ 0.0f, 1.0f, t });
+		vb[6].Set<Element::Position3D>({ 0.0f, -1.0f, -t });
+		vb[7].Set<Element::Position3D>({ 0.0f, 1.0f, -t });		
+		
+		vb[8].Set<Element::Position3D>({ t, 0.0f, -1.0f });
+		vb[9].Set<Element::Position3D>({ t, 0.0f, 1.0f });
+		vb[10].Set<Element::Position3D>({ -t, 0.0f, -1.0f });
+		vb[11].Set<Element::Position3D>({ -t, 0.0f, 1.0f });
+
 		return{
-			std::move(verts),{
+			std::move(vb),{
 				0, 11,5,	0, 5, 1,	0, 1, 7,	0, 7,10,	0,10,11,
 				1, 5, 9,	5, 11,4,	11,10,2,	10,7, 6,	7, 1, 8,
 				3, 9, 4,	3, 4, 2,	3, 2, 6,	3, 6, 8,	3, 8, 9,
@@ -42,12 +45,12 @@ public:
 			}
 		};
 	}
-	template<class V>
-	static IndexedTriangleList<V> MakeIndependent()
-	{
-		auto temp = Make<V>();
 
-		std::vector<V> ReVertices(temp.indices.size());
+	static IndexedTriangleList MakeIndependent(std::optional<DV::VertexLayout> layout = std::nullopt)
+	{
+		auto temp = Make(layout);
+		DV::VertexBuffer ReVertices{ std::move(temp.vertices.GetLayout()) };
+		ReVertices.Reserve(temp.indices.size());
 		UINT j = 0;
 		for (auto i : temp.indices)
 		{

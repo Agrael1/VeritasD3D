@@ -422,9 +422,6 @@
     <ClInclude Include="TestObject.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Objects\Bases</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\VertexLayout.h">
-      <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
-    </ClInclude>
     <ClInclude Include="Framework\noexcept_if.h">
       <Filter>Файлы исходного кода\Engine\Graphics</Filter>
     </ClInclude>
@@ -463,6 +460,12 @@
     </ClInclude>
     <ClInclude Include="Fmtlib\include\fmt\safe-duration-cast.h">
       <Filter>Заголовочные файлы\Framework\Fmt</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\VertexLayout.h">
+      <Filter>Заголовочные файлы\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Codex.h">
+      <Filter>Заголовочные файлы\Engine\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

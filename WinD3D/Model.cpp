@@ -21,8 +21,8 @@ Model::Model(Graphics& gfx, std::mt19937& rng,
 	{
 		DV::VertexBuffer vertices(std::move(
 			DV::VertexLayout{}
-			+ DV::VertexLayout::Position3D
-			+ DV::VertexLayout::Normal
+			+ DV::Type::Position3D
+			+ DV::Type::Normal
 		));
 
 		Assimp::Importer imp;

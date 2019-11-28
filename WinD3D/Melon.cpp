@@ -67,11 +67,10 @@ Melon::Melon(Graphics& gfx,
 		AddStaticBind(std::make_unique<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	}
 
-	struct Vertex
-	{
-		dx::XMFLOAT3 pos;
-	};
-	auto model = Sphere::MakeTesselated<Vertex>(latdist(rng), longdist(rng));
+	auto&& vertex = DV::VertexLayout{}
+		+DV::Type::Position3D;
+
+	auto model = Sphere::MakeTesselated(vertex, latdist(rng), longdist(rng));
 	// deform vertices of model by linear transformation
 	model.Deform(dx::XMMatrixScaling(1.0f, 1.0f, 1.2f));
 

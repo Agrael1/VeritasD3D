@@ -19,13 +19,11 @@ Icosahedron::Icosahedron(Graphics & gfx, std::mt19937 & rng, std::uniform_real_d
 	namespace dx = DirectX;
 	if (!IsStaticInitialized())
 	{
-		
-		struct Vertex
-		{
-			dx::XMFLOAT3 pos;
-			dx::XMFLOAT3 n;
-		};
-		auto model = Icosphere::MakeIndependent<Vertex>();
+		auto&& Vertex = DV::VertexLayout{}
+			+ DV::Type::Position3D
+			+ DV::Type::Normal;
+
+		auto model = Icosphere::MakeIndependent(Vertex);
 		// normalize the sphere
 		const float scale = 2 / (3.0f + std::sqrtf(5));
 		model.Deform(dx::XMMatrixScaling(scale, scale, scale));
