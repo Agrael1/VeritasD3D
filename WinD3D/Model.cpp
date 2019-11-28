@@ -19,11 +19,11 @@ Model::Model(Graphics& gfx, std::mt19937& rng,
 
 	if (!IsStaticInitialized())
 	{
-		struct Vertex
-		{
-			dx::XMFLOAT3 pos;
-			dx::XMFLOAT3 n;
-		};
+		DV::VertexBuffer vertices(std::move(
+			DV::VertexLayout{}
+			+ DV::VertexLayout::Position3D
+			+ DV::VertexLayout::Normal
+		));
 
 		Assimp::Importer imp;
 		const auto pModel = imp.ReadFile("models\\suzanne.obj",
@@ -32,14 +32,12 @@ Model::Model(Graphics& gfx, std::mt19937& rng,
 		);
 		const auto pMesh = pModel->mMeshes[0];
 
-		std::vector<Vertex> vertices;
-		vertices.reserve(pMesh->mNumVertices);
 		for (unsigned int i = 0; i < pMesh->mNumVertices; i++)
 		{
-			vertices.push_back({
-				{ pMesh->mVertices[i].x * scale,pMesh->mVertices[i].y * scale,pMesh->mVertices[i].z * scale },
+			vertices.EmplaceBack(
+				dx::XMFLOAT3{ pMesh->mVertices[i].x * scale,pMesh->mVertices[i].y * scale,pMesh->mVertices[i].z * scale },
 				*reinterpret_cast<dx::XMFLOAT3*>(&pMesh->mNormals[i])
-			});
+			);
 		}
 
 		std::vector<unsigned short> indices;
@@ -63,12 +61,7 @@ Model::Model(Graphics& gfx, std::mt19937& rng,
 
 		AddStaticBind(std::make_unique<PixelShader>(gfx, L"PhongPS.cso"));
 
-		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
-		{
-			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
-			{ "Normal",0,DXGI_FORMAT_R32G32B32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA,0 },
-		};
-		AddStaticBind(std::make_unique<InputLayout>(gfx, ied, pvsbc));
+		AddStaticBind(std::make_unique<InputLayout>(gfx, vertices.GetLayout().GetD3DLayout(), pvsbc));
 
 		AddStaticBind(std::make_unique<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 

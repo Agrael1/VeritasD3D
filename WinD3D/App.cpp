@@ -14,19 +14,8 @@
 
 GDIPlusManager gdipm;
 
-void f()
-{
-	using namespace DirectX;
-	VertexLayout vl;
-	vl.Append<VertexLayout::Position3D>();
-	VertexBuffer vb(std::move(vl));
-	vb.EmplaceBack(XMFLOAT3{ 1.0f,2.0f,3.0f });
-	auto pos = vb[0].Attr<VertexLayout::Position3D>();
-}
-
 App::App() : wnd(800,600,"VTest"), light(wnd.Gfx())
 {
-	f();
 	class Factory
 	{
 	public:
