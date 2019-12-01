@@ -11,14 +11,14 @@ public:
 		vertices(std::move(verts)),
 		indices(std::move(inds))
 	{
-		assert(vertices.Size() > 2);
+		assert(vertices.Count() > 2);
 		assert(indices.size() % 3 == 0);
 	}
 public:
 	void Deform(DirectX::FXMMATRIX matrix)
 	{
 		using Type = DV::VertexLayout::ElementType;
-		for (int i = 0; i < vertices.Size(); i++)
+		for (int i = 0; i < vertices.Count(); i++)
 		{
 			auto& pos = vertices[i].Attr<Type::Position3D>();
 			DirectX::XMStoreFloat3(

@@ -25,25 +25,18 @@ Pyramid::Pyramid(Graphics& gfx,
 
 	if (!IsStaticInitialized())
 	{
-		struct Vertex
-		{
-			dx::XMFLOAT3 pos;
-			struct
-			{
-				unsigned char r;
-				unsigned char g;
-				unsigned char b;
-				unsigned char a;
-			} color;
-		};
-		auto model = Cone::MakeTesselated<Vertex>(4);
+		auto&& layout = DV::VertexLayout{}
+			+ DV::Type::Position3D
+			+ DV::Type::BGRAColor;
+
+		auto model = Cone::MakeTesselated(4, layout);
 		// set vertex colors for mesh
-		model.vertices[0].color = { 255,255,0 };
-		model.vertices[1].color = { 255,255,0 };
-		model.vertices[2].color = { 124,252,0 };
-		model.vertices[3].color = { 127,255,212 };
-		model.vertices[4].color = { 255,255,80 };
-		model.vertices[5].color = { 255,10,0 };
+		model.vertices[0].Set<DV::Type::BGRAColor>({ 0, 255,255,0 });
+		model.vertices[1].Set<DV::Type::BGRAColor>({ 0, 255,255,0 });
+		model.vertices[2].Set<DV::Type::BGRAColor>({ 0, 124,252,0 });
+		model.vertices[3].Set<DV::Type::BGRAColor>({ 0, 127,255,212 });
+		model.vertices[4].Set<DV::Type::BGRAColor>({ 0, 255,255,80 });
+		model.vertices[5].Set<DV::Type::BGRAColor>({ 0, 255,10,0 });
 		// deform mesh linearly
 		model.Deform(dx::XMMatrixScaling(1.0f, 1.0f, 0.7f));
 
@@ -57,12 +50,7 @@ Pyramid::Pyramid(Graphics& gfx,
 
 		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
 
-		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
-		{
-			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
-			{ "Color",0,DXGI_FORMAT_R8G8B8A8_UNORM,0,12,D3D11_INPUT_PER_VERTEX_DATA,0 },
-		};
-		AddStaticBind(std::make_unique<InputLayout>(gfx, ied, pvsbc));
+		AddStaticBind(std::make_unique<InputLayout>(gfx, model.vertices.GetLayout().GetD3DLayout(), pvsbc));
 
 		AddStaticBind(std::make_unique<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	}
