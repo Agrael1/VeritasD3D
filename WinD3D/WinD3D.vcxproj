@@ -142,7 +142,7 @@
     <ClCompile Include="Bindable.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Drawable.cpp" />
+    <ClCompile Include="Engine\Architecture\Drawable.cpp" />
     <ClCompile Include="Engine\Graphics.cpp" />
     <ClCompile Include="Engine\Keyboard.cpp" />
     <ClCompile Include="Engine\Mouse.cpp" />
@@ -191,9 +191,8 @@
     <ClInclude Include="Cone.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="Cube.h" />
-    <ClInclude Include="Drawable.h" />
-    <ClInclude Include="DrawableBase.h" />
     <ClInclude Include="Engine\Architecture\Codex.h" />
+    <ClInclude Include="Engine\Architecture\Drawable.h" />
     <ClInclude Include="Engine\Architecture\VertexLayout.h" />
     <ClInclude Include="Engine\Graphics.h" />
     <ClInclude Include="Engine\Keyboard.h" />

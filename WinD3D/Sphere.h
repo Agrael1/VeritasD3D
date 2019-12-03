@@ -18,13 +18,13 @@ public:
 		const float longitudeAngle = 2.0f * dx::XM_PI / longDiv;
 		
 		DV::VertexBuffer vb{ std::move(layout) };
-		for (int iLat = 1; iLat < latDiv; iLat++)
+		for (size_t iLat = 1; iLat < latDiv; iLat++)
 		{
 			const auto latBase = dx::XMVector3Transform(
 				base,
 				dx::XMMatrixRotationX(lattitudeAngle * iLat)
 			);
-			for (int iLong = 0; iLong < longDiv; iLong++)
+			for (size_t iLong = 0; iLong < longDiv; iLong++)
 			{
 				dx::XMFLOAT3 calculatedPos;
 				auto v = dx::XMVector3Transform(

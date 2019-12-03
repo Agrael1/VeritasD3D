@@ -1,7 +1,7 @@
 #pragma once
-#include "DrawableBase.h"
+#include <Engine/Architecture/Drawable.h>
 
-class SolidSphere : public DrawableBase<SolidSphere>
+class SolidSphere : public Drawable
 {
 public:
 	SolidSphere(Graphics& gfx, float radius, DirectX::XMFLOAT3 color = { 1.0f,1.0f,1.0f });

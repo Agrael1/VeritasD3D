@@ -1,7 +1,8 @@
 #pragma once
-#include "Engine\Window.h"
+#include <Engine\Window.h>
 #include "ImGUIManager.h"
 #include "Camera.h"
+#include "Model.h"
 #include "PointLight.h"
 
 class App
@@ -18,9 +19,10 @@ private:
 	Window wnd;
 	Camera cam;
 	PointLight light;
+	Model nano{ wnd.Gfx(), "Models\\nanosuit.obj" };
 
 	float speed = 1.0f;
-	std::vector<std::unique_ptr<class Drawable>> drawables;
+	//std::vector<std::unique_ptr<class Drawable>> drawables;
 	static constexpr size_t nDrawables = 180;
 };
 

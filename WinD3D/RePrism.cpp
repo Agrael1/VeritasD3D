@@ -2,10 +2,10 @@
 #include "Prism.h"
 #include "BindableBase.h"
 
-RePrism::RePrism(Graphics & gfx, std::mt19937 & rng, 
-	std::uniform_real_distribution<float>& adist, 
-	std::uniform_real_distribution<float>& ddist, 
-	std::uniform_real_distribution<float>& odist, 
+RePrism::RePrism(Graphics& gfx, std::mt19937& rng,
+	std::uniform_real_distribution<float>& adist,
+	std::uniform_real_distribution<float>& ddist,
+	std::uniform_real_distribution<float>& odist,
 	std::uniform_real_distribution<float>& rdist,
 	std::uniform_real_distribution<float>& bdist,
 	std::uniform_int_distribution<int>& longdist)
@@ -22,44 +22,34 @@ RePrism::RePrism(Graphics & gfx, std::mt19937 & rng,
 	phi(adist(rng))
 {
 	namespace dx = DirectX;
-	if (!IsStaticInitialized())
-	{
-		auto&& vertex = DV::VertexLayout{}
-			+ DV::Type::Position3D
-			+ DV::Type::BGRAColor;
+	auto&& vertex = DV::VertexLayout{}
+		+DV::Type::Position3D
+		+ DV::Type::BGRAColor;
 
-		auto model = Prism::MakeTesselated(longdist(rng), vertex);
-		// set vertex colors for mesh
-		model.vertices[0].Set<DV::Type::BGRAColor>({0,255,255,0 });
-		model.vertices[1].Set<DV::Type::BGRAColor>({0,255,255,0 });
-		model.vertices[2].Set<DV::Type::BGRAColor>({0,124,252,0 });
-		model.vertices[3].Set<DV::Type::BGRAColor>({0,127,255,212 });
-		model.vertices[4].Set<DV::Type::BGRAColor>({0,255,255,80 });
-		model.vertices[5].Set<DV::Type::BGRAColor>({0,255,10,0 });
-		model.vertices[6].Set<DV::Type::BGRAColor>({0,0,255,0 });
-		// deform mesh linearly
-		model.Deform(dx::XMMatrixScaling(1.0f, 1.0f, 0.7f));
+	auto model = Prism::MakeTesselated(longdist(rng), vertex);
+	// set vertex colors for mesh
+	model.vertices[0].Set<DV::Type::BGRAColor>({ 0,255,255,0 });
+	model.vertices[1].Set<DV::Type::BGRAColor>({ 0,255,255,0 });
+	model.vertices[2].Set<DV::Type::BGRAColor>({ 0,124,252,0 });
+	model.vertices[3].Set<DV::Type::BGRAColor>({ 0,127,255,212 });
+	model.vertices[4].Set<DV::Type::BGRAColor>({ 0,255,255,80 });
+	model.vertices[5].Set<DV::Type::BGRAColor>({ 0,255,10,0 });
+	model.vertices[6].Set<DV::Type::BGRAColor>({ 0,0,255,0 });
+	// deform mesh linearly
+	model.Deform(dx::XMMatrixScaling(1.0f, 1.0f, 0.7f));
 
-		AddStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
+	AddBind(std::make_shared<VertexBuffer>(gfx, model.vertices));
 
-		auto pvs = std::make_unique<VertexShader>(gfx, L"ColorBlendVS.cso");
-		auto pvsbc = pvs->GetBytecode();
-		AddStaticBind(std::move(pvs));
+	auto pvs = std::make_shared<VertexShader>(gfx, L"ColorBlendVS.cso");
+	auto pvsbc = pvs->GetBytecode();
+	AddBind(std::move(pvs));
 
-		AddStaticBind(std::make_unique<PixelShader>(gfx, L"ColorBlendPS.cso"));
+	AddBind(std::make_shared<PixelShader>(gfx, L"ColorBlendPS.cso"));
+	AddBind(std::make_shared<IndexBuffer>(gfx, model.indices));
+	AddBind(std::make_shared<InputLayout>(gfx, model.vertices.GetLayout().GetD3DLayout(), pvsbc));
+	AddBind(std::make_shared<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+	AddBind(std::make_shared<TransformCbuf>(gfx, *this));
 
-		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
-
-		AddStaticBind(std::make_unique<InputLayout>(gfx, model.vertices.GetLayout().GetD3DLayout(), pvsbc));
-
-		AddStaticBind(std::make_unique<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
-	}
-	else
-	{
-		SetIndexFromStatic();
-	}
-
-	AddBind(std::make_unique<TransformCbuf>(gfx, *this));
 	// store deformation
 	dx::XMStoreFloat3x3(
 		&mt,

@@ -1,8 +1,8 @@
 #pragma once
-#include "DrawableBase.h"
+#include <Engine/Architecture/Drawable.h>
 #include <random>
 
-class Icosahedron : public DrawableBase<Icosahedron>
+class Icosahedron : public Drawable
 {
 public:
 	Icosahedron(Graphics& gfx, std::mt19937& rng,

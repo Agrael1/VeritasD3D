@@ -1,8 +1,8 @@
 #pragma once
-#include "DrawableBase.h"
+#include <Engine/Architecture/Drawable.h>
 #include <random>
 
-class Melon : public DrawableBase<Melon>
+class Melon : public Drawable
 {
 public:
 	Melon(Graphics& gfx, std::mt19937& rng,

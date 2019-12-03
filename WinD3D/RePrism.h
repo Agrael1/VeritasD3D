@@ -1,8 +1,8 @@
 #pragma once
+#include <Engine/Architecture/Drawable.h>
 #include <random>
-#include "DrawableBase.h"
 
-class RePrism : public DrawableBase<RePrism>
+class RePrism : public Drawable
 {
 public:
 	RePrism(Graphics& gfx, std::mt19937& rng,

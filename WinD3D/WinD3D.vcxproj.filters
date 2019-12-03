@@ -61,9 +61,6 @@
     <Filter Include="Заголовочные файлы\Engine\Graphics\Bindable">
       <UniqueIdentifier>{67aa1cea-d71a-4ddd-8e53-f1683d9a51a9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Graphics\Drawable">
-      <UniqueIdentifier>{c7bafcde-4da9-4674-b4cd-49c791274e62}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Заголовочные файлы\Engine\Graphics\Storage">
       <UniqueIdentifier>{95121d9c-d1d0-414e-9b5e-a27e83f87231}</UniqueIdentifier>
     </Filter>
@@ -78,12 +75,6 @@
     </Filter>
     <Filter Include="Файлы исходного кода\Engine\Graphics">
       <UniqueIdentifier>{96c6a4ef-9569-4b2e-81f2-4b6f1ec57f66}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Graphics\Bindable">
-      <UniqueIdentifier>{096266d9-3160-48a2-9b3b-747e5b9c5d85}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Graphics\Drawable">
-      <UniqueIdentifier>{546ff5c6-ffc0-4bd8-a1ef-7eaa8feff8a3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Файлы исходного кода\Engine\Graphics\Storage">
       <UniqueIdentifier>{510fadf1-db83-4526-98ee-8e644be3ac2f}</UniqueIdentifier>
@@ -118,6 +109,15 @@
     <Filter Include="Файлы исходного кода\Framework\Fmt">
       <UniqueIdentifier>{a500ef43-2332-40f3-9c0f-770f755c45d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Заголовочные файлы\Engine\Architecture">
+      <UniqueIdentifier>{09026b9f-f410-42fd-9f58-bde7006ca9b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Engine\Architecture">
+      <UniqueIdentifier>{cf0ddef9-b360-4eb0-b889-54f9c6218443}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Engine\Graphics\Bindable">
+      <UniqueIdentifier>{096266d9-3160-48a2-9b3b-747e5b9c5d85}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">
@@ -143,9 +143,6 @@
     </ClCompile>
     <ClCompile Include="Topology.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Drawable.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="TransformCBuf.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
@@ -249,6 +246,9 @@
     <ClCompile Include="Fmtlib\src\posix.cc">
       <Filter>Файлы исходного кода\Framework\Fmt</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Architecture\Drawable.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -281,14 +281,8 @@
     <ClInclude Include="ConstantBuffer.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
     </ClInclude>
-    <ClInclude Include="Drawable.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Drawable</Filter>
-    </ClInclude>
     <ClInclude Include="TransformCBuf.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="DrawableBase.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="BindableBase.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
@@ -422,9 +416,6 @@
     <ClInclude Include="TestObject.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Objects\Bases</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\noexcept_if.h">
-      <Filter>Файлы исходного кода\Engine\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Fmtlib\include\fmt\chrono.h">
       <Filter>Заголовочные файлы\Framework\Fmt</Filter>
     </ClInclude>
@@ -461,11 +452,17 @@
     <ClInclude Include="Fmtlib\include\fmt\safe-duration-cast.h">
       <Filter>Заголовочные файлы\Framework\Fmt</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Architecture\VertexLayout.h">
-      <Filter>Заголовочные файлы\Engine\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Architecture\Codex.h">
-      <Filter>Заголовочные файлы\Engine\Graphics</Filter>
+      <Filter>Заголовочные файлы\Engine\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\VertexLayout.h">
+      <Filter>Заголовочные файлы\Engine\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Drawable.h">
+      <Filter>Заголовочные файлы\Engine\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\noexcept_if.h">
+      <Filter>Файлы исходного кода\Framework</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

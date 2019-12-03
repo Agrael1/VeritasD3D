@@ -24,53 +24,44 @@ Box::Box(Graphics& gfx,
 {
 	namespace dx = DirectX;
 
-	if (!IsStaticInitialized())
+	const auto model = Cube::Make();
+
+	AddBind(std::make_shared<VertexBuffer>(gfx, model.vertices));
+
+	auto pvs = std::make_shared<VertexShader>(gfx, L"ColorIndexVS.cso");
+	auto pvsbc = pvs->GetBytecode();
+	AddBind(std::move(pvs));
+
+	AddBind(std::make_shared<PixelShader>(gfx, L"ColorIndexPS.cso"));
+	AddBind(std::make_shared<IndexBuffer>(gfx, model.indices));
+
+	struct PixelShaderConstants
 	{
-		const auto model = Cube::Make();
-
-		AddStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
-
-		auto pvs = std::make_unique<VertexShader>(gfx, L"ColorIndexVS.cso");
-		auto pvsbc = pvs->GetBytecode();
-		AddStaticBind(std::move(pvs));
-
-		AddStaticBind(std::make_unique<PixelShader>(gfx, L"ColorIndexPS.cso"));
-
-		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
-
-		struct PixelShaderConstants
+		struct
 		{
-			struct
-			{
-				float r;
-				float g;
-				float b;
-				float a;
-			} face_colors[8];
-		};
-		const PixelShaderConstants cb2 =
-		{
-			{
-				{ 1.0f,1.0f,1.0f },
-				{ 1.0f,0.0f,0.0f },
-				{ 0.0f,1.0f,0.0f },
-				{ 1.0f,1.0f,0.0f },
-				{ 0.0f,0.0f,1.0f },
-				{ 1.0f,0.0f,1.0f },
-				{ 0.0f,1.0f,1.0f },
-				{ 0.0f,0.0f,0.0f },
-			}
-		};
-		AddStaticBind(std::make_unique<PixelConstantBuffer<PixelShaderConstants>>(gfx, cb2));
-
-		AddStaticBind(std::make_unique<InputLayout>(gfx, model.vertices.GetLayout().GetD3DLayout(), pvsbc));
-
-		AddStaticBind(std::make_unique<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
-	}
-	else
+			float r;
+			float g;
+			float b;
+			float a;
+		} face_colors[8];
+	};
+	const PixelShaderConstants cb2 =
 	{
-		SetIndexFromStatic();
-	}
+		{
+			{ 1.0f,1.0f,1.0f },
+			{ 1.0f,0.0f,0.0f },
+			{ 0.0f,1.0f,0.0f },
+			{ 1.0f,1.0f,0.0f },
+			{ 0.0f,0.0f,1.0f },
+			{ 1.0f,0.0f,1.0f },
+			{ 0.0f,1.0f,1.0f },
+			{ 0.0f,0.0f,0.0f },
+		}
+	};
+	AddBind(std::make_shared<PixelConstantBuffer<PixelShaderConstants>>(gfx, cb2));
+	AddBind(std::make_shared<InputLayout>(gfx, model.vertices.GetLayout().GetD3DLayout(), pvsbc));
+	AddBind(std::make_shared<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+
 
 	AddBind(std::make_unique<TransformCbuf>(gfx, *this));
 

@@ -1,8 +1,8 @@
 #pragma once
-#include "DrawableBase.h"
+#include <Engine/Architecture/Drawable.h>
 #include <random>
 
-class Pyramid : public DrawableBase<Pyramid>
+class Pyramid : public Drawable
 {
 public:
 	Pyramid(Graphics& gfx, std::mt19937& rng,

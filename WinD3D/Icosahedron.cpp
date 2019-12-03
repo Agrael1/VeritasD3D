@@ -2,7 +2,7 @@
 #include "Icosphere.h"
 #include "BindableBase.h"
 
-Icosahedron::Icosahedron(Graphics & gfx, std::mt19937 & rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist, std::uniform_real_distribution<float>& bdist, DirectX::XMFLOAT3 material)
+Icosahedron::Icosahedron(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist, std::uniform_real_distribution<float>& bdist, DirectX::XMFLOAT3 material)
 	:
 	r(rdist(rng)),
 	droll(ddist(rng)),
@@ -17,44 +17,29 @@ Icosahedron::Icosahedron(Graphics & gfx, std::mt19937 & rng, std::uniform_real_d
 	radius(bdist(rng))
 {
 	namespace dx = DirectX;
-	if (!IsStaticInitialized())
-	{
-		auto&& Vertex = DV::VertexLayout{}
-			+ DV::Type::Position3D
-			+ DV::Type::Normal;
 
-		auto model = Icosphere::MakeIndependent(Vertex);
-		// normalize the sphere
-		const float scale = 2 / (3.0f + std::sqrtf(5));
-		model.Deform(dx::XMMatrixScaling(scale, scale, scale));
-		model.CalcNormalsIndependentFlat();
+	auto&& Vertex = DV::VertexLayout{}
+		+DV::Type::Position3D
+		+ DV::Type::Normal;
 
-		AddStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
+	auto model = Icosphere::MakeIndependent(Vertex);
+	// normalize the sphere
+	const float scale = 2 / (3.0f + std::sqrtf(5));
+	model.Deform(dx::XMMatrixScaling(scale, scale, scale));
+	model.CalcNormalsIndependentFlat();
 
-		auto pvs = std::make_unique<VertexShader>(gfx, L"PhongVS.cso");
-		auto pvsbc = pvs->GetBytecode();
-		AddStaticBind(std::move(pvs));
+	AddBind(std::make_shared<VertexBuffer>(gfx, model.vertices));
 
-		AddStaticBind(std::make_unique<PixelShader>(gfx, L"PhongPS.cso"));
+	auto pvs = std::make_shared<VertexShader>(gfx, L"PhongVS.cso");
+	auto pvsbc = pvs->GetBytecode();
+	AddBind(std::move(pvs));
 
-		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
+	AddBind(std::make_shared<PixelShader>(gfx, L"PhongPS.cso"));
+	AddBind(std::make_shared<IndexBuffer>(gfx, model.indices));
+	AddBind(std::make_shared<InputLayout>(gfx, model.vertices.GetLayout().GetD3DLayout(), pvsbc));
+	AddBind(std::make_shared<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+	AddBind(std::make_shared<TransformCbuf>(gfx, *this));
 
-		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
-		{
-			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
-			{ "Normal",0,DXGI_FORMAT_R32G32B32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA,0 },
-		};
-		AddStaticBind(std::make_unique<InputLayout>(gfx, ied, pvsbc));
-
-		AddStaticBind(std::make_unique<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
-	}
-	else
-	{
-		SetIndexFromStatic();
-	}
-
-	AddBind(std::make_unique<TransformCbuf>(gfx, *this));
-	
 	struct PSMaterialConstant
 	{
 		alignas(16)DirectX::XMFLOAT3 color;
@@ -63,7 +48,7 @@ Icosahedron::Icosahedron(Graphics & gfx, std::mt19937 & rng, std::uniform_real_d
 		float padding[2];
 	}colorConst;
 	colorConst.color = material;
-	AddBind(std::make_unique<PixelConstantBuffer<PSMaterialConstant>>(gfx, colorConst, 1u));
+	AddBind(std::make_shared<PixelConstantBuffer<PSMaterialConstant>>(gfx, colorConst, 1u));
 
 	// Per instance scaling
 	dx::XMStoreFloat3x3(

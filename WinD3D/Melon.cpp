@@ -25,60 +25,49 @@ Melon::Melon(Graphics& gfx,
 {
 	namespace dx = DirectX;
 
-	if (!IsStaticInitialized())
-	{
-		auto pvs = std::make_unique<VertexShader>(gfx, L"ColorIndexVS.cso");
-		auto pvsbc = pvs->GetBytecode();
-		AddStaticBind(std::move(pvs));
-
-		AddStaticBind(std::make_unique<PixelShader>(gfx, L"ColorIndexPS.cso"));
-
-		struct PixelShaderConstants
-		{
-			struct
-			{
-				float r;
-				float g;
-				float b;
-				float a;
-			} face_colors[8];
-		};
-		const PixelShaderConstants cb2 =
-		{
-			{
-				{ 1.0f,1.0f,1.0f },
-				{ 1.0f,0.0f,0.0f },
-				{ 0.0f,1.0f,0.0f },
-				{ 1.0f,1.0f,0.0f },
-				{ 0.0f,0.0f,1.0f },
-				{ 1.0f,0.0f,1.0f },
-				{ 0.0f,1.0f,1.0f },
-				{ 0.0f,0.0f,0.0f },
-			}
-		};
-		AddStaticBind(std::make_unique<PixelConstantBuffer<PixelShaderConstants>>(gfx, cb2));
-
-		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
-		{
-			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
-		};
-		AddStaticBind(std::make_unique<InputLayout>(gfx, ied, pvsbc));
-
-		AddStaticBind(std::make_unique<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
-	}
-
 	auto&& vertex = DV::VertexLayout{}
-		+DV::Type::Position3D;
+	+DV::Type::Position3D;
 
 	auto model = Sphere::MakeTesselated(vertex, latdist(rng), longdist(rng));
 	// deform vertices of model by linear transformation
 	model.Deform(dx::XMMatrixScaling(1.0f, 1.0f, 1.2f));
 
-	AddBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
+	AddBind(std::make_shared<VertexBuffer>(gfx, model.vertices));
+	AddBind(std::make_shared<IndexBuffer>(gfx, model.indices));
 
-	AddIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
+	auto pvs = std::make_shared<VertexShader>(gfx, L"ColorIndexVS.cso");
+	auto pvsbc = pvs->GetBytecode();
+	AddBind(std::move(pvs));
 
-	AddBind(std::make_unique<TransformCbuf>(gfx, *this));
+	AddBind(std::make_shared<PixelShader>(gfx, L"ColorIndexPS.cso"));
+
+	struct PixelShaderConstants
+	{
+		struct
+		{
+			float r;
+			float g;
+			float b;
+			float a;
+		} face_colors[8];
+	};
+	const PixelShaderConstants cb2 =
+	{
+		{
+			{ 1.0f,1.0f,1.0f },
+			{ 1.0f,0.0f,0.0f },
+			{ 0.0f,1.0f,0.0f },
+			{ 1.0f,1.0f,0.0f },
+			{ 0.0f,0.0f,1.0f },
+			{ 1.0f,0.0f,1.0f },
+			{ 0.0f,1.0f,1.0f },
+			{ 0.0f,0.0f,0.0f },
+		}
+	};
+	AddBind(std::make_shared<PixelConstantBuffer<PixelShaderConstants>>(gfx, cb2));
+	AddBind(std::make_shared<InputLayout>(gfx, model.vertices.GetLayout().GetD3DLayout(), pvsbc));
+	AddBind(std::make_shared<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+	AddBind(std::make_shared<TransformCbuf>(gfx, *this));
 }
 
 void Melon::Update(float dt) noexcept

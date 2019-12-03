@@ -1,8 +1,8 @@
 #pragma once
-#include "DrawableBase.h"
+#include <Engine/Architecture/Drawable.h>
 #include <random>
 
-class SkinnedBox : public DrawableBase<SkinnedBox>
+class SkinnedBox : public Drawable
 {
 public:
 	SkinnedBox(Graphics& gfx, std::mt19937& rng,

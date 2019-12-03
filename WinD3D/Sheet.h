@@ -1,8 +1,8 @@
 #pragma once
-#include "DrawableBase.h"
+#include <Engine/Architecture/Drawable.h>
 #include <random>
 
-class Sheet : public DrawableBase<Sheet>
+class Sheet : public Drawable
 {
 public:
 	Sheet(Graphics& gfx, std::mt19937& rng,

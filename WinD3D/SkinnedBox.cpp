@@ -6,7 +6,7 @@
 #include "Sampler.h"
 
 
-SkinnedBox::SkinnedBox(Graphics & gfx, std::mt19937 & rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist, std::uniform_real_distribution<float>& bdist)
+SkinnedBox::SkinnedBox(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist, std::uniform_real_distribution<float>& bdist)
 	:
 	r(rdist(rng)),
 	droll(ddist(rng)),
@@ -21,31 +21,22 @@ SkinnedBox::SkinnedBox(Graphics & gfx, std::mt19937 & rng, std::uniform_real_dis
 {
 	namespace dx = DirectX;
 
-	if (!IsStaticInitialized())
-	{
-		const auto model = Cube::MakeSkinned();
+	const auto model = Cube::MakeSkinned();
 
-		AddStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
-		
-		AddStaticBind(std::make_unique<Texture>(gfx, ReSurface(L"C:\\Users\\aa\\Desktop\\Marble.jpg")));
-		AddStaticBind(std::make_unique<Sampler>(gfx));
+	AddBind(std::make_shared<VertexBuffer>(gfx, model.vertices));
 
-		auto pvs = std::make_unique<VertexShader>(gfx, L"TextureVS.cso");
-		auto pvsbc = pvs->GetBytecode();
-		AddStaticBind(std::move(pvs));
+	AddBind(std::make_shared<Texture>(gfx, ReSurface(L"C:\\Users\\aa\\Desktop\\Marble.jpg")));
+	AddBind(std::make_shared<Sampler>(gfx));
 
-		AddStaticBind(std::make_unique<PixelShader>(gfx, L"TexturePS.cso"));
-		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
+	auto pvs = std::make_shared<VertexShader>(gfx, L"TextureVS.cso");
+	auto pvsbc = pvs->GetBytecode();
+	AddBind(std::move(pvs));
 
-		AddStaticBind(std::make_unique<InputLayout>(gfx, model.vertices.GetLayout().GetD3DLayout(), pvsbc));
-
-		AddStaticBind(std::make_unique<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
-	}
-	else
-	{
-		SetIndexFromStatic();
-	}
-	AddBind(std::make_unique<TransformCbuf>(gfx, *this));
+	AddBind(std::make_shared<PixelShader>(gfx, L"TexturePS.cso"));
+	AddBind(std::make_shared<IndexBuffer>(gfx, model.indices));
+	AddBind(std::make_shared<InputLayout>(gfx, model.vertices.GetLayout().GetD3DLayout(), pvsbc));
+	AddBind(std::make_shared<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+	AddBind(std::make_shared<TransformCbuf>(gfx, *this));
 
 	// model deformation transform (per instance, not stored as bind)
 	dx::XMStoreFloat3x3(

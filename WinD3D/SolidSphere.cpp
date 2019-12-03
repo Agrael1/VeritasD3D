@@ -2,42 +2,32 @@
 #include "BindableBase.h"
 #include "Sphere.h"
 
-SolidSphere::SolidSphere(Graphics & gfx, float radius, DirectX::XMFLOAT3 color)
+SolidSphere::SolidSphere(Graphics& gfx, float radius, DirectX::XMFLOAT3 color)
 	:color(color)
 {
 	namespace dx = DirectX;
+	auto model = Sphere::Make();
+	model.Deform(dx::XMMatrixScaling(radius, radius, radius));
+	AddBind(std::make_shared<VertexBuffer>(gfx, model.vertices));
+	AddBind(std::make_shared<IndexBuffer>(gfx, model.indices));
 
-	if (!IsStaticInitialized())
+	auto pvs = std::make_unique<VertexShader>(gfx, L"SolidVS.cso");
+	auto pvsbc = pvs->GetBytecode();
+	AddBind(std::move(pvs));
+
+	AddBind(std::make_shared<PixelShader>(gfx, L"SolidPS.cso"));
+
+	struct PSColorConstant
 	{
-		auto model = Sphere::Make();
-		model.Deform(dx::XMMatrixScaling(radius, radius, radius));
-		AddBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
-		AddIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
+		dx::XMFLOAT3 color;
+		float padding;
+	} colorConst;
+	colorConst.color = color;
 
-		auto pvs = std::make_unique<VertexShader>(gfx, L"SolidVS.cso");
-		auto pvsbc = pvs->GetBytecode();
-		AddStaticBind(std::move(pvs));
-
-		AddStaticBind(std::make_unique<PixelShader>(gfx, L"SolidPS.cso"));
-
-		struct PSColorConstant
-		{
-			dx::XMFLOAT3 color;
-			float padding;
-		} colorConst;
-		colorConst.color = color;
-		
-		AddStaticBind(std::make_unique<PixelConstantBuffer<PSColorConstant>>(gfx, colorConst));
-
-		AddStaticBind(std::make_unique<InputLayout>(gfx, model.vertices.GetLayout().GetD3DLayout(), pvsbc));
-
-		AddStaticBind(std::make_unique<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
-	}
-	else
-	{
-		SetIndexFromStatic();
-	}
-	AddBind(std::make_unique<TransformCbuf>(gfx, *this));
+	AddBind(std::make_shared<PixelConstantBuffer<PSColorConstant>>(gfx, colorConst));
+	AddBind(std::make_shared<InputLayout>(gfx, model.vertices.GetLayout().GetD3DLayout(), pvsbc));
+	AddBind(std::make_shared<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+	AddBind(std::make_shared<TransformCbuf>(gfx, *this));
 }
 
 void SolidSphere::SetPos(DirectX::XMFLOAT3 pos) noexcept
