@@ -3,7 +3,7 @@
 
 Mesh::Mesh(Graphics& gfx, std::vector<std::shared_ptr<Bindable>> binds)
 {
-	AddBind(std::make_shared<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	for (auto& pb : binds)
 	{
 		AddBind(std::move(pb));
@@ -70,12 +70,12 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
 	bindablePtrs.push_back(std::make_shared<VertexBuffer>(gfx, vertices));
 	bindablePtrs.push_back(std::make_shared<IndexBuffer>(gfx, indices));
 
-	auto pvs = std::make_shared<VertexShader>(gfx, L"PhongVS.cso");
+	auto pvs = VertexShader::Resolve(gfx, "PhongVS.cso");
 	auto pvsbc = pvs->GetBytecode();
 	bindablePtrs.push_back(std::move(pvs));
 
-	bindablePtrs.push_back(std::make_shared<PixelShader>(gfx, L"PhongPS.cso"));
-	bindablePtrs.push_back(std::make_shared<InputLayout>(gfx, vertices.GetLayout().GetD3DLayout(), pvsbc));
+	bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongPS.cso"));
+	bindablePtrs.push_back(InputLayout::Resolve(gfx, vertices.GetLayout(), pvsbc));
 
 	struct PSMaterialConstant
 	{

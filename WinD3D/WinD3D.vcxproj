@@ -216,6 +216,7 @@
     <ClInclude Include="Framework\GdiSetup.h" />
     <ClInclude Include="Framework\noexcept_if.h" />
     <ClInclude Include="Framework\optional.h" />
+    <ClInclude Include="Framework\Utility.h" />
     <ClInclude Include="Framework\WinSetup.h" />
     <ClInclude Include="GDIPlusManager.h" />
     <ClInclude Include="Icosahedron.h" />

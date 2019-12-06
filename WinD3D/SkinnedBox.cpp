@@ -26,16 +26,16 @@ SkinnedBox::SkinnedBox(Graphics& gfx, std::mt19937& rng, std::uniform_real_distr
 	AddBind(std::make_shared<VertexBuffer>(gfx, model.vertices));
 
 	AddBind(std::make_shared<Texture>(gfx, ReSurface(L"C:\\Users\\aa\\Desktop\\Marble.jpg")));
-	AddBind(std::make_shared<Sampler>(gfx));
+	AddBind(Sampler::Resolve(gfx));
 
-	auto pvs = std::make_shared<VertexShader>(gfx, L"TextureVS.cso");
+	auto pvs = VertexShader::Resolve(gfx, "TextureVS.cso");
 	auto pvsbc = pvs->GetBytecode();
 	AddBind(std::move(pvs));
 
-	AddBind(std::make_shared<PixelShader>(gfx, L"TexturePS.cso"));
+	AddBind(PixelShader::Resolve(gfx, "TexturePS.cso"));
 	AddBind(std::make_shared<IndexBuffer>(gfx, model.indices));
-	AddBind(std::make_shared<InputLayout>(gfx, model.vertices.GetLayout().GetD3DLayout(), pvsbc));
-	AddBind(std::make_shared<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
+	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	AddBind(std::make_shared<TransformCbuf>(gfx, *this));
 
 	// model deformation transform (per instance, not stored as bind)

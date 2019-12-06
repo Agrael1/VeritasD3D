@@ -383,7 +383,7 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 		{
 			break;
 		}
-		UINT size;
+		UINT size = 0;
 		// first get the size of the input data
 		if (GetRawInputData(
 			reinterpret_cast<HRAWINPUT>(lParam),

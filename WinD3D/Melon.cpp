@@ -35,11 +35,11 @@ Melon::Melon(Graphics& gfx,
 	AddBind(std::make_shared<VertexBuffer>(gfx, model.vertices));
 	AddBind(std::make_shared<IndexBuffer>(gfx, model.indices));
 
-	auto pvs = std::make_shared<VertexShader>(gfx, L"ColorIndexVS.cso");
+	auto pvs = VertexShader::Resolve(gfx, "ColorIndexVS.cso");
 	auto pvsbc = pvs->GetBytecode();
 	AddBind(std::move(pvs));
 
-	AddBind(std::make_shared<PixelShader>(gfx, L"ColorIndexPS.cso"));
+	AddBind(PixelShader::Resolve(gfx, "ColorIndexPS.cso"));
 
 	struct PixelShaderConstants
 	{
@@ -65,8 +65,8 @@ Melon::Melon(Graphics& gfx,
 		}
 	};
 	AddBind(std::make_shared<PixelConstantBuffer<PixelShaderConstants>>(gfx, cb2));
-	AddBind(std::make_shared<InputLayout>(gfx, model.vertices.GetLayout().GetD3DLayout(), pvsbc));
-	AddBind(std::make_shared<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
+	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	AddBind(std::make_shared<TransformCbuf>(gfx, *this));
 }
 

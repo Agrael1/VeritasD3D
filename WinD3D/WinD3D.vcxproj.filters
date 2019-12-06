@@ -464,6 +464,9 @@
     <ClInclude Include="Framework\noexcept_if.h">
       <Filter>Файлы исходного кода\Framework</Filter>
     </ClInclude>
+    <ClInclude Include="Framework\Utility.h">
+      <Filter>Заголовочные файлы\Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc">
