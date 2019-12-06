@@ -1,5 +1,6 @@
 #pragma once
 #include <Engine/Architecture/Drawable.h>
+#include <filesystem>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -55,7 +56,7 @@ class Model
 public:
 	Model(Graphics& gfx, const std::string filename);
 public:
-	static std::unique_ptr<Mesh> ParseMesh(Graphics& gfx, const aiMesh& mesh);
+	static std::unique_ptr<Mesh> ParseMesh(Graphics& gfx, const aiMesh& mesh, const std::filesystem::path& path);
 public:
 	std::unique_ptr<Node> ParseNode(const aiNode& node);
 	void Draw(Graphics& gfx)const;

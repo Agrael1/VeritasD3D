@@ -26,7 +26,7 @@ Pyramid::Pyramid(Graphics& gfx,
 	auto&& layout = DV::VertexLayout{}
 		+DV::Type::Position3D
 		+ DV::Type::BGRAColor;
-
+	auto tag = "Pyramid";
 	auto model = Cone::MakeTesselated(4, layout);
 	// set vertex colors for mesh
 	model.vertices[0].Set<DV::Type::BGRAColor>({ 0, 255,255,0 });
@@ -38,14 +38,14 @@ Pyramid::Pyramid(Graphics& gfx,
 	// deform mesh linearly
 	model.Deform(dx::XMMatrixScaling(1.0f, 1.0f, 0.7f));
 
-	AddBind(std::make_shared<VertexBuffer>(gfx, model.vertices));
+	AddBind(VertexBuffer::Resolve(gfx, tag, model.vertices));
 
 	auto pvs = VertexShader::Resolve(gfx, "ColorBlendVS.cso");
 	auto pvsbc = pvs->GetBytecode();
 	AddBind(std::move(pvs));
 
 	AddBind(PixelShader::Resolve(gfx, "ColorBlendPS.cso"));
-	AddBind(std::make_shared<IndexBuffer>(gfx, model.indices));
+	AddBind(IndexBuffer::Resolve(gfx, tag, model.indices));
 	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
 	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	AddBind(std::make_shared<TransformCbuf>(gfx, *this));

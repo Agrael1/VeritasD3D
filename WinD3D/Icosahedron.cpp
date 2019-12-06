@@ -22,20 +22,21 @@ Icosahedron::Icosahedron(Graphics& gfx, std::mt19937& rng, std::uniform_real_dis
 		+DV::Type::Position3D
 		+ DV::Type::Normal;
 
+	auto tag = "Icosphere";
 	auto model = Icosphere::MakeIndependent(Vertex);
 	// normalize the sphere
 	const float scale = 2 / (3.0f + std::sqrtf(5));
 	model.Deform(dx::XMMatrixScaling(scale, scale, scale));
 	model.CalcNormalsIndependentFlat();
 
-	AddBind(std::make_shared<VertexBuffer>(gfx, model.vertices));
+	AddBind(VertexBuffer::Resolve(gfx, tag, model.vertices));
 
 	auto pvs = VertexShader::Resolve(gfx, "PhongVS.cso");
 	auto pvsbc = pvs->GetBytecode();
 	AddBind(std::move(pvs));
 
 	AddBind(PixelShader::Resolve(gfx, "PhongPS.cso"));
-	AddBind(std::make_shared<IndexBuffer>(gfx, model.indices));
+	AddBind(IndexBuffer::Resolve(gfx, tag, model.indices));
 	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
 	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	AddBind(std::make_shared<TransformCbuf>(gfx, *this));
@@ -48,7 +49,7 @@ Icosahedron::Icosahedron(Graphics& gfx, std::mt19937& rng, std::uniform_real_dis
 		float padding[2];
 	}colorConst;
 	colorConst.color = material;
-	AddBind(std::make_shared<PixelConstantBuffer<PSMaterialConstant>>(gfx, colorConst, 1u));
+	AddBind(PixelConstantBuffer<PSMaterialConstant>::Resolve(gfx, colorConst, 1u));
 
 	// Per instance scaling
 	dx::XMStoreFloat3x3(

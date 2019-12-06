@@ -6,10 +6,11 @@ SolidSphere::SolidSphere(Graphics& gfx, float radius, DirectX::XMFLOAT3 color)
 	:color(color)
 {
 	namespace dx = DirectX;
+	auto tag = "SolidSphere";
 	auto model = Sphere::Make();
 	model.Deform(dx::XMMatrixScaling(radius, radius, radius));
-	AddBind(std::make_shared<VertexBuffer>(gfx, model.vertices));
-	AddBind(std::make_shared<IndexBuffer>(gfx, model.indices));
+	AddBind(VertexBuffer::Resolve(gfx, tag, model.vertices));
+	AddBind(IndexBuffer::Resolve(gfx, tag, model.indices));
 
 	auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
 	auto pvsbc = pvs->GetBytecode();
@@ -24,7 +25,7 @@ SolidSphere::SolidSphere(Graphics& gfx, float radius, DirectX::XMFLOAT3 color)
 	} colorConst;
 	colorConst.color = color;
 
-	AddBind(std::make_shared<PixelConstantBuffer<PSColorConstant>>(gfx, colorConst));
+	AddBind(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst));
 	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
 	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	AddBind(std::make_shared<TransformCbuf>(gfx, *this));

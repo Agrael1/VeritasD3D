@@ -25,15 +25,15 @@ Box::Box(Graphics& gfx,
 	namespace dx = DirectX;
 
 	const auto model = Cube::Make();
-
-	AddBind(std::make_shared<VertexBuffer>(gfx, model.vertices));
+	auto tag = "Box";
+	AddBind(VertexBuffer::Resolve(gfx, tag, model.vertices));
 
 	auto pvs = VertexShader::Resolve(gfx, "ColorIndexVS.cso");
 	auto pvsbc = pvs->GetBytecode();
 	AddBind(std::move(pvs));
 
 	AddBind(PixelShader::Resolve(gfx, "ColorIndexPS.cso"));
-	AddBind(std::make_shared<IndexBuffer>(gfx, model.indices));
+	AddBind(IndexBuffer::Resolve(gfx, tag, model.indices));
 
 	struct PixelShaderConstants
 	{
@@ -58,12 +58,12 @@ Box::Box(Graphics& gfx,
 			{ 0.0f,0.0f,0.0f },
 		}
 	};
-	AddBind(std::make_shared<PixelConstantBuffer<PixelShaderConstants>>(gfx, cb2));
+	AddBind(PixelConstantBuffer<PixelShaderConstants>::Resolve(gfx, cb2));
 	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
 	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 
 
-	AddBind(std::make_unique<TransformCbuf>(gfx, *this));
+	AddBind(std::make_shared<TransformCbuf>(gfx, *this));
 
 	// model deformation transform (per instance, not stored as bind)
 	dx::XMStoreFloat3x3(

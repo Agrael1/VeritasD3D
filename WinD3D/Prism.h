@@ -23,7 +23,7 @@ public:
 		const auto iCenterNear = (unsigned short)(vertices.Count() - 1);
 		// far center
 		vertices[1].Set<DV::Type::Position3D>({ 0.0f,0.0f,1.0f });
-		const auto iCenterFar = (unsigned short)(vertices.Count() - 1);
+		const auto iCenterFar = (unsigned short)(vertices.Count() - 2);
 
 		DirectX::XMFLOAT3 pos{};
 		// base vertices

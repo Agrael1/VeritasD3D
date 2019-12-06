@@ -32,12 +32,12 @@ Model::Model(Graphics& gfx, const std::string filename)
 
 	for (size_t i = 0; i < pScene->mNumMeshes; i++)
 	{
-		meshPtrs.push_back(ParseMesh(gfx, *pScene->mMeshes[i]));
+		meshPtrs.push_back(ParseMesh(gfx, *pScene->mMeshes[i], filename));
 	}
 	pRoot = ParseNode(*pScene->mRootNode);
 }
 
-std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
+std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const std::filesystem::path& path)
 {
 	namespace dx = DirectX;
 	DV::VertexBuffer vertices(std::move(
@@ -47,6 +47,7 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
 	));
 	vertices.Reserve(mesh.mNumVertices);
 
+	const auto meshTag = path.string() + "%" + mesh.mName.C_Str();
 
 	for (unsigned int i = 0; i < mesh.mNumVertices; i++)
 	{
@@ -67,8 +68,8 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
 
 	std::vector<std::shared_ptr<Bindable>> bindablePtrs;
 
-	bindablePtrs.push_back(std::make_shared<VertexBuffer>(gfx, vertices));
-	bindablePtrs.push_back(std::make_shared<IndexBuffer>(gfx, indices));
+	bindablePtrs.push_back(VertexBuffer::Resolve(gfx, meshTag, vertices));
+	bindablePtrs.push_back(IndexBuffer::Resolve(gfx, meshTag, indices));
 
 	auto pvs = VertexShader::Resolve(gfx, "PhongVS.cso");
 	auto pvsbc = pvs->GetBytecode();
@@ -84,7 +85,7 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
 		float specularPower = 30.0f;
 		float padding[3];
 	} pmc;
-	bindablePtrs.push_back(std::make_shared<PixelConstantBuffer<PSMaterialConstant>>(gfx, pmc, 1u));
+	bindablePtrs.push_back(PixelConstantBuffer<PSMaterialConstant>::Resolve(gfx, pmc, 1u));
 
 	return std::make_unique<Mesh>(gfx, std::move(bindablePtrs));
 }

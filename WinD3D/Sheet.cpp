@@ -1,4 +1,3 @@
-#include "ReSurface.h"
 #include "Sheet.h"
 #include "Plane.h"
 #include "Texture.h"
@@ -24,14 +23,15 @@ Sheet::Sheet(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribution<fl
 		+ DV::Type::Texture2D;
 
 	auto model = Plane::Make(vertex);
+	auto tag = "Sheet";
 
 	model.vertices[0].Set<DV::Type::Texture2D>({ 0.0f,0.0f });
 	model.vertices[1].Set<DV::Type::Texture2D>({ 1.0f,0.0f });
 	model.vertices[2].Set<DV::Type::Texture2D>({ 0.0f,1.0f });
 	model.vertices[3].Set<DV::Type::Texture2D>({ 1.0f,1.0f });
 
-	AddBind(std::make_shared<Texture>(gfx, ReSurface(L"C:\\Users\\aa\\Desktop\\Marble.jpg")));
-	AddBind(std::make_shared<VertexBuffer>(gfx, model.vertices));
+	AddBind(Texture::Resolve(gfx, "C:\\Users\\aa\\Desktop\\Marble.jpg"));
+	AddBind(VertexBuffer::Resolve(gfx, tag, model.vertices));
 	AddBind(Sampler::Resolve(gfx));
 
 	auto pvs = VertexShader::Resolve(gfx, "TextureVS.cso");
@@ -39,7 +39,7 @@ Sheet::Sheet(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribution<fl
 	AddBind(std::move(pvs));
 
 	AddBind(PixelShader::Resolve(gfx, "TexturePS.cso"));
-	AddBind(std::make_shared<IndexBuffer>(gfx, model.indices));
+	AddBind(IndexBuffer::Resolve(gfx, tag, model.indices));
 	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
 	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	AddBind(std::make_shared<TransformCbuf>(gfx, *this));

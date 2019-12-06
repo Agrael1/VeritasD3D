@@ -24,6 +24,7 @@ Melon::Melon(Graphics& gfx,
 	phi(adist(rng))
 {
 	namespace dx = DirectX;
+	auto tag = "Melon";
 
 	auto&& vertex = DV::VertexLayout{}
 	+DV::Type::Position3D;
@@ -32,8 +33,8 @@ Melon::Melon(Graphics& gfx,
 	// deform vertices of model by linear transformation
 	model.Deform(dx::XMMatrixScaling(1.0f, 1.0f, 1.2f));
 
-	AddBind(std::make_shared<VertexBuffer>(gfx, model.vertices));
-	AddBind(std::make_shared<IndexBuffer>(gfx, model.indices));
+	AddBind(VertexBuffer::Resolve(gfx, tag, model.vertices));
+	AddBind(IndexBuffer::Resolve(gfx, tag, model.indices));
 
 	auto pvs = VertexShader::Resolve(gfx, "ColorIndexVS.cso");
 	auto pvsbc = pvs->GetBytecode();
@@ -64,7 +65,7 @@ Melon::Melon(Graphics& gfx,
 			{ 0.0f,0.0f,0.0f },
 		}
 	};
-	AddBind(std::make_shared<PixelConstantBuffer<PixelShaderConstants>>(gfx, cb2));
+	AddBind(PixelConstantBuffer<PixelShaderConstants>::Resolve(gfx, cb2));
 	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
 	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	AddBind(std::make_shared<TransformCbuf>(gfx, *this));
