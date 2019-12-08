@@ -50,6 +50,7 @@ void App::DoFrame(float dt)
 	ImGui::End();
 	cam.SpawnControlWindow();
 	light.SpawnControlWindow();
+	nano.ShowWindow("Nanosuit");
 
 	// Present
 	wnd.Gfx().EndFrame();
