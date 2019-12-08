@@ -14,6 +14,7 @@ public:
 	int Go();
 private:
 	void DoFrame(float dt);
+	void ProcessInput(float dt);
 private:
 	ImGUIManager imgui;
 	Window wnd;
