@@ -189,7 +189,7 @@ void Model::ShowWindow(std::string_view windowName) noexcept
 
 void Node::Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noxnd
 {
-	const auto tMat = DirectX::XMLoadFloat4x4(&transform)* DirectX::XMLoadFloat4x4(&appliedTransform) * accumulatedTransform;
+	const auto tMat = DirectX::XMLoadFloat4x4(&appliedTransform) * DirectX::XMLoadFloat4x4(&transform)*  accumulatedTransform;
 	for (const auto pm : meshPtrs)
 	{
 		pm->Draw(gfx, tMat);

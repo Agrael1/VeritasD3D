@@ -48,7 +48,7 @@ public:
 		std::string info;
 	};
 public:
-	Graphics( HWND hWnd);
+	Graphics( HWND hWnd, unsigned width, unsigned height);
 	Graphics(const Graphics&) = delete;
 	Graphics& operator=(const Graphics&) = delete;
 	~Graphics();

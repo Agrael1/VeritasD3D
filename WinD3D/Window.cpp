@@ -68,7 +68,7 @@ Window::Window(unsigned int width, unsigned int height, const char * name):width
 	WND_CALL_INFO(ImGui_ImplWin32_Init(hWnd));
 
 	// Create Graphics object
-	pGfx = std::make_unique<Graphics>(hWnd);
+	pGfx = std::make_unique<Graphics>(hWnd, width, height);
 
 	RAWINPUTDEVICE rid;
 	rid.usUsagePage = 0x01; // mouse page
