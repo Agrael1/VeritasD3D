@@ -50,7 +50,7 @@ artifacts/
 *.ilk
 *.meta
 *.obj
-!WinD3D/Models/*.obj
+!WinD3D/Models/**/*.obj
 *.pch
 *.pdb
 *.pgc
