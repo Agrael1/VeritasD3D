@@ -20,7 +20,7 @@ private:
 	Window wnd;
 	Camera cam;
 	PointLight light;
-	Model nano{ wnd.Gfx(), "Models\\Nano_hierarchy.gltf" };
+	Model nano{ wnd.Gfx(), "Models\\nano_textured\\nanosuit.obj" };
 
 	float speed = 1.0f;
 	//std::vector<std::unique_ptr<class Drawable>> drawables;

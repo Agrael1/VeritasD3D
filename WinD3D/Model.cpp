@@ -1,5 +1,7 @@
 #include "Model.h"
 #include "BindableBase.h"
+#include "Texture.h"
+#include "Sampler.h"
 #include <ImGUI/imgui.h>
 #include <fmt/printf.h>
 
@@ -118,7 +120,7 @@ Model::Model(Graphics& gfx, const std::string filename)
 
 	for (size_t i = 0; i < pScene->mNumMeshes; i++)
 	{
-		meshPtrs.push_back(ParseMesh(gfx, *pScene->mMeshes[i], filename));
+		meshPtrs.push_back(ParseMesh(gfx, *pScene->mMeshes[i], pScene->mMaterials, filename));
 	}
 	int NextID = 0;
 	pRoot = ParseNode(NextID, *pScene->mRootNode);
@@ -127,13 +129,18 @@ Model::~Model() noexcept //pImpl idiom
 {
 }
 
-std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const std::filesystem::path& path)
+std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials, const std::filesystem::path& path)
 {
 	namespace dx = DirectX;
+	bool hasSpecMap = false;
+
+	const auto rootPath = path.parent_path().string() + "\\";
+
 	DV::VertexBuffer vertices(std::move(
 		DV::VertexLayout{}
 		+DV::Type::Position3D
 		+ DV::Type::Normal
+		+ DV::Type::Texture2D
 	));
 	vertices.Reserve(mesh.mNumVertices);
 
@@ -143,6 +150,7 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 	{
 		vertices[i].Set< DV::Type::Position3D >(std::move(*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mVertices[i])));
 		vertices[i].Set< DV::Type::Normal >(std::move(*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mNormals[i])));
+		vertices[i].Set<DV::Type::Texture2D>(std::move(*reinterpret_cast<dx::XMFLOAT2*>(&mesh.mTextureCoords[0][i])));
 	}
 
 	std::vector<unsigned short> indices;
@@ -158,6 +166,22 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 
 	std::vector<std::shared_ptr<Bindable>> bindablePtrs;
 
+	if (mesh.mMaterialIndex >= 0)
+	{
+		auto& material = *pMaterials[mesh.mMaterialIndex];
+		aiString texFileName;
+		if (material.GetTexture(aiTextureType_DIFFUSE, 0, &texFileName) == 0)
+		{
+			bindablePtrs.push_back(Texture::Resolve(gfx, rootPath + texFileName.C_Str()));
+		}
+		if (material.GetTexture(aiTextureType_SPECULAR, 0, &texFileName) == 0)
+		{
+			bindablePtrs.push_back(Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 1));
+			hasSpecMap = true;
+		}
+		bindablePtrs.push_back(Sampler::Resolve(gfx));
+	}
+
 	bindablePtrs.push_back(VertexBuffer::Resolve(gfx, meshTag, vertices));
 	bindablePtrs.push_back(IndexBuffer::Resolve(gfx, meshTag, indices));
 
@@ -165,17 +189,21 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 	auto pvsbc = pvs->GetBytecode();
 	bindablePtrs.push_back(std::move(pvs));
 
-	bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongPS.cso"));
-	bindablePtrs.push_back(InputLayout::Resolve(gfx, vertices.GetLayout(), pvsbc));
-
-	struct PSMaterialConstant
+	if(hasSpecMap)
+		bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongPSSpecular.cso"));
+	else
 	{
-		DirectX::XMFLOAT3 color{ 0.6f, 0.6f, 0.8f };
-		float specularIntensity = 0.6f;
-		float specularPower = 30.0f;
-		float padding[3];
-	} pmc;
-	bindablePtrs.push_back(PixelConstantBuffer<PSMaterialConstant>::Resolve(gfx, pmc, 1u));
+		bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongPS.cso"));
+		struct PSMaterialConstant
+		{
+			float specularIntensity = 0.6f;
+			float specularPower = 30.0f;
+			float padding[2];
+		} pmc;
+		bindablePtrs.push_back(PixelConstantBuffer<PSMaterialConstant>::Resolve(gfx, pmc, 1u));
+	}
+
+	bindablePtrs.push_back(InputLayout::Resolve(gfx, vertices.GetLayout(), pvsbc));
 
 	return std::make_unique<Mesh>(gfx, std::move(bindablePtrs));
 }
