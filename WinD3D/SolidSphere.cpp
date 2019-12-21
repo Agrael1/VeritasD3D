@@ -25,7 +25,7 @@ SolidSphere::SolidSphere(Graphics& gfx, float radius, DirectX::XMFLOAT3 color)
 	} colorConst;
 	colorConst.color = color;
 
-	AddBind(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst));
+	AddBind(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst, 1u));
 	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
 	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	AddBind(std::make_shared<TransformCbuf>(gfx, *this));

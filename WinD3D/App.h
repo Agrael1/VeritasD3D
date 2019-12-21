@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "Model.h"
 #include "PointLight.h"
+#include "SkinnedBox.h"
 
 class App
 {
@@ -22,8 +23,9 @@ private:
 	PointLight light;
 	Model nano{ wnd.Gfx(), "Models\\nano_textured\\nanosuit.obj" };
 
+	SkinnedBox test;
+
 	float speed = 1.0f;
-	//std::vector<std::unique_ptr<class Drawable>> drawables;
 	static constexpr size_t nDrawables = 180;
 };
 

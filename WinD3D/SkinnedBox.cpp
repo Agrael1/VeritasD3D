@@ -5,60 +5,44 @@
 #include "Sampler.h"
 
 
-SkinnedBox::SkinnedBox(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist, std::uniform_real_distribution<float>& bdist)
-	:
-	r(rdist(rng)),
-	droll(ddist(rng)),
-	dpitch(ddist(rng)),
-	dyaw(ddist(rng)),
-	dphi(odist(rng)),
-	dtheta(odist(rng)),
-	dchi(odist(rng)),
-	chi(adist(rng)),
-	theta(adist(rng)),
-	phi(adist(rng))
+SkinnedBox::SkinnedBox(Graphics& gfx)
 {
 	namespace dx = DirectX;
 	auto tag = "SkinnedBox";
-	const auto model = Cube::MakeSkinned();
+
+	auto vertex = DV::VertexLayout{}
+		+ DV::Type::Position3D
+		+ DV::Type::Normal
+		+ DV::Type::Texture2D;
+
+	auto model = Cube::MakeIndependentSkinned(vertex);
+	model.CalcNormalsIndependentFlat();
+	model.Deform(dx::XMMatrixScaling(5.0f, 5.0f, 5.0f));
 
 	AddBind(VertexBuffer::Resolve(gfx, tag, model.vertices));
 
-	AddBind(Texture::Resolve(gfx, "C:\\Users\\aa\\Desktop\\Marble.jpg"));
+	AddBind(Texture::Resolve(gfx, "Materials\\crate_diffuse.png"));
 	AddBind(Sampler::Resolve(gfx));
 
-	auto pvs = VertexShader::Resolve(gfx, "TextureVS.cso");
+	auto pvs = VertexShader::Resolve(gfx, "PhongVS.cso");
 	auto pvsbc = pvs->GetBytecode();
 	AddBind(std::move(pvs));
 
-	AddBind(PixelShader::Resolve(gfx, "TexturePS.cso"));
+	AddBind(PixelShader::Resolve(gfx, "PhongPS.cso"));
 	AddBind(IndexBuffer::Resolve(gfx, tag, model.indices));
 	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
 	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	AddBind(std::make_shared<TransformCbuf>(gfx, *this));
-
-	// model deformation transform (per instance, not stored as bind)
-	dx::XMStoreFloat3x3(
-		&mt,
-		dx::XMMatrixScaling(1.0f, 1.0f, bdist(rng))
-	);
 }
 
 void SkinnedBox::Update(float dt) noexcept
 {
-	roll += droll * dt;
-	pitch += dpitch * dt;
-	yaw += dyaw * dt;
-	theta += dtheta * dt;
-	phi += dphi * dt;
-	chi += dchi * dt;
+
 }
 
 DirectX::XMMATRIX SkinnedBox::GetTransformXM() const noexcept
 {
 	namespace dx = DirectX;
-	return dx::XMLoadFloat3x3(&mt) *
-		dx::XMMatrixRotationRollPitchYaw(pitch, yaw, roll) *
-		dx::XMMatrixTranslation(r, 0.0f, 0.0f) *
-		dx::XMMatrixRotationRollPitchYaw(theta, phi, chi);
+	return 	DirectX::XMMatrixRotationRollPitchYaw(roll, pitch, yaw) *
+		DirectX::XMMatrixTranslation(x, y, z);
 }

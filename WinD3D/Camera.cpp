@@ -53,8 +53,8 @@ void Camera::SpawnControlWindow() noexcept
 }
 void Camera::Reset() noexcept
 {
-	pos = { -13.5f, 6.0f, 3.5f };
-	rot = { 0.0f, dx::XM_PIDIV2 };
+	pos = { -4.5f, 6.2f, -4.7f };
+	rot = { DirectX::XM_PIDIV4, DirectX::XM_PIDIV4 };
 }
 void Camera::Rotate(float dx, float dy) noexcept
 {

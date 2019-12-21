@@ -93,4 +93,88 @@ public:
 			}
 		};
 	}
+
+	static IndexedTriangleList MakeIndependentSkinned(std::optional<DV::VertexLayout> layout = std::nullopt)
+	{
+		namespace dx = DirectX;
+		constexpr float side = 1.0f / 2.0f;
+
+		if (!layout)
+		{
+			layout = DV::VertexLayout{}
+				+DV::Type::Position3D
+				+ DV::Type::Texture2D;
+		}
+		DV::VertexBuffer vertices(std::move(*layout));
+		vertices.Reserve(24u);
+
+		vertices[0].Set<DV::Type::Position3D>({ -side,-side,-side });
+		vertices[0].Set<DV::Type::Texture2D>({ 1.0f, 1.0f });
+		vertices[1].Set<DV::Type::Position3D>({ side,-side,-side });
+		vertices[1].Set<DV::Type::Texture2D>({ 0.0f, 1.0f });
+		vertices[2].Set<DV::Type::Position3D>({ -side,side,-side });
+		vertices[2].Set<DV::Type::Texture2D>({ 1.0f, 0.0f });
+		vertices[3].Set<DV::Type::Position3D>({ side,side,-side });
+		vertices[3].Set<DV::Type::Texture2D>({ 0.0f, 0.0f });
+
+
+		vertices[4].Set<DV::Type::Position3D>({ -side,-side,side });
+		vertices[4].Set<DV::Type::Texture2D>({ 0.0f, 1.0f });
+		vertices[5].Set<DV::Type::Position3D>({ side,-side,side });
+		vertices[5].Set<DV::Type::Texture2D>({ 1.0f, 1.0f });
+		vertices[6].Set<DV::Type::Position3D>({ -side,side,side });
+		vertices[6].Set<DV::Type::Texture2D>({ 0.0f, 0.0f });
+		vertices[7].Set<DV::Type::Position3D>({ side,side,side });
+		vertices[7].Set<DV::Type::Texture2D>({ 1.0f, 0.0f });
+
+
+		vertices[8].Set<DV::Type::Position3D>({ side,side,side });
+		vertices[8].Set<DV::Type::Texture2D>({ 0.0f, 0.0f });
+		vertices[9].Set<DV::Type::Position3D>({ side,-side,side });
+		vertices[9].Set<DV::Type::Texture2D>({ 0.0f, 1.0f });
+		vertices[10].Set<DV::Type::Position3D>({ side,-side,-side });
+		vertices[10].Set<DV::Type::Texture2D>({ 1.0f, 1.0f });
+		vertices[11].Set<DV::Type::Position3D>({ side,side,-side });
+		vertices[11].Set<DV::Type::Texture2D>({ 1.0f, 0.0f });
+
+
+		vertices[12].Set<DV::Type::Position3D>({ -side,side,-side });
+		vertices[12].Set<DV::Type::Texture2D>({ 0.0f, 0.0f });
+		vertices[13].Set<DV::Type::Position3D>({ side,side,-side });
+		vertices[13].Set<DV::Type::Texture2D>({ 1.0f, 0.0f });
+		vertices[14].Set<DV::Type::Position3D>({ -side,side,side });
+		vertices[14].Set<DV::Type::Texture2D>({ 0.0f, 1.0f });
+		vertices[15].Set<DV::Type::Position3D>({ side,side,side });
+		vertices[15].Set<DV::Type::Texture2D>({ 1.0f, 1.0f });
+
+
+		vertices[16].Set<DV::Type::Position3D>({ -side,side,-side });
+		vertices[16].Set<DV::Type::Texture2D>({ 0.0f, 0.0f });
+		vertices[17].Set<DV::Type::Position3D>({ -side,-side,-side });
+		vertices[17].Set<DV::Type::Texture2D>({ 0.0f, 1.0f });
+		vertices[18].Set<DV::Type::Position3D>({ -side,side,side });
+		vertices[18].Set<DV::Type::Texture2D>({ 1.0f, 0.0f });
+		vertices[19].Set<DV::Type::Position3D>({ -side,-side,side });
+		vertices[19].Set<DV::Type::Texture2D>({ 1.0f, 1.0f });
+
+		vertices[20].Set<DV::Type::Position3D>({ side,-side,-side });
+		vertices[20].Set<DV::Type::Texture2D>({ 0.0f, 0.0f });
+		vertices[21].Set<DV::Type::Position3D>({ -side,-side,-side });
+		vertices[21].Set<DV::Type::Texture2D>({ 1.0f, 0.0f });
+		vertices[22].Set<DV::Type::Position3D>({ side,-side,side });
+		vertices[22].Set<DV::Type::Texture2D>({ 0.0f, 1.0f });
+		vertices[23].Set<DV::Type::Position3D>({ -side,-side,side });
+		vertices[23].Set<DV::Type::Texture2D>({ 1.0f, 1.0f });
+
+		return{
+			std::move(vertices),{
+				2,1,0,   1,2,3,
+				4,5,6,   7,6,5,
+				8,9,10,   8,10,11,
+				14,13,12,   13,14,15,
+				16,17,18, 19,18,17,
+				22,21,20,  21,22,23
+			}
+		};
+	}
 };
