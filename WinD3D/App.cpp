@@ -51,6 +51,7 @@ void App::DoFrame(float dt)
 	ProcessInput(dt);
 	cam.SpawnControlWindow();
 	light.SpawnControlWindow();
+	test.SpawnControlWindow(wnd.Gfx());
 	nano.ShowWindow("Nanosuit");
 
 	// Present

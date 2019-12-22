@@ -19,6 +19,18 @@ public:
 public:
 	void Draw(Graphics& gfx)const noxnd;
 protected:
+	template<class T>
+	T* QueryBindable() noexcept
+	{
+		for (auto& pb : binds)
+		{
+			if (auto pt = dynamic_cast<T*>(pb.get()))
+			{
+				return pt;
+			}
+		}
+		return nullptr;
+	}
 	void AddBind(std::shared_ptr<IndexBuffer> index)noxnd;
 	void AddBind(std::shared_ptr<Bindable> bind)noxnd;
 private:
