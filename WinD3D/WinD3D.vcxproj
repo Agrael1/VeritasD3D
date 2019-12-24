@@ -139,10 +139,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
-    <ClCompile Include="Bindable.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Engine\Architecture\Bindable.cpp" />
     <ClCompile Include="Engine\Architecture\Drawable.cpp" />
+    <ClCompile Include="Engine\Architecture\TransformCBuf.cpp" />
+    <ClCompile Include="Engine\Architecture\TransformUnified.cpp" />
     <ClCompile Include="Engine\Graphics.cpp" />
     <ClCompile Include="Engine\Keyboard.cpp" />
     <ClCompile Include="Engine\Mouse.cpp" />
@@ -176,7 +178,6 @@
     <ClCompile Include="SolidSphere.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Topology.cpp" />
-    <ClCompile Include="TransformCBuf.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="VFileDialog.cpp" />
@@ -184,15 +185,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
-    <ClInclude Include="Bindable.h" />
-    <ClInclude Include="BindableBase.h" />
+    <ClInclude Include="BindableCommons.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Cone.h" />
-    <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="Engine\Architecture\Bindable.h" />
     <ClInclude Include="Engine\Architecture\Codex.h" />
+    <ClInclude Include="Engine\Architecture\ConstantBuffer.h" />
     <ClInclude Include="Engine\Architecture\Drawable.h" />
+    <ClInclude Include="Engine\Architecture\TransformCBuf.h" />
+    <ClInclude Include="Engine\Architecture\TransformUnified.h" />
     <ClInclude Include="Engine\Architecture\VertexLayout.h" />
     <ClInclude Include="Engine\Graphics.h" />
     <ClInclude Include="Engine\Keyboard.h" />
@@ -251,7 +254,6 @@
     <ClInclude Include="TestObject.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Topology.h" />
-    <ClInclude Include="TransformCBuf.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexShader.h" />
     <ClInclude Include="VFileDialog.h" />

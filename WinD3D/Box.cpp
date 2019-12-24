@@ -1,5 +1,5 @@
 #include "Box.h"
-#include "BindableBase.h"
+#include "BindableCommons.h"
 #include "Cube.h"
 
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "Bindable.h"
+#include <Engine/Architecture/Bindable.h>
 #include <Engine/Architecture/VertexLayout.h>
 
 class InputLayout : public Bindable

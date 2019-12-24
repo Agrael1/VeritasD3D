@@ -118,13 +118,16 @@
     <Filter Include="Файлы исходного кода\Engine\Graphics\Bindable">
       <UniqueIdentifier>{096266d9-3160-48a2-9b3b-747e5b9c5d85}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Заголовочные файлы\Engine\Architecture\Bindable">
+      <UniqueIdentifier>{80808386-c8b3-4c29-b92b-a04cefe8ac10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Engine\Architecture\Bindable">
+      <UniqueIdentifier>{dd9d84e4-62e6-4716-aad9-4c603318cc38}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">
       <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
-    <ClCompile Include="Bindable.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="IndexBuffer.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
@@ -142,9 +145,6 @@
       <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="Topology.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="TransformCBuf.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="Window.cpp">
@@ -249,6 +249,15 @@
     <ClCompile Include="Engine\Architecture\Drawable.cpp">
       <Filter>Файлы исходного кода\Engine\Architecture</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Architecture\TransformUnified.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Bindable.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\TransformCBuf.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -256,9 +265,6 @@
     </ClInclude>
     <ClInclude Include="App.h">
       <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="Bindable.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="IndexBuffer.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
@@ -276,15 +282,6 @@
       <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="Topology.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="ConstantBuffer.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="TransformCBuf.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="BindableBase.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="Cone.h">
@@ -466,6 +463,21 @@
     </ClInclude>
     <ClInclude Include="Framework\Utility.h">
       <Filter>Заголовочные файлы\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\TransformUnified.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Bindable.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\TransformCBuf.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\ConstantBuffer.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="BindableCommons.h">
+      <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

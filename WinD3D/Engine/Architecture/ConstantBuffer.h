@@ -1,7 +1,8 @@
 #pragma once
-#include "Bindable.h"
-#include "GraphicsThrows.m"
 #include <Engine/Architecture/Codex.h>
+#include <Engine/Architecture/Bindable.h>
+#include "GraphicsThrows.m"
+
 
 template<typename C>
 class ConstantBuffer : public Bindable

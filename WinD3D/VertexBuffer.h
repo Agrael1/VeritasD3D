@@ -1,7 +1,7 @@
 #pragma once
-#include "Bindable.h"
-#include "GraphicsThrows.m"
+#include <Engine/Architecture/Bindable.h>
 #include <Engine/Architecture/VertexLayout.h>
+#include "GraphicsThrows.m"
 #include <memory>
 
 class VertexBuffer : public Bindable

@@ -1,5 +1,5 @@
 #pragma once
-#include "Bindable.h"
+#include <Engine/Architecture/Bindable.h>
 #include <memory>
 
 class IndexBuffer : public Bindable
