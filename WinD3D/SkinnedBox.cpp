@@ -1,8 +1,6 @@
-#include "Texture.h"
 #include "SkinnedBox.h"
 #include "Cube.h"
-#include "BindableBase.h"
-#include "Sampler.h"
+#include "BindableCommons.h"
 #include <ImGUI/imgui.h>
 
 
@@ -37,7 +35,7 @@ SkinnedBox::SkinnedBox(Graphics& gfx)
 	AddBind(PixelConstantBuffer<PSMaterialConstant>::Resolve(gfx, pmc, 1u));
 
 	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
-	AddBind(std::make_shared<TransformCbuf>(gfx, *this));
+	AddBind(std::make_shared<TransformUnified>(gfx, *this, 0u, 2u));
 }
 
 void SkinnedBox::Update(float dt) noexcept

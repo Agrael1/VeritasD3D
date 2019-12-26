@@ -15,6 +15,11 @@ cbuffer ObjectBuf
     bool normalEnabled;
     float padding;
 };
+cbuffer TransformBuf
+{
+    matrix modelView;
+    matrix modelViewProj;
+};
 Texture2D tex;
 Texture2D nmap;
 SamplerState smpl;
@@ -28,6 +33,7 @@ float4 main(float3 worldPos : Position, float3 n : Normal, float2 tc : TEXCOORD)
         n.x = normalSample.x * 2.0f - 1.0f;
         n.y = -normalSample.y * 2.0f + 1.0f;
         n.z = -normalSample.z;
+        n = mul(n, (float3x3) modelView);
     }
 	// fragment to light vector data
     const float3 vToL = lightPos - worldPos;

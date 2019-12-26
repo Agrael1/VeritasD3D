@@ -174,12 +174,6 @@
     <ClCompile Include="ReSurface.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Storage</Filter>
     </ClCompile>
-    <ClCompile Include="Sampler.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
-    </ClCompile>
     <ClCompile Include="Sheet.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Objects\Geometry</Filter>
     </ClCompile>
@@ -249,13 +243,19 @@
     <ClCompile Include="Engine\Architecture\Drawable.cpp">
       <Filter>Файлы исходного кода\Engine\Architecture</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Architecture\TransformUnified.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Architecture\Bindable.cpp">
       <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Architecture\TransformCBuf.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\TransformUnified.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Texture.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Sampler.cpp">
       <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
     </ClCompile>
   </ItemGroup>
@@ -331,12 +331,6 @@
     </ClInclude>
     <ClInclude Include="ReSurface.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Storage</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Sampler.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="Plane.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Objects\Bases</Filter>
@@ -478,6 +472,12 @@
     </ClInclude>
     <ClInclude Include="BindableCommons.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Texture.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Sampler.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
