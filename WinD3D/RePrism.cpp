@@ -1,6 +1,6 @@
 #include "RePrism.h"
 #include "Prism.h"
-#include "BindableBase.h"
+#include "BindableCommons.h"
 
 RePrism::RePrism(Graphics& gfx, std::mt19937& rng,
 	std::uniform_real_distribution<float>& adist,

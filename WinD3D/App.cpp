@@ -40,7 +40,7 @@ void App::DoFrame(float dt)
 
 	nano.Draw(wnd.Gfx());
 	light.Draw(wnd.Gfx());
-	test.Draw(wnd.Gfx());
+	//test.Draw(wnd.Gfx());
 
 	if (ImGui::Begin("Simulation speed"))
 	{
@@ -51,7 +51,7 @@ void App::DoFrame(float dt)
 	ProcessInput(dt);
 	cam.SpawnControlWindow();
 	light.SpawnControlWindow();
-	test.SpawnControlWindow(wnd.Gfx());
+	//test.SpawnControlWindow(wnd.Gfx());
 	nano.ShowWindow("Nanosuit");
 
 	// Present

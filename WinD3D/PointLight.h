@@ -1,6 +1,6 @@
 #pragma once
 #include <Engine/Graphics.h>
-#include "ConstantBuffer.h"
+#include <Engine/Architecture/ConstantBuffer.h>
 #include "SolidSphere.h"
 
 class PointLight

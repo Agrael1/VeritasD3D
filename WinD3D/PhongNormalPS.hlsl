@@ -21,19 +21,26 @@ cbuffer TransformBuf
     matrix modelViewProj;
 };
 Texture2D tex;
-Texture2D nmap;
+Texture2D nmap : register(t2);
 SamplerState smpl;
 
 
-float4 main(float3 worldPos : Position, float3 n : Normal, float2 tc : TEXCOORD) : SV_Target
+float4 main(float3 worldPos : Position, float3 n : Normal, float3 tan : Tangent, float3 bitan : Bitangent, float2 tc : TEXCOORD) : SV_Target
 {
     if (normalEnabled)
     {
+        const float3x3 tanToView = float3x3(
+            normalize(tan),
+            normalize(bitan),
+            normalize(n)
+        );
+        
+        
         const float3 normalSample = nmap.Sample(smpl, tc).xyz;
         n.x = normalSample.x * 2.0f - 1.0f;
         n.y = -normalSample.y * 2.0f + 1.0f;
-        n.z = -normalSample.z;
-        n = mul(n, (float3x3) modelView);
+        n.z = normalSample.z;
+        n = mul(n, (float3x3) tanToView);
     }
 	// fragment to light vector data
     const float3 vToL = lightPos - worldPos;

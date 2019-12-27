@@ -153,6 +153,10 @@ namespace DV
 					return sizeof(XMFLOAT2);
 				case VertexLayout::ElementType::Normal:
 					return sizeof(XMFLOAT3);
+				case VertexLayout::ElementType::Tangent:
+					return sizeof(XMFLOAT3);
+				case VertexLayout::ElementType::Bitangent:
+					return sizeof(XMFLOAT3);
 				case VertexLayout::ElementType::Float3Color:
 					return sizeof(XMFLOAT3);
 				case VertexLayout::ElementType::Float4Color:

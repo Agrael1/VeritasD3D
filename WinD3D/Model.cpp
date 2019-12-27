@@ -1,7 +1,5 @@
 #include "Model.h"
-#include "BindableBase.h"
-#include "Texture.h"
-#include "Sampler.h"
+#include "BindableCommons.h"
 #include <ImGUI/imgui.h>
 #include <fmt/printf.h>
 
@@ -112,7 +110,8 @@ Model::Model(Graphics& gfx, const std::string filename)
 		aiProcess_Triangulate |
 		aiProcess_JoinIdenticalVertices |
 		aiProcess_ConvertToLeftHanded |
-		aiProcess_GenNormals
+		aiProcess_GenNormals |
+		aiProcess_CalcTangentSpace
 	);
 
 	if (!pScene)
@@ -138,8 +137,10 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 
 	DV::VertexBuffer vertices(std::move(
 		DV::VertexLayout{}
-		+DV::Type::Position3D
+		+ DV::Type::Position3D
 		+ DV::Type::Normal
+		+ DV::Type::Tangent
+		+ DV::Type::Bitangent
 		+ DV::Type::Texture2D
 	));
 	vertices.Reserve(mesh.mNumVertices);
@@ -150,7 +151,9 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 	{
 		vertices[i].Set< DV::Type::Position3D >(std::move(*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mVertices[i])));
 		vertices[i].Set< DV::Type::Normal >(std::move(*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mNormals[i])));
-		vertices[i].Set<DV::Type::Texture2D>(std::move(*reinterpret_cast<dx::XMFLOAT2*>(&mesh.mTextureCoords[0][i])));
+		vertices[i].Set< DV::Type::Tangent >(std::move(*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mTangents[i])));
+		vertices[i].Set< DV::Type::Bitangent >(std::move(*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mBitangents[i])));
+		vertices[i].Set< DV::Type::Texture2D >(std::move(*reinterpret_cast<dx::XMFLOAT2*>(&mesh.mTextureCoords[0][i])));
 	}
 
 	std::vector<unsigned short> indices;
@@ -179,21 +182,27 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 			bindablePtrs.push_back(Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 1));
 			hasSpecMap = true;
 		}
+		if (material.GetTexture(aiTextureType_NORMALS, 0, &texFileName) == 0)
+		{
+			bindablePtrs.push_back(Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 2));
+			hasSpecMap = true;
+		}
 		bindablePtrs.push_back(Sampler::Resolve(gfx));
 	}
 
 	bindablePtrs.push_back(VertexBuffer::Resolve(gfx, meshTag, vertices));
 	bindablePtrs.push_back(IndexBuffer::Resolve(gfx, meshTag, indices));
 
-	auto pvs = VertexShader::Resolve(gfx, "PhongVS.cso");
+	auto pvs = VertexShader::Resolve(gfx, "PhongNormalVS.cso");
 	auto pvsbc = pvs->GetBytecode();
 	bindablePtrs.push_back(std::move(pvs));
 
-	if(hasSpecMap)
-		bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongPSSpecular.cso"));
-	else
+
+	//if(hasSpecMap)
+	//	bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongNormalPS.cso"));
+	//else
 	{
-		bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongPS.cso"));
+		bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongNormalPS.cso"));
 		struct PSMaterialConstant
 		{
 			float specularIntensity = 0.6f;
