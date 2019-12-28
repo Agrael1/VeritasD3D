@@ -1,10 +1,9 @@
 #pragma once
-#include <Engine\Window.h>
-#include "ImGUIManager.h"
+#include <Engine/Window.h>
+#include <Engine/Entities/ImGUIManager.h>
+#include <Engine/Entities/Model.h>
 #include "Camera.h"
-#include "Model.h"
 #include "PointLight.h"
-#include "SkinnedBox.h"
 
 class App
 {

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "IndexBuffer.h"
-#include "InputLayout.h"
-#include "PixelShader.h"
-#include "Topology.h"
+#include <Engine/Architecture/IndexBuffer.h>
+#include <Engine/Architecture/InputLayout.h>
+#include <Engine/Architecture/PixelShader.h>
+#include <Engine/Architecture/Topology.h>
 #include <Engine/Architecture/TransformUnified.h>
 #include <Engine/Architecture/Sampler.h>
 #include <Engine/Architecture/Texture.h>
-#include "VertexBuffer.h"
-#include "VertexShader.h"
+#include <Engine/Architecture/VertexBuffer.h>
+#include <Engine/Architecture/VertexShader.h>

@@ -1,9 +1,8 @@
 #include "App.h"
 #include <random>
 #include <iterator>
-#include "ImGUI\imgui.h"
-#include "GDIPlusManager.h"
-#include "Model.h"
+#include "ImGUI/imgui.h"
+#include <Engine/Entities/GDIPlusManager.h>
 
 GDIPlusManager gdipm;
 

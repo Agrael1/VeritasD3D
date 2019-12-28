@@ -10,33 +10,14 @@ cbuffer LightCBuf
 };
 cbuffer ObjectBuf
 {
+    float3 materialColor;
     float specularIntensity;
     float specularPower;
-    bool normalEnabled;
-    float padding;
+    float3 padding;
 };
 
-Texture2D tex;
-Texture2D nmap : register(t2);
-SamplerState smpl;
-
-
-float4 main(float3 worldPos : Position, float3 n : Normal, float3 tan : Tangent, float3 bitan : Bitangent, float2 tc : TEXCOORD) : SV_Target
+float4 main(float3 worldPos : Position, float3 n : Normal) : SV_Target
 {
-    if (normalEnabled)
-    {
-        const float3x3 tanToView = float3x3(
-            normalize(tan),
-            normalize(bitan),
-            normalize(n)
-        );
-        
-        const float3 normalSample = nmap.Sample(smpl, tc).xyz;
-        n.x = normalSample.x * 2.0f - 1.0f;
-        n.y = -normalSample.y * 2.0f + 1.0f;
-        n.z = normalSample.z;
-        n = mul(n, (float3x3) tanToView);
-    }
 	// fragment to light vector data
     const float3 vToL = lightPos - worldPos;
     const float distToL = length(vToL);
@@ -51,5 +32,5 @@ float4 main(float3 worldPos : Position, float3 n : Normal, float3 tan : Tangent,
     // calculate specular intensity
     const float3 specular = att * (diffuseColor * diffuseIntensity) * specularIntensity * pow(max(0.0f, dot(normalize(-r), normalize(worldPos))), specularPower);
 	// final color
-    return float4(saturate((diffuse + ambient) * tex.Sample(smpl, tc).rgb + specular), 1.0f);
+    return float4(saturate((diffuse + ambient) * materialColor + specular), 1.0f);
 }

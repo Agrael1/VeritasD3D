@@ -143,46 +143,46 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Engine\Architecture\Bindable.cpp" />
     <ClCompile Include="Engine\Architecture\Drawable.cpp" />
+    <ClCompile Include="Engine\Architecture\IndexBuffer.cpp" />
+    <ClCompile Include="Engine\Architecture\InputLayout.cpp" />
+    <ClCompile Include="Engine\Architecture\PixelShader.cpp" />
     <ClCompile Include="Engine\Architecture\Sampler.cpp" />
     <ClCompile Include="Engine\Architecture\Texture.cpp" />
+    <ClCompile Include="Engine\Architecture\Topology.cpp" />
     <ClCompile Include="Engine\Architecture\TransformCBuf.cpp" />
     <ClCompile Include="Engine\Architecture\TransformUnified.cpp" />
+    <ClCompile Include="Engine\Architecture\VertexBuffer.cpp" />
     <ClCompile Include="Engine\Architecture\VertexLayoutDebug.cpp" />
+    <ClCompile Include="Engine\Architecture\VertexShader.cpp" />
+    <ClCompile Include="Engine\Entities\GDIPlusManager.cpp" />
+    <ClCompile Include="Engine\Entities\ImGUIManager.cpp" />
+    <ClCompile Include="Engine\Entities\Model.cpp" />
+    <ClCompile Include="Engine\Entities\ReSurface.cpp" />
+    <ClCompile Include="Engine\Entities\VFileDialog.cpp" />
     <ClCompile Include="Engine\Graphics.cpp" />
     <ClCompile Include="Engine\Keyboard.cpp" />
     <ClCompile Include="Engine\Mouse.cpp" />
+    <ClCompile Include="Engine\Window.cpp" />
     <ClCompile Include="EntryMain.cpp" />
     <ClCompile Include="Fmtlib\src\format.cc" />
     <ClCompile Include="Fmtlib\src\posix.cc" />
     <ClCompile Include="Framework\dxerr.cpp" />
     <ClCompile Include="Framework\DXGIInfoManager.cpp" />
     <ClCompile Include="Framework\Exception.cpp" />
-    <ClCompile Include="GDIPlusManager.cpp" />
     <ClCompile Include="Icosahedron.cpp" />
-    <ClCompile Include="ImGUIManager.cpp" />
     <ClCompile Include="ImGUI\imgui.cpp" />
     <ClCompile Include="ImGUI\imgui_demo.cpp" />
     <ClCompile Include="ImGUI\imgui_draw.cpp" />
     <ClCompile Include="ImGUI\imgui_impl_dx11.cpp" />
     <ClCompile Include="ImGUI\imgui_impl_win32.cpp" />
     <ClCompile Include="ImGUI\imgui_widgets.cpp" />
-    <ClCompile Include="IndexBuffer.cpp" />
-    <ClCompile Include="InputLayout.cpp" />
     <ClCompile Include="Melon.cpp" />
-    <ClCompile Include="Model.cpp" />
-    <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Pyramid.cpp" />
     <ClCompile Include="RePrism.cpp" />
-    <ClCompile Include="ReSurface.cpp" />
     <ClCompile Include="Sheet.cpp" />
     <ClCompile Include="SkinnedBox.cpp" />
     <ClCompile Include="SolidSphere.cpp" />
-    <ClCompile Include="Topology.cpp" />
-    <ClCompile Include="VertexBuffer.cpp" />
-    <ClCompile Include="VertexShader.cpp" />
-    <ClCompile Include="VFileDialog.cpp" />
-    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
@@ -195,11 +195,22 @@
     <ClInclude Include="Engine\Architecture\Codex.h" />
     <ClInclude Include="Engine\Architecture\ConstantBuffer.h" />
     <ClInclude Include="Engine\Architecture\Drawable.h" />
+    <ClInclude Include="Engine\Architecture\IndexBuffer.h" />
+    <ClInclude Include="Engine\Architecture\InputLayout.h" />
+    <ClInclude Include="Engine\Architecture\PixelShader.h" />
     <ClInclude Include="Engine\Architecture\Sampler.h" />
     <ClInclude Include="Engine\Architecture\Texture.h" />
+    <ClInclude Include="Engine\Architecture\Topology.h" />
     <ClInclude Include="Engine\Architecture\TransformCBuf.h" />
     <ClInclude Include="Engine\Architecture\TransformUnified.h" />
+    <ClInclude Include="Engine\Architecture\VertexBuffer.h" />
     <ClInclude Include="Engine\Architecture\VertexLayout.h" />
+    <ClInclude Include="Engine\Architecture\VertexShader.h" />
+    <ClInclude Include="Engine\Entities\GDIPlusManager.h" />
+    <ClInclude Include="Engine\Entities\ImGUIManager.h" />
+    <ClInclude Include="Engine\Entities\Model.h" />
+    <ClInclude Include="Engine\Entities\ReSurface.h" />
+    <ClInclude Include="Engine\Entities\VFileDialog.h" />
     <ClInclude Include="Engine\Graphics.h" />
     <ClInclude Include="Engine\Keyboard.h" />
     <ClInclude Include="Engine\Mouse.h" />
@@ -224,10 +235,8 @@
     <ClInclude Include="Framework\optional.h" />
     <ClInclude Include="Framework\Utility.h" />
     <ClInclude Include="Framework\WinSetup.h" />
-    <ClInclude Include="GDIPlusManager.h" />
     <ClInclude Include="Icosahedron.h" />
     <ClInclude Include="Icosphere.h" />
-    <ClInclude Include="ImGUIManager.h" />
     <ClInclude Include="ImGUI\imconfig.h" />
     <ClInclude Include="ImGUI\imgui.h" />
     <ClInclude Include="ImGUI\imgui_impl_dx11.h" />
@@ -236,28 +245,19 @@
     <ClInclude Include="ImGUI\imstb_rectpack.h" />
     <ClInclude Include="ImGUI\imstb_textedit.h" />
     <ClInclude Include="ImGUI\imstb_truetype.h" />
-    <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="IndexedTriangleList.h" />
-    <ClInclude Include="InputLayout.h" />
     <ClInclude Include="Melon.h" />
-    <ClInclude Include="Model.h" />
-    <ClInclude Include="PixelShader.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="Prism.h" />
     <ClInclude Include="Pyramid.h" />
     <ClInclude Include="RePrism.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="ReSurface.h" />
     <ClInclude Include="Sheet.h" />
     <ClInclude Include="SkinnedBox.h" />
     <ClInclude Include="SolidSphere.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="TestObject.h" />
-    <ClInclude Include="Topology.h" />
-    <ClInclude Include="VertexBuffer.h" />
-    <ClInclude Include="VertexShader.h" />
-    <ClInclude Include="VFileDialog.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc" />
@@ -317,7 +317,28 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="PhongNormalSpecularPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="PhongNormalVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="PhongNoTexPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="PhongNoTexVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

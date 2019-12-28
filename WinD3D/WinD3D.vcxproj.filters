@@ -28,12 +28,6 @@
     <Filter Include="Заголовочные файлы\Engine\Window">
       <UniqueIdentifier>{cf3ff23a-ad75-4fae-beb1-eaed3b03d628}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Заголовочные файлы\Engine\File">
-      <UniqueIdentifier>{6112d352-0803-46a0-b2e4-9a278b6355fa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Engine\File">
-      <UniqueIdentifier>{c06b2447-0d18-440d-8264-658c4acfc9de}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Файлы ресурсов\Images">
       <UniqueIdentifier>{904b3ac4-0756-475d-8141-d73632901c89}</UniqueIdentifier>
     </Filter>
@@ -58,12 +52,6 @@
     <Filter Include="Заголовочные файлы\Engine\Graphics">
       <UniqueIdentifier>{8a1dccec-54a8-48dd-8502-619f48a1b07e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Graphics\Bindable">
-      <UniqueIdentifier>{67aa1cea-d71a-4ddd-8e53-f1683d9a51a9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Graphics\Storage">
-      <UniqueIdentifier>{95121d9c-d1d0-414e-9b5e-a27e83f87231}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Заголовочные файлы\Engine\Graphics\Objects">
       <UniqueIdentifier>{f60c432c-80a5-4f07-ba69-f99e55ff1c41}</UniqueIdentifier>
     </Filter>
@@ -75,9 +63,6 @@
     </Filter>
     <Filter Include="Файлы исходного кода\Engine\Graphics">
       <UniqueIdentifier>{96c6a4ef-9569-4b2e-81f2-4b6f1ec57f66}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Graphics\Storage">
-      <UniqueIdentifier>{510fadf1-db83-4526-98ee-8e644be3ac2f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Файлы исходного кода\Engine\Graphics\Objects">
       <UniqueIdentifier>{bfb28d2d-a35d-447c-bbc7-3a48c60dccd1}</UniqueIdentifier>
@@ -115,40 +100,22 @@
     <Filter Include="Файлы исходного кода\Engine\Architecture">
       <UniqueIdentifier>{cf0ddef9-b360-4eb0-b889-54f9c6218443}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Graphics\Bindable">
-      <UniqueIdentifier>{096266d9-3160-48a2-9b3b-747e5b9c5d85}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Заголовочные файлы\Engine\Architecture\Bindable">
       <UniqueIdentifier>{80808386-c8b3-4c29-b92b-a04cefe8ac10}</UniqueIdentifier>
     </Filter>
     <Filter Include="Файлы исходного кода\Engine\Architecture\Bindable">
       <UniqueIdentifier>{dd9d84e4-62e6-4716-aad9-4c603318cc38}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Заголовочные файлы\Engine\Entities">
+      <UniqueIdentifier>{6112d352-0803-46a0-b2e4-9a278b6355fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Engine\Entities">
+      <UniqueIdentifier>{c06b2447-0d18-440d-8264-658c4acfc9de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">
       <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
-    <ClCompile Include="IndexBuffer.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexBuffer.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="InputLayout.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="PixelShader.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexShader.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Topology.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>Файлы исходного кода\Engine\Window</Filter>
     </ClCompile>
     <ClCompile Include="Pyramid.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Objects\Geometry</Filter>
@@ -164,15 +131,6 @@
     </ClCompile>
     <ClCompile Include="Icosahedron.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Objects\Geometry</Filter>
-    </ClCompile>
-    <ClCompile Include="VFileDialog.cpp">
-      <Filter>Файлы исходного кода\Engine\File</Filter>
-    </ClCompile>
-    <ClCompile Include="GDIPlusManager.cpp">
-      <Filter>Файлы исходного кода\Engine\File</Filter>
-    </ClCompile>
-    <ClCompile Include="ReSurface.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Storage</Filter>
     </ClCompile>
     <ClCompile Include="Sheet.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Objects\Geometry</Filter>
@@ -194,9 +152,6 @@
     </ClCompile>
     <ClCompile Include="ImGUI\imgui_impl_win32.cpp">
       <Filter>Файлы исходного кода\Engine\ImGUI\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGUIManager.cpp">
-      <Filter>Файлы исходного кода\Engine\ImGUI</Filter>
     </ClCompile>
     <ClCompile Include="SkinnedBox.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Objects\Geometry</Filter>
@@ -228,9 +183,6 @@
     <ClCompile Include="Engine\Graphics.cpp">
       <Filter>Файлы исходного кода\Engine\Window</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Fmtlib\src\format.cc">
       <Filter>Файлы исходного кода\Framework\Fmt</Filter>
     </ClCompile>
@@ -258,6 +210,42 @@
     <ClCompile Include="Engine\Architecture\VertexLayoutDebug.cpp">
       <Filter>Файлы исходного кода\Engine\Architecture</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Architecture\IndexBuffer.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\InputLayout.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\PixelShader.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Topology.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\VertexBuffer.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\VertexShader.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\GDIPlusManager.cpp">
+      <Filter>Файлы исходного кода\Engine\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\ImGUIManager.cpp">
+      <Filter>Файлы исходного кода\Engine\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\Model.cpp">
+      <Filter>Файлы исходного кода\Engine\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\ReSurface.cpp">
+      <Filter>Файлы исходного кода\Engine\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\VFileDialog.cpp">
+      <Filter>Файлы исходного кода\Engine\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Window.cpp">
+      <Filter>Файлы исходного кода\Engine\Window</Filter>
+    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Objects</Filter>
     </ClCompile>
@@ -268,24 +256,6 @@
     </ClInclude>
     <ClInclude Include="App.h">
       <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="IndexBuffer.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="InputLayout.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexBuffer.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="PixelShader.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexShader.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Topology.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="Cone.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Objects\Bases</Filter>
@@ -326,15 +296,6 @@
     <ClInclude Include="Icosahedron.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Objects\Geometry</Filter>
     </ClInclude>
-    <ClInclude Include="VFileDialog.h">
-      <Filter>Заголовочные файлы\Engine\File</Filter>
-    </ClInclude>
-    <ClInclude Include="GDIPlusManager.h">
-      <Filter>Заголовочные файлы\Engine\File</Filter>
-    </ClInclude>
-    <ClInclude Include="ReSurface.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Storage</Filter>
-    </ClInclude>
     <ClInclude Include="Plane.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Objects\Bases</Filter>
     </ClInclude>
@@ -368,12 +329,6 @@
     <ClInclude Include="ImGUI\imgui_impl_win32.h">
       <Filter>Заголовочные файлы\Engine\ImGUI\Impl</Filter>
     </ClInclude>
-    <ClInclude Include="ImGUIManager.h">
-      <Filter>Заголовочные файлы\Engine\ImGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Заголовочные файлы\Engine\Window</Filter>
-    </ClInclude>
     <ClInclude Include="PointLight.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Objects</Filter>
     </ClInclude>
@@ -400,9 +355,6 @@
     </ClInclude>
     <ClInclude Include="Framework\DXGIInfoManager.h">
       <Filter>Заголовочные файлы\Framework\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics.h">
       <Filter>Заголовочные файлы\Engine\Window</Filter>
@@ -473,14 +425,50 @@
     <ClInclude Include="Engine\Architecture\ConstantBuffer.h">
       <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
     </ClInclude>
-    <ClInclude Include="BindableCommons.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Bindable</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Architecture\Texture.h">
       <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Architecture\Sampler.h">
       <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\IndexBuffer.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\InputLayout.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\PixelShader.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Topology.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\VertexBuffer.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\VertexShader.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="BindableCommons.h">
+      <Filter>Заголовочные файлы\Engine\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\GDIPlusManager.h">
+      <Filter>Заголовочные файлы\Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\ImGUIManager.h">
+      <Filter>Заголовочные файлы\Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\Model.h">
+      <Filter>Заголовочные файлы\Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\ReSurface.h">
+      <Filter>Заголовочные файлы\Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\VFileDialog.h">
+      <Filter>Заголовочные файлы\Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Заголовочные файлы\Engine\Graphics\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -551,6 +539,15 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="PhongNormalVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongNormalSpecularPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongNoTexVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongNoTexPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
