@@ -21,9 +21,7 @@ private:
 	Window wnd;
 	Camera cam;
 	PointLight light;
-	Model nano{ wnd.Gfx(), "Models\\nano_textured\\nanosuit.obj" };
-
-	SkinnedBox test;
+	Model goblin{ wnd.Gfx(), "Models\\gobber\\GoblinX.obj" };
 
 	float speed = 1.0f;
 	static constexpr size_t nDrawables = 180;

@@ -131,18 +131,44 @@ Model::~Model() noexcept //pImpl idiom
 std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials, const std::filesystem::path& path)
 {
 	namespace dx = DirectX;
-	bool hasSpecMap = false;
-
 	const auto rootPath = path.parent_path().string() + "\\";
+	std::vector<std::shared_ptr<Bindable>> bindablePtrs;
+	bool hasAny = false;
+	bool hasSpecMap = false;
+	bool hasNormMap = false;
+	bool hasDiffMap = false;
 
-	DV::VertexBuffer vertices(std::move(
-		DV::VertexLayout{}
-		+ DV::Type::Position3D
-		+ DV::Type::Normal
-		+ DV::Type::Tangent
-		+ DV::Type::Bitangent
-		+ DV::Type::Texture2D
-	));
+	auto&& Vertex = DV::VertexLayout{};
+	Vertex = Vertex + DV::Type::Position3D;
+
+	if (mesh.mMaterialIndex >= 0)
+	{
+		auto& material = *pMaterials[mesh.mMaterialIndex];
+		aiString texFileName;
+		hasAny = true;
+		Vertex = Vertex
+			+ DV::Type::Texture2D;
+
+		if (hasDiffMap = material.GetTexture(aiTextureType_DIFFUSE, 0, &texFileName) == 0)
+		{
+			bindablePtrs.push_back(Texture::Resolve(gfx, rootPath + texFileName.C_Str()));
+		}
+		if (hasSpecMap = material.GetTexture(aiTextureType_SPECULAR, 0, &texFileName) == 0)
+		{
+			bindablePtrs.push_back(Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 1));
+		}
+		if (hasNormMap = material.GetTexture(aiTextureType_NORMALS, 0, &texFileName) == 0)
+		{
+			Vertex = Vertex
+				+ DV::Type::Normal
+				+ DV::Type::Tangent
+				+ DV::Type::Bitangent;
+			bindablePtrs.push_back(Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 2));
+		}
+		bindablePtrs.push_back(Sampler::Resolve(gfx));
+	}
+
+	DV::VertexBuffer vertices(std::move(Vertex));
 	vertices.Reserve(mesh.mNumVertices);
 
 	const auto meshTag = path.string() + "%" + mesh.mName.C_Str();
@@ -150,10 +176,14 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 	for (unsigned int i = 0; i < mesh.mNumVertices; i++)
 	{
 		vertices[i].Set< DV::Type::Position3D >(std::move(*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mVertices[i])));
-		vertices[i].Set< DV::Type::Normal >(std::move(*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mNormals[i])));
-		vertices[i].Set< DV::Type::Tangent >(std::move(*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mTangents[i])));
-		vertices[i].Set< DV::Type::Bitangent >(std::move(*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mBitangents[i])));
-		vertices[i].Set< DV::Type::Texture2D >(std::move(*reinterpret_cast<dx::XMFLOAT2*>(&mesh.mTextureCoords[0][i])));
+		if (hasNormMap)
+		{
+			vertices[i].Set< DV::Type::Normal >(std::move(*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mNormals[i])));
+			vertices[i].Set< DV::Type::Tangent >(std::move(*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mTangents[i])));
+			vertices[i].Set< DV::Type::Bitangent >(std::move(*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mBitangents[i])));
+		}
+		if(hasAny)
+			vertices[i].Set< DV::Type::Texture2D >(std::move(*reinterpret_cast<dx::XMFLOAT2*>(&mesh.mTextureCoords[0][i])));
 	}
 
 	std::vector<unsigned short> indices;
@@ -165,29 +195,6 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 		indices.push_back(face.mIndices[0]);
 		indices.push_back(face.mIndices[1]);
 		indices.push_back(face.mIndices[2]);
-	}
-
-	std::vector<std::shared_ptr<Bindable>> bindablePtrs;
-
-	if (mesh.mMaterialIndex >= 0)
-	{
-		auto& material = *pMaterials[mesh.mMaterialIndex];
-		aiString texFileName;
-		if (material.GetTexture(aiTextureType_DIFFUSE, 0, &texFileName) == 0)
-		{
-			bindablePtrs.push_back(Texture::Resolve(gfx, rootPath + texFileName.C_Str()));
-		}
-		if (material.GetTexture(aiTextureType_SPECULAR, 0, &texFileName) == 0)
-		{
-			bindablePtrs.push_back(Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 1));
-			hasSpecMap = true;
-		}
-		if (material.GetTexture(aiTextureType_NORMALS, 0, &texFileName) == 0)
-		{
-			bindablePtrs.push_back(Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 2));
-			hasSpecMap = true;
-		}
-		bindablePtrs.push_back(Sampler::Resolve(gfx));
 	}
 
 	bindablePtrs.push_back(VertexBuffer::Resolve(gfx, meshTag, vertices));

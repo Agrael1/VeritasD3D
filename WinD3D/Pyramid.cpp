@@ -1,5 +1,5 @@
 #include "Pyramid.h"
-#include "BindableBase.h"
+#include "BindableCommons.h"
 #include "Cone.h"
 
 

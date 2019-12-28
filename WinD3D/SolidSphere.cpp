@@ -1,5 +1,5 @@
 #include "SolidSphere.h"
-#include "BindableBase.h"
+#include "BindableCommons.h"
 #include "Sphere.h"
 
 SolidSphere::SolidSphere(Graphics& gfx, float radius, DirectX::XMFLOAT3 color)

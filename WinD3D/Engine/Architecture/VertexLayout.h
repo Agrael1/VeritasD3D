@@ -3,6 +3,7 @@
 #include <array>
 #include <DirectXMath.h>
 #include <Framework\noexcept_if.h>
+#include <Framework\Utility.h>
 #include <Fmtlib\include\fmt\printf.h>
 #include <Engine\Graphics.h>
 
@@ -37,18 +38,7 @@ namespace DV
 		};
 
 #if _DEBUG
-		std::array<std::string, size_t(ElementType::Count)> Typenames
-		{
-			"Position2D",
-			"Position3D",
-			"Texture2D",
-			"Normal",
-			"Tangent",
-			"Bitangent",
-			"Float3Color",
-			"Float4Color",
-			"BGRAColor"
-		};
+		static std::array<std::wstring, size_t(ElementType::Count)> Typenames;
 #endif
 		template<ElementType> struct Map;
 		template<> struct Map<ElementType::Position2D>
@@ -246,7 +236,8 @@ namespace DV
 				}
 			}
 #if _DEBUG
-			assert(fmt::sprintf("Couldn't resolve type name %s", Typenames[size_t(Type)]).c_str() && false);
+			auto error = fmt::sprintf(L"Couldn't resolve type name %s", Typenames[size_t(Type)]);
+			_wassert(error.c_str(),__FILEW__,__LINE__);
 #endif
 			return elements.front();
 		}

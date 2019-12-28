@@ -147,6 +147,7 @@
     <ClCompile Include="Engine\Architecture\Texture.cpp" />
     <ClCompile Include="Engine\Architecture\TransformCBuf.cpp" />
     <ClCompile Include="Engine\Architecture\TransformUnified.cpp" />
+    <ClCompile Include="Engine\Architecture\VertexLayoutDebug.cpp" />
     <ClCompile Include="Engine\Graphics.cpp" />
     <ClCompile Include="Engine\Keyboard.cpp" />
     <ClCompile Include="Engine\Mouse.cpp" />

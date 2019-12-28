@@ -201,9 +201,6 @@
     <ClCompile Include="SkinnedBox.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Objects\Geometry</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="PointLight.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Objects</Filter>
     </ClCompile>
@@ -257,6 +254,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Architecture\Sampler.cpp">
       <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\VertexLayoutDebug.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Файлы исходного кода\Engine\Graphics\Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
