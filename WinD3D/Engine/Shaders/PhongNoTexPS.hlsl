@@ -7,6 +7,7 @@ cbuffer ObjectCBuf
     float4 materialColor;
     float4 specularColor;
     float specularPower;
+    float3 padding;
 };
 
 

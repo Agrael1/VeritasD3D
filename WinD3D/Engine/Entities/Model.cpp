@@ -140,8 +140,8 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 	bool hasAlphaGloss = false;
 
 	float shininess = 2.0f;
-	dx::XMFLOAT4 specularColor = { 0.18f,0.18f,0.18f,1.0f };
-	dx::XMFLOAT4 diffuseColor = { 0.45f,0.45f,0.85f,1.0f };
+	dx::XMFLOAT4A specularColor = { 0.18f,0.18f,0.18f,1.0f };
+	dx::XMFLOAT4A diffuseColor = { 0.45f,0.45f,0.85f,1.0f };
 
 	DV::VertexLayout Vertex;
 	Vertex = Vertex 
@@ -236,13 +236,14 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 		bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongNoTexPS.cso"));
 		struct PSMaterialConstant
 		{
-			DirectX::XMFLOAT3 materialColor = { 0.8f, 0.5f, 0.2f };
-			float specularIntensity = 0.6f;
-			float specularPower = 20.0f;
+			DirectX::XMFLOAT4A materialColor;
+			DirectX::XMFLOAT4A specularColor;
+			float specularPower = 0.6f;
 			float padding[3];
 		} pmc;
+		pmc.materialColor = diffuseColor;
+		pmc.specularColor = specularColor;
 		pmc.specularPower = shininess;
-		pmc.specularIntensity = (specularColor.x + specularColor.y + specularColor.z) / 3.0f;
 		bindablePtrs.push_back(PixelConstantBuffer<PSMaterialConstant>::Resolve(gfx, pmc, 1u));
 	}
 	if (hasDiffMap && hasSpecMap && hasNormMap)
