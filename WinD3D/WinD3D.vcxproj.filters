@@ -19,9 +19,6 @@
     <Filter Include="Файлы исходного кода\Engine">
       <UniqueIdentifier>{3e5fe48e-64ab-48b0-bfad-ffcef5385d25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{5f9f9b20-2379-49e0-96f5-da73b309d79e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Файлы исходного кода\Engine\Window">
       <UniqueIdentifier>{eddc15d2-7938-479f-a159-a8b9d64b3776}</UniqueIdentifier>
     </Filter>
@@ -111,6 +108,21 @@
     </Filter>
     <Filter Include="Файлы исходного кода\Engine\Entities">
       <UniqueIdentifier>{c06b2447-0d18-440d-8264-658c4acfc9de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{666e558c-769e-4eed-a311-9335a828cd8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Old">
+      <UniqueIdentifier>{e25f098c-3f20-45ec-b80a-5007d68d646b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Headers">
+      <UniqueIdentifier>{1669cf90-f1bc-4606-a2ad-a3c4e120f62c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\PixelShades">
+      <UniqueIdentifier>{8a801722-9734-4570-85dc-4679b9a38679}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\VertexShaders">
+      <UniqueIdentifier>{421a567e-b07d-48e3-a352-ad6b2f98d515}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -500,55 +512,64 @@
     <None Include="Framework\DXTrace.inl">
       <Filter>Файлы исходного кода\Framework\Exceptions\Inline</Filter>
     </None>
+    <None Include="Engine\Shaders\LightVectorData.hlsli">
+      <Filter>Shaders\Headers</Filter>
+    </None>
+    <None Include="Engine\Shaders\ShaderProcs.hlsli">
+      <Filter>Shaders\Headers</Filter>
+    </None>
+    <None Include="Engine\Shaders\PointLight.hlsli">
+      <Filter>Shaders\Headers</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="ColorBlendPS.hlsl">
-      <Filter>Shaders</Filter>
+    <FxCompile Include="Engine\Shaders\ColorBlendPS.hlsl">
+      <Filter>Shaders\Old</Filter>
     </FxCompile>
-    <FxCompile Include="ColorBlendVS.hlsl">
-      <Filter>Shaders</Filter>
+    <FxCompile Include="Engine\Shaders\ColorBlendVS.hlsl">
+      <Filter>Shaders\Old</Filter>
     </FxCompile>
-    <FxCompile Include="ColorIndexPS.hlsl">
-      <Filter>Shaders</Filter>
+    <FxCompile Include="Engine\Shaders\ColorIndexPS.hlsl">
+      <Filter>Shaders\Old</Filter>
     </FxCompile>
-    <FxCompile Include="ColorIndexVS.hlsl">
-      <Filter>Shaders</Filter>
+    <FxCompile Include="Engine\Shaders\ColorIndexVS.hlsl">
+      <Filter>Shaders\Old</Filter>
     </FxCompile>
-    <FxCompile Include="TexturePS.hlsl">
-      <Filter>Shaders</Filter>
+    <FxCompile Include="Engine\Shaders\TextureVS.hlsl">
+      <Filter>Shaders\Old</Filter>
     </FxCompile>
-    <FxCompile Include="TextureVS.hlsl">
-      <Filter>Shaders</Filter>
+    <FxCompile Include="Engine\Shaders\TexturePS.hlsl">
+      <Filter>Shaders\Old</Filter>
     </FxCompile>
-    <FxCompile Include="PhongVS.hlsl">
-      <Filter>Shaders</Filter>
+    <FxCompile Include="Engine\Shaders\PhongNormalPS.hlsl">
+      <Filter>Shaders\PixelShades</Filter>
     </FxCompile>
-    <FxCompile Include="PhongPS.hlsl">
-      <Filter>Shaders</Filter>
+    <FxCompile Include="Engine\Shaders\PhongNormalSpecularPS.hlsl">
+      <Filter>Shaders\PixelShades</Filter>
     </FxCompile>
-    <FxCompile Include="SolidVS.hlsl">
-      <Filter>Shaders</Filter>
+    <FxCompile Include="Engine\Shaders\PhongNoTexPS.hlsl">
+      <Filter>Shaders\PixelShades</Filter>
     </FxCompile>
-    <FxCompile Include="SolidPS.hlsl">
-      <Filter>Shaders</Filter>
+    <FxCompile Include="Engine\Shaders\PhongPS.hlsl">
+      <Filter>Shaders\PixelShades</Filter>
     </FxCompile>
-    <FxCompile Include="PhongPSSpecular.hlsl">
-      <Filter>Shaders</Filter>
+    <FxCompile Include="Engine\Shaders\PhongPSSpecular.hlsl">
+      <Filter>Shaders\PixelShades</Filter>
     </FxCompile>
-    <FxCompile Include="PhongNormalPS.hlsl">
-      <Filter>Shaders</Filter>
+    <FxCompile Include="Engine\Shaders\SolidPS.hlsl">
+      <Filter>Shaders\PixelShades</Filter>
     </FxCompile>
-    <FxCompile Include="PhongNormalVS.hlsl">
-      <Filter>Shaders</Filter>
+    <FxCompile Include="Engine\Shaders\PhongNormalVS.hlsl">
+      <Filter>Shaders\VertexShaders</Filter>
     </FxCompile>
-    <FxCompile Include="PhongNormalSpecularPS.hlsl">
-      <Filter>Shaders</Filter>
+    <FxCompile Include="Engine\Shaders\PhongNoTexVS.hlsl">
+      <Filter>Shaders\VertexShaders</Filter>
     </FxCompile>
-    <FxCompile Include="PhongNoTexVS.hlsl">
-      <Filter>Shaders</Filter>
+    <FxCompile Include="Engine\Shaders\PhongVS.hlsl">
+      <Filter>Shaders\VertexShaders</Filter>
     </FxCompile>
-    <FxCompile Include="PhongNoTexPS.hlsl">
-      <Filter>Shaders</Filter>
+    <FxCompile Include="Engine\Shaders\SolidVS.hlsl">
+      <Filter>Shaders\VertexShaders</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
