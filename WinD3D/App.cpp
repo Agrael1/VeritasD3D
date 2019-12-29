@@ -8,7 +8,7 @@ GDIPlusManager gdipm;
 
 App::App() : wnd(1280,720,"VTest"), light(wnd.Gfx())
 {
-	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(720.0f / 1280.0f), 0.5f, 40.0f));
+	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(720.0f / 1280.0f), 0.5f, 100.0f));
 }
 App::~App()
 {
@@ -37,7 +37,7 @@ void App::DoFrame(float dt)
 	light.Bind(wnd.Gfx(), cam.GetViewMatrix());
 	
 
-	goblin.Draw(wnd.Gfx());
+	Sponza.Draw(wnd.Gfx());
 	light.Draw(wnd.Gfx());
 
 	if (ImGui::Begin("Simulation speed"))
@@ -49,7 +49,7 @@ void App::DoFrame(float dt)
 	ProcessInput(dt);
 	cam.SpawnControlWindow();
 	light.SpawnControlWindow();
-	goblin.ShowWindow("Goblin");
+	Sponza.ShowWindow("Sponza");
 
 	// Present
 	wnd.Gfx().EndFrame();

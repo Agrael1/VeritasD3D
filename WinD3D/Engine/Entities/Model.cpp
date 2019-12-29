@@ -102,7 +102,7 @@ void Mesh::Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform)const nox
 }
 
 
-Model::Model(Graphics& gfx, const std::string filename)
+Model::Model(Graphics& gfx, const std::string filename, float scale)
 	:pWindow(std::make_unique< ModelWindow >())
 {
 	Assimp::Importer imp;
@@ -119,7 +119,7 @@ Model::Model(Graphics& gfx, const std::string filename)
 
 	for (size_t i = 0; i < pScene->mNumMeshes; i++)
 	{
-		meshPtrs.push_back(ParseMesh(gfx, *pScene->mMeshes[i], pScene->mMaterials, filename));
+		meshPtrs.push_back(ParseMesh(gfx, *pScene->mMeshes[i], pScene->mMaterials, filename, scale));
 	}
 	int NextID = 0;
 	pRoot = ParseNode(NextID, *pScene->mRootNode);
@@ -128,7 +128,7 @@ Model::~Model() noexcept //pImpl idiom
 {
 }
 
-std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials, const std::filesystem::path& path)
+std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials, const std::filesystem::path& path, float scale)
 {
 	namespace dx = DirectX;
 	const auto rootPath = path.parent_path().string() + "\\";
@@ -195,7 +195,7 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 
 	for (unsigned int i = 0; i < mesh.mNumVertices; i++)
 	{
-		vertices[i].Set< DV::Type::Position3D >(std::move(*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mVertices[i])));
+		vertices[i].Set< DV::Type::Position3D >(std::move(dx::XMFLOAT3(mesh.mVertices[i].x* scale, mesh.mVertices[i].y* scale, mesh.mVertices[i].z* scale)));
 		vertices[i].Set< DV::Type::Normal >(std::move(*reinterpret_cast<dx::XMFLOAT3*>(&mesh.mNormals[i])));
 		if (hasNormMap)
 		{	

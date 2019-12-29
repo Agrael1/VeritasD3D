@@ -419,9 +419,6 @@
     <ClInclude Include="Engine\Architecture\Drawable.h">
       <Filter>Заголовочные файлы\Engine\Architecture</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\noexcept_if.h">
-      <Filter>Файлы исходного кода\Framework</Filter>
-    </ClInclude>
     <ClInclude Include="Framework\Utility.h">
       <Filter>Заголовочные файлы\Framework</Filter>
     </ClInclude>
@@ -481,6 +478,9 @@
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\noexcept_if.h">
+      <Filter>Заголовочные файлы\Framework</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
