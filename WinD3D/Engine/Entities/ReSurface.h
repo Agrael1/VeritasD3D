@@ -18,10 +18,12 @@ public:
 	ReSurface(const std::wstring& filepath);
 	UINT GetWidth()noexcept;
 	UINT GetHeight()noexcept;
+	bool UsesAlpha()const noexcept;
 	Gdiplus::BitmapData& GetBufferPtr()noexcept;
 private:
 	Gdiplus::Bitmap bitmap;
 	Gdiplus::BitmapData buffer;
+	bool HasAlphaD = false;
 };
 
 #undef FULL_WINOPT

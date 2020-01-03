@@ -142,6 +142,7 @@
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Engine\Architecture\Bindable.cpp" />
+    <ClCompile Include="Engine\Architecture\BlendState.cpp" />
     <ClCompile Include="Engine\Architecture\Drawable.cpp" />
     <ClCompile Include="Engine\Architecture\IndexBuffer.cpp" />
     <ClCompile Include="Engine\Architecture\InputLayout.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="Cone.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="Engine\Architecture\Bindable.h" />
+    <ClInclude Include="Engine\Architecture\BlendState.h" />
     <ClInclude Include="Engine\Architecture\Codex.h" />
     <ClInclude Include="Engine\Architecture\ConstantBuffer.h" />
     <ClInclude Include="Engine\Architecture\Drawable.h" />

@@ -10,6 +10,7 @@ Texture::Texture(Graphics& gfx, const std::string& path, UINT slot)
 	INFOMAN(gfx);
 
 	ReSurface s(ToWide(path));
+	hasAlpha = s.UsesAlpha();
 
 	//create texture resource
 	D3D11_TEXTURE2D_DESC texDesc = {};
@@ -66,4 +67,9 @@ std::string Texture::GenerateUID(const std::string& path, UINT slot)
 std::string Texture::GetUID() const noexcept
 {
 	return GenerateUID(path, slot);
+}
+
+bool Texture::UsesAlpha() const noexcept
+{
+	return hasAlpha;
 }

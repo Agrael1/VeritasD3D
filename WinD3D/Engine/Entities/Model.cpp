@@ -137,6 +137,7 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 	bool hasSpecMap = false;
 	bool hasNormMap = false;
 	bool hasDiffMap = false;
+	bool hasAlphaDiffuse = false;
 	bool hasAlphaGloss = false;
 
 	float shininess = 2.0f;
@@ -155,7 +156,9 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 
 		if (hasDiffMap = material.GetTexture(aiTextureType_DIFFUSE, 0, &texFileName) == 0)
 		{
-			bindablePtrs.push_back(Texture::Resolve(gfx, rootPath + texFileName.C_Str()));
+			auto tex = Texture::Resolve(gfx, rootPath + texFileName.C_Str());
+			hasAlphaDiffuse = tex->UsesAlpha();
+			bindablePtrs.push_back(std::move(tex));
 		}
 		else
 		{
@@ -163,7 +166,9 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 		}
 		if (hasSpecMap = material.GetTexture(aiTextureType_SPECULAR, 0, &texFileName) == 0)
 		{
-			bindablePtrs.push_back(Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 1));
+			auto tex = Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 1u);
+			hasAlphaGloss = tex->UsesAlpha();
+			bindablePtrs.push_back(std::move(tex));
 		}
 		else
 		{
@@ -260,7 +265,6 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 		pmc.specularPower = shininess;
 		pmc.hasGlossMap = hasAlphaGloss ? TRUE : FALSE;
 		bindablePtrs.push_back(PixelConstantBuffer<PSMaterialConstantFullmonte>::Resolve(gfx, pmc, 1u));
-
 		bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongNormalSpecularPS.cso"));
 	}
 	if (hasDiffMap && !hasSpecMap && hasNormMap)
@@ -291,6 +295,7 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 		bindablePtrs.push_back(PixelConstantBuffer<PSMaterialConstant>::Resolve(gfx, pmc, 1u));
 	}
 
+	bindablePtrs.push_back(BlendState::Resolve(gfx, false));
 	bindablePtrs.push_back(InputLayout::Resolve(gfx, vertices.GetLayout(), pvsbc));
 
 	return std::make_unique<Mesh>(gfx, std::move(bindablePtrs));

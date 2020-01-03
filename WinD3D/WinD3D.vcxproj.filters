@@ -261,6 +261,9 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Файлы исходного кода\Engine\Graphics\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Architecture\BlendState.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -481,6 +484,9 @@
     </ClInclude>
     <ClInclude Include="Framework\noexcept_if.h">
       <Filter>Заголовочные файлы\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\BlendState.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

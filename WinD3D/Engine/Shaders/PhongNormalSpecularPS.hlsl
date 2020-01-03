@@ -21,6 +21,9 @@ SamplerState splr;
 
 float4 main(float3 viewFragPos : Position, float3 viewNormal : Normal, float3 viewTan : Tangent, float3 viewBitan : Bitangent, float2 tc : Texcoord) : SV_Target
 {
+    float4 dtex = tex.Sample(splr, tc);
+    clip(dtex.a < 0.1f ? -1 : 1);
+    
     // normalize the mesh normal
     viewNormal = normalize(viewNormal);
     // replace normal with mapped if normal mapping enabled
@@ -55,6 +58,7 @@ float4 main(float3 viewFragPos : Position, float3 viewNormal : Normal, float3 vi
         specularReflectionColor, 1.0f, viewNormal,
         lv.vToL, viewFragPos, att, specularPower
     );
+    
 	// final color = attenuate diffuse & ambient by diffuse texture color and add specular reflected
-    return float4(saturate((diffuse + ambient) * tex.Sample(splr, tc).rgb + specularReflected), 1.0f);
+    return float4(saturate((diffuse + ambient) * dtex.rgb+ specularReflected), dtex.a);
 }

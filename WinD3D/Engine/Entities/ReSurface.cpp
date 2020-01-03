@@ -15,6 +15,16 @@ ReSurface::ReSurface(const std::wstring& filepath)
 	
 	bitmap.LockBits(&Gdiplus::Rect(0, 0, GetWidth(), GetHeight()), Gdiplus::ImageLockModeRead,
 	PixelFormat32bppARGB, &buffer);
+
+	byte* p = (byte*)buffer.Scan0;
+	for (size_t i = 3u; (i < GetHeight()*GetWidth())&&(!HasAlphaD); i+=4)
+	{		
+		if (p[i]!=255)
+		{
+			HasAlphaD = true;
+			break;
+		}
+	}
 }
 
 UINT ReSurface::GetWidth()noexcept
@@ -24,6 +34,10 @@ UINT ReSurface::GetWidth()noexcept
 UINT ReSurface::GetHeight() noexcept
 {
 	return bitmap.GetHeight();
+}
+bool ReSurface::UsesAlpha() const noexcept
+{
+	return HasAlphaD;
 }
 
 Gdiplus::BitmapData& ReSurface::GetBufferPtr() noexcept
