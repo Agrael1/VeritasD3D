@@ -265,7 +265,8 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 		pmc.specularPower = shininess;
 		pmc.hasGlossMap = hasAlphaGloss ? TRUE : FALSE;
 		bindablePtrs.push_back(PixelConstantBuffer<PSMaterialConstantFullmonte>::Resolve(gfx, pmc, 1u));
-		bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongNormalSpecularPS.cso"));
+		auto shader = hasAlphaDiffuse ? "PhongTranslucentPS.cso" : "PhongNormalSpecularPS.cso";
+		bindablePtrs.push_back(PixelShader::Resolve(gfx, shader));
 	}
 	if (hasDiffMap && !hasSpecMap && hasNormMap)
 	{
@@ -296,6 +297,7 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 	}
 
 	bindablePtrs.push_back(BlendState::Resolve(gfx, false));
+	bindablePtrs.push_back(RasterizerState::Resolve(gfx, hasAlphaDiffuse));
 	bindablePtrs.push_back(InputLayout::Resolve(gfx, vertices.GetLayout(), pvsbc));
 
 	return std::make_unique<Mesh>(gfx, std::move(bindablePtrs));

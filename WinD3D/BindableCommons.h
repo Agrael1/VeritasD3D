@@ -5,6 +5,7 @@
 #include <Engine/Architecture/PixelShader.h>
 #include <Engine/Architecture/Topology.h>
 #include <Engine/Architecture/BlendState.h>
+#include <Engine/Architecture/RasterizerState.h>
 #include <Engine/Architecture/TransformUnified.h>
 #include <Engine/Architecture/Sampler.h>
 #include <Engine/Architecture/Texture.h>

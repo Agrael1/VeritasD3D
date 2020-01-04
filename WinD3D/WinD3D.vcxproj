@@ -147,6 +147,7 @@
     <ClCompile Include="Engine\Architecture\IndexBuffer.cpp" />
     <ClCompile Include="Engine\Architecture\InputLayout.cpp" />
     <ClCompile Include="Engine\Architecture\PixelShader.cpp" />
+    <ClCompile Include="Engine\Architecture\RasterizerState.cpp" />
     <ClCompile Include="Engine\Architecture\Sampler.cpp" />
     <ClCompile Include="Engine\Architecture\Texture.cpp" />
     <ClCompile Include="Engine\Architecture\Topology.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Engine\Architecture\IndexBuffer.h" />
     <ClInclude Include="Engine\Architecture\InputLayout.h" />
     <ClInclude Include="Engine\Architecture\PixelShader.h" />
+    <ClInclude Include="Engine\Architecture\RasterizerState.h" />
     <ClInclude Include="Engine\Architecture\Sampler.h" />
     <ClInclude Include="Engine\Architecture\Texture.h" />
     <ClInclude Include="Engine\Architecture\Topology.h" />
@@ -324,6 +326,10 @@
     <FxCompile Include="Engine\Shaders\PhongPSSpecular.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\PhongTranslucentPS.hlsl">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Engine\Shaders\PhongVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

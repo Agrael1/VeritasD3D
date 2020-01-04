@@ -264,6 +264,9 @@
     <ClCompile Include="Engine\Architecture\BlendState.cpp">
       <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Architecture\RasterizerState.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -488,6 +491,9 @@
     <ClInclude Include="Engine\Architecture\BlendState.h">
       <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Architecture\RasterizerState.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc">
@@ -550,9 +556,6 @@
     <FxCompile Include="Engine\Shaders\PhongNormalPS.hlsl">
       <Filter>Shaders\PixelShades</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shaders\PhongNormalSpecularPS.hlsl">
-      <Filter>Shaders\PixelShades</Filter>
-    </FxCompile>
     <FxCompile Include="Engine\Shaders\PhongNoTexPS.hlsl">
       <Filter>Shaders\PixelShades</Filter>
     </FxCompile>
@@ -576,6 +579,12 @@
     </FxCompile>
     <FxCompile Include="Engine\Shaders\SolidVS.hlsl">
       <Filter>Shaders\VertexShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\PhongTranslucentPS.hlsl">
+      <Filter>Shaders\PixelShades</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\PhongNormalSpecularPS.hlsl">
+      <Filter>Shaders\PixelShades</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
