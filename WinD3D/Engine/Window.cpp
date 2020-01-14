@@ -138,7 +138,7 @@ void Window::DisableImGuiMouse() noexcept
 	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
 }
 
-std::experimental::optional<WPARAM> Window::ProcessMessages() noexcept
+std::optional<WPARAM> Window::ProcessMessages() noexcept
 {
 	MSG msg;
 	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))

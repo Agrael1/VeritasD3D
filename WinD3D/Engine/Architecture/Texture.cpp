@@ -4,12 +4,14 @@
 #include <Engine/Architecture/Codex.h>
 #include <Framework/Utility.h>
 
-Texture::Texture(Graphics& gfx, const std::string& path, UINT slot)
+
+
+Texture::Texture(Graphics& gfx, std::string_view path, UINT slot)
 	:slot(slot), path(path)
 {
 	INFOMAN(gfx);
 
-	ReSurface s(ToWide(path));
+	ReSurface s(path);
 	hasAlpha = s.UsesAlpha();
 
 	//create texture resource
@@ -32,8 +34,9 @@ Texture::Texture(Graphics& gfx, const std::string& path, UINT slot)
 		nullptr,
 		&pTexture));
 
+
 	GetContext(gfx)->UpdateSubresource(
-		pTexture.Get(), 0u, nullptr, s.GetBufferPtr().Scan0, s.GetBufferPtr().Stride, 0u
+		pTexture.Get(), 0u, nullptr, s.GetBufferPtr(), s.GetStride(), 0u
 	);
 
 	// create a resource view
@@ -55,14 +58,14 @@ void Texture::Bind(Graphics& gfx)noexcept
 {
 	GetContext(gfx)->PSSetShaderResources(slot, 1u, pTextureView.GetAddressOf());
 }
-std::shared_ptr<Texture> Texture::Resolve(Graphics& gfx, const std::string& path, UINT slot)
+std::shared_ptr<Texture> Texture::Resolve(Graphics& gfx, std::string_view path, UINT slot)
 {
 	return Codex::Resolve<Texture>(gfx, path, slot);
 }
-std::string Texture::GenerateUID(const std::string& path, UINT slot)
+std::string Texture::GenerateUID(std::string_view path, UINT slot)
 {
 	using namespace std::string_literals;
-	return typeid(Texture).name() + "#"s + path + "#" + std::to_string(slot);
+	return typeid(Texture).name() + "#"s + path.data() + "#" + std::to_string(slot);
 }
 std::string Texture::GetUID() const noexcept
 {

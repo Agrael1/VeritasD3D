@@ -5,12 +5,12 @@
 class Texture :public Bindable
 {
 public:
-	Texture(Graphics& gfx, const std::string& path, UINT slot = 0);
+	Texture(Graphics& gfx, std::string_view path, UINT slot = 0);
 public:
 	void Bind(Graphics& gfx)noexcept override;
-	static std::shared_ptr<Texture> Resolve(Graphics& gfx, const std::string& path, UINT slot = 0);
-	static std::string GenerateUID(const std::string& path, UINT slot = 0);
-	std::string GetUID() const noexcept override;
+	static std::shared_ptr<Texture> Resolve(Graphics& gfx, std::string_view path, UINT slot = 0);
+	static std::string GenerateUID(std::string_view path, UINT slot = 0);
+	std::string GetUID()const noexcept override;
 	bool UsesAlpha()const noexcept;
 private:
 	unsigned int slot;

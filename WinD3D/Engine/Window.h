@@ -1,11 +1,11 @@
 #pragma once
 #include <Framework\Exception.h>
-#include <Framework\optional.h>
 
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Graphics.h"
 #include <memory>
+#include <optional>
 
 class Window 
 {
@@ -59,7 +59,7 @@ public:
 	void DisableCursor() noexcept;
 	bool CursorEnabled() const noexcept;
 	void SetTitle(const std::string& title);
-	static std::experimental::optional<WPARAM> ProcessMessages()noexcept;
+	static std::optional<WPARAM> ProcessMessages()noexcept;
 	Graphics& Gfx();
 private:
 	static LRESULT WINAPI HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

@@ -11,8 +11,7 @@ ModelException::ModelException(int line, const char* file, std::string note) noe
 
 const char* ModelException::what() const noexcept
 {
-	auto s = fmt::sprintf("%s:\n [Note]: %s ", Exception::what(), note);
-	whatBuffer = s;
+	whatBuffer = fmt::sprintf("%s:\n [Note]: %s ", Exception::what(), note);
 	return whatBuffer.c_str();
 }
 const char* ModelException::GetType() const noexcept
