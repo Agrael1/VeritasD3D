@@ -161,6 +161,7 @@
     <ClCompile Include="Engine\Entities\ImGUIManager.cpp" />
     <ClCompile Include="Engine\Entities\Model.cpp" />
     <ClCompile Include="Engine\Entities\ReSurface.cpp" />
+    <ClCompile Include="Engine\Entities\Surface.cpp" />
     <ClCompile Include="Engine\Entities\VFileDialog.cpp" />
     <ClCompile Include="Engine\Graphics.cpp" />
     <ClCompile Include="Engine\Keyboard.cpp" />
@@ -223,6 +224,7 @@
     <ClInclude Include="Engine\Entities\ImGUIManager.h" />
     <ClInclude Include="Engine\Entities\Model.h" />
     <ClInclude Include="Engine\Entities\ReSurface.h" />
+    <ClInclude Include="Engine\Entities\Surface.h" />
     <ClInclude Include="Engine\Entities\VFileDialog.h" />
     <ClInclude Include="Engine\Graphics.h" />
     <ClInclude Include="Engine\Keyboard.h" />

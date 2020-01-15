@@ -1,9 +1,8 @@
-#include <Engine/Entities/ReSurface.h>
 #include "Texture.h"
 #include "GraphicsThrows.m"
 #include <Engine/Architecture/Codex.h>
 #include <Framework/Utility.h>
-
+#include <Engine/Entities/Surface.h>
 
 
 Texture::Texture(Graphics& gfx, std::string_view path, UINT slot)
@@ -11,7 +10,7 @@ Texture::Texture(Graphics& gfx, std::string_view path, UINT slot)
 {
 	INFOMAN(gfx);
 
-	ReSurface s(path);
+	Surface s(path);
 	hasAlpha = s.UsesAlpha();
 
 	//create texture resource

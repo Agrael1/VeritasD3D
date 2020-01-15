@@ -1,9 +1,6 @@
 #include "App.h"
 #include "ImGUI/imgui.h"
-#include <Engine/Entities/GDIPlusManager.h>
 #include <filesystem>
-
-GDIPlusManager gdipm;
 
 App::App() : wnd(1280,720,"VTest"), light(wnd.Gfx())
 {

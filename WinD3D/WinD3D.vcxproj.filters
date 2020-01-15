@@ -270,6 +270,9 @@
     <ClCompile Include="Engine\Architecture\RasterizerState.cpp">
       <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Entities\Surface.cpp">
+      <Filter>Файлы исходного кода\Engine\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -520,6 +523,9 @@
     </ClInclude>
     <ClInclude Include="dxtex\scoped.h">
       <Filter>Заголовочные файлы\Engine\Dxtex</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\Surface.h">
+      <Filter>Заголовочные файлы\Engine\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

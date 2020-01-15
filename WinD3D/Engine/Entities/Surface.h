@@ -1,13 +1,13 @@
 #pragma once
-#include <Framework\GdiSetup.h>
+#include <dxtex/DirectXTex.h>
 #include <Framework/Exception.h> 
 
-class ReSurface
+class Surface
 {
 	class LoadException : public Exception
 	{
 	public:
-		LoadException(int line, const char* file, std::string_view filepath, std::string note) noexcept;
+		LoadException(int line, const char* file, std::string_view filepath, std::string note, HRESULT hr) noexcept;
 		const char* what() const noexcept override;
 		const char* GetType() const noexcept override;
 		const std::string& GetNote() const noexcept;
@@ -15,7 +15,7 @@ class ReSurface
 		std::string note;
 	};
 public:
-	ReSurface(std::string_view filepath);
+	Surface(std::string_view filepath);
 public:
 	UINT GetWidth()const noexcept;
 	UINT GetHeight()const noexcept;
@@ -23,9 +23,6 @@ public:
 	bool UsesAlpha()const noexcept;
 	void* GetBufferPtr()const noexcept;
 private:
-	Gdiplus::Bitmap bitmap;
-	Gdiplus::BitmapData buffer;
-	bool HasAlphaD = false;
+	DirectX::ScratchImage image;
+	static constexpr DXGI_FORMAT format = DXGI_FORMAT::DXGI_FORMAT_B8G8R8A8_UNORM;
 };
-
-#undef FULL_WINOPT
