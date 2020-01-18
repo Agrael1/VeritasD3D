@@ -1,6 +1,5 @@
 #include "App.h"
 #include "ImGUI/imgui.h"
-#include <filesystem>
 
 App::App() : wnd(1280,720,"VTest"), light(wnd.Gfx())
 {

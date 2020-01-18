@@ -11,9 +11,7 @@ inline std::wstring ToWide(std::string_view narrowPtr)
 }
 inline std::wstring ToWide(const std::string& narrow)
 {
-	wchar_t* wide = (wchar_t*)alloca((narrow.length() + 1) * sizeof(wchar_t));
-	mbstowcs_s(nullptr, wide, narrow.length() + 1, narrow.c_str(), _TRUNCATE);
-	return wide;
+	return ToWide(std::string_view(narrow));
 }
 
 inline std::string ToNarrow(const std::wstring& wide)

@@ -23,6 +23,5 @@ private:
 	Model Sponza{ wnd.Gfx(), "Models\\Sponza\\sponza.obj", 1.0f/20.0f };
 
 	float speed = 1.0f;
-	static constexpr size_t nDrawables = 180;
 };
 
