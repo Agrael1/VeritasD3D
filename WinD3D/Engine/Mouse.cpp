@@ -7,7 +7,7 @@ std::pair<int, int> Mouse::GetPos() const noexcept
 	return{ x,y };
 }
 
-std::experimental::optional<Mouse::RawDelta> Mouse::ReadRawDelta() noexcept
+std::optional<Mouse::RawDelta> Mouse::ReadRawDelta() noexcept
 {
 	if (rawDeltaBuffer.empty())
 	{
@@ -43,7 +43,7 @@ bool Mouse::RightIsPressed() const noexcept
 	return rightIsPressed;
 }
 
-std::experimental::optional<Mouse::Event> Mouse::Read() noexcept
+std::optional<Mouse::Event> Mouse::Read() noexcept
 {
 	if (buffer.size() > 0u)
 	{

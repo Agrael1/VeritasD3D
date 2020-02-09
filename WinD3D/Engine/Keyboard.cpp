@@ -5,7 +5,7 @@ bool Keyboard::KeyIsPressed(unsigned char keycode) const noexcept
 	return keystates[keycode];
 }
 
-std::experimental::optional<Keyboard::Event> Keyboard::ReadKey() noexcept
+std::optional<Keyboard::Event> Keyboard::ReadKey() noexcept
 {
 	if (keybuffer.size() > 0u)
 	{
@@ -21,7 +21,7 @@ bool Keyboard::KeyIsEmpty() const noexcept
 	return keybuffer.empty();
 }
 
-std::experimental::optional<char> Keyboard::ReadChar() noexcept
+std::optional<char> Keyboard::ReadChar() noexcept
 {
 	if (charbuffer.size() > 0u)
 	{

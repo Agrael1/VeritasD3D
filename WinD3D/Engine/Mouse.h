@@ -1,6 +1,6 @@
 #pragma once
 #include <queue>
-#include <Framework\optional.h>
+#include <optional>
 
 class Mouse
 {
@@ -70,13 +70,13 @@ public:
 	Mouse(const Mouse&) = delete;
 	Mouse& operator=(const Mouse&) = delete;
 	std::pair<int, int> GetPos() const noexcept;
-	std::experimental::optional<RawDelta> ReadRawDelta() noexcept;
+	std::optional<RawDelta> ReadRawDelta() noexcept;
 	int GetPosX() const noexcept;
 	int GetPosY() const noexcept;
 	bool IsInWindow() const noexcept;
 	bool LeftIsPressed() const noexcept;
 	bool RightIsPressed() const noexcept;
-	std::experimental::optional<Mouse::Event> Read() noexcept;
+	std::optional<Mouse::Event> Read() noexcept;
 	bool IsEmpty() const noexcept
 	{
 		return buffer.empty();

@@ -58,7 +58,7 @@ public:
 	void EnableCursor() noexcept;
 	void DisableCursor() noexcept;
 	bool CursorEnabled() const noexcept;
-	void SetTitle(const std::string& title);
+	void SetTitle(std::string_view title);
 	static std::optional<WPARAM> ProcessMessages()noexcept;
 	Graphics& Gfx();
 private:

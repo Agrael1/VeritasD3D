@@ -1,6 +1,6 @@
+#include <Engine/Window.h> //just for TranslateErrorCode
 #include <fmt/printf.h>
 #include "Surface.h"
-#include <Engine/Window.h> //just for TranslateErrorCode
 #include <Framework/Utility.h>
 
 // surface exception stuff

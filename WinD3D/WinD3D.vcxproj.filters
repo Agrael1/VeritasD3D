@@ -273,6 +273,12 @@
     <ClCompile Include="Engine\Entities\Surface.cpp">
       <Filter>Файлы исходного кода\Engine\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Architecture\DynamicConstant.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\LayoutCodex.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -358,9 +364,6 @@
     </ClInclude>
     <ClInclude Include="SolidSphere.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Objects\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\optional.h">
-      <Filter>Заголовочные файлы\Framework</Filter>
     </ClInclude>
     <ClInclude Include="Framework\GdiSetup.h">
       <Filter>Заголовочные файлы\Framework</Filter>
@@ -527,6 +530,12 @@
     <ClInclude Include="Engine\Entities\Surface.h">
       <Filter>Заголовочные файлы\Engine\Entities</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Architecture\DynamicConstant.h">
+      <Filter>Заголовочные файлы\Engine\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\LayoutCodex.h">
+      <Filter>Заголовочные файлы\Engine\Architecture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc">
@@ -569,6 +578,7 @@
     <None Include="dxtex\DirectXTex.inl">
       <Filter>Заголовочные файлы\Engine\Dxtex</Filter>
     </None>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shaders\ColorBlendPS.hlsl">

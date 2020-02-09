@@ -145,8 +145,10 @@
     <ClCompile Include="Engine\Architecture\Bindable.cpp" />
     <ClCompile Include="Engine\Architecture\BlendState.cpp" />
     <ClCompile Include="Engine\Architecture\Drawable.cpp" />
+    <ClCompile Include="Engine\Architecture\DynamicConstant.cpp" />
     <ClCompile Include="Engine\Architecture\IndexBuffer.cpp" />
     <ClCompile Include="Engine\Architecture\InputLayout.cpp" />
+    <ClCompile Include="Engine\Architecture\LayoutCodex.cpp" />
     <ClCompile Include="Engine\Architecture\PixelShader.cpp" />
     <ClCompile Include="Engine\Architecture\RasterizerState.cpp" />
     <ClCompile Include="Engine\Architecture\Sampler.cpp" />
@@ -208,8 +210,10 @@
     <ClInclude Include="Engine\Architecture\Codex.h" />
     <ClInclude Include="Engine\Architecture\ConstantBuffer.h" />
     <ClInclude Include="Engine\Architecture\Drawable.h" />
+    <ClInclude Include="Engine\Architecture\DynamicConstant.h" />
     <ClInclude Include="Engine\Architecture\IndexBuffer.h" />
     <ClInclude Include="Engine\Architecture\InputLayout.h" />
+    <ClInclude Include="Engine\Architecture\LayoutCodex.h" />
     <ClInclude Include="Engine\Architecture\PixelShader.h" />
     <ClInclude Include="Engine\Architecture\RasterizerState.h" />
     <ClInclude Include="Engine\Architecture\Sampler.h" />
@@ -247,7 +251,6 @@
     <ClInclude Include="Framework\Exception.h" />
     <ClInclude Include="Framework\GdiSetup.h" />
     <ClInclude Include="Framework\noexcept_if.h" />
-    <ClInclude Include="Framework\optional.h" />
     <ClInclude Include="Framework\Utility.h" />
     <ClInclude Include="Framework\WinSetup.h" />
     <ClInclude Include="Icosahedron.h" />
@@ -283,6 +286,7 @@
     <Image Include="TheLostReality.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="cpp.hint" />
     <None Include="dxtex\DirectXTex.inl" />
     <None Include="Engine\Shaders\LightVectorData.hlsli" />
     <None Include="Engine\Shaders\PointLight.hlsli" />

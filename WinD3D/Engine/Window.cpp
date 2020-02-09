@@ -1,10 +1,7 @@
-#include "Engine\Window.h"
+#include "Window.h"
 #include <sstream>
 #include "resource.h"
 #include "ImGUI\imgui_impl_win32.h"
-
-#define GET_X_LPARAM(lp)                        ((int)(short)LOWORD(lp))
-#define GET_Y_LPARAM(lp)                        ((int)(short)HIWORD(lp))
 
 Window::WindowClass Window::WindowClass::wndClass;
 
@@ -82,9 +79,9 @@ Window::~Window()
 	ImGui_ImplWin32_Shutdown();
 	DestroyWindow(hWnd);
 }
-void Window::SetTitle(const std::string & title)
+void Window::SetTitle(std::string_view title)
 {
-	if (!SetWindowText(this->hWnd, title.c_str()))
+	if (!SetWindowText(this->hWnd, title.data()))
 	{
 		throw WND_LAST_EXCEPT();
 	}
