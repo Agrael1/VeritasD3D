@@ -1,22 +1,46 @@
+#define DCB_IMPL_SOURCE
 #include "DynamicConstant.h"
-#include "LayoutCodex.h"
+#include <string>
 #include <algorithm>
+#include <cctype>
+#include "LayoutCodex.h"
+
 
 namespace DC
 {
 	struct ExtraData
 	{
-		struct Struct :public LayoutElement::ExtraDataBase
+		struct Struct : public LayoutElement::ExtraDataBase
 		{
 			std::vector<std::pair<std::string, LayoutElement>> layoutElements;
 		};
-		struct Array :public LayoutElement::ExtraDataBase
+		struct Array : public LayoutElement::ExtraDataBase
 		{
-			std::optional< LayoutElement >layoutElement;
+			std::optional<LayoutElement> layoutElement;
 			size_t size;
 		};
 	};
 
+	std::string LayoutElement::GetSignature() const noxnd
+	{
+		switch (type)
+		{
+#define X(el) case Type::el: return Map<Type::el>::code;
+			LEAF_ELEMENT_TYPES
+#undef X
+		case Type::Struct:
+			return GetSignatureForStruct();
+		case Type::Array:
+			return GetSignatureForArray();
+		default:
+			assert("Bad type in signature generation" && false);
+			return "???";
+		}
+	}
+	bool LayoutElement::Exists() const noexcept
+	{
+		return type != Type::Empty;
+	}
 	std::pair<size_t, const LayoutElement*> LayoutElement::CalculateIndexingOffset(size_t offset, size_t index) const noxnd
 	{
 		assert("Indexing into non-array" && type == Type::Array);
@@ -24,19 +48,9 @@ namespace DC
 		assert(index < data.size);
 		return { offset + data.layoutElement->GetSizeInBytes() * index,&*data.layoutElement };
 	}
-
-	std::string LayoutElement::GetSignature() const noxnd
-	{
-		return std::string();
-	}
-	bool LayoutElement::Exists() const noexcept
-	{
-		return type != Type::Empty;
-	}
-
 	LayoutElement& LayoutElement::operator[](std::string_view key) noxnd
 	{
-		assert("Non-struct access" && type == Type::Struct);
+		assert("Keying into non-struct" && type == Type::Struct);
 		for (auto& mem : static_cast<ExtraData::Struct&>(*pExtraData).layoutElements)
 		{
 			if (mem.first == key)
@@ -46,11 +60,10 @@ namespace DC
 		}
 		return GetEmptyElement();
 	}
-	const LayoutElement& LayoutElement::operator[](std::string_view key)const noxnd
+	const LayoutElement& LayoutElement::operator[](std::string_view key) const noxnd
 	{
 		return const_cast<LayoutElement&>(*this)[key];
 	}
-
 	LayoutElement& LayoutElement::T() noxnd
 	{
 		assert("Accessing T of non-array" && type == Type::Array);
@@ -60,7 +73,6 @@ namespace DC
 	{
 		return const_cast<LayoutElement&>(*this).T();
 	}
-
 	size_t LayoutElement::GetOffsetBegin() const noxnd
 	{
 		return *offset;
@@ -69,9 +81,9 @@ namespace DC
 	{
 		switch (type)
 		{
-		#define X(el) case Type::el: return *offset + Map<Type::el>::hlslSize;
-		LEAF_ELEMENT_TYPES
-		#undef X
+#define X(el) case Type::el: return *offset + Map<Type::el>::hlslSize;
+			LEAF_ELEMENT_TYPES
+#undef X
 		case Type::Struct:
 			{
 				const auto& data = static_cast<ExtraData::Struct&>(*pExtraData);
@@ -83,7 +95,7 @@ namespace DC
 			return *offset + AdvanceToBoundary(data.layoutElement->GetSizeInBytes()) * data.size;
 		}
 		default:
-			assert("Tried to get offset of empty or invalid element" && false);
+			assert("Tried to get offset of empty or invalid Type::element" && false);
 			return 0u;
 		}
 	}
@@ -91,29 +103,6 @@ namespace DC
 	{
 		return GetOffsetEnd() - GetOffsetBegin();
 	}
-
-	bool LayoutElement::CrossesBoundary(size_t offset, size_t size) noexcept
-	{
-		const auto end = offset + size;
-		const auto pageStart = offset / 16u;
-		const auto pageEnd = end / 16u;
-		return (pageStart != pageEnd && end % 16 != 0u) || size > 16u;
-	}
-	size_t LayoutElement::AdvanceIfCrossesBoundary(size_t offset, size_t size) noexcept
-	{
-		return CrossesBoundary(offset, size) ? AdvanceToBoundary(offset) : offset;
-	}
-	size_t LayoutElement::AdvanceToBoundary(size_t offset) noexcept
-	{
-		return offset + (16u - offset % 16u) % 16u;
-	}
-
-	LayoutElement& LayoutElement::GetEmptyElement() noexcept
-	{
-		static LayoutElement empty{};
-		return empty;
-	}
-
 	LayoutElement& LayoutElement::Add(Type addedType, std::string name) noxnd
 	{
 		assert("Add to non-struct in layout" && type == Type::Struct);
@@ -137,28 +126,27 @@ namespace DC
 		arrayData.size = size;
 		return *this;
 	}
-
 	LayoutElement::LayoutElement(Type typeIn) noxnd
-		:type(typeIn)
+		:
+	type{ typeIn }
 	{
 		assert(typeIn != Type::Empty);
 		if (typeIn == Type::Struct)
 		{
-			pExtraData = std::make_unique<ExtraData::Struct>();
+			pExtraData = std::unique_ptr<ExtraData::Struct>{ new ExtraData::Struct() };
 		}
 		if (typeIn == Type::Array)
 		{
-			pExtraData = std::make_unique<ExtraData::Array>();
+			pExtraData = std::unique_ptr<ExtraData::Array>{ new ExtraData::Array() };
 		}
 	}
-
 	size_t LayoutElement::Finalize(size_t offsetIn) noxnd
 	{
 		switch (type)
 		{
-		#define X(el) case Type::el: offset = AdvanceIfCrossesBoundary( offsetIn,Map<Type::el>::hlslSize ); return *offset + Map<Type::el>::hlslSize;
-		LEAF_ELEMENT_TYPES
-		#undef X
+#define X(el) case Type::el: offset = AdvanceIfCrossesBoundary( offsetIn,Map<Type::el>::hlslSize ); return *offset + Map<Type::el>::hlslSize;
+			LEAF_ELEMENT_TYPES
+#undef X
 		case Type::Struct:
 			return FinalizeForStruct(offsetIn);
 		case Type::Array:
@@ -205,7 +193,21 @@ namespace DC
 		data.layoutElement->Finalize(*offset);
 		return GetOffsetEnd();
 	}
-
+	bool LayoutElement::CrossesBoundary(size_t offset, size_t size) noexcept
+	{
+		const auto end = offset + size;
+		const auto pageStart = offset / 16u;
+		const auto pageEnd = end / 16u;
+		return (pageStart != pageEnd && end % 16 != 0u) || size > 16u;
+	}
+	size_t LayoutElement::AdvanceIfCrossesBoundary(size_t offset, size_t size) noexcept
+	{
+		return CrossesBoundary(offset, size) ? AdvanceToBoundary(offset) : offset;
+	}
+	size_t LayoutElement::AdvanceToBoundary(size_t offset) noexcept
+	{
+		return offset + (16u - offset % 16u) % 16u;
+	}
 	bool LayoutElement::ValidateSymbolName(const std::string& name) noexcept
 	{
 		// symbols can contain alphanumeric and underscore, must not start with digit
@@ -215,10 +217,31 @@ namespace DC
 				}
 		);
 	}
+	LayoutElement& LayoutElement::GetEmptyElement() noexcept
+	{
+		static LayoutElement empty{};
+		return empty;
+	}
+
+
+
+	Layout::Layout(std::shared_ptr<LayoutElement> pRoot) noexcept
+		:
+		pRoot{ std::move(pRoot) }
+	{}
+	size_t Layout::GetSizeInBytes() const noexcept
+	{
+		return pRoot->GetSizeInBytes();
+	}
+	std::string Layout::GetSignature() const noxnd
+	{
+		return pRoot->GetSignature();
+	}
+
 
 	RawLayout::RawLayout() noexcept
 		:
-		Layout{ std::make_shared<LayoutElement>(Type::Struct) }
+		Layout{ std::shared_ptr<LayoutElement>{ new LayoutElement(Type::Struct) } }
 	{}
 	LayoutElement& RawLayout::operator[](const std::string& key) noxnd
 	{
@@ -255,18 +278,6 @@ namespace DC
 	}
 
 
-	Layout::Layout(std::shared_ptr<LayoutElement> pRoot) noexcept
-		:
-		pRoot{ std::move(pRoot) }
-	{}
-	size_t Layout::GetSizeInBytes() const noexcept
-	{
-		return pRoot->GetSizeInBytes();
-	}
-	std::string Layout::GetSignature() const noxnd
-	{
-		return pRoot->GetSignature();
-	}
 
 
 
@@ -318,38 +329,38 @@ namespace DC
 	{
 		return Ptr{ const_cast<ElementRef*>(this) };
 	}
-	ElementRef::ElementRef(const LayoutElement* pLayout, char* pBytes, size_t offset) noexcept
+	ElementRef::ElementRef(const LayoutElement * pLayout, char* pBytes, size_t offset) noexcept
 		:
 		offset(offset),
 		pLayout(pLayout),
 		pBytes(pBytes)
 	{}
-	ElementRef::Ptr::Ptr(ElementRef* ref) noexcept : ref(ref)
+	ElementRef::Ptr::Ptr(ElementRef * ref) noexcept : ref(ref)
 	{}
 
 
 
 
-	Buffer::Buffer(RawLayout&& lay) noxnd
+	Buffer::Buffer(RawLayout && lay) noxnd
 		:
 	Buffer(LayoutCodex::Resolve(std::move(lay)))
 	{}
-	Buffer::Buffer(const CookedLayout& lay) noxnd
+	Buffer::Buffer(const CookedLayout & lay) noxnd
 		:
 		pLayoutRoot(lay.ShareRoot()),
 		bytes(pLayoutRoot->GetOffsetEnd())
 	{}
-	Buffer::Buffer(CookedLayout&& lay) noxnd
+	Buffer::Buffer(CookedLayout && lay) noxnd
 		:
 		pLayoutRoot(lay.RelinquishRoot()),
 		bytes(pLayoutRoot->GetOffsetEnd())
 	{}
-	Buffer::Buffer(const Buffer& buf) noexcept
+	Buffer::Buffer(const Buffer & buf) noexcept
 		:
 		pLayoutRoot(buf.pLayoutRoot),
 		bytes(buf.bytes)
 	{}
-	Buffer::Buffer(Buffer&& buf) noexcept
+	Buffer::Buffer(Buffer && buf) noexcept
 		:
 		pLayoutRoot(std::move(buf.pLayoutRoot)),
 		bytes(std::move(buf.bytes))
@@ -360,7 +371,7 @@ namespace DC
 	}
 	ConstElementRef Buffer::operator[](const std::string& key) const noxnd
 	{
-		return const_cast<Buffer&>(*this)[key];
+		return { &(*pLayoutRoot)[key],bytes.data(),0u };
 	}
 	const char* Buffer::GetData() const noexcept
 	{
@@ -374,7 +385,7 @@ namespace DC
 	{
 		return *pLayoutRoot;
 	}
-	void Buffer::CopyFrom(const Buffer& other) noxnd
+	void Buffer::CopyFrom(const Buffer & other) noxnd
 	{
 		assert(&GetRootLayoutElement() == &other.GetRootLayoutElement());
 		std::copy(other.bytes.begin(), other.bytes.end(), bytes.begin());

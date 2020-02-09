@@ -337,7 +337,7 @@ namespace DC
 		template<typename T>
 		operator T& () const noxnd
 		{
-			//static_assert(ReverseMap<std::remove_const_t<T>>::valid, "Unsupported SysType used in conversion");
+			static_assert(ReverseMap<std::remove_const_t<T>>::valid, "Unsupported SysType used in conversion");
 			return *reinterpret_cast<T*>(pBytes + offset + pLayout->Resolve<T>());
 		}
 		// assignment for writing to as a supported SysType
@@ -356,17 +356,9 @@ namespace DC
 	};
 
 
-
-
-	// The buffer object is a combination of a raw byte buffer with a LayoutElement
-	// tree structure which acts as an view/interpretation/overlay for those bytes
-	// operator [] indexes into the root Struct, returning a Ref shell that can be
-	// used to further index if struct/array, returning further Ref shells, or used
-	// to access the data stored in the buffer if a Leaf element type
 	class Buffer
 	{
 	public:
-		// various resources can be used to construct a Buffer
 		Buffer(RawLayout&& lay) noxnd;
 		Buffer(const CookedLayout& lay) noxnd;
 		Buffer(CookedLayout&& lay) noxnd;
@@ -374,10 +366,10 @@ namespace DC
 		// have to be careful with this one...
 		// the buffer that has once been pilfered must not be used :x
 		Buffer(Buffer&&) noexcept;
-		// how you begin indexing into buffer (root is always Struct)
+	public:
 		ElementRef operator[](const std::string& key) noxnd;
-		// if Buffer is const, you only get to index into the buffer with a read-only proxy
 		ConstElementRef operator[](const std::string& key) const noxnd;
+	public:
 		// get the raw bytes
 		const char* GetData() const noexcept;
 		// size of the raw byte buffer

@@ -11,9 +11,16 @@ App::App() : wnd(1280,720,"VTest"), light(wnd.Gfx())
 	s["butts"].Add(
 		{
 			{ DC::Type::Float, "pubes", 6},
+			{ DC::Type::Float, "dank"},
+			{ DC::Type::Struct, "danker", 2}
+		}
+	);
+	s["butts"]["danker"].T().Add(
+		{
 			{ DC::Type::Float, "dank"}
 		}
 	);
+
 
 	using namespace std::string_literals;
 	auto b = DC::Buffer(std::move(s));
@@ -21,7 +28,6 @@ App::App() : wnd(1280,720,"VTest"), light(wnd.Gfx())
 
 	b["butts"s]["dank"s] = 0.2f;
 	b["butts"s]["pubes"s][1] = 0.2f;
-
 	//s["butts"].Add<DC::Type::Float3>("pubes");
 	//s["butts"].Add<DC::Type::Float>("dank");
 	//s.Add<DC::Type::Float>("woot");
