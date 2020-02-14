@@ -126,6 +126,7 @@ namespace DC
 		arrayData.size = size;
 		return *this;
 	}
+
 	LayoutElement::LayoutElement(Type typeIn) noxnd
 		:
 	type{ typeIn }
@@ -133,13 +134,14 @@ namespace DC
 		assert(typeIn != Type::Empty);
 		if (typeIn == Type::Struct)
 		{
-			pExtraData = std::unique_ptr<ExtraData::Struct>{ new ExtraData::Struct() };
+			pExtraData = std::make_unique<ExtraData::Struct>();
 		}
 		if (typeIn == Type::Array)
 		{
-			pExtraData = std::unique_ptr<ExtraData::Array>{ new ExtraData::Array() };
+			pExtraData = std::make_unique<ExtraData::Array>();
 		}
 	}
+
 	size_t LayoutElement::Finalize(size_t offsetIn) noxnd
 	{
 		switch (type)
@@ -241,7 +243,7 @@ namespace DC
 
 	RawLayout::RawLayout() noexcept
 		:
-		Layout{ std::shared_ptr<LayoutElement>{ new LayoutElement(Type::Struct) } }
+		Layout{std::make_shared<LayoutElement>( Type::Struct ) }
 	{}
 	LayoutElement& RawLayout::operator[](const std::string& key) noxnd
 	{

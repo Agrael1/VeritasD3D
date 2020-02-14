@@ -152,6 +152,7 @@
     <ClCompile Include="Engine\Architecture\PixelShader.cpp" />
     <ClCompile Include="Engine\Architecture\RasterizerState.cpp" />
     <ClCompile Include="Engine\Architecture\Sampler.cpp" />
+    <ClCompile Include="Engine\Architecture\Stencil.cpp" />
     <ClCompile Include="Engine\Architecture\Texture.cpp" />
     <ClCompile Include="Engine\Architecture\Topology.cpp" />
     <ClCompile Include="Engine\Architecture\TransformCBuf.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="Engine\Architecture\PixelShader.h" />
     <ClInclude Include="Engine\Architecture\RasterizerState.h" />
     <ClInclude Include="Engine\Architecture\Sampler.h" />
+    <ClInclude Include="Engine\Architecture\Stencil.h" />
     <ClInclude Include="Engine\Architecture\Texture.h" />
     <ClInclude Include="Engine\Architecture\Topology.h" />
     <ClInclude Include="Engine\Architecture\TransformCBuf.h" />

@@ -11,3 +11,4 @@
 #include <Engine/Architecture/Texture.h>
 #include <Engine/Architecture/VertexBuffer.h>
 #include <Engine/Architecture/VertexShader.h>
+#include <Engine/Architecture/Stencil.h>

@@ -298,6 +298,7 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 	bindablePtrs.push_back(BlendState::Resolve(gfx, false));
 	bindablePtrs.push_back(RasterizerState::Resolve(gfx, hasAlphaDiffuse));
 	bindablePtrs.push_back(InputLayout::Resolve(gfx, vertices.GetLayout(), pvsbc));
+	bindablePtrs.push_back(std::make_shared<Stencil>(gfx, Stencil::Mode::Off));
 
 	return std::make_unique<Mesh>(gfx, std::move(bindablePtrs));
 }

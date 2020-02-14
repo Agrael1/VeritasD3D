@@ -126,17 +126,6 @@ Graphics::Graphics(HWND hWnd, unsigned width, unsigned height)
 		pBackBuffer.Get(), nullptr, &pTarget
 	));
 
-	// Create a depth stencil
-	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
-	dsDesc.DepthEnable = TRUE;
-	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> pDSState;
-	GFX_THROW_INFO(pDevice->CreateDepthStencilState(&dsDesc, &pDSState));
-
-	//bind Depth Stencil
-	pContext->OMSetDepthStencilState(pDSState.Get(), 1u);
-
 	//create Depth Stencil texture
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> pDepthStencil;
 	D3D11_TEXTURE2D_DESC descDepth = {};
@@ -144,7 +133,7 @@ Graphics::Graphics(HWND hWnd, unsigned width, unsigned height)
 	descDepth.Height = height;
 	descDepth.MipLevels = 1u;
 	descDepth.ArraySize = 1u;
-	descDepth.Format = DXGI_FORMAT_D32_FLOAT;
+	descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	descDepth.Usage = D3D11_USAGE_DEFAULT;
 	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
@@ -156,7 +145,7 @@ Graphics::Graphics(HWND hWnd, unsigned width, unsigned height)
 
 	//create view of depth stencil
 	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
-	dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	dsvDesc.Texture2D.MipSlice = 0u;
 	GFX_THROW_INFO(pDevice->CreateDepthStencilView(
@@ -207,7 +196,7 @@ void Graphics::BeginFrame(float r, float g, float b) noexcept
 	}
 	const float color[] = { r,g,b,1.0f };
 	pContext->ClearRenderTargetView(pTarget.Get(), color);
-	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
+	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_STENCIL | D3D11_CLEAR_DEPTH, 1.0f, 0u);
 }
 void Graphics::EndFrame()
 {

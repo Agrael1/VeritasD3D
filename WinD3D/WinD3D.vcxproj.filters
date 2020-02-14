@@ -279,6 +279,9 @@
     <ClCompile Include="Engine\Architecture\LayoutCodex.cpp">
       <Filter>Файлы исходного кода\Engine\Architecture</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Architecture\Stencil.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -535,6 +538,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Architecture\LayoutCodex.h">
       <Filter>Заголовочные файлы\Engine\Architecture</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Stencil.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

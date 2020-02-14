@@ -115,6 +115,9 @@ namespace DC
 		friend class RawLayout;
 		friend struct ExtraData;
 	public:
+		LayoutElement() noexcept = default;
+		LayoutElement(Type typeIn) noxnd;
+	public:
 		std::pair<size_t, const LayoutElement*> CalculateIndexingOffset(size_t offset, size_t index) const noxnd;
 		std::string GetSignature() const noxnd;
 		bool Exists() const noexcept;
@@ -170,9 +173,6 @@ namespace DC
 		std::string GetSignatureForStruct() const noxnd;
 		std::string GetSignatureForArray() const noxnd;
 		bool ValidateSymbolName(const std::string& name) noexcept;
-	public://here
-		LayoutElement() noexcept = default;
-		LayoutElement(Type typeIn) noxnd;
 	private:
 		size_t Finalize(size_t offsetIn) noxnd;
 		size_t FinalizeForStruct(size_t offsetIn);
@@ -192,6 +192,7 @@ namespace DC
 		std::string GetSignature() const noxnd;
 	protected:
 		Layout(std::shared_ptr<LayoutElement> pRoot) noexcept;
+	protected:
 		std::shared_ptr<LayoutElement> pRoot;
 	};
 
@@ -202,19 +203,15 @@ namespace DC
 		friend class LayoutCodex;
 	public:
 		RawLayout() noexcept;
-		// key into the root Struct
-		LayoutElement& operator[](const std::string& key) noxnd;
-		// add an element to the root Struct
-		template<Type type>
-		LayoutElement& Add(const std::string& key) noxnd
+	public:
+		LayoutElement& operator[](const std::string& key) noxnd;		// key into the root Struct
+		LayoutElement& Add(std::initializer_list<LayoutElement::LayoutPair> pairs) noxnd
 		{
-			return pRoot->Add(type,key);
+			return pRoot->Add(std::move(pairs));
 		}
 	private:
-		// reset this object with an empty struct at its root
-		void ClearRoot() noexcept;
-		// finalize the layout and then relinquish (by yielding the root layout element)
-		std::shared_ptr<LayoutElement> DeliverRoot() noexcept;
+		void ClearRoot() noexcept; // reset this object with an empty struct at its root
+		std::shared_ptr<LayoutElement> DeliverRoot() noexcept;// finalize the layout and then relinquish (by yielding the root layout element)
 	};
 
 	// CookedLayout represend a completed and registered Layout shell object
@@ -287,6 +284,7 @@ namespace DC
 	private:
 		// refs should only be constructable by other refs or by the buffer
 		ConstElementRef(const LayoutElement* pLayout, const char* pBytes, size_t offset) noexcept;
+	private:
 		// this offset is the offset that is built up by indexing into arrays
 		// accumulated for every array index in the path of access into the structure
 		size_t offset;

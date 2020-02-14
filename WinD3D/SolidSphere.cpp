@@ -29,6 +29,7 @@ SolidSphere::SolidSphere(Graphics& gfx, float radius, DirectX::XMFLOAT3 color)
 	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
 	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	AddBind(std::make_shared<TransformCbuf>(gfx, *this));
+	AddBind(std::make_shared<Stencil>(gfx, Stencil::Mode::Off));
 }
 
 void SolidSphere::SetPos(DirectX::XMFLOAT3 pos) noexcept
