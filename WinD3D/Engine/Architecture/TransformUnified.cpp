@@ -1,7 +1,7 @@
 #include "TransformUnified.h"
 
-TransformUnified::TransformUnified(Graphics& gfx, const Drawable& parent, UINT slotV, UINT slotP)
-	:TransformCbuf(gfx, parent, slotV)
+TransformUnified::TransformUnified(Graphics& gfx, UINT slotV, UINT slotP)
+	:TransformCbuf(gfx, slotV)
 {
 	if (!pPCBuf)
 	{

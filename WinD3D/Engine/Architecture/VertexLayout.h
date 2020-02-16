@@ -395,6 +395,7 @@ namespace DV
 	{
 	public:
 		ConstVertex(const Vertex& v) noxnd;
+	public:
 		template<VertexLayout::ElementType Type>
 		const auto& Attr() const noxnd
 		{
@@ -438,21 +439,9 @@ namespace DV
 		{
 			buffer.resize(buffer.size() + layout.Size() * size);
 		}
-		Vertex Back() noxnd
-		{
-			assert(!buffer.empty());
-			return Vertex{ buffer.data() + buffer.size() - layout.Size(), layout };
-		}
-		Vertex Front() noxnd
-		{
-			assert(buffer.empty());
-			return Vertex{ buffer.data(), layout };
-		}
-		Vertex operator[](size_t i)noxnd
-		{
-			assert(i < Count());
-			return Vertex{ buffer.data() + layout.Size() * i,layout };
-		}
+		Vertex Back() noxnd;
+		Vertex Front() noxnd;
+		Vertex operator[](size_t i)noxnd;
 
 		ConstVertex Back() const noxnd
 		{

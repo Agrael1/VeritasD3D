@@ -5,7 +5,7 @@ class SolidSphere : public Drawable
 {
 public:
 	SolidSphere(Graphics& gfx, float radius, DirectX::XMFLOAT3 color = { 1.0f,1.0f,1.0f });
-	void Update(float dt)noexcept override;
+public:
 	void SetPos(DirectX::XMFLOAT3 pos)noexcept;
 	void SetColor(DirectX::XMFLOAT3 color)noexcept;
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;

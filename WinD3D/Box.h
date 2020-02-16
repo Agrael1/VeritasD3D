@@ -11,7 +11,7 @@ public:
 		std::uniform_real_distribution<float>& odist,
 		std::uniform_real_distribution<float>& rdist,
 		std::uniform_real_distribution<float>& bdist);
-	void Update(float dt) noexcept override;
+	void Update(float dt) noexcept;
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
 private:
 	// positional

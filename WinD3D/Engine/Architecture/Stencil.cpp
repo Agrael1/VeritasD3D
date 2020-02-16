@@ -1,6 +1,8 @@
 #include "Stencil.h"
+#include "Codex.h"
 
 Stencil::Stencil(Graphics& gfx, Mode mode)
+    :mode(mode)
 {
     D3D11_DEPTH_STENCIL_DESC dsDesc = { 0 };
     dsDesc.DepthEnable = TRUE;
@@ -33,4 +35,29 @@ Stencil::Stencil(Graphics& gfx, Mode mode)
 void Stencil::Bind(Graphics& gfx) noexcept
 {
     GetContext(gfx)->OMSetDepthStencilState(pStencil.Get(), 0xFF);
+}
+
+std::string Stencil::GetUID() const noexcept
+{
+    return GenerateUID(mode);
+}
+std::shared_ptr<Stencil> Stencil::Resolve(Graphics& gfx, Mode mode)
+{
+    return Codex::Resolve<Stencil>(gfx, mode);
+}
+std::string Stencil::GenerateUID(Mode mode)
+{
+    using namespace std::string_literals;
+    const auto modeName = [mode]() {
+        switch (mode) {
+        case Mode::Off:
+            return "off"s;
+        case Mode::Write:
+            return "write"s;
+        case Mode::Mask:
+            return "mask"s;
+        }
+        return "ERROR"s;
+    };
+    return typeid(Stencil).name() + "#"s + modeName();
 }

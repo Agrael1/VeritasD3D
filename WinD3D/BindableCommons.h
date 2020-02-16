@@ -12,3 +12,4 @@
 #include <Engine/Architecture/VertexBuffer.h>
 #include <Engine/Architecture/VertexShader.h>
 #include <Engine/Architecture/Stencil.h>
+#include <Engine/Architecture/ConstantBuffersEX.h>

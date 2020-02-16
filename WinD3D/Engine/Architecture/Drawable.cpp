@@ -1,30 +1,33 @@
-#include "IndexBuffer.h"
+#include "BindableCommons.h"
 #include "Drawable.h"
 #include "GraphicsThrows.m"
-#include <cassert>
 
-void Drawable::Draw(Graphics & gfx) const noxnd
+void Drawable::AddTechnique(Technique tech_in) noexcept
 {
-	for (auto& b : binds)
-	{
-		b->Bind(gfx);
-	}
-	gfx.DrawIndexed(pIndexBuffer->GetCount());
+	tech_in.InitializeParentReferences(*this);
+	techniques.push_back(std::move(tech_in));
 }
-
-void Drawable::AddBind(std::shared_ptr<IndexBuffer> index)noxnd
+void Drawable::Submit(FrameCommander& frame) const noexcept
 {
-	assert("Multiple Index buffers attached!" && pIndexBuffer == nullptr);
-	pIndexBuffer = &(*index);		
-	binds.push_back(std::move(index));
-}
-void Drawable::AddBind(std::shared_ptr<Bindable> bind) noxnd
-{
-	// special case for index buffer
-	if (typeid(*bind) == typeid(IndexBuffer))
+	for (const auto& tech : techniques)
 	{
-		assert("Binding multiple index buffers not allowed" && pIndexBuffer == nullptr);
-		pIndexBuffer = &static_cast<IndexBuffer&>(*bind);
+		tech.Submit(frame, *this);
 	}
-	binds.push_back(std::move(bind));
+}
+void Drawable::Bind(Graphics& gfx) const noexcept
+{
+	pTopology->Bind(gfx);
+	pIndices->Bind(gfx);
+	pVertices->Bind(gfx);
+}
+void Drawable::Accept(TechniqueProbe& probe)
+{
+	for (auto& t : techniques)
+	{
+		t.Accept(probe);
+	}
+}
+UINT Drawable::GetIndexCount() const noexcept(!IS_DEBUG)
+{
+	return pIndices->GetCount();
 }

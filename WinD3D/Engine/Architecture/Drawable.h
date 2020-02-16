@@ -3,9 +3,7 @@
 #include <Engine/Graphics.h>
 #include <DirectXMath.h>
 #include <memory>
-
-class Bindable;
-class IndexBuffer;
+#include "Technique.h"
 
 class Drawable
 {
@@ -14,26 +12,16 @@ public:
 	Drawable(const Drawable&) = delete;
 public:
 	virtual DirectX::XMMATRIX GetTransformXM() const noexcept = 0;
-	virtual void Update(float dt)noexcept {};
 	virtual ~Drawable() = default;
 public:
-	void Draw(Graphics& gfx)const noxnd;
+	void AddTechnique(Technique tech_in) noexcept;
+	void Submit(class FrameCommander& frame) const noexcept;
+	void Bind(Graphics& gfx)const noexcept;
+	void Accept(TechniqueProbe& probe);
+	UINT GetIndexCount()const noxnd;
 protected:
-	template<class T>
-	T* QueryBindable() noexcept
-	{
-		for (auto& pb : binds)
-		{
-			if (auto pt = dynamic_cast<T*>(pb.get()))
-			{
-				return pt;
-			}
-		}
-		return nullptr;
-	}
-	void AddBind(std::shared_ptr<IndexBuffer> index)noxnd;
-	void AddBind(std::shared_ptr<Bindable> bind)noxnd;
-private:
-	const IndexBuffer* pIndexBuffer = nullptr;
-	std::vector<std::shared_ptr<Bindable>> binds;
+	std::shared_ptr<class IndexBuffer> pIndices;
+	std::shared_ptr<class VertexBuffer> pVertices;
+	std::shared_ptr<class Topology> pTopology;
+	std::vector<Technique> techniques;
 };

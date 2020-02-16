@@ -1,9 +1,10 @@
 #include "App.h"
 #include "ImGUI/imgui.h"
-#include <Engine/Architecture/DynamicConstant.h>
 
 App::App() : wnd(1280,720,"VTest"), light(wnd.Gfx())
 {
+	cube.SetPos({ 4.0f,0.0f,0.0f });
+	cube2.SetPos({ 0.0f,4.0f,0.0f });
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(720.0f / 1280.0f), 0.5f, 100.0f));
 }
 App::~App()
@@ -33,12 +34,12 @@ void App::DoFrame(float dt)
 	light.Bind(wnd.Gfx(), cam.GetViewMatrix());
 	
 
-	Sponza.Draw(wnd.Gfx());
-	light.Draw(wnd.Gfx());
-	cube.Draw(wnd.Gfx());
-	//cube2.Draw(wnd.Gfx());
-	cube.DrawOutline(wnd.Gfx());
-	//cube2.DrawOutline(wnd.Gfx());
+	//Sponza.Draw(wnd.Gfx());
+	//light.Submit(fc);
+	cube.Submit(fc);
+	cube2.Submit(fc);
+	fc.Execute(wnd.Gfx());
+
 
 	if (ImGui::Begin("Simulation speed"))
 	{
@@ -49,10 +50,13 @@ void App::DoFrame(float dt)
 	ProcessInput(dt);
 	cam.SpawnControlWindow();
 	light.SpawnControlWindow();
-	Sponza.ShowWindow("Sponza");
+	cube.SpawnControlWindow(wnd.Gfx(), "Cube 1");
+	cube2.SpawnControlWindow(wnd.Gfx(), "Cube 2");
+	//Sponza.ShowWindow("Sponza");
 
 	// Present
 	wnd.Gfx().EndFrame();
+	fc.Reset();
 }
 
 void App::ProcessInput(float dt)

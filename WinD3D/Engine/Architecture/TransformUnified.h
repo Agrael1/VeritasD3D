@@ -4,7 +4,7 @@
 class TransformUnified : public TransformCbuf
 {
 public:
-	TransformUnified(Graphics& gfx, const Drawable& parent, UINT slotV = 0u, UINT slotP = 0u);
+	TransformUnified(Graphics& gfx, UINT slotV = 0u, UINT slotP = 0u);
 public:
 	void Bind(Graphics& gfx)noexcept override;
 protected:
