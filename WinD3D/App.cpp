@@ -35,7 +35,7 @@ void App::DoFrame(float dt)
 	
 
 	//Sponza.Draw(wnd.Gfx());
-	//light.Submit(fc);
+	light.Submit(fc);
 	cube.Submit(fc);
 	cube2.Submit(fc);
 	fc.Execute(wnd.Gfx());

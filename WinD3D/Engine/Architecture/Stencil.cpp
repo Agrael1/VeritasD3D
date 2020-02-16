@@ -18,6 +18,8 @@ Stencil::Stencil(Graphics& gfx, Mode mode)
 
     if (mode == Mode::Write)
     {
+        dsDesc.DepthEnable = FALSE;
+        dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
         dsDesc.StencilEnable = TRUE;
         dsDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_REPLACE;
     }
@@ -25,6 +27,7 @@ Stencil::Stencil(Graphics& gfx, Mode mode)
     {
         dsDesc.DepthEnable = FALSE;
         dsDesc.StencilEnable = TRUE;
+        dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
         dsDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
         dsDesc.FrontFace.StencilFunc = D3D11_COMPARISON_NOT_EQUAL;
     }
