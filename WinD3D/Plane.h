@@ -31,10 +31,8 @@ public:
 			layout = DV::VertexLayout{}
 			+DV::Type::Position3D;
 		}
-		DV::VertexBuffer vertices(std::move(*layout));
-		vertices.Reserve(size_t(nVertX * nVertY));
+		DV::VertexBuffer vertices(std::move(*layout), size_t(nVertX * nVertY));
 		{
-			DirectX::XMFLOAT3 pos{};
 			for (unsigned y = 0, i = 0; y < nVertY; y++)
 			{
 				const float y_pos = float(y) * divisionSize_y;
@@ -44,8 +42,7 @@ public:
 						bottomLeft,
 						DirectX::XMVectorSet(float(x) * divisionSize_x, y_pos, 0.0f, 0.0f)
 					);
-					DirectX::XMStoreFloat3(&pos, v);
-					vertices[y*nVertX + x].Set<DV::Type::Position3D>(std::move(pos));
+					DirectX::XMStoreFloat3(&vertices[y * nVertX + x].Attr<DV::Type::Position3D>(), v);
 				}
 			}
 		}

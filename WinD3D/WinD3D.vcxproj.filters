@@ -584,6 +584,9 @@
     <ClInclude Include="Engine\Architecture\TechniqueProbe.h">
       <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Architecture\Material.h">
+      <Filter>Заголовочные файлы\Engine\Architecture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc">

@@ -14,9 +14,9 @@ public:
 private:
 	struct PointLightCBuf
 	{
-		alignas(16)DirectX::XMFLOAT3 pos;
-		alignas(16)DirectX::XMFLOAT3 ambient;
-		alignas(16)DirectX::XMFLOAT3 diffuse;
+		DirectX::XMFLOAT3A pos;
+		DirectX::XMFLOAT3A ambient;
+		DirectX::XMFLOAT3 diffuse;
 		float diffuseIntensity;
 		float attConst;
 		float attLin;

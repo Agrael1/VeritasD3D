@@ -222,6 +222,7 @@
     <ClInclude Include="Engine\Architecture\InputLayout.h" />
     <ClInclude Include="Engine\Architecture\Job.h" />
     <ClInclude Include="Engine\Architecture\LayoutCodex.h" />
+    <ClInclude Include="Engine\Architecture\Material.h" />
     <ClInclude Include="Engine\Architecture\NullPixelShader.h" />
     <ClInclude Include="Engine\Architecture\Pass.h" />
     <ClInclude Include="Engine\Architecture\PixelShader.h" />

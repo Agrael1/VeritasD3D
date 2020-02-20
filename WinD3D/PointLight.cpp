@@ -48,7 +48,7 @@ void PointLight::Reset() noexcept
 		0.0075f
 	};
 }
-void PointLight::Submit(class FrameCommander& frame) const noxnd
+void PointLight::Submit(FrameCommander& frame) const noxnd
 {
 	mesh.SetPos(cbData.pos);
 	mesh.Submit(frame);
@@ -56,8 +56,8 @@ void PointLight::Submit(class FrameCommander& frame) const noxnd
 void PointLight::Bind(Graphics& gfx, DirectX::FXMMATRIX view) const noexcept
 {
 	auto dataCopy = cbData;
-	const auto pos = DirectX::XMLoadFloat3(&cbData.pos);
-	DirectX::XMStoreFloat3(&dataCopy.pos, DirectX::XMVector3Transform(pos, view));
+	const auto pos = DirectX::XMLoadFloat3A(&cbData.pos);
+	DirectX::XMStoreFloat3A(&dataCopy.pos, DirectX::XMVector3Transform(pos, view));
 	cbuf.Update(gfx, dataCopy);
 	cbuf.Bind(gfx);
 }

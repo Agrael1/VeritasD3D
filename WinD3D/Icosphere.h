@@ -16,8 +16,7 @@ public:
 			layout = DV::VertexLayout{}
 			+Element::Position3D;
 		}
-		DV::VertexBuffer vb{ std::move(*layout) };
-		vb.Reserve(12);
+		DV::VertexBuffer vb{ std::move(*layout), 12};
 
 		const float t = (1.0f + std::sqrtf(5.0f)) / 2.0f;
 		

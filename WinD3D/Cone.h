@@ -18,11 +18,9 @@ public:
 			layout = DV::VertexLayout{}
 			+DV::Type::Position3D;
 		}
-		DV::VertexBuffer vertices(std::move(*layout));
-		vertices.Reserve((size_t)longDiv + 2);
+		DV::VertexBuffer vertices(std::move(*layout), (size_t)longDiv + 2);
 
 		unsigned short iLong = 0;
-		DirectX::XMFLOAT3 pos{};
 		// base vertices
 		for (; iLong < longDiv; iLong++)
 		{
@@ -30,8 +28,7 @@ public:
 				base,
 				DirectX::XMMatrixRotationZ(longitudeAngle * iLong)
 			);
-			DirectX::XMStoreFloat3(&pos, v);
-			vertices[iLong].Set<DV::Type::Position3D>(std::move(pos));
+			DirectX::XMStoreFloat3(&vertices[iLong].Attr< DV::Type::Position3D >(), v);
 		}
 		// the center
 		vertices[iLong++].Set<DV::Type::Position3D>({ 0.0f,0.0f,-1.0f });

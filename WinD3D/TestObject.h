@@ -1,5 +1,4 @@
 #pragma once
-#include "DrawableBase.h"
 #include <random>
 
 template<typename T>
@@ -13,7 +12,7 @@ T wrap_angle(T theta)
 }
 
 template<class T>
-class TestObject : public DrawableBase<T>
+class TestObject
 {
 public:
 	TestObject(Graphics& gfx, std::mt19937& rng,

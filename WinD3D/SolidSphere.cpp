@@ -3,7 +3,7 @@
 #include "Sphere.h"
 
 SolidSphere::SolidSphere(Graphics& gfx, float radius, DirectX::XMFLOAT3 color)
-	:color(color)
+	:colorConst{color}
 {
 	namespace dx = DirectX;
 	const auto geometryTag = "$ssphere." + std::to_string(radius);
@@ -23,11 +23,6 @@ SolidSphere::SolidSphere(Graphics& gfx, float radius, DirectX::XMFLOAT3 color)
 
 		only.AddBindable(PixelShader::Resolve(gfx, "SolidPS.cso"));
 
-		struct PSColorConstant
-		{
-			dx::XMFLOAT3 color = { 1.0f,1.0f,1.0f };
-			float padding;
-		} colorConst;
 		only.AddBindable(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst, 1u));
 		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
 		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
@@ -40,10 +35,6 @@ SolidSphere::SolidSphere(Graphics& gfx, float radius, DirectX::XMFLOAT3 color)
 void SolidSphere::SetPos(DirectX::XMFLOAT3 pos) noexcept
 {
 	this->pos = pos;
-}
-void SolidSphere::SetColor(DirectX::XMFLOAT3 color) noexcept
-{
-	this->color = color;
 }
 DirectX::XMMATRIX SolidSphere::GetTransformXM() const noexcept
 {

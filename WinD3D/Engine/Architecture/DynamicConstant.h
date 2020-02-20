@@ -382,3 +382,6 @@ namespace DC
 		std::vector<char> bytes;
 	};
 }
+#ifndef DCB_IMPL_SOURCE
+#undef LEAF_ELEMENT_TYPES
+#endif

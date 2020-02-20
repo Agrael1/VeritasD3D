@@ -1,12 +1,27 @@
 #pragma once
 #include <vector>
 #include <array>
+#include <type_traits>
 #include <DirectXMath.h>
+#include <assimp/scene.h>
 #include <Framework\noexcept_if.h>
 #include <Framework\Utility.h>
 #include <Fmtlib\include\fmt\printf.h>
 #include <Engine\Graphics.h>
 
+#define DVTX_ELEMENT_AI_EXTRACTOR(member) static SysType Extract( const aiMesh& mesh, size_t i ) noexcept {return *reinterpret_cast<const SysType*>(&mesh.member[i]);}
+
+#define LAYOUT_ELEMENT_TYPES \
+	X( Position2D ) \
+	X( Position3D ) \
+	X( Texture2D ) \
+	X( Normal ) \
+	X( Tangent ) \
+	X( Bitangent ) \
+	X( Float3Color ) \
+	X( Float4Color ) \
+	X( BGRAColor ) \
+	X( Count )
 
 namespace DV
 {
@@ -23,18 +38,9 @@ namespace DV
 	public:
 		enum class ElementType : size_t
 		{
-			Position2D,
-			Position3D,
-			Texture2D,
-			Normal,
-			Tangent,
-			Bitangent,
-			Float3Color,
-			Float4Color,
-			BGRAColor,
-#if _DEBUG
-			Count,
-#endif
+			#define X(el) el,
+			LAYOUT_ELEMENT_TYPES
+			#undef X
 		};
 
 #if _DEBUG
@@ -47,6 +53,7 @@ namespace DV
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 			static constexpr const char* semantic = "Position";
 			static constexpr const char* code = "P2";
+			DVTX_ELEMENT_AI_EXTRACTOR(mVertices)
 		};
 		template<> struct Map<ElementType::Position3D>
 		{
@@ -54,6 +61,7 @@ namespace DV
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Position";
 			static constexpr const char* code = "P3";
+			DVTX_ELEMENT_AI_EXTRACTOR(mVertices)
 		};
 		template<> struct Map<ElementType::Texture2D>
 		{
@@ -61,6 +69,7 @@ namespace DV
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 			static constexpr const char* semantic = "Texcoord";
 			static constexpr const char* code = "T2";
+			DVTX_ELEMENT_AI_EXTRACTOR(mTextureCoords[0])
 		};
 		template<> struct Map<ElementType::Normal>
 		{
@@ -68,6 +77,7 @@ namespace DV
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Normal";
 			static constexpr const char* code = "N";
+			DVTX_ELEMENT_AI_EXTRACTOR(mNormals)
 		};
 		template<> struct Map<ElementType::Tangent>
 		{
@@ -75,6 +85,7 @@ namespace DV
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Tangent";
 			static constexpr const char* code = "Nt";
+			DVTX_ELEMENT_AI_EXTRACTOR(mTangents)
 		};
 		template<> struct Map<ElementType::Bitangent>
 		{
@@ -82,6 +93,7 @@ namespace DV
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Bitangent";
 			static constexpr const char* code = "Nb";
+			DVTX_ELEMENT_AI_EXTRACTOR(mBitangents)
 		};
 		template<> struct Map<ElementType::Float3Color>
 		{
@@ -89,6 +101,7 @@ namespace DV
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Color";
 			static constexpr const char* code = "C3";
+			DVTX_ELEMENT_AI_EXTRACTOR(mColors[0])
 		};
 		template<> struct Map<ElementType::Float4Color>
 		{
@@ -96,6 +109,7 @@ namespace DV
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			static constexpr const char* semantic = "Color";
 			static constexpr const char* code = "C4";
+			DVTX_ELEMENT_AI_EXTRACTOR(mColors[0])
 		};
 		template<> struct Map<ElementType::BGRAColor>
 		{
@@ -103,123 +117,49 @@ namespace DV
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 			static constexpr const char* semantic = "Color";
 			static constexpr const char* code = "C8";
+			DVTX_ELEMENT_AI_EXTRACTOR(mColors[0])
 		};
+		template<> struct Map<ElementType::Count>
+		{
+			using SysType = long double;
+			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_UNKNOWN;
+			static constexpr const char* semantic = "!INVALID!";
+			static constexpr const char* code = "!INV!";
+			DVTX_ELEMENT_AI_EXTRACTOR(mFaces)
+		};
+
+		template<template<VertexLayout::ElementType> class F, typename... Args>
+		static constexpr auto Bridge(VertexLayout::ElementType type, Args&&... args) noxnd
+		{
+			switch (type)
+			{
+				#define X(el) case VertexLayout::ElementType::el: return F<VertexLayout::ElementType::el>::Exec( std::forward<Args>( args )... );
+				LAYOUT_ELEMENT_TYPES
+				#undef X
+			}
+			assert("Invalid element type" && false);
+			return F<VertexLayout::ElementType::Count>::Exec(std::forward<Args>(args)...);
+		}
 	public:
 		class Element
 		{
 		public:
-			Element(ElementType type, size_t offset)
-				: type(type),
-				offset(offset)
-			{}
+			Element(ElementType type, size_t offset);
 		public:
 			bool operator==(const Element& other)const //for equality check
 			{
 				return other.type == type;
 			}
 		public:
-			size_t GetOffsetAfter()const noxnd
-			{
-				return offset + Size();
-			}
-			size_t GetOffset()const noexcept
-			{
-				return offset;
-			}
-			size_t Size()const noxnd
-			{
-				return SizeOf(type);
-			}
-			static constexpr size_t SizeOf(ElementType type)noxnd
-			{
-				using namespace DirectX;
-				switch (type)
-				{
-				case VertexLayout::ElementType::Position2D:
-					return sizeof(XMFLOAT2);
-				case VertexLayout::ElementType::Position3D:
-					return sizeof(XMFLOAT3);
-				case VertexLayout::ElementType::Texture2D:
-					return sizeof(XMFLOAT2);
-				case VertexLayout::ElementType::Normal:
-					return sizeof(XMFLOAT3);
-				case VertexLayout::ElementType::Tangent:
-					return sizeof(XMFLOAT3);
-				case VertexLayout::ElementType::Bitangent:
-					return sizeof(XMFLOAT3);
-				case VertexLayout::ElementType::Float3Color:
-					return sizeof(XMFLOAT3);
-				case VertexLayout::ElementType::Float4Color:
-					return sizeof(XMFLOAT4);
-				case VertexLayout::ElementType::BGRAColor:
-					return sizeof(unsigned int);
-				default:
-					assert("Invalid Element Type" && false);
-					return 0u;
-				}
-			}
-			ElementType GetType()const noexcept
-			{
-				return type;
-			}
-			D3D11_INPUT_ELEMENT_DESC VertexLayout::Element::GetDesc() const noxnd
-			{
-				switch (type)
-				{
-				case ElementType::Position2D:
-					return GenerateDesc<ElementType::Position2D>(GetOffset());
-				case ElementType::Position3D:
-					return GenerateDesc<ElementType::Position3D>(GetOffset());
-				case ElementType::Texture2D:
-					return GenerateDesc<ElementType::Texture2D>(GetOffset());
-				case ElementType::Normal:
-					return GenerateDesc<ElementType::Normal>(GetOffset());
-				case ElementType::Tangent:
-					return GenerateDesc<ElementType::Tangent>(GetOffset());
-				case ElementType::Bitangent:
-					return GenerateDesc<ElementType::Bitangent>(GetOffset());
-				case ElementType::Float3Color:
-					return GenerateDesc<ElementType::Float3Color>(GetOffset());
-				case ElementType::Float4Color:
-					return GenerateDesc<ElementType::Float4Color>(GetOffset());
-				case ElementType::BGRAColor:
-					return GenerateDesc<ElementType::BGRAColor>(GetOffset());
-				}
-				assert("Invalid element type" && false);
-				return{ "INVALID",0,DXGI_FORMAT_UNKNOWN,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 };
-			}
-			const char* GetCode() const noexcept
-			{
-				switch (type)
-				{
-				case ElementType::Position2D:
-					return Map<ElementType::Position2D>::code;
-				case ElementType::Position3D:
-					return Map<ElementType::Position3D>::code;
-				case ElementType::Texture2D:
-					return Map<ElementType::Texture2D>::code;
-				case ElementType::Normal:
-					return Map<ElementType::Normal>::code;
-				case ElementType::Tangent:
-					return Map<ElementType::Tangent>::code;
-				case ElementType::Bitangent:
-					return Map<ElementType::Bitangent>::code;
-				case ElementType::Float3Color:
-					return Map<ElementType::Float3Color>::code;
-				case ElementType::Float4Color:
-					return Map<ElementType::Float4Color>::code;
-				case ElementType::BGRAColor:
-					return Map<ElementType::BGRAColor>::code;
-				}
-				assert("Invalid element type" && false);
-				return "Invalid";
-			}
-		private:
-			template<ElementType type>
-			static constexpr D3D11_INPUT_ELEMENT_DESC GenerateDesc(size_t offset) noexcept
-			{
-				return{ Map<type>::semantic,0,Map<type>::dxgiFormat,0,(UINT)offset,D3D11_INPUT_PER_VERTEX_DATA,0 };
-			}
+			size_t GetOffsetAfter()const noxnd;
+			size_t GetOffset()const noexcept;
+			size_t Size()const noxnd;
+		public:
+			static constexpr size_t SizeOf(ElementType type)noxnd;
+		public:
+			ElementType GetType()const noexcept;
+			D3D11_INPUT_ELEMENT_DESC GetDesc() const noxnd;
+			const char* GetCode() const noexcept;
 		private:
 			ElementType type;
 			size_t offset;
@@ -300,6 +240,17 @@ namespace DV
 	class Vertex
 	{
 		friend class VertexBuffer;
+	private:
+		// necessary for Bridge to SetAttribute
+		template<VertexLayout::ElementType type>
+		struct AttributeSetting
+		{
+			template<typename T>
+			static constexpr auto Exec(Vertex* pVertex, unsigned char* pAttribute, T&& val) noxnd
+			{
+				return pVertex->SetAttribute<type>(pAttribute, std::forward<T>(val));
+			}
+		};
 	public:
 		Vertex& operator=(const Vertex& prev)
 		{
@@ -327,38 +278,9 @@ namespace DV
 		{
 			const auto& element = layout.ResolveByIndex(i);
 			auto pAttribute = pData + element.GetOffset();
-			switch (element.GetType())
-			{
-			case VertexLayout::ElementType::Position2D:
-				SetAttribute<VertexLayout::ElementType::Position2D>(pAttribute, std::forward<T>(val));
-				break;
-			case VertexLayout::ElementType::Position3D:
-				SetAttribute<VertexLayout::ElementType::Position3D>(pAttribute, std::forward<T>(val));
-				break;
-			case VertexLayout::ElementType::Texture2D:
-				SetAttribute<VertexLayout::ElementType::Texture2D>(pAttribute, std::forward<T>(val));
-				break;
-			case VertexLayout::ElementType::Normal:
-				SetAttribute<VertexLayout::ElementType::Normal>(pAttribute, std::forward<T>(val));
-				break;
-			case VertexLayout::ElementType::Tangent:
-				SetAttribute<VertexLayout::ElementType::Tangent>(pAttribute, std::forward<T>(val));
-				break;
-			case VertexLayout::ElementType::Bitangent:
-				SetAttribute<VertexLayout::ElementType::Bitangent>(pAttribute, std::forward<T>(val));
-				break;
-			case VertexLayout::ElementType::Float3Color:
-				SetAttribute<VertexLayout::ElementType::Float3Color>(pAttribute, std::forward<T>(val));
-				break;
-			case VertexLayout::ElementType::Float4Color:
-				SetAttribute<VertexLayout::ElementType::Float4Color>(pAttribute, std::forward<T>(val));
-				break;
-			case VertexLayout::ElementType::BGRAColor:
-				SetAttribute<VertexLayout::ElementType::BGRAColor>(pAttribute, std::forward<T>(val));
-				break;
-			default:
-				assert("Bad element type" && false);
-			}
+			VertexLayout::Bridge<AttributeSetting>(
+				element.GetType(), this, pAttribute, std::forward<T>(val)
+			);
 		}
 	protected:
 		Vertex(unsigned char* pData, const VertexLayout& layout) noxnd
@@ -408,26 +330,14 @@ namespace DV
 	class VertexBuffer
 	{
 	public:
-		VertexBuffer(VertexLayout layout)noxnd
-			: layout(std::move(layout))
-		{}
+		VertexBuffer::VertexBuffer(VertexLayout layout, size_t size = 0) noxnd;
+		VertexBuffer(VertexLayout layout, const aiMesh& mesh);
 	public:
-		const VertexLayout& GetLayout() const noexcept
-		{
-			return layout;
-		}
-		size_t Count()const noxnd
-		{
-			return buffer.size() / layout.Size();
-		}
-		size_t Size() const noxnd
-		{
-			return buffer.size();
-		}
-		const unsigned char* data()const noxnd
-		{
-			return buffer.data();
-		}
+		const VertexLayout& GetLayout() const noexcept;
+		size_t Count()const noxnd;
+		size_t Size() const noxnd;
+		const unsigned char* data()const noxnd;
+
 		template<typename ...Params>
 		void EmplaceBack(Params&&... params) noxnd
 		{
@@ -435,22 +345,13 @@ namespace DV
 			buffer.resize(buffer.size() + layout.Size());
 			Back().SetAttributeByIndex(0u, std::forward<Params>(params)...);
 		}
-		void Reserve(size_t size)
-		{
-			buffer.resize(buffer.size() + layout.Size() * size);
-		}
+		void Reserve(size_t size);
 		Vertex Back() noxnd;
 		Vertex Front() noxnd;
 		Vertex operator[](size_t i)noxnd;
 
-		ConstVertex Back() const noxnd
-		{
-			return const_cast<VertexBuffer*>(this)->Back();
-		}
-		ConstVertex Front() const noxnd
-		{
-			return const_cast<VertexBuffer*>(this)->Front();
-		}
+		ConstVertex Back() const noxnd;
+		ConstVertex Front() const noxnd;
 		ConstVertex operator[](size_t i) const noxnd
 		{
 			return const_cast<VertexBuffer&>(*this)[i];
@@ -460,5 +361,9 @@ namespace DV
 		std::vector<unsigned char> buffer;
 	};
 
-	typedef DV::VertexLayout::ElementType Type;
+	typedef VertexLayout::ElementType Type;
 }
+#undef DVTX_ELEMENT_AI_EXTRACTOR
+#ifndef DVTX_SOURCE_FILE
+#undef LAYOUT_ELEMENT_TYPES
+#endif

@@ -16,8 +16,7 @@ public:
 		const auto offset = dx::XMVectorSet(0.0f, 0.0f, 2.0f, 0.0f);
 		const float longitudeAngle = dx::XM_2PI / longDiv;
 
-		DV::VertexBuffer vertices{ std::move(*layout) };
-		vertices.Reserve(2 * longDiv + 2);
+		DV::VertexBuffer vertices{ std::move(*layout), 2 * longDiv + 2};
 		// near center
 		vertices[0].Set<DV::Type::Position3D>({ 0.0f,0.0f,-1.0f });
 		const auto iCenterNear = (unsigned short)(vertices.Count() - 1);
@@ -25,7 +24,6 @@ public:
 		vertices[1].Set<DV::Type::Position3D>({ 0.0f,0.0f,1.0f });
 		const auto iCenterFar = (unsigned short)(vertices.Count() - 2);
 
-		DirectX::XMFLOAT3 pos{};
 		// base vertices
 		for (unsigned iLong = 0; iLong < longDiv; iLong++)
 		{
@@ -35,8 +33,7 @@ public:
 					base,
 					dx::XMMatrixRotationZ(longitudeAngle * iLong)
 				);
-				DirectX::XMStoreFloat3(&pos, v);
-				vertices[2 * iLong].Set<DV::Type::Position3D>(std::move(pos));
+				DirectX::XMStoreFloat3(&vertices[2 * iLong].Attr<DV::Type::Position3D>(), v);
 			}
 			// far base
 			{
@@ -45,8 +42,7 @@ public:
 					dx::XMMatrixRotationZ(longitudeAngle * iLong)
 				);
 				v = dx::XMVectorAdd(v, offset);
-				DirectX::XMStoreFloat3(&pos, v);
-				vertices[2 * iLong + 1].Set<DV::Type::Position3D>(std::move(pos));
+				DirectX::XMStoreFloat3(&vertices[2 * iLong+1].Attr<DV::Type::Position3D>(), v);
 			}
 		}
 
