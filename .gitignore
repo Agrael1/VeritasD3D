@@ -20,6 +20,7 @@
 [Bb]uild/
 bld/
 [Bb]in/
+!WinD3D/dxtex/**/
 [Oo]bj/
 
 # Visual Studio 2015 cache/options directory
@@ -58,6 +59,7 @@ artifacts/
 *.rsp
 *.sbr
 *.tlb
+*.tlog
 *.tli
 *.tlh
 *.tmp
