@@ -190,17 +190,14 @@ namespace DV
 		}
 
 
-		template <ElementType Type>
-		VertexLayout& Append()noxnd
-		{
-			elements.emplace_back(Type, Size());
-			return *this;
-		}
+		bool VertexLayout::Has(ElementType type) const noexcept;		
 		VertexLayout& operator +(ElementType Type)noxnd
 		{
-			elements.emplace_back(Type, Size());
+			if (!Has(Type))
+				elements.emplace_back(Type, Size());
 			return *this;
 		}
+
 		friend bool operator==(const VertexLayout& lhs, const VertexLayout& rhs)
 		{
 			return lhs.elements == rhs.elements;

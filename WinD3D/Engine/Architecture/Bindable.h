@@ -1,5 +1,6 @@
 #pragma once
 #include <Engine/Graphics.h>
+#include <memory>
 
 class Bindable
 {
@@ -26,3 +27,8 @@ protected:
 	static DXGIInfoManager& GetInfoManager(Graphics& gfx)noexcept(IS_DEBUG);
 };
 
+class CloningBindable : public Bindable
+{
+public:
+	virtual std::unique_ptr<CloningBindable> Clone() const noexcept = 0;
+};

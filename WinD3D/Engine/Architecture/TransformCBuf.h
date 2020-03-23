@@ -3,7 +3,7 @@
 #include <Engine/Architecture/Drawable.h>
 #include <DirectXMath.h>
 
-class TransformCbuf : public Bindable
+class TransformCbuf : public CloningBindable
 {
 protected:
 	struct Transforms
@@ -13,9 +13,9 @@ protected:
 	};
 public:
 	TransformCbuf(Graphics& gfx, UINT slot = 0u);
-public:
 	void Bind(Graphics& gfx) noexcept override;
-	void InitializeParentReference(const Drawable& parent)noexcept override;
+	void InitializeParentReference(const Drawable& parent) noexcept override;
+	std::unique_ptr<CloningBindable> Clone() const noexcept override;
 protected:
 	void UpdateBindImpl(Graphics& gfx, const Transforms& tf) noexcept;
 	Transforms GetTransforms(Graphics& gfx) noexcept;

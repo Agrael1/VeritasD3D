@@ -162,4 +162,15 @@ namespace DV
 	{
 		return Bridge<DescGenerate>(type, GetOffset());
 	}
+	bool VertexLayout::Has(ElementType type) const noexcept
+	{
+		for (auto& e : elements)
+		{
+			if (e.GetType() == type)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }

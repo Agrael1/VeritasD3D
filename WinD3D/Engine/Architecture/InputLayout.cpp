@@ -2,7 +2,8 @@
 #include "GraphicsThrows.m"
 #include <Engine/Architecture/Codex.h>
 
-InputLayout::InputLayout(Graphics & gfx, DV::VertexLayout layout, ID3DBlob * pVertexShaderBytecode)
+InputLayout::InputLayout(Graphics & gfx, DV::VertexLayout layout_in, ID3DBlob * pVertexShaderBytecode)
+	:layout(std::move(layout_in))
 {
 	INFOMAN(gfx);
 

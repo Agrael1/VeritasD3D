@@ -1,6 +1,19 @@
 #include "BindableCommons.h"
 #include "Drawable.h"
 #include "GraphicsThrows.m"
+#include "Material.h"
+
+Drawable::Drawable(Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale) noexcept
+{
+	pVertices = mat.MakeVertexBindable(gfx, mesh, scale);
+	pIndices = mat.MakeIndexBindable(gfx, mesh);
+	pTopology = Topology::Resolve(gfx);
+
+	for (auto& t : mat.GetTechniques())
+	{
+		AddTechnique(std::move(t));
+	}
+}
 
 void Drawable::AddTechnique(Technique tech_in) noexcept
 {

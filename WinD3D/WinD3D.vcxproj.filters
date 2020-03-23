@@ -300,6 +300,18 @@
     <ClCompile Include="Engine\Architecture\VertexLayout.cpp">
       <Filter>Файлы исходного кода\Engine\Architecture</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Architecture\Material.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\Mesh.cpp">
+      <Filter>Файлы исходного кода\Engine\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\ModelException.cpp">
+      <Filter>Файлы исходного кода\Engine\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\Node.cpp">
+      <Filter>Файлы исходного кода\Engine\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -587,6 +599,18 @@
     <ClInclude Include="Engine\Architecture\Material.h">
       <Filter>Заголовочные файлы\Engine\Architecture</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Entities\Mesh.h">
+      <Filter>Заголовочные файлы\Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\ModelException.h">
+      <Filter>Заголовочные файлы\Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\Node.h">
+      <Filter>Заголовочные файлы\Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\ModelProbe.h">
+      <Filter>Заголовочные файлы\Engine\Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc">
@@ -650,37 +674,46 @@
     <FxCompile Include="Engine\Shaders\TexturePS.hlsl">
       <Filter>Shaders\Old</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shaders\PhongNormalPS.hlsl">
+    <FxCompile Include="Engine\Shaders\Solid_PS.hlsl">
       <Filter>Shaders\PixelShades</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shaders\PhongNoTexPS.hlsl">
-      <Filter>Shaders\PixelShades</Filter>
-    </FxCompile>
-    <FxCompile Include="Engine\Shaders\PhongPS.hlsl">
-      <Filter>Shaders\PixelShades</Filter>
-    </FxCompile>
-    <FxCompile Include="Engine\Shaders\PhongPSSpecular.hlsl">
-      <Filter>Shaders\PixelShades</Filter>
-    </FxCompile>
-    <FxCompile Include="Engine\Shaders\SolidPS.hlsl">
-      <Filter>Shaders\PixelShades</Filter>
-    </FxCompile>
-    <FxCompile Include="Engine\Shaders\PhongNormalVS.hlsl">
+    <FxCompile Include="Engine\Shaders\Solid_VS.hlsl">
       <Filter>Shaders\VertexShaders</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shaders\PhongNoTexVS.hlsl">
+    <FxCompile Include="Engine\Shaders\Phong_VS.hlsl">
       <Filter>Shaders\VertexShaders</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shaders\PhongVS.hlsl">
-      <Filter>Shaders\VertexShaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Engine\Shaders\SolidVS.hlsl">
-      <Filter>Shaders\VertexShaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Engine\Shaders\PhongTranslucentPS.hlsl">
+    <FxCompile Include="Engine\Shaders\Phong_PS.hlsl">
       <Filter>Shaders\PixelShades</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shaders\PhongNormalSpecularPS.hlsl">
+    <FxCompile Include="Engine\Shaders\PhongDif_VS.hlsl">
+      <Filter>Shaders\VertexShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\PhongDif_PS.hlsl">
+      <Filter>Shaders\PixelShades</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\PhongDifSpc_VS.hlsl">
+      <Filter>Shaders\VertexShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\PhongDifSpc_PS.hlsl">
+      <Filter>Shaders\PixelShades</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\PhongDifSpcNrm_VS.hlsl">
+      <Filter>Shaders\VertexShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\PhongDifNrm_VS.hlsl">
+      <Filter>Shaders\VertexShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\PhongDifNrm_PS.hlsl">
+      <Filter>Shaders\PixelShades</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\PhongDifSpcNrm_PS.hlsl">
+      <Filter>Shaders\PixelShades</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\PhongDifMskSpcNrm_VS.hlsl">
+      <Filter>Shaders\VertexShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\PhongDifMskSpcNrm_PS.hlsl">
       <Filter>Shaders\PixelShades</Filter>
     </FxCompile>
   </ItemGroup>

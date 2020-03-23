@@ -75,3 +75,9 @@ bool Texture::UsesAlpha() const noexcept
 {
 	return hasAlpha;
 }
+UINT Texture::CalculateNumberOfMipLevels(UINT width, UINT height) noexcept
+{
+	const float xSteps = std::ceil(log2((float)width));
+	const float ySteps = std::ceil(log2((float)height));
+	return (UINT)std::max(xSteps, ySteps);
+}

@@ -9,6 +9,7 @@ class Drawable
 {
 public:
 	Drawable() = default;
+	Drawable(Graphics& gfx, const class Material& mat, const struct aiMesh& mesh, float scale = 1.0f) noexcept;
 	Drawable(const Drawable&) = delete;
 public:
 	virtual DirectX::XMMATRIX GetTransformXM() const noexcept = 0;
