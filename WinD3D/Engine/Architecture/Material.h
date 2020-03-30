@@ -1,12 +1,14 @@
 #pragma once
 #include <Engine/Graphics.h>
-#include "BindableCommons.h"
 #include <vector>
 #include <filesystem>
+#include "VertexLayout.h"
 #include "Technique.h"
 
 struct aiMaterial;
 struct aiMesh;
+class VertexBuffer;
+class IndexBuffer;
 
 class Material
 {

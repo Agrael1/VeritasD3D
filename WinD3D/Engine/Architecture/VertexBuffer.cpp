@@ -8,7 +8,8 @@ VertexBuffer::VertexBuffer(Graphics& gfx, const DV::VertexBuffer& vbuf)
 VertexBuffer::VertexBuffer(Graphics& gfx, const std::string& tag, const DV::VertexBuffer& vbuf)
 	:
 	stride((UINT)vbuf.GetLayout().Size()),
-	tag(tag)
+	tag(tag),
+	layout(vbuf.GetLayout())
 {
 	INFOMAN(gfx);
 
@@ -24,10 +25,16 @@ VertexBuffer::VertexBuffer(Graphics& gfx, const std::string& tag, const DV::Vert
 	GFX_THROW_INFO(GetDevice(gfx)->CreateBuffer(&bd, &sd, &pVertexBuffer));
 }
 
-void VertexBuffer::Bind(Graphics& gfx) noexcept
+
+const DV::VertexLayout& VertexBuffer::GetLayout() const noexcept
+{
+	return layout;
+}
+void VertexBuffer::Bind(Graphics& gfx) noxnd
 {
 	const UINT offset = 0u;
-	GetContext(gfx)->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
+	INFOMAN_NOHR(gfx);
+	GFX_THROW_INFO_ONLY(GetContext(gfx)->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset));
 }
 std::shared_ptr<VertexBuffer> VertexBuffer::Resolve(Graphics& gfx, const std::string& tag,
 	const DV::VertexBuffer& vbuf)

@@ -5,7 +5,7 @@
 #include "Camera.h"
 #include "PointLight.h"
 #include "SkinnedBox.h"
-#include <Engine/Architecture/FrameCommander.h>
+#include <Engine\Architecture\BlurOutlineRenderGraph.h>
 
 class App
 {
@@ -21,12 +21,12 @@ private:
 	ImGUIManager imgui;
 	Window wnd;
 	Camera cam;
-	FrameCommander fc;
 
+	RG::BlurOutlineRenderGraph rg{ wnd.Gfx() };
 	PointLight light;
-	//TestCube cube{ wnd.Gfx(),4.0f };
-	//TestCube cube2{ wnd.Gfx(),4.0f };
-	Model sponza{ wnd.Gfx(), "Models\\brick_wall\\brick_wall.obj", 1.0f/*/20.0f*/ };
+	TestCube cube{ wnd.Gfx(),4.0f };
+	TestCube cube2{ wnd.Gfx(),4.0f };
+	Model sponza{ wnd.Gfx(), "Models\\Sponza\\sponza.obj", 1.0f/20.0f };
 
 	float speed = 1.0f;
 };

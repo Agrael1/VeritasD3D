@@ -142,19 +142,31 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Engine\Architecture\Bindable.cpp" />
+    <ClCompile Include="Engine\Architecture\BindingPass.cpp" />
     <ClCompile Include="Engine\Architecture\BlendState.cpp" />
+    <ClCompile Include="Engine\Architecture\BlurOutlineRenderGraph.cpp" />
+    <ClCompile Include="Engine\Architecture\BufferClearPass.cpp" />
+    <ClCompile Include="Engine\Architecture\DepthStencil.cpp" />
     <ClCompile Include="Engine\Architecture\Drawable.cpp" />
     <ClCompile Include="Engine\Architecture\DynamicConstant.cpp" />
+    <ClCompile Include="Engine\Architecture\FullscreenPass.cpp" />
+    <ClCompile Include="Engine\Architecture\GraphicsResource.cpp" />
+    <ClCompile Include="Engine\Architecture\HorizontalBlurPass.cpp" />
     <ClCompile Include="Engine\Architecture\IndexBuffer.cpp" />
     <ClCompile Include="Engine\Architecture\InputLayout.cpp" />
     <ClCompile Include="Engine\Architecture\Job.cpp" />
     <ClCompile Include="Engine\Architecture\LayoutCodex.cpp" />
     <ClCompile Include="Engine\Architecture\Material.cpp" />
     <ClCompile Include="Engine\Architecture\NullPixelShader.cpp" />
+    <ClCompile Include="Engine\Architecture\Pass.cpp" />
     <ClCompile Include="Engine\Architecture\PixelShader.cpp" />
     <ClCompile Include="Engine\Architecture\RasterizerState.cpp" />
+    <ClCompile Include="Engine\Architecture\RenderGraph.cpp" />
+    <ClCompile Include="Engine\Architecture\RenderQueuePass.cpp" />
+    <ClCompile Include="Engine\Architecture\RenderTarget.cpp" />
     <ClCompile Include="Engine\Architecture\Sampler.cpp" />
+    <ClCompile Include="Engine\Architecture\Sink.cpp" />
+    <ClCompile Include="Engine\Architecture\Source.cpp" />
     <ClCompile Include="Engine\Architecture\Stencil.cpp" />
     <ClCompile Include="Engine\Architecture\Step.cpp" />
     <ClCompile Include="Engine\Architecture\Technique.cpp" />
@@ -165,6 +177,7 @@
     <ClCompile Include="Engine\Architecture\VertexBuffer.cpp" />
     <ClCompile Include="Engine\Architecture\VertexLayout.cpp" />
     <ClCompile Include="Engine\Architecture\VertexShader.cpp" />
+    <ClCompile Include="Engine\Architecture\VerticalBlurPass.cpp" />
     <ClCompile Include="Engine\Entities\GDIPlusManager.cpp" />
     <ClCompile Include="Engine\Entities\ImGUIManager.cpp" />
     <ClCompile Include="Engine\Entities\Mesh.cpp" />
@@ -184,6 +197,8 @@
     <ClCompile Include="Framework\dxerr.cpp" />
     <ClCompile Include="Framework\DXGIInfoManager.cpp" />
     <ClCompile Include="Framework\Exception.cpp" />
+    <ClCompile Include="Framework\GraphicsExceptions.cpp" />
+    <ClCompile Include="Framework\RenderGraphException.cpp" />
     <ClCompile Include="Icosahedron.cpp" />
     <ClCompile Include="ImGUI\imgui.cpp" />
     <ClCompile Include="ImGUI\imgui_demo.cpp" />
@@ -215,23 +230,41 @@
     <ClInclude Include="dxtex\filters.h" />
     <ClInclude Include="dxtex\scoped.h" />
     <ClInclude Include="Engine\Architecture\Bindable.h" />
+    <ClInclude Include="Engine\Architecture\BindingPass.h" />
     <ClInclude Include="Engine\Architecture\BlendState.h" />
+    <ClInclude Include="Engine\Architecture\BlurOutlineDrawingPass.h" />
+    <ClInclude Include="Engine\Architecture\BlurOutlineRenderGraph.h" />
+    <ClInclude Include="Engine\Architecture\BufferClearPass.h" />
+    <ClInclude Include="Engine\Architecture\BufferResource.h" />
     <ClInclude Include="Engine\Architecture\Codex.h" />
     <ClInclude Include="Engine\Architecture\ConstantBuffer.h" />
     <ClInclude Include="Engine\Architecture\ConstantBuffersEX.h" />
+    <ClInclude Include="Engine\Architecture\DepthStencil.h" />
     <ClInclude Include="Engine\Architecture\Drawable.h" />
     <ClInclude Include="Engine\Architecture\DynamicConstant.h" />
     <ClInclude Include="Engine\Architecture\FrameCommander.h" />
+    <ClInclude Include="Engine\Architecture\FullscreenPass.h" />
+    <ClInclude Include="Engine\Architecture\GraphicsResource.h" />
+    <ClInclude Include="Engine\Architecture\HorizontalBlurPass.h" />
     <ClInclude Include="Engine\Architecture\IndexBuffer.h" />
     <ClInclude Include="Engine\Architecture\InputLayout.h" />
     <ClInclude Include="Engine\Architecture\Job.h" />
+    <ClInclude Include="Engine\Architecture\LambertianPass.h" />
     <ClInclude Include="Engine\Architecture\LayoutCodex.h" />
     <ClInclude Include="Engine\Architecture\Material.h" />
     <ClInclude Include="Engine\Architecture\NullPixelShader.h" />
+    <ClInclude Include="Engine\Architecture\OutlineMaskGenerationPass.h" />
     <ClInclude Include="Engine\Architecture\Pass.h" />
     <ClInclude Include="Engine\Architecture\PixelShader.h" />
     <ClInclude Include="Engine\Architecture\RasterizerState.h" />
+    <ClInclude Include="Engine\Architecture\RenderGraph.h" />
+    <ClInclude Include="Engine\Architecture\RenderQueuePass.h" />
+    <ClInclude Include="Engine\Architecture\RenderTarget.h" />
     <ClInclude Include="Engine\Architecture\Sampler.h" />
+    <ClInclude Include="Engine\Architecture\Sink.h" />
+    <ClInclude Include="Engine\Architecture\SinksT.h" />
+    <ClInclude Include="Engine\Architecture\Source.h" />
+    <ClInclude Include="Engine\Architecture\SourcesT.h" />
     <ClInclude Include="Engine\Architecture\Stencil.h" />
     <ClInclude Include="Engine\Architecture\Step.h" />
     <ClInclude Include="Engine\Architecture\Technique.h" />
@@ -243,6 +276,7 @@
     <ClInclude Include="Engine\Architecture\VertexBuffer.h" />
     <ClInclude Include="Engine\Architecture\VertexLayout.h" />
     <ClInclude Include="Engine\Architecture\VertexShader.h" />
+    <ClInclude Include="Engine\Architecture\VerticalBlurPass.h" />
     <ClInclude Include="Engine\Entities\GDIPlusManager.h" />
     <ClInclude Include="Engine\Entities\ImGUIManager.h" />
     <ClInclude Include="Engine\Entities\Mesh.h" />
@@ -252,6 +286,7 @@
     <ClInclude Include="Engine\Entities\Node.h" />
     <ClInclude Include="Engine\Entities\ReSurface.h" />
     <ClInclude Include="Engine\Entities\Surface.h" />
+    <ClInclude Include="Engine\Entities\TestModelProbe.h" />
     <ClInclude Include="Engine\Entities\VFileDialog.h" />
     <ClInclude Include="Engine\Graphics.h" />
     <ClInclude Include="Engine\Keyboard.h" />
@@ -273,7 +308,10 @@
     <ClInclude Include="Framework\DXGIInfoManager.h" />
     <ClInclude Include="Framework\Exception.h" />
     <ClInclude Include="Framework\GdiSetup.h" />
+    <ClInclude Include="Framework\GraphicsExceptions.h" />
+    <ClInclude Include="Framework\MathHelper.h" />
     <ClInclude Include="Framework\noexcept_if.h" />
+    <ClInclude Include="Framework\RenderGraphException.h" />
     <ClInclude Include="Framework\Utility.h" />
     <ClInclude Include="Framework\WinSetup.h" />
     <ClInclude Include="Icosahedron.h" />
@@ -320,6 +358,16 @@
     <None Include="GraphicsThrows.m" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Engine\Shaders\BlurOutline_PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\Blur_PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="Engine\Shaders\ColorBlendPS.hlsl">
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
@@ -341,6 +389,10 @@
     <FxCompile Include="Engine\Shaders\ColorIndexVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\Fullscreen_VS.hlsl">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Engine\Shaders\PhongDifMskSpcNrm_VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

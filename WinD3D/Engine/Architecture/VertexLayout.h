@@ -190,7 +190,7 @@ namespace DV
 		}
 
 
-		bool VertexLayout::Has(ElementType type) const noexcept;		
+		bool Has(ElementType type) const noexcept;		
 		VertexLayout& operator +(ElementType Type)noxnd
 		{
 			if (!Has(Type))
@@ -327,7 +327,7 @@ namespace DV
 	class VertexBuffer
 	{
 	public:
-		VertexBuffer::VertexBuffer(VertexLayout layout, size_t size = 0) noxnd;
+		VertexBuffer(VertexLayout layout, size_t size = 0) noxnd;
 		VertexBuffer(VertexLayout layout, const aiMesh& mesh);
 	public:
 		const VertexLayout& GetLayout() const noexcept;

@@ -1,17 +1,24 @@
 #pragma once
 #include <Engine/Architecture/Bindable.h>
-#include <memory> 
 
 class Sampler : public Bindable
 {
 public:
-	Sampler(Graphics& gfx);
+	enum class Type
+	{
+		Anisotropic,
+		Bilinear,
+		Point,
+	};
 public:
-	void Bind(Graphics& gfx)noexcept override;
+	Sampler(Graphics& gfx, Type type, bool reflect);
+public:
+	void Bind(Graphics& gfx) noxnd override;
+	static std::shared_ptr<Sampler> Resolve(Graphics& gfx, Type type = Type::Anisotropic, bool reflect = false);
+	static std::string GenerateUID(Type type, bool reflect);
 	std::string GetUID() const noexcept override;
-public:
-	static std::shared_ptr<Sampler> Resolve(Graphics& gfx);
-	static std::string GenerateUID();
 protected:
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> pSampler;
+	Type type;
+	bool reflect;
 };

@@ -1,19 +1,18 @@
 #pragma once
 #include <Engine/Graphics.h>
 #include <Framework/noexcept_if.h>
-#include <memory>
 
 class Model;
 class Mesh;
-class FrameCommander;
+class TechniqueProbe;
+class ModelProbe;
 
 class Node
 {
 	friend Model;
 public:
-	Node(int id, std::string_view name, std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform) noxnd;
-public:
-	void Submit(FrameCommander& frame, DirectX::FXMMATRIX accumulatedTransform) const noxnd;
+	Node(int id, std::string_view, std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform) noxnd;
+	void Submit(DirectX::FXMMATRIX accumulatedTransform) const noxnd;
 	void SetAppliedTransform(DirectX::FXMMATRIX transform) noexcept;
 	const DirectX::XMFLOAT4X4& GetAppliedTransform() const noexcept;
 	int GetId() const noexcept;
@@ -21,8 +20,8 @@ public:
 	{
 		return childPtrs.size() > 0;
 	}
-	void Accept(class ModelProbe& probe);
-	void Accept(class TechniqueProbe& probe);
+	void Accept(ModelProbe& probe);
+	void Accept(TechniqueProbe& probe);
 	const std::string& GetName() const
 	{
 		return name;

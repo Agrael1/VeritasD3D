@@ -12,8 +12,8 @@ namespace dx = DirectX;
 DirectX::XMMATRIX ScaleTranslation(DirectX::XMMATRIX matrix, float scale)
 {
 	dx::XMVECTOR s = _mm_load1_ps(&scale);
-	s = _mm_add_ps(_mm_and_ps(s, dx::g_XMMask3),dx::g_XMIdentityR3);
-	matrix.r[3] = _mm_mul_ps(matrix.r[3], s);
+	s = _mm_and_ps(s, dx::g_XMMask3);
+	matrix.r[3] = _mm_add_ps(_mm_mul_ps(matrix.r[3], s), dx::g_XMIdentityR3);
 	return matrix;
 }
 
@@ -51,13 +51,9 @@ Model::Model(Graphics& gfx, std::string_view pathString, const float scale)
 	pRoot = ParseNode(nextId, *pScene->mRootNode, scale);
 }
 
-void Model::Submit(FrameCommander& frame) const noxnd
+void Model::Submit() const noxnd
 {
-	// I'm still not happy about updating parameters (i.e. mutating a bindable GPU state
-	// which is part of a mesh which is part of a node which is part of the model that is
-	// const in this call) Can probably do this elsewhere
-	//pWindow->ApplyParameters();
-	pRoot->Submit(frame, dx::XMMatrixIdentity());
+	pRoot->Submit(DirectX::XMMatrixIdentity());
 }
 
 void Model::SetRootTransform(DirectX::FXMMATRIX tf) noexcept
@@ -69,6 +65,17 @@ void Model::Accept(ModelProbe& probe)
 {
 	pRoot->Accept(probe);
 }
+
+void Model::LinkTechniques(RG::RenderGraph& rg)
+{
+	for (auto& pMesh : meshPtrs)
+	{
+		pMesh->LinkTechniques(rg);
+	}
+}
+
+Model::~Model() noexcept
+{}
 
 std::unique_ptr<Node> Model::ParseNode(int& nextId, const aiNode& node, float scale) noexcept
 {

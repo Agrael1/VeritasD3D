@@ -9,24 +9,16 @@ RasterizerState::RasterizerState(Graphics& gfx, bool twoSided)
 {
 	INFOMAN(gfx);
 
-	D3D11_RASTERIZER_DESC rasterDesc = {};
-	rasterDesc.FillMode = D3D11_FILL_SOLID;
+	D3D11_RASTERIZER_DESC rasterDesc = CD3D11_RASTERIZER_DESC(CD3D11_DEFAULT{});
 	rasterDesc.CullMode = twoSided ? D3D11_CULL_NONE : D3D11_CULL_BACK;
-	rasterDesc.FrontCounterClockwise = FALSE;
-	rasterDesc.DepthBias = D3D11_DEFAULT_DEPTH_BIAS;
-	rasterDesc.DepthBiasClamp = D3D11_DEFAULT_DEPTH_BIAS_CLAMP;
-	rasterDesc.SlopeScaledDepthBias = D3D11_DEFAULT_SLOPE_SCALED_DEPTH_BIAS;
-	rasterDesc.DepthClipEnable = TRUE;
-	rasterDesc.ScissorEnable = FALSE;
-	rasterDesc.MultisampleEnable = FALSE;
-	rasterDesc.AntialiasedLineEnable = FALSE;
 
 	GFX_THROW_INFO(GetDevice(gfx)->CreateRasterizerState(&rasterDesc, &pRasterizer));
 }
 
-void RasterizerState::Bind(Graphics& gfx) noexcept
+void RasterizerState::Bind(Graphics& gfx) noxnd
 {
-	GetContext(gfx)->RSSetState(pRasterizer.Get());
+	INFOMAN_NOHR(gfx);
+	GFX_THROW_INFO_ONLY(GetContext(gfx)->RSSetState(pRasterizer.Get()));
 }
 
 std::shared_ptr<RasterizerState> RasterizerState::Resolve(Graphics& gfx, bool twoSided)

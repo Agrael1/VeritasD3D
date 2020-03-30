@@ -2,27 +2,30 @@
 #include <Engine/Graphics.h>
 #include <string>
 #include <memory>
-#include "Node.h"
-#include "Mesh.h"
 #include <filesystem>
 #include <Framework/noexcept_if.h>
 
 class Node;
 class Mesh;
-class FrameCommander;
 class ModelWindow;
 struct aiMesh;
 struct aiMaterial;
 struct aiNode;
 
+namespace RG
+{
+	class RenderGraph;
+}
+
 class Model
 {
 public:
 	Model(Graphics& gfx, std::string_view pathString, float scale = 1.0f);
-public:
-	void Submit(FrameCommander& frame) const noxnd;
+	void Submit() const noxnd;
 	void SetRootTransform(DirectX::FXMMATRIX tf) noexcept;
 	void Accept(class ModelProbe& probe);
+	void LinkTechniques(RG::RenderGraph&);
+	~Model() noexcept;
 private:
 	static std::unique_ptr<Mesh> ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials, const std::filesystem::path& path, float scale);
 	std::unique_ptr<Node> ParseNode(int& nextId, const aiNode& node, float scale) noexcept;

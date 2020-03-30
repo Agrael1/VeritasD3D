@@ -10,7 +10,8 @@ public:
 	VertexBuffer(Graphics& gfx, const std::string& tag, const DV::VertexBuffer& vbuf);
 	VertexBuffer(Graphics& gfx, const DV::VertexBuffer& vbuf);
 public:
-	void Bind(Graphics& gfx) noexcept override;
+	const DV::VertexLayout& GetLayout() const noexcept;
+	void Bind(Graphics& gfx) noxnd override;
 	static std::shared_ptr<VertexBuffer> Resolve(Graphics& gfx, const std::string& tag,
 		const DV::VertexBuffer& vbuf);
 	template<typename...Ignore>
@@ -25,4 +26,5 @@ protected:
 	std::string tag;
 	UINT stride;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
+	DV::VertexLayout layout;
 };

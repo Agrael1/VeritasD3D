@@ -133,6 +133,18 @@
     <Filter Include="Файлы исходного кода\Engine\Architecture\Multipass">
       <UniqueIdentifier>{44c0e871-8de0-4e93-8ed2-9f2ea2b81ff5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Заголовочные файлы\Engine\Architecture\Multipass\Passes">
+      <UniqueIdentifier>{6378b3f8-cce6-4cab-b2ad-e25b721cbf0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Engine\Architecture\Multipass\Passes">
+      <UniqueIdentifier>{51dfa0b5-a92e-4f8f-8cbc-f30d0c54294b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\Engine\Architecture\Multipass\Graphs">
+      <UniqueIdentifier>{47b36fa9-7477-44dd-b91d-3b57853bdad0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Engine\Architecture\Multipass\Graphs">
+      <UniqueIdentifier>{16d11086-9306-494c-b9b4-de4f9ed9fba8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">
@@ -212,9 +224,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Architecture\Drawable.cpp">
       <Filter>Файлы исходного кода\Engine\Architecture</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\Bindable.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Architecture\TransformCBuf.cpp">
       <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
@@ -311,6 +320,54 @@
     </ClCompile>
     <ClCompile Include="Engine\Entities\Node.cpp">
       <Filter>Файлы исходного кода\Engine\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\GraphicsResource.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\DepthStencil.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\RenderTarget.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Pass.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Multipass</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Sink.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Multipass</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\RenderGraphException.cpp">
+      <Filter>Файлы исходного кода\Framework\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Source.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Multipass</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\GraphicsExceptions.cpp">
+      <Filter>Файлы исходного кода\Framework\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\BindingPass.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Multipass\Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\RenderQueuePass.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Multipass\Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\BlurOutlineRenderGraph.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Multipass\Graphs</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\RenderGraph.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Multipass\Graphs</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\BufferClearPass.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Multipass\Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\FullscreenPass.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Multipass\Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\HorizontalBlurPass.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Multipass\Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\VerticalBlurPass.cpp">
+      <Filter>Файлы исходного кода\Engine\Architecture\Multipass\Passes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -593,9 +650,6 @@
     <ClInclude Include="Engine\Architecture\ConstantBuffersEX.h">
       <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Architecture\TechniqueProbe.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Architecture\Material.h">
       <Filter>Заголовочные файлы\Engine\Architecture</Filter>
     </ClInclude>
@@ -610,6 +664,78 @@
     </ClInclude>
     <ClInclude Include="Engine\Entities\ModelProbe.h">
       <Filter>Заголовочные файлы\Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\DepthStencil.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\GraphicsResource.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\RenderTarget.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Sink.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Source.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\RenderGraphException.h">
+      <Filter>Заголовочные файлы\Framework\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\SinksT.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\SourcesT.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\BufferResource.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\GraphicsExceptions.h">
+      <Filter>Заголовочные файлы\Framework\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\BindingPass.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\BlurOutlineRenderGraph.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Graphs</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\RenderQueuePass.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\RenderGraph.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Graphs</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\BufferClearPass.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\LambertianPass.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\OutlineMaskGenerationPass.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\BlurOutlineDrawingPass.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\HorizontalBlurPass.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\FullscreenPass.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\VerticalBlurPass.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\TestModelProbe.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\TechniqueProbe.h">
+      <Filter>Заголовочные файлы\Engine\Architecture\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\MathHelper.h">
+      <Filter>Заголовочные файлы\Framework</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -714,6 +840,15 @@
       <Filter>Shaders\VertexShaders</Filter>
     </FxCompile>
     <FxCompile Include="Engine\Shaders\PhongDifMskSpcNrm_PS.hlsl">
+      <Filter>Shaders\PixelShades</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\Blur_PS.hlsl">
+      <Filter>Shaders\PixelShades</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\BlurOutline_PS.hlsl">
+      <Filter>Shaders\PixelShades</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\Fullscreen_VS.hlsl">
       <Filter>Shaders\PixelShades</Filter>
     </FxCompile>
   </ItemGroup>

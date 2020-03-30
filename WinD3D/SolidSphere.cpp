@@ -15,13 +15,13 @@ SolidSphere::SolidSphere(Graphics& gfx, float radius, DirectX::XMFLOAT3 color)
 
 	{
 		Technique solid;
-		Step only(0);
+		Step only("lambertian");
 
-		auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
+		auto pvs = VertexShader::Resolve(gfx, "Solid_VS.cso");
 		auto pvsbc = pvs->GetBytecode();
 		only.AddBindable(std::move(pvs));
 
-		only.AddBindable(PixelShader::Resolve(gfx, "SolidPS.cso"));
+		only.AddBindable(PixelShader::Resolve(gfx, "Solid_PS.cso"));
 
 		only.AddBindable(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst, 1u));
 		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));

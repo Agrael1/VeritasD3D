@@ -1,13 +1,14 @@
 #pragma once
-#include <Engine/Graphics.h>
+#include <Engine\Architecture\GraphicsResource.h>
+#include <Framework\noexcept_if.h>
 #include <memory>
 
-class Bindable
+class Bindable : public GraphicsResource
 {
 public:
 	virtual ~Bindable() = default;
 public:
-	virtual void Bind(Graphics& gfx)noexcept = 0;
+	virtual void Bind(Graphics& gfx)noxnd = 0;
 	virtual void InitializeParentReference(const class Drawable&)noexcept
 	{
 
@@ -21,10 +22,6 @@ public:
 		assert(false);
 		return "";
 	}
-protected:
-	static ID3D11DeviceContext* GetContext(Graphics& gfx)noexcept;
-	static ID3D11Device* GetDevice(Graphics& gfx)noexcept;
-	static DXGIInfoManager& GetInfoManager(Graphics& gfx)noexcept(IS_DEBUG);
 };
 
 class CloningBindable : public Bindable
