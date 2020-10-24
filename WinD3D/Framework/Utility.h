@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <iterator>
 
 #pragma warning(disable:6255) //alloca annoying warning
 
