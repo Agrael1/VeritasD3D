@@ -33,7 +33,7 @@ DirectX::XMFLOAT3 ExtractTranslation(const DirectX::XMFLOAT4X4& matrix)
 	return { matrix._41,matrix._42,matrix._43 };
 }
 
-class SelectingTP : public TechniqueProbe
+class WanderingTP : public TechniqueProbe
 {
 public:
 	void OnSetTechnique() override
@@ -41,8 +41,6 @@ public:
 		using namespace std::string_literals;
 		ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, pTech->GetName().c_str());
 		bool active = pTech->IsActive();
-		if (pTech->GetName() == "Outline")
-			active = true;
 		ImGui::Checkbox(("Tech Active##"s + std::to_string(techIdx)).c_str(), &active);
 		pTech->SetActiveState(active);
 	}
@@ -97,6 +95,14 @@ public:
 		return dirty;
 	}
 };
+class SelectingTP : public TechniqueProbe
+{
+	void OnSetTechnique() override
+	{
+		if (pTech->GetName() == "Outline")
+			pTech->SetActiveState(true);
+	}
+};
 class DeselectingTP : public TechniqueProbe
 {
 	void OnSetTechnique() override
@@ -146,7 +152,7 @@ public:
 				);
 			}
 
-			static SelectingTP probe;
+			WanderingTP probe;
 			pSelectedNode->Accept(probe);
 		}
 		ImGui::End();
@@ -171,11 +177,13 @@ protected:
 		{
 			if (pSelectedNode)
 			{
-				static DeselectingTP probe;
+				DeselectingTP probe;
 				pSelectedNode->Accept(probe);
 			}
 
 			pSelectedNode = &node;
+			SelectingTP probe;
+			pSelectedNode->Accept(probe);
 		}
 		// signal if children should also be recursed
 		return expanded;
