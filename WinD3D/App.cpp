@@ -1,20 +1,22 @@
 #include "App.h"
 #include "ImGUI/imgui.h"
 #include "Engine/Entities/TestModelProbe.h"
+#include <chrono>
 
 namespace dx = DirectX;
 
-App::App() : wnd(1280,720,"VTest"), light(wnd.Gfx())
+App::App(uint32_t width, uint32_t height) 
+	: wnd(width, height,"VTest"), light(wnd.Gfx())
 {
-	cube.SetPos({ 4.0f,0.0f,0.0f });
-	cube2.SetPos({ 0.0f,4.0f,0.0f });
-
-	cube.LinkTechniques(rg);
-	cube2.LinkTechniques(rg);
+	model = std::make_unique<Model>(wnd.Gfx(), "Models\\Sponza\\sponza.obj", 1.0f / 20.0f);
+	//cube.SetPos({ 4.0f,0.0f,0.0f });
+	//cube2.SetPos({ 0.0f,4.0f,0.0f });
+	//cube.LinkTechniques(rg);
+	//cube2.LinkTechniques(rg);
 	light.LinkTechniques(rg);
-	sponza.LinkTechniques(rg);
+	model->LinkTechniques(rg);
 
-	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(720.0f / 1280.0f), 0.5f, 100.0f));
+	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 100.0f));
 }
 App::~App()
 {
@@ -22,10 +24,9 @@ App::~App()
 
 int App::Go()
 {
-	float dt = 0.005f;
+	float dt = 0.01;
 	while (true)
 	{
-		//dt += 0.05f;
 		const auto a = Window::ProcessMessages();
 		if (a)
 		{
@@ -43,14 +44,15 @@ void App::DoFrame(float dt)
 	light.Bind(wnd.Gfx(), cam.GetViewMatrix());
 	
 
-	sponza.Submit();
+	model->Submit();
 	light.Submit();
-	cube.Submit();
-	cube2.Submit();
+	//cube.Submit();
+	//cube2.Submit();
 	rg.Execute(wnd.Gfx());
 
 
-	if (ImGui::Begin("Simulation speed"))
+	if (ImGui::Begin("Simulation speed",nullptr, 
+		ImGuiWindowFlags_::ImGuiWindowFlags_NoInputs))
 	{
 		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	}
@@ -60,13 +62,13 @@ void App::DoFrame(float dt)
 	static MP modelProbe;
 
 	// imgui windows
-	modelProbe.SpawnWindow(sponza);
+	modelProbe.SpawnWindow(*model);
 
 	ProcessInput(dt);
 	cam.SpawnControlWindow();
 	light.SpawnControlWindow();
-	cube.SpawnControlWindow(wnd.Gfx(), "Cube 1");
-	cube2.SpawnControlWindow(wnd.Gfx(), "Cube 2");
+	//cube.SpawnControlWindow(wnd.Gfx(), "Cube 1");
+	//cube2.SpawnControlWindow(wnd.Gfx(), "Cube 2");
 
 	// Present
 	wnd.Gfx().EndFrame();

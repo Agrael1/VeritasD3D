@@ -1,9 +1,8 @@
 #include "SolidSphere.h"
-#include "BindableCommons.h"
 #include "Sphere.h"
 
-SolidSphere::SolidSphere(Graphics& gfx, float radius, DirectX::XMFLOAT3 color)
-	:colorConst{color}
+SolidSphere::SolidSphere(Graphics& gfx, float radius)
+	:colorBuffer(std::make_shared<PixelConstantBuffer<PSColorConstant>>(gfx, colorConst, 1u))
 {
 	namespace dx = DirectX;
 	const auto geometryTag = "$ssphere." + std::to_string(radius);
@@ -23,7 +22,8 @@ SolidSphere::SolidSphere(Graphics& gfx, float radius, DirectX::XMFLOAT3 color)
 
 		only.AddBindable(PixelShader::Resolve(gfx, "Solid_PS.cso"));
 
-		only.AddBindable(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst, 1u));
+
+		only.AddBindable(colorBuffer);
 		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
 		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
@@ -35,6 +35,14 @@ SolidSphere::SolidSphere(Graphics& gfx, float radius, DirectX::XMFLOAT3 color)
 void SolidSphere::SetPos(DirectX::XMFLOAT3 pos) noexcept
 {
 	this->pos = pos;
+}
+void SolidSphere::SetColor(DirectX::XMFLOAT3 color) noexcept
+{
+	colorConst.color = color;
+}
+void SolidSphere::UpdateColor(Graphics& gfx) noexcept
+{
+	colorBuffer->Update(gfx, colorConst);
 }
 DirectX::XMMATRIX SolidSphere::GetTransformXM() const noexcept
 {

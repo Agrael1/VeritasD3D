@@ -10,7 +10,7 @@
 class App
 {
 public:
-	App();
+	App(uint32_t width, uint32_t height);
 	~App();
 public:
 	int Go();
@@ -24,9 +24,9 @@ private:
 
 	RG::BlurOutlineRenderGraph rg{ wnd.Gfx() };
 	PointLight light;
-	TestCube cube{ wnd.Gfx(),4.0f };
-	TestCube cube2{ wnd.Gfx(),4.0f };
-	Model sponza{ wnd.Gfx(), "Models\\Sponza\\sponza.obj", 1.0f/20.0f };
+	//TestCube cube{ wnd.Gfx(),4.0f };
+	//TestCube cube2{ wnd.Gfx(),4.0f };
+	std::unique_ptr<Model> model;
 
 	float speed = 1.0f;
 };

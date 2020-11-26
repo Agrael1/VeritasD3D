@@ -20,7 +20,7 @@ void PointLight::SpawnControlWindow() noexcept
 
 		ImGui::Text("Intensity/Color");
 		ImGui::SliderFloat("Intensity", &cbData.diffuseIntensity, 0.01f, 2.0f, "%.2f", 2);
-		ImGui::ColorEdit3("Diffuse Color", &cbData.diffuse.x);
+		bColorChanged = ImGui::ColorEdit3("Diffuse Color", &cbData.diffuse.x);
 		ImGui::ColorEdit3("Ambient", &cbData.ambient.x);
 
 		ImGui::Text("Falloff");
@@ -47,6 +47,7 @@ void PointLight::Reset() noexcept
 		0.045f,
 		0.0075f,
 	};
+	bColorChanged = true;
 }
 
 void PointLight::Submit() const noxnd
@@ -61,6 +62,11 @@ void PointLight::Bind(Graphics& gfx, DirectX::FXMMATRIX view) const noexcept
 	const auto pos = DirectX::XMLoadFloat3(&cbData.pos);
 	DirectX::XMStoreFloat3(&dataCopy.pos, DirectX::XMVector3Transform(pos, view));
 	cbuf.Update(gfx, dataCopy);
+	if (bColorChanged)
+	{
+		mesh.SetColor(dataCopy.diffuse);
+		mesh.UpdateColor(gfx);
+	}
 	cbuf.Bind(gfx);
 }
 

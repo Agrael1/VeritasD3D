@@ -1,17 +1,22 @@
 #pragma once
 #include <Engine/Architecture/Drawable.h>
+#include "BindableCommons.h"
 
 class SolidSphere : public Drawable
 {
 public:
-	SolidSphere(Graphics& gfx, float radius, DirectX::XMFLOAT3 color = { 1.0f,1.0f,1.0f });
+	SolidSphere(Graphics& gfx, float radius);
 public:
 	void SetPos(DirectX::XMFLOAT3 pos)noexcept;
+	void SetColor(DirectX::XMFLOAT3 color)noexcept;
+	void UpdateColor(Graphics& gfx)noexcept;
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
 private:
 	DirectX::XMFLOAT3 pos = { 1.0f,1.0f,1.0f };
 	struct PSColorConstant
 	{
-		alignas(16)DirectX::XMFLOAT3 color{ 1.0f,1.0f,0.0f };
-	}colorConst;
+		DirectX::XMFLOAT3 color = { 1.0f,1.0f,1.0f };
+		float padding;
+	} colorConst;
+	std::shared_ptr<PixelConstantBuffer<PSColorConstant>> colorBuffer;
 };

@@ -9,7 +9,7 @@ int WINAPI WinMain(
 {
 	try
 	{
-		return App{}.Go();
+		return App{1280, 720}.Go();
 	}
 	catch (const Exception& e)
 	{

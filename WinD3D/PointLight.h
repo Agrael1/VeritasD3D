@@ -24,6 +24,7 @@ private:
 		float attQuad;
 	};
 private:
+	bool bColorChanged = false;
 	PointLightCBuf cbData;
 	mutable SolidSphere mesh;
 	mutable PixelConstantBuffer<PointLightCBuf> cbuf;

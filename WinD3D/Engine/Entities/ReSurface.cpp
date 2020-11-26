@@ -38,9 +38,11 @@ ReSurface::ReSurface(std::string_view filepath)
 		std::stringstream ss;
 		ss << "Loading image [" << std::string(filepath.begin(), filepath.end()) << "]: failed to load.";
 		throw LoadException(__LINE__, __FILE__, filepath, ss.str());
-	}	
-	
-	bitmap.LockBits(&Gdiplus::Rect(0, 0, bitmap.GetWidth(), bitmap.GetHeight()), Gdiplus::ImageLockModeRead,
+	}
+
+	auto lock_rect = Gdiplus::Rect(0, 0, bitmap.GetWidth(), bitmap.GetHeight());
+
+	bitmap.LockBits(&lock_rect, Gdiplus::ImageLockModeRead,
 	PixelFormat32bppARGB, &buffer);
 
 	byte* p = (byte*)buffer.Scan0;

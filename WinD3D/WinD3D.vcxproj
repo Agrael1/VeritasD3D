@@ -94,7 +94,7 @@
       <PreprocessorDefinitions>IS_DEBUG=true;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)Assimp\Include;$(ProjectDir)Fmtlib\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Assimp/assimp-vc140-mt.lib;dxtex/bin/x64/Debug/DirectXTex.lib;%(AdditionalDependencies)</AdditionalDependencies>
