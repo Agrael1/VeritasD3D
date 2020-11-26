@@ -66,13 +66,14 @@ namespace RG
 
 	void RenderGraph::AppendPass(std::unique_ptr<Pass> pass)
 	{
+		using namespace std::string_literals;
 		assert(!finalized);
 		// validate name uniqueness
 		for (const auto& p : passes)
 		{
 			if (pass->GetName() == p->GetName())
 			{
-				throw RGC_EXCEPTION("Pass name already exists: " + pass->GetName());
+				throw RGC_EXCEPTION("Pass name already exists: "s + pass->GetName().data());
 			}
 		}
 

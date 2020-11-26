@@ -33,7 +33,7 @@ DirectX::XMFLOAT3 ExtractTranslation(const DirectX::XMFLOAT4X4& matrix)
 	return { matrix._41,matrix._42,matrix._43 };
 }
 
-class TP : public TechniqueProbe
+class SelectingTP : public TechniqueProbe
 {
 public:
 	void OnSetTechnique() override
@@ -41,6 +41,8 @@ public:
 		using namespace std::string_literals;
 		ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, pTech->GetName().c_str());
 		bool active = pTech->IsActive();
+		if (pTech->GetName() == "Outline")
+			active = true;
 		ImGui::Checkbox(("Tech Active##"s + std::to_string(techIdx)).c_str(), &active);
 		pTech->SetActiveState(active);
 	}
@@ -95,6 +97,14 @@ public:
 		return dirty;
 	}
 };
+class DeselectingTP : public TechniqueProbe
+{
+	void OnSetTechnique() override
+	{
+		if (pTech->GetName() == "Outline")
+			pTech->SetActiveState(false);
+	}
+};
 
 class MP : ModelProbe
 {
@@ -104,11 +114,16 @@ public:
 		namespace dx = DirectX;
 
 		ImGui::Begin("Model");
-		ImGui::Columns(2, nullptr, true);
 		model.Accept(*this);
+		ImGui::End();
 
-		ImGui::NextColumn();
-		if (pSelectedNode != nullptr)
+		SpawnSelected();
+	}
+	void SpawnSelected()
+	{
+		namespace dx = DirectX;
+		if(ImGui::Begin("Selected"))
+		if (pSelectedNode)
 		{
 			bool dirty = false;
 			const auto dcheck = [&dirty](bool changed) {dirty = dirty || changed; };
@@ -131,10 +146,11 @@ public:
 				);
 			}
 
-			TP probe;
+			static SelectingTP probe;
 			pSelectedNode->Accept(probe);
 		}
 		ImGui::End();
+		
 	}
 protected:
 	bool PushNode(Node& node) override
@@ -153,6 +169,12 @@ protected:
 		// processing for selecting node
 		if (ImGui::IsItemClicked())
 		{
+			if (pSelectedNode)
+			{
+				static DeselectingTP probe;
+				pSelectedNode->Accept(probe);
+			}
+
 			pSelectedNode = &node;
 		}
 		// signal if children should also be recursed

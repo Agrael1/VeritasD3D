@@ -9,17 +9,20 @@ namespace RG
 	Pass::Pass(std::string name) noexcept
 		:name(std::move(name))
 	{}
+	Pass::Pass(std::string_view name) noexcept
+		:name(name)
+	{}
 	Pass::~Pass()
 	{}
 
 	void Pass::Reset() noxnd
 	{}
 
-	const std::string& Pass::GetName() const noexcept
+	std::string_view Pass::GetName() const noexcept
 	{
 		return name;
 	}
-	const std::vector<std::unique_ptr<Sink>>& Pass::GetSinks() const
+	std::span<const std::unique_ptr<Sink>> Pass::GetSinks() const
 	{
 		return sinks;
 	}
@@ -74,11 +77,12 @@ namespace RG
 	void Pass::RegisterSource(std::unique_ptr<Source> source)
 	{
 		// check for overlap of output names
+		using namespace std::string_literals;
 		for (auto& src : sources)
 		{
 			if (src->GetName() == source->GetName())
 			{
-				throw RGC_EXCEPTION("Registered output overlaps with existing: " + source->GetName());
+				throw RGC_EXCEPTION("Registered output overlaps with existing: "s + source->GetName().data());
 			}
 		}
 

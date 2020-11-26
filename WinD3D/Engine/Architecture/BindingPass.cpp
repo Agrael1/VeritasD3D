@@ -29,10 +29,11 @@ namespace RG
 
 	void BindingPass::Finalize()
 	{
+		using namespace std::string_literals;
 		Pass::Finalize();
 		if (!renderTarget && !depthStencil)
 		{
-			throw RGC_EXCEPTION("BindingPass [" + GetName() + "] needs at least one of a renderTarget or depthStencil");
+			throw RGC_EXCEPTION("BindingPass ["s + GetName().data() + "] needs at least one of a renderTarget or depthStencil");
 		}
 	}
 

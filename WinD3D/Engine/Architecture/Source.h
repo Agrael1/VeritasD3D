@@ -10,13 +10,14 @@ namespace RG
 	class Source 
 	{
 	public:
-		const std::string& GetName()const noexcept;
+		std::string_view GetName()const noexcept;
 		virtual void PostLinkValidate()const = 0;
 		virtual std::shared_ptr<Bindable> YieldBindable();
 		virtual std::shared_ptr<BufferResource> YieldBuffer();
-		~Source() = default;
+		virtual ~Source() = default;
 	protected:
-		Source(std::string name);
+		explicit Source(std::string name);
+		Source(std::string_view name);
 	private:
 		std::string name;
 	};

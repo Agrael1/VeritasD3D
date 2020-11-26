@@ -22,9 +22,10 @@ namespace RG
 		{}
 		std::shared_ptr<BufferResource> YieldBuffer() override
 		{
+			using namespace std::string_literals;
 			if (linked)
 			{
-				throw RGC_EXCEPTION("Mutable output bound twice: " + GetName());
+				throw RGC_EXCEPTION("Mutable output bound twice: "s + GetName().data());
 			}
 			linked = true;
 			return buffer;
