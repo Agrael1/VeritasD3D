@@ -18,7 +18,7 @@ namespace RG
 		binds.push_back(std::move(bind));
 	}
 
-	void BindingPass::BindAll(Graphics& gfx) const noexcept
+	void BindingPass::BindAll(Graphics& gfx) const noxnd
 	{
 		BindBufferResources(gfx);
 		for (auto& bind : binds)

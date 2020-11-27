@@ -14,7 +14,7 @@ namespace RG
 		BindingPass(std::string name, std::vector<std::shared_ptr<Bindable>> binds = {});
 	public:
 		void AddBind(std::shared_ptr<Bindable> bind) noexcept;
-		void BindAll(Graphics& gfx) const noexcept;
+		void BindAll(Graphics& gfx) const noxnd;
 		void Finalize() override;
 	protected:
 		template<class T>

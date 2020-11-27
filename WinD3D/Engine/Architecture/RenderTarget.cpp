@@ -80,7 +80,7 @@ void RenderTarget::BindAsBuffer(Graphics& gfx, DepthStencil* depthStencil) noxnd
 void RenderTarget::BindAsBuffer(Graphics& gfx, ID3D11DepthStencilView* pDepthStencilView) noxnd
 {
 	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->OMSetRenderTargets(1, pTargetView.GetAddressOf(), pDepthStencilView));
+	GetContext(gfx)->OMSetRenderTargets(1, pTargetView.GetAddressOf(), pDepthStencilView);
 
 	// configure viewport
 	D3D11_VIEWPORT vp;
