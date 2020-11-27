@@ -58,6 +58,8 @@ public:
 	void EnableCursor() noexcept;
 	void DisableCursor() noexcept;
 	bool CursorEnabled() const noexcept;
+	bool LoadCalled() const noexcept;
+	void LoadingComplete()noexcept;
 	void SetTitle(std::string_view title);
 	static std::optional<WPARAM> ProcessMessages()noexcept;
 	Graphics& Gfx();
@@ -72,14 +74,17 @@ private:
 	void HideCursor() noexcept;
 	void EnableImGuiMouse() noexcept;
 	void DisableImGuiMouse() noexcept;
+	void AddMenu(HWND hWnd);
 public:
 	Keyboard kbd;
 	Mouse mouse;
 private:
 	bool cursorEnabled = true;
+	bool bLoadCallIssued = false;
 	int width;
 	int height;
 	HWND hWnd;
+	HMENU menu;
 	std::unique_ptr<Graphics> pGfx;
 	std::vector<BYTE> rawBuffer;
 };

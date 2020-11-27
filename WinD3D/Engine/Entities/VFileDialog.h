@@ -3,7 +3,7 @@
 #include "Engine\Window.h"
 #include <ShObjIdl.h>
 #include <wrl.h>
-#include <vector>
+#include <span>
 
 // Helper Class
 class VFileDialog
@@ -16,9 +16,9 @@ public:
 		const char* GetType()const noexcept override;
 	};
 public:
-	void SetFileTypes(const std::vector<COMDLG_FILTERSPEC> filters);
+	void SetFileTypes(std::span<COMDLG_FILTERSPEC> filters);
 	std::wstring GetFilePath();
-	void SetDefaultFolder(std::wstring FolderPath);
+	void SetDefaultFolder(std::wstring_view FolderPath);
 protected:
 	DWORD dwFlags;
 	Microsoft::WRL::ComPtr<IFileDialog> pDialog;

@@ -369,6 +369,9 @@
     <ClCompile Include="Engine\Architecture\VerticalBlurPass.cpp">
       <Filter>Файлы исходного кода\Engine\Architecture\Multipass\Passes</Filter>
     </ClCompile>
+    <ClCompile Include="FileDialog.ixx">
+      <Filter>Заголовочные файлы\Engine\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">

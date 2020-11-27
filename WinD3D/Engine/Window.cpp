@@ -3,6 +3,7 @@
 #include "resource.h"
 #include "ImGUI\imgui_impl_win32.h"
 
+
 Window::WindowClass Window::WindowClass::wndClass;
 
 Window::WindowClass::WindowClass() noexcept
@@ -45,7 +46,7 @@ Window::Window(unsigned int width, unsigned int height, const char * name):width
 	rWindow.top = 100;
 	rWindow.bottom = height + rWindow.top;
 	// Automatic calculation of window height and width to client region
-	WND_CALL_INFO(AdjustWindowRect(&rWindow, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE));
+	WND_CALL_INFO(AdjustWindowRect(&rWindow, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, TRUE));
 
 	hWnd = CreateWindowA(
 		WindowClass::GetName(), name,
@@ -106,6 +107,16 @@ bool Window::CursorEnabled() const noexcept
 	return cursorEnabled;
 }
 
+bool Window::LoadCalled() const noexcept
+{
+	return bLoadCallIssued;
+}
+
+void Window::LoadingComplete() noexcept
+{
+	bLoadCallIssued = false;
+}
+
 void Window::ConfineCursor() noexcept
 {
 	RECT rect;
@@ -133,6 +144,15 @@ void Window::EnableImGuiMouse() noexcept
 void Window::DisableImGuiMouse() noexcept
 {
 	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
+}
+
+void Window::AddMenu(HWND hWnd)
+{
+	menu = CreateMenu();
+	HMENU hFileMenu = CreateMenu();
+	AppendMenu(hFileMenu, MF_STRING, 0, TEXT("Load"));
+	AppendMenu(menu, MF_POPUP, (UINT_PTR)hFileMenu, TEXT("File"));
+	SetMenu(hWnd, menu);
 }
 
 std::optional<WPARAM> Window::ProcessMessages() noexcept
@@ -200,6 +220,15 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 		// clear keystate when window loses focus to prevent input getting "stuck"
 	case WM_KILLFOCUS:
 		kbd.ClearState();
+		break;
+	case WM_CREATE:
+		AddMenu(hWnd);
+		break;
+	case WM_COMMAND:
+		if (wParam == 0)
+		{
+			bLoadCallIssued = true;
+		}
 		break;
 	case WM_ACTIVATE:
 		// confine/free cursor on window to foreground/background if cursor disabled

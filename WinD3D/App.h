@@ -7,6 +7,8 @@
 #include "SkinnedBox.h"
 #include <Engine\Architecture\BlurOutlineRenderGraph.h>
 
+import VFileDialog;
+
 class App
 {
 public:
@@ -24,10 +26,8 @@ private:
 
 	RG::BlurOutlineRenderGraph rg{ wnd.Gfx() };
 	PointLight light;
-	//TestCube cube{ wnd.Gfx(),4.0f };
-	//TestCube cube2{ wnd.Gfx(),4.0f };
 	std::unique_ptr<Model> model;
-
+	VFileOpenDialog opener;
 	float speed = 1.0f;
 };
 
