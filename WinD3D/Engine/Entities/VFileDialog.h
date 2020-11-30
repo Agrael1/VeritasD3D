@@ -1,7 +1,6 @@
 #pragma once
-#define FULL_WINOPT
-#include "Engine\Window.h"
-#include <ShObjIdl.h>
+#include <Framework/WindowExceptions.h>
+#include <shtypes.h>
 #include <wrl.h>
 #include <span>
 
@@ -9,19 +8,22 @@
 class VFileDialog
 {
 public:
-	class HRException : public Window::HrException
+	class HRException : public HrException
 	{
 	public:
-		using Window::HrException::HrException;
+		using HrException::HrException;
 		const char* GetType()const noexcept override;
 	};
+
+public:
+	~VFileDialog();
 public:
 	void SetFileTypes(std::span<COMDLG_FILTERSPEC> filters);
 	std::wstring GetFilePath();
 	void SetDefaultFolder(std::wstring_view FolderPath);
 protected:
 	DWORD dwFlags;
-	Microsoft::WRL::ComPtr<IFileDialog> pDialog;
+	Microsoft::WRL::ComPtr<struct IFileDialog> pDialog;
 };
 
 class VFileOpenDialog : public VFileDialog

@@ -1,4 +1,5 @@
 #pragma once
+#include <Engine/Entities/VFileDialog.h>
 #include <Engine/Window.h>
 #include <Engine/Entities/ImGUIManager.h>
 #include <Engine/Entities/Model.h>
@@ -6,8 +7,6 @@
 #include "PointLight.h"
 #include <Engine\Architecture\BlurOutlineRenderGraph.h>
 #include "Grid.h"
-
-import VFileDialog;
 
 class App
 {

@@ -1,5 +1,5 @@
 #pragma once
-#include <dxtex/DirectXTex.h>
+#include <DirectXTex.h>
 #include <Framework/Exception.h> 
 
 class Surface

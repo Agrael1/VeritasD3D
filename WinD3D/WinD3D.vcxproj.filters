@@ -82,15 +82,6 @@
     <Filter Include="Файлы исходного кода\Framework\Exceptions">
       <UniqueIdentifier>{48e6c941-810c-4f44-9b7b-65abefa5c7f8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы исходного кода\Framework\Exceptions\Inline">
-      <UniqueIdentifier>{5e2e8e3b-d781-4384-a6bf-c65a57d8b206}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Framework\Fmt">
-      <UniqueIdentifier>{80ca9775-97c4-4f16-b84f-76b2958f37bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Framework\Fmt">
-      <UniqueIdentifier>{a500ef43-2332-40f3-9c0f-770f755c45d9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Заголовочные файлы\Engine\Architecture">
       <UniqueIdentifier>{09026b9f-f410-42fd-9f58-bde7006ca9b1}</UniqueIdentifier>
     </Filter>
@@ -123,9 +114,6 @@
     </Filter>
     <Filter Include="Shaders\VertexShaders">
       <UniqueIdentifier>{421a567e-b07d-48e3-a352-ad6b2f98d515}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Dxtex">
-      <UniqueIdentifier>{20402c4a-622c-487b-8011-81108d488082}</UniqueIdentifier>
     </Filter>
     <Filter Include="Заголовочные файлы\Engine\Architecture\Multipass">
       <UniqueIdentifier>{7671009b-2342-4f1f-9ef0-9361c29b625d}</UniqueIdentifier>
@@ -204,9 +192,6 @@
     <ClCompile Include="Engine\Mouse.cpp">
       <Filter>Файлы исходного кода\Engine\Window</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\dxerr.cpp">
-      <Filter>Файлы исходного кода\Framework\Exceptions</Filter>
-    </ClCompile>
     <ClCompile Include="Framework\DXGIInfoManager.cpp">
       <Filter>Файлы исходного кода\Framework\Exceptions</Filter>
     </ClCompile>
@@ -215,12 +200,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Graphics.cpp">
       <Filter>Файлы исходного кода\Engine\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="Fmtlib\src\format.cc">
-      <Filter>Файлы исходного кода\Framework\Fmt</Filter>
-    </ClCompile>
-    <ClCompile Include="Fmtlib\src\posix.cc">
-      <Filter>Файлы исходного кода\Framework\Fmt</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Architecture\Drawable.cpp">
       <Filter>Файлы исходного кода\Engine\Architecture</Filter>
@@ -369,8 +348,11 @@
     <ClCompile Include="Engine\Architecture\VerticalBlurPass.cpp">
       <Filter>Файлы исходного кода\Engine\Architecture\Multipass\Passes</Filter>
     </ClCompile>
-    <ClCompile Include="FileDialog.ixx">
-      <Filter>Заголовочные файлы\Engine\Entities</Filter>
+    <ClCompile Include="Framework\WindowException.cpp">
+      <Filter>Файлы исходного кода\Framework\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\WinSetup.h">
+      <Filter>Заголовочные файлы\Framework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -461,17 +443,8 @@
     <ClInclude Include="Framework\GdiSetup.h">
       <Filter>Заголовочные файлы\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\Exception.h">
-      <Filter>Заголовочные файлы\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\WinSetup.h">
-      <Filter>Заголовочные файлы\Framework</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Mouse.h">
       <Filter>Заголовочные файлы\Engine\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\dxerr.h">
-      <Filter>Заголовочные файлы\Framework\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="Framework\DXGIInfoManager.h">
       <Filter>Заголовочные файлы\Framework\Exceptions</Filter>
@@ -481,42 +454,6 @@
     </ClInclude>
     <ClInclude Include="TestObject.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Objects\Bases</Filter>
-    </ClInclude>
-    <ClInclude Include="Fmtlib\include\fmt\chrono.h">
-      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
-    </ClInclude>
-    <ClInclude Include="Fmtlib\include\fmt\color.h">
-      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
-    </ClInclude>
-    <ClInclude Include="Fmtlib\include\fmt\compile.h">
-      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
-    </ClInclude>
-    <ClInclude Include="Fmtlib\include\fmt\core.h">
-      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
-    </ClInclude>
-    <ClInclude Include="Fmtlib\include\fmt\format.h">
-      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
-    </ClInclude>
-    <ClInclude Include="Fmtlib\include\fmt\format-inl.h">
-      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
-    </ClInclude>
-    <ClInclude Include="Fmtlib\include\fmt\locale.h">
-      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
-    </ClInclude>
-    <ClInclude Include="Fmtlib\include\fmt\ostream.h">
-      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
-    </ClInclude>
-    <ClInclude Include="Fmtlib\include\fmt\posix.h">
-      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
-    </ClInclude>
-    <ClInclude Include="Fmtlib\include\fmt\printf.h">
-      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
-    </ClInclude>
-    <ClInclude Include="Fmtlib\include\fmt\ranges.h">
-      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
-    </ClInclude>
-    <ClInclude Include="Fmtlib\include\fmt\safe-duration-cast.h">
-      <Filter>Заголовочные файлы\Framework\Fmt</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Architecture\Codex.h">
       <Filter>Заголовочные файлы\Engine\Architecture</Filter>
@@ -595,30 +532,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Architecture\RasterizerState.h">
       <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="dxtex\BC.h">
-      <Filter>Заголовочные файлы\Engine\Dxtex</Filter>
-    </ClInclude>
-    <ClInclude Include="dxtex\BCDirectCompute.h">
-      <Filter>Заголовочные файлы\Engine\Dxtex</Filter>
-    </ClInclude>
-    <ClInclude Include="dxtex\d3dx12.h">
-      <Filter>Заголовочные файлы\Engine\Dxtex</Filter>
-    </ClInclude>
-    <ClInclude Include="dxtex\DDS.h">
-      <Filter>Заголовочные файлы\Engine\Dxtex</Filter>
-    </ClInclude>
-    <ClInclude Include="dxtex\DirectXTex.h">
-      <Filter>Заголовочные файлы\Engine\Dxtex</Filter>
-    </ClInclude>
-    <ClInclude Include="dxtex\DirectXTexP.h">
-      <Filter>Заголовочные файлы\Engine\Dxtex</Filter>
-    </ClInclude>
-    <ClInclude Include="dxtex\filters.h">
-      <Filter>Заголовочные файлы\Engine\Dxtex</Filter>
-    </ClInclude>
-    <ClInclude Include="dxtex\scoped.h">
-      <Filter>Заголовочные файлы\Engine\Dxtex</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Entities\Surface.h">
       <Filter>Заголовочные файлы\Engine\Entities</Filter>
@@ -743,6 +656,12 @@
     <ClInclude Include="Grid.h">
       <Filter>Заголовочные файлы\Engine\Graphics\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Framework\Exception.h">
+      <Filter>Заголовочные файлы\Framework\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\WindowExceptions.h">
+      <Filter>Заголовочные файлы\Framework\Exceptions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc">
@@ -759,19 +678,13 @@
     <Image Include="Images\kappa50.png">
       <Filter>Файлы ресурсов\Images</Filter>
     </Image>
+    <Image Include="TLR.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="GraphicsThrows.m">
       <Filter>Заголовочные файлы\Framework\Exceptions\Macros</Filter>
-    </None>
-    <None Include="Framework\DXGetErrorDescription.inl">
-      <Filter>Файлы исходного кода\Framework\Exceptions\Inline</Filter>
-    </None>
-    <None Include="Framework\DXGetErrorString.inl">
-      <Filter>Файлы исходного кода\Framework\Exceptions\Inline</Filter>
-    </None>
-    <None Include="Framework\DXTrace.inl">
-      <Filter>Файлы исходного кода\Framework\Exceptions\Inline</Filter>
     </None>
     <None Include="Engine\Shaders\LightVectorData.hlsli">
       <Filter>Shaders\Headers</Filter>
@@ -781,9 +694,6 @@
     </None>
     <None Include="Engine\Shaders\PointLight.hlsli">
       <Filter>Shaders\Headers</Filter>
-    </None>
-    <None Include="dxtex\DirectXTex.inl">
-      <Filter>Заголовочные файлы\Engine\Dxtex</Filter>
     </None>
     <None Include="cpp.hint" />
     <None Include="packages.config" />
@@ -856,7 +766,7 @@
       <Filter>Shaders\PixelShades</Filter>
     </FxCompile>
     <FxCompile Include="Engine\Shaders\Fullscreen_VS.hlsl">
-      <Filter>Shaders\PixelShades</Filter>
+      <Filter>Shaders\VertexShaders</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

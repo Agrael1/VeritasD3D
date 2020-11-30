@@ -1,9 +1,15 @@
-#include "VFileDialog.h"
+#define FULL_WINOPT
 #include <ShlObj.h>
+#include "VFileDialog.h"
+
 
 const char* VFileDialog::HRException::GetType()const noexcept
 {
 	return "Veritas File Exception";
+}
+
+VFileDialog::~VFileDialog()
+{
 }
 
 void VFileDialog::SetFileTypes(std::span<COMDLG_FILTERSPEC> filters)

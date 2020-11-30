@@ -1,4 +1,4 @@
-#include <Engine/Window.h> //just for TranslateErrorCode
+#include <Framework/WindowExceptions.h>
 #include <fmt/printf.h>
 #include "Surface.h"
 #include <Framework/Utility.h>
@@ -11,7 +11,7 @@ Surface::LoadException::LoadException(int line, const char* file, std::string_vi
 	using namespace std::string_literals;
 	note = std::move(
 		"[Error]: "s + Note + "\n" 
-		+ Window::WindowException::TranslateErrorCode(hr) + "\n" 
+		+ WindowException::TranslateErrorCode(hr) + "\n" 
 		+ "[File]: " + filepath.data());
 }
 const char* Surface::LoadException::what() const noexcept

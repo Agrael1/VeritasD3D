@@ -1,5 +1,5 @@
 #include <Framework\Exception.h>
-#include <sstream>
+#include <fmt/printf.h>
 
 Exception::Exception(unsigned int line, const char * file) noexcept
 	:line(line),file(file)
@@ -13,22 +13,17 @@ int Exception::GetLine() const noexcept
 {
 	return line;
 }
-const std::string & Exception::GetFile() const noexcept
+std::string_view Exception::GetFile() const noexcept
 {
 	return file;
 }
 std::string Exception::GetOriginString() const noexcept
 {
-	std::ostringstream oss;
-	oss << "[File] " << file << std::endl
-		<< "[Line] " << line;
-	return oss.str();
+	return fmt::sprintf("[File]: %s\n[Line]: %d", file, line);
 }
 const char* Exception::what() const noexcept
 {
-	std::ostringstream oss;
-	oss << GetType() << std::endl
-		<< GetOriginString();
-	whatBuffer = oss.str();
+	if (whatBuffer.empty()) 
+		whatBuffer = GetType() + '\n' + GetOriginString();
 	return whatBuffer.c_str();
 }

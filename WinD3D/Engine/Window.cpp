@@ -23,7 +23,7 @@ Window::WindowClass::WindowClass() noexcept
 	wcWindow.cbWndExtra = 0;
 	wcWindow.hInstance = GetInstance();
 	wcWindow.hCursor = nullptr;
-	wcWindow.hIcon = LoadIcon(wcWindow.hInstance,MAKEINTRESOURCE(IDI_ICON2));
+	wcWindow.hIcon = LoadIcon(wcWindow.hInstance,MAKEINTRESOURCE(IDI_ICON1));
 	wcWindow.hbrBackground = nullptr;
 	wcWindow.lpszMenuName = nullptr;
 	wcWindow.hIconSm = nullptr;
@@ -486,51 +486,4 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 
 	return DefWindowProc(hWnd, msg, wParam, lParam);
-}
-
-//Window Exception
-Window::HrException::HrException(int line, const char * file, HRESULT hr)
-	:WindowException(line,file),hResult(hr)
-{}
-std::string Window::WindowException::TranslateErrorCode(HRESULT hr) noexcept
-{
-	char* pMsgBuf = nullptr;
-	DWORD nMsgLen = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
-		FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPSTR>(&pMsgBuf),
-		0, nullptr);
-
-	if (nMsgLen == 0)
-	{
-		return "Unknown error";
-	}
-	std::string errorString = pMsgBuf;
-	LocalFree(pMsgBuf);
-	return errorString;
-}
-HRESULT Window::HrException::GetErrorCode() const noexcept
-{
-	return hResult;
-}
-std::string Window::HrException::GetErrorDescription() const noexcept
-{
-	return WindowException::TranslateErrorCode(hResult);
-}
-const char* Window::HrException::GetType()const noexcept
-{
-	return "Vertas Window Exception";
-}
-const char* Window::HrException::what() const noexcept
-{
-	std::ostringstream oss;
-	oss << GetType() << std::endl
-		<< "[Error Code] 0x" << std::hex << std::uppercase << GetErrorCode()
-		<< std::dec << " (" << (unsigned long)GetErrorCode() << ")" << std::endl
-		<< "[Description] " << GetErrorDescription() << std::endl
-		<< GetOriginString();
-	whatBuffer = oss.str();
-	return whatBuffer.c_str();
-}
-const char* Window::NoGfxException::GetType() const noexcept
-{
-	return "Veritas Window Exception [No Graphics]";
 }
