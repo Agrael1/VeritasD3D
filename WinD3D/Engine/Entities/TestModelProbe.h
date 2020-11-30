@@ -147,7 +147,7 @@ public:
 			dcheck(ImGui::SliderAngle("Y-rotation", &tf.yRot, -180.0f, 180.0f));
 			dcheck(ImGui::SliderAngle("Z-rotation", &tf.zRot, -180.0f, 180.0f));
 			ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Scale");
-			dcheck(ImGui::SliderFloat("Scale", &tf.Scale, 0.1f, 3.0f));
+			dcheck(ImGui::SliderFloat("Scale", &tf.Scale, 0.05f, 3.0f));
 			if (ImGui::Button("Reset"))
 			{
 				dirty = true;
