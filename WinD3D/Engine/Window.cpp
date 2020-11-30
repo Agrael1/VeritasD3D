@@ -3,6 +3,12 @@
 #include "resource.h"
 #include "ImGUI\imgui_impl_win32.h"
 
+enum class MenuItems:UINT_PTR
+{
+	Load,
+	Exit,
+	ShowGrid
+};
 
 Window::WindowClass Window::WindowClass::wndClass;
 
@@ -48,7 +54,7 @@ Window::Window(unsigned int width, unsigned int height, const char * name):width
 	// Automatic calculation of window height and width to client region
 	WND_CALL_INFO(AdjustWindowRect(&rWindow, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, TRUE));
 
-	hWnd = CreateWindowA(
+	hWnd.reset(CreateWindowA(
 		WindowClass::GetName(), name,
 		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
 		CW_USEDEFAULT, CW_USEDEFAULT, 
@@ -56,17 +62,17 @@ Window::Window(unsigned int width, unsigned int height, const char * name):width
 		rWindow.bottom - rWindow.top,
 		nullptr, nullptr,
 		WindowClass::GetInstance(), this
-	);
+	));
 
 	// Error checks
 	if (!hWnd) throw WND_LAST_EXCEPT();
-	ShowWindow(hWnd, SW_SHOWDEFAULT);
+	ShowWindow(hWnd.get(), SW_SHOWDEFAULT);
 	
 	// Init GUI (only one window supported)
-	WND_CALL_INFO(ImGui_ImplWin32_Init(hWnd));
+	WND_CALL_INFO(ImGui_ImplWin32_Init(hWnd.get()));
 
 	// Create Graphics object
-	pGfx = std::make_unique<Graphics>(hWnd, width, height);
+	pGfx = std::make_unique<Graphics>(hWnd.get(), width, height);
 
 	RAWINPUTDEVICE rid;
 	rid.usUsagePage = 0x01; // mouse page
@@ -78,11 +84,10 @@ Window::Window(unsigned int width, unsigned int height, const char * name):width
 Window::~Window()
 {
 	ImGui_ImplWin32_Shutdown();
-	DestroyWindow(hWnd);
 }
 void Window::SetTitle(std::string_view title)
 {
-	if (!SetWindowText(this->hWnd, title.data()))
+	if (!SetWindowText(hWnd.get(), title.data()))
 	{
 		throw WND_LAST_EXCEPT();
 	}
@@ -117,11 +122,16 @@ void Window::LoadingComplete() noexcept
 	bLoadCallIssued = false;
 }
 
+bool Window::DrawGrid() const noexcept
+{
+	return bGridEnabled;
+}
+
 void Window::ConfineCursor() noexcept
 {
 	RECT rect;
-	GetClientRect(hWnd, &rect);
-	MapWindowPoints(hWnd, nullptr, reinterpret_cast<POINT*>(&rect), 2);
+	GetClientRect(hWnd.get(), &rect);
+	MapWindowPoints(hWnd.get(), nullptr, reinterpret_cast<POINT*>(&rect), 2);
 	ClipCursor(&rect);
 }
 void Window::FreeCursor() noexcept
@@ -148,11 +158,20 @@ void Window::DisableImGuiMouse() noexcept
 
 void Window::AddMenu(HWND hWnd)
 {
-	menu = CreateMenu();
+	menu.reset( CreateMenu() );
 	HMENU hFileMenu = CreateMenu();
-	AppendMenu(hFileMenu, MF_STRING, 0, TEXT("Load"));
-	AppendMenu(menu, MF_POPUP, (UINT_PTR)hFileMenu, TEXT("File"));
-	SetMenu(hWnd, menu);
+	OptionsMenu.reset(CreateMenu());
+	HMENU hHelpMenu = CreateMenu();
+	AppendMenu(hFileMenu, MF_STRING, UINT_PTR(MenuItems::Load), TEXT("Load"));
+	AppendMenu(hFileMenu, MF_SEPARATOR, 0, NULL);
+	AppendMenu(hFileMenu, MF_STRING, UINT_PTR(MenuItems::Exit), TEXT("Exit"));
+
+	AppendMenu(OptionsMenu.get(), MF_CHECKED, UINT_PTR(MenuItems::ShowGrid), TEXT("Draw Grid"));
+
+	AppendMenu(menu.get(), MF_POPUP, (UINT_PTR)hFileMenu, TEXT("File"));
+	AppendMenu(menu.get(), MF_POPUP, (UINT_PTR)OptionsMenu.get(), TEXT("Options"));
+	AppendMenu(menu.get(), MF_POPUP, (UINT_PTR)hHelpMenu, TEXT("Help"));
+	SetMenu(hWnd, menu.get());
 }
 
 std::optional<WPARAM> Window::ProcessMessages() noexcept
@@ -221,13 +240,34 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_KILLFOCUS:
 		kbd.ClearState();
 		break;
+
+
 	case WM_CREATE:
 		AddMenu(hWnd);
 		break;
 	case WM_COMMAND:
-		if (wParam == 0)
+		switch (MenuItems(wParam))
 		{
+		case MenuItems::Load:
 			bLoadCallIssued = true;
+			break;
+		case MenuItems::Exit:
+			PostQuitMessage(0);
+			return 0;
+		case MenuItems::ShowGrid:
+		{
+			bGridEnabled ^= 1;
+			MENUITEMINFO mii
+			{
+				.cbSize = sizeof(MENUITEMINFO),
+				.fMask = MIIM_STATE,
+				.fState = UINT(bGridEnabled? MFS_CHECKED: MFS_UNCHECKED)
+			};
+			SetMenuItemInfo(OptionsMenu.get(), 0, true, &mii);
+			break;
+		}
+		default:
+			break;
 		}
 		break;
 	case WM_ACTIVATE:

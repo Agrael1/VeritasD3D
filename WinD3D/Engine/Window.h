@@ -6,6 +6,7 @@
 #include "Graphics.h"
 #include <memory>
 #include <optional>
+#include <wil/win32_helpers.h>
 
 class Window 
 {
@@ -60,6 +61,7 @@ public:
 	bool CursorEnabled() const noexcept;
 	bool LoadCalled() const noexcept;
 	void LoadingComplete()noexcept;
+	bool DrawGrid()const noexcept;
 	void SetTitle(std::string_view title);
 	static std::optional<WPARAM> ProcessMessages()noexcept;
 	Graphics& Gfx();
@@ -81,10 +83,12 @@ public:
 private:
 	bool cursorEnabled = true;
 	bool bLoadCallIssued = false;
+	bool bGridEnabled = true;
 	int width;
 	int height;
-	HWND hWnd;
-	HMENU menu;
+	wil::unique_hwnd hWnd;
+	wil::unique_hmenu menu;
+	wil::unique_hmenu OptionsMenu;
 	std::unique_ptr<Graphics> pGfx;
 	std::vector<BYTE> rawBuffer;
 };

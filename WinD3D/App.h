@@ -4,8 +4,8 @@
 #include <Engine/Entities/Model.h>
 #include "Camera.h"
 #include "PointLight.h"
-#include "SkinnedBox.h"
 #include <Engine\Architecture\BlurOutlineRenderGraph.h>
+#include "Grid.h"
 
 import VFileDialog;
 
@@ -26,6 +26,8 @@ private:
 
 	RG::BlurOutlineRenderGraph rg{ wnd.Gfx() };
 	PointLight light;
+
+	Grid grid;
 	std::unique_ptr<Model> model;
 	VFileOpenDialog opener;
 	float speed = 1.0f;

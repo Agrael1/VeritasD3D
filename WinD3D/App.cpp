@@ -6,22 +6,16 @@
 namespace dx = DirectX;
 
 App::App(uint32_t width, uint32_t height) 
-	: wnd(width, height,"VTest"), light(wnd.Gfx())
+	: wnd(width, height,"VTest"), light(wnd.Gfx()), grid(wnd.Gfx())
 {
 	std::array<COMDLG_FILTERSPEC, 1> filterSpecs =
 	{
 		{L"Wavefront object file",L"*.obj"}
 	};
 	opener.SetFileTypes(filterSpecs);
-	opener.SetDefaultFolder(LR"(C:\Users\aa\Documents\Visual Studio 2019\Projects\WinD3D\WinD3D\Models)");
 
-	model = std::make_unique<Model>(wnd.Gfx(), "Models\\Sponza\\sponza.obj", 1.0f / 20.0f);
-	//cube.SetPos({ 4.0f,0.0f,0.0f });
-	//cube2.SetPos({ 0.0f,4.0f,0.0f });
-	//cube.LinkTechniques(rg);
-	//cube2.LinkTechniques(rg);
+	grid.LinkTechniques(rg);
 	light.LinkTechniques(rg);
-	model->LinkTechniques(rg);
 
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 100.0f));
 }
@@ -46,15 +40,13 @@ int App::Go()
 void App::DoFrame(float dt)
 {
 	const auto s = dt*speed;
-	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
+	wnd.Gfx().BeginFrame(0.2f, 0.2f, 0.2f);
 	wnd.Gfx().SetCamera(cam.GetViewMatrix());
 	light.Bind(wnd.Gfx(), cam.GetViewMatrix());
 	
-
-	model->Submit();
+	if(model)model->Submit();
 	light.Submit();
-	//cube.Submit();
-	//cube2.Submit();
+	if(wnd.DrawGrid())grid.Submit();
 	rg.Execute(wnd.Gfx());
 
 
@@ -65,17 +57,14 @@ void App::DoFrame(float dt)
 	}
 	ImGui::End();
 
-	
-	static MP modelProbe;
 
-	// imgui windows
-	modelProbe.SpawnWindow(*model);
+	static MP modelProbe;
+	if (model)
+		modelProbe.SpawnWindow(*model);	// imgui windows
 
 	ProcessInput(dt);
 	cam.SpawnControlWindow();
 	light.SpawnControlWindow();
-	//cube.SpawnControlWindow(wnd.Gfx(), "Cube 1");
-	//cube2.SpawnControlWindow(wnd.Gfx(), "Cube 2");
 
 	// Present
 	wnd.Gfx().EndFrame();

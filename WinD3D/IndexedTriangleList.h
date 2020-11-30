@@ -12,7 +12,7 @@ public:
 		indices(std::move(inds))
 	{
 		assert(vertices.Count() > 2);
-		assert(indices.size() % 3 == 0);
+		//assert(indices.size() % 3 == 0);
 	}
 public:
 	void Deform(DirectX::FXMMATRIX matrix)

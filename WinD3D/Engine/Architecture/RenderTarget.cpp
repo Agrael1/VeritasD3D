@@ -101,7 +101,7 @@ void RenderTarget::Clear(Graphics& gfx, const std::array<float, 4>& color) noxnd
 
 void RenderTarget::Clear(Graphics& gfx) noxnd
 {
-	Clear(gfx, { 0.0f,0.0f,0.0f,0.0f });
+	Clear(gfx, { 0.2f,0.2f,0.2f,0.0f });
 }
 
 UINT RenderTarget::GetWidth() const noexcept

@@ -740,6 +740,9 @@
     <ClInclude Include="Framework\MathHelper.h">
       <Filter>Заголовочные файлы\Framework</Filter>
     </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Заголовочные файлы\Engine\Graphics\Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc">
@@ -783,6 +786,7 @@
       <Filter>Заголовочные файлы\Engine\Dxtex</Filter>
     </None>
     <None Include="cpp.hint" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shaders\ColorBlendPS.hlsl">
