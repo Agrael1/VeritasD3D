@@ -351,9 +351,6 @@
     <ClCompile Include="Framework\WindowException.cpp">
       <Filter>Файлы исходного кода\Framework\Exceptions</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\WinSetup.h">
-      <Filter>Заголовочные файлы\Framework</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -661,6 +658,9 @@
     </ClInclude>
     <ClInclude Include="Framework\WindowExceptions.h">
       <Filter>Заголовочные файлы\Framework\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\WinSetup.h">
+      <Filter>Заголовочные файлы\Framework</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

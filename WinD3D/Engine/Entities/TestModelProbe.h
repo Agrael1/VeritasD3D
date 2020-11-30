@@ -32,6 +32,10 @@ DirectX::XMFLOAT3 ExtractTranslation(const DirectX::XMFLOAT4X4& matrix)
 {
 	return { matrix._41,matrix._42,matrix._43 };
 }
+float ExtractScale(const DirectX::XMFLOAT4X4& matrix)
+{
+	return { matrix._11 };
+}
 
 class WanderingTP : public TechniqueProbe
 {
@@ -142,9 +146,17 @@ public:
 			dcheck(ImGui::SliderAngle("X-rotation", &tf.xRot, -180.0f, 180.0f));
 			dcheck(ImGui::SliderAngle("Y-rotation", &tf.yRot, -180.0f, 180.0f));
 			dcheck(ImGui::SliderAngle("Z-rotation", &tf.zRot, -180.0f, 180.0f));
+			ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Scale");
+			dcheck(ImGui::SliderFloat("Scale", &tf.Scale, 0.1f, 3.0f));
+			if (ImGui::Button("Reset"))
+			{
+				dirty = true;
+				tf = TransformParameters{};
+			}
 			if (dirty)
 			{
 				pSelectedNode->SetAppliedTransform(
+					dx::XMMatrixScalingFromVector(dx::XMVectorReplicate(tf.Scale))*
 					dx::XMMatrixRotationX(tf.xRot) *
 					dx::XMMatrixRotationY(tf.yRot) *
 					dx::XMMatrixRotationZ(tf.zRot) *
@@ -202,6 +214,7 @@ private:
 		float x = 0.0f;
 		float y = 0.0f;
 		float z = 0.0f;
+		float Scale = 1.0f;
 	};
 	std::unordered_map<int, TransformParameters> transformParams;
 private:
@@ -227,6 +240,7 @@ private:
 		tp.x = translation.x;
 		tp.y = translation.y;
 		tp.z = translation.z;
+		tp.Scale = ExtractScale(applied);
 		return transformParams.insert({ id,{ tp } }).first->second;
 	}
 };

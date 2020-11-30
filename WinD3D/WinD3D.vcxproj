@@ -100,6 +100,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableModules>true</EnableModules>
+      <DisableSpecificWarnings>5104;5105;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Assimp/assimp-vc140-mt.lib;$(directxtex-LibPath)\DirectXTex.lib;$(SolutionDir)packages\DXSDK_Missing.1.1.2\Lib\native\x64\DxErr.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -299,9 +300,9 @@
     <ClInclude Include="Framework\RenderGraphException.h" />
     <ClInclude Include="Framework\Utility.h" />
     <ClInclude Include="Framework\WindowExceptions.h" />
-    <ClCompile Include="Framework\WinSetup.h">
+    <ClInclude Include="Framework\WinSetup.h">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsHeaderUnit</CompileAs>
-    </ClCompile>
+    </ClInclude>
     <ClInclude Include="Icosahedron.h" />
     <ClInclude Include="Icosphere.h" />
     <ClInclude Include="ImGUI\imconfig.h" />
