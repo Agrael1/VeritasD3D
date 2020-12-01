@@ -662,6 +662,9 @@
     <ClInclude Include="Framework\WinSetup.h">
       <Filter>Заголовочные файлы\Framework</Filter>
     </ClInclude>
+    <ClInclude Include="VApp.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc">
