@@ -665,6 +665,9 @@
     <ClInclude Include="VApp.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="IDXGIInfoManager.h">
+      <Filter>Заголовочные файлы\Framework\Exceptions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc">

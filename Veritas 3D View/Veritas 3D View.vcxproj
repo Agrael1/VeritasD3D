@@ -98,6 +98,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
     <ClCompile>
       <PreprocessorDefinitions>_DEBUG;IS_DEBUG=true;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">$(SolutionDir)shared\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">$(SolutionDir)shared\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)shared\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)shared\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">stdcpplatest</LanguageStandard>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">stdcpplatest</LanguageStandard>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdcpplatest</LanguageStandard>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -109,12 +117,20 @@
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Link>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">dxgi.lib;dxguid.lib;$(SolutionDir)shared\bin\assimp\x64\$(Configuration)\assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
     <ClCompile>
       <PreprocessorDefinitions>NDEBUG;IS_DEBUG=false;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">$(SolutionDir)shared\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">$(SolutionDir)shared\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)shared\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)shared\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">stdcpplatest</LanguageStandard>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">stdcpplatest</LanguageStandard>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">stdcpplatest</LanguageStandard>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -122,11 +138,68 @@
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">dxgi.lib;dxguid.lib;$(SolutionDir)shared\bin\assimp\x64\$(Configuration)\assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BindableCommons.h" />
     <ClInclude Include="DXGIInfoManager.h" />
+    <ClInclude Include="Engine\Architecture\Bindable.h" />
+    <ClInclude Include="Engine\Architecture\BindingPass.h" />
+    <ClInclude Include="Engine\Architecture\BlendState.h" />
+    <ClInclude Include="Engine\Architecture\BlurOutlineDrawingPass.h" />
+    <ClInclude Include="Engine\Architecture\BlurOutlineRenderGraph.h" />
+    <ClInclude Include="Engine\Architecture\BufferClearPass.h" />
+    <ClInclude Include="Engine\Architecture\BufferResource.h" />
+    <ClInclude Include="Engine\Architecture\Codex.h" />
+    <ClInclude Include="Engine\Architecture\ConstantBuffer.h" />
+    <ClInclude Include="Engine\Architecture\ConstantBuffersEX.h" />
+    <ClInclude Include="Engine\Architecture\DepthStencil.h" />
+    <ClInclude Include="Engine\Architecture\Drawable.h" />
+    <ClInclude Include="Engine\Architecture\DynamicConstant.h" />
+    <ClInclude Include="Engine\Architecture\FullscreenPass.h" />
+    <ClInclude Include="Engine\Architecture\GraphicsResource.h" />
+    <ClInclude Include="Engine\Architecture\HorizontalBlurPass.h" />
+    <ClInclude Include="Engine\Architecture\IndexBuffer.h" />
+    <ClInclude Include="Engine\Architecture\InputLayout.h" />
+    <ClInclude Include="Engine\Architecture\Job.h" />
+    <ClInclude Include="Engine\Architecture\LambertianPass.h" />
+    <ClInclude Include="Engine\Architecture\LayoutCodex.h" />
+    <ClInclude Include="Engine\Architecture\NullPixelShader.h" />
+    <ClInclude Include="Engine\Architecture\OutlineMaskGenerationPass.h" />
+    <ClInclude Include="Engine\Architecture\Pass.h" />
+    <ClInclude Include="Engine\Architecture\PixelShader.h" />
+    <ClInclude Include="Engine\Architecture\RasterizerState.h" />
+    <ClInclude Include="Engine\Architecture\RenderGraph.h" />
+    <ClInclude Include="Engine\Architecture\RenderQueuePass.h" />
+    <ClInclude Include="Engine\Architecture\RenderTarget.h" />
+    <ClInclude Include="Engine\Architecture\Sampler.h" />
+    <ClInclude Include="Engine\Architecture\Sink.h" />
+    <ClInclude Include="Engine\Architecture\SinksT.h" />
+    <ClInclude Include="Engine\Architecture\Source.h" />
+    <ClInclude Include="Engine\Architecture\SourcesT.h" />
+    <ClInclude Include="Engine\Architecture\Stencil.h" />
+    <ClInclude Include="Engine\Architecture\Step.h" />
+    <ClInclude Include="Engine\Architecture\Technique.h" />
+    <ClInclude Include="Engine\Architecture\Texture.h" />
+    <ClInclude Include="Engine\Architecture\Topology.h" />
+    <ClInclude Include="Engine\Architecture\TransformCBuf.h" />
+    <ClInclude Include="Engine\Architecture\TransformUnified.h" />
+    <ClInclude Include="Engine\Architecture\VertexBuffer.h" />
+    <ClInclude Include="Engine\Architecture\VertexLayout.h" />
+    <ClInclude Include="Engine\Architecture\VertexShader.h" />
+    <ClInclude Include="Engine\Architecture\VerticalBlurPass.h" />
+    <ClInclude Include="Engine\Entities\Material.h" />
+    <ClInclude Include="Engine\Entities\Mesh.h" />
+    <ClInclude Include="Engine\Entities\Model.h" />
+    <ClInclude Include="Engine\Entities\Node.h" />
+    <ClInclude Include="Engine\Entities\Surface.h" />
+    <ClInclude Include="Engine\Probes\ModelProbe.h" />
+    <ClInclude Include="Engine\Probes\TechniqueProbe.h" />
+    <ClInclude Include="Engine\Probes\TestModelProbe.h" />
+    <ClInclude Include="Framework\MathHelper.h" />
+    <ClInclude Include="Framework\noexcept_if.h" />
+    <ClInclude Include="Framework\Utility.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="App.h">
@@ -160,6 +233,83 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXGIInfoManager.cpp" />
+    <ClCompile Include="Engine\Architecture\Bindable.cpp" />
+    <ClCompile Include="Engine\Architecture\BindingPass.cpp" />
+    <ClCompile Include="Engine\Architecture\BlendState.cpp" />
+    <ClCompile Include="Engine\Architecture\BlurOutlineRenderGraph.cpp" />
+    <ClCompile Include="Engine\Architecture\BufferClearPass.cpp" />
+    <ClCompile Include="Engine\Architecture\DepthStencil.cpp" />
+    <ClCompile Include="Engine\Architecture\Drawable.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\DynamicConstant.cpp" />
+    <ClCompile Include="Engine\Architecture\FullscreenPass.cpp" />
+    <ClCompile Include="Engine\Architecture\GraphicsResource.cpp" />
+    <ClCompile Include="Engine\Architecture\HorizontalBlurPass.cpp" />
+    <ClCompile Include="Engine\Architecture\IndexBuffer.cpp" />
+    <ClCompile Include="Engine\Architecture\InputLayout.cpp" />
+    <ClCompile Include="Engine\Architecture\Job.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\LayoutCodex.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\NullPixelShader.cpp" />
+    <ClCompile Include="Engine\Architecture\Pass.cpp" />
+    <ClCompile Include="Engine\Architecture\PixelShader.cpp" />
+    <ClCompile Include="Engine\Architecture\RasterizerState.cpp" />
+    <ClCompile Include="Engine\Architecture\RenderGraph.cpp" />
+    <ClCompile Include="Engine\Architecture\RenderQueuePass.cpp" />
+    <ClCompile Include="Engine\Architecture\RenderTarget.cpp" />
+    <ClCompile Include="Engine\Architecture\Sampler.cpp" />
+    <ClCompile Include="Engine\Architecture\Sink.cpp" />
+    <ClCompile Include="Engine\Architecture\Source.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Stencil.cpp" />
+    <ClCompile Include="Engine\Architecture\Step.cpp" />
+    <ClCompile Include="Engine\Architecture\Technique.cpp" />
+    <ClCompile Include="Engine\Architecture\Texture.cpp" />
+    <ClCompile Include="Engine\Architecture\Topology.cpp" />
+    <ClCompile Include="Engine\Architecture\TransformCBuf.cpp" />
+    <ClCompile Include="Engine\Architecture\TransformUnified.cpp" />
+    <ClCompile Include="Engine\Architecture\VertexBuffer.cpp" />
+    <ClCompile Include="Engine\Architecture\VertexLayout.cpp" />
+    <ClCompile Include="Engine\Architecture\VertexShader.cpp" />
+    <ClCompile Include="Engine\Architecture\VerticalBlurPass.cpp" />
+    <ClCompile Include="Engine\Entities\Material.cpp" />
+    <ClCompile Include="Engine\Entities\Mesh.cpp" />
+    <ClCompile Include="Engine\Entities\Model.cpp" />
+    <ClCompile Include="Engine\Entities\Node.cpp" />
+    <ClCompile Include="Engine\Entities\Surface.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
@@ -181,6 +331,15 @@
     </Midl>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\shared\bin\assimp\x64\Debug\assimp-vc142-mtd.dll">
+      <DeploymentContent>true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
+    </None>
+    <None Include="..\shared\bin\assimp\x64\Release\assimp-vc142-mt.dll">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
+    <None Include="GraphicsThrows.h" />
     <None Include="packages.config" />
     <None Include="PropertySheet.props" />
     <Text Include="readme.txt">
@@ -190,6 +349,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.201113.7\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.201113.7\build\native\Microsoft.Windows.CppWinRT.targets')" />
+    <Import Project="..\packages\directxmath.2020.8.3.1\build\native\directxmath.targets" Condition="Exists('..\packages\directxmath.2020.8.3.1\build\native\directxmath.targets')" />
+    <Import Project="..\packages\fmt.7.0.1\build\fmt.targets" Condition="Exists('..\packages\fmt.7.0.1\build\fmt.targets')" />
+    <Import Project="..\packages\directxtex_desktop_win10.2020.11.12.1\build\native\directxtex_desktop_win10.targets" Condition="Exists('..\packages\directxtex_desktop_win10.2020.11.12.1\build\native\directxtex_desktop_win10.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -197,5 +359,8 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.201113.7\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.201113.7\build\native\Microsoft.Windows.CppWinRT.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.201113.7\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.201113.7\build\native\Microsoft.Windows.CppWinRT.targets'))" />
+    <Error Condition="!Exists('..\packages\directxmath.2020.8.3.1\build\native\directxmath.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxmath.2020.8.3.1\build\native\directxmath.targets'))" />
+    <Error Condition="!Exists('..\packages\fmt.7.0.1\build\fmt.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\fmt.7.0.1\build\fmt.targets'))" />
+    <Error Condition="!Exists('..\packages\directxtex_desktop_win10.2020.11.12.1\build\native\directxtex_desktop_win10.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtex_desktop_win10.2020.11.12.1\build\native\directxtex_desktop_win10.targets'))" />
   </Target>
 </Project>

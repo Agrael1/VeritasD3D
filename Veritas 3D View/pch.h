@@ -13,5 +13,12 @@
 #include <winrt/Windows.UI.Xaml.Interop.h>
 #include <winrt/Windows.UI.Xaml.Markup.h>
 #include <winrt/Windows.UI.Xaml.Navigation.h>
+#include <Windows.UI.Xaml.Media.dxinterop.h>
+
 #include <d3d11_3.h>
 #include <dxgi1_2.h>
+#include <wrl.h>
+
+#undef min
+#undef max
+#define WINSETUP_SUPPRESS

@@ -35,7 +35,7 @@ private:
 	bool imguiEnabled = true;
 private:
 	winrt::com_ptr<ID3D11Device> pDevice;
-	winrt::com_ptr<IDXGISwapChain> pSwap;
+	winrt::com_ptr<IDXGISwapChain1> pSwap;
 	winrt::com_ptr<ID3D11DeviceContext> pContext;
 	std::shared_ptr<RenderTarget> pTarget;
 	UINT width;

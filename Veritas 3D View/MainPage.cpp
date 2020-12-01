@@ -4,7 +4,7 @@
 #include "../WinD3D/VApp.h"
 
 using namespace winrt;
-using namespace Windows::UI::Xaml;
+using namespace winrt::Windows::UI::Xaml;
 
 namespace winrt::Veritas_3D_View::implementation
 {

@@ -21,6 +21,7 @@
 [Bb]uild/
 bld/
 [Bb]in/
+!shared/**/
 [Oo]bj/
 
 # Visual Studio 2015 cache/options directory
@@ -97,6 +98,9 @@ ipch/
 *.vsp
 *.vspx
 *.sap
+
+# Visual Studio Trace Files
+*.e2e
 
 # TFS 2012 Local Workspace
 $tf/
@@ -212,11 +216,14 @@ UpgradeLog*.htm
 # SQL Server files
 *.mdf
 *.ldf
+*.ndf
 
 # Business Intelligence projects
 *.rdl.data
 *.bim.layout
 *.bim_*.settings
+*.rptproj.rsuser
+*- Backup*.rdl
 
 # Microsoft Fakes
 FakesAssemblies/

@@ -1,6 +1,4 @@
 #pragma once
-#include <vector>
-#include <string>
 #include <DXGIDebug.h>
 
 class DXGIInfoManager
@@ -11,7 +9,7 @@ public:
 	DXGIInfoManager& operator=(const DXGIInfoManager&) = delete;
 public:
 	void Set()noexcept;
-	std::vector<std::string> GetMessages()const;
+	winrt::hstring GetMessages()const;
 private:
 	unsigned long long next = 0Ui64;
 	winrt::com_ptr<IDXGIInfoQueue> pDxgiInfoQueue;

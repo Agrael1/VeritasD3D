@@ -307,6 +307,7 @@
     </ClInclude>
     <ClInclude Include="Icosahedron.h" />
     <ClInclude Include="Icosphere.h" />
+    <ClInclude Include="IDXGIInfoManager.h" />
     <ClInclude Include="ImGUI\imconfig.h" />
     <ClInclude Include="ImGUI\imgui.h" />
     <ClInclude Include="ImGUI\imgui_impl_dx11.h" />
