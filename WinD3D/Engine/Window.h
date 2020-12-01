@@ -30,11 +30,15 @@ public:
 	Window(const Window&) = delete;
 	Window& operator=(const Window&) = delete;
 public:
+	UINT GetWidth() const noexcept;
+	UINT GetHeight() const noexcept;
 	void EnableCursor() noexcept;
 	void DisableCursor() noexcept;
 	bool CursorEnabled() const noexcept;
 	bool LoadCalled() const noexcept;
 	void LoadingComplete()noexcept;
+	bool ResizeCalled() const noexcept;
+	void ResizeComplete()noexcept;
 	bool DrawGrid()const noexcept;
 	void SetTitle(std::string_view title);
 	static std::optional<WPARAM> ProcessMessages()noexcept;
@@ -58,6 +62,7 @@ private:
 	bool cursorEnabled = true;
 	bool bLoadCallIssued = false;
 	bool bGridEnabled = true;
+	bool bResizeIssued = false;
 	int width;
 	int height;
 	wil::unique_hwnd hWnd;

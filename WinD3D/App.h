@@ -18,12 +18,13 @@ public:
 private:
 	void DoFrame(float dt);
 	void ProcessInput(float dt);
+	void CreateRenderGraph();
 private:
 	ImGUIManager imgui;
 	Window wnd;
 	Camera cam;
 
-	RG::BlurOutlineRenderGraph rg{ wnd.Gfx() };
+	std::optional<RG::BlurOutlineRenderGraph> rg;
 	PointLight light;
 
 	Grid grid;

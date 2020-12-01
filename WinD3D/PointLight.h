@@ -12,6 +12,7 @@ public:
 	void Submit() const noxnd;
 	void Bind(Graphics& gfx, DirectX::FXMMATRIX view)const noexcept;
 	void LinkTechniques(RG::RenderGraph&);
+	void UnlinkTechniques();
 private:
 	struct PointLightCBuf
 	{

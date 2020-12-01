@@ -32,6 +32,7 @@ public:
 	UINT GetWidth() const noexcept;
 	UINT GetHeight() const noexcept;
 	std::shared_ptr<RenderTarget> GetTarget();
+	void OnResize(unsigned newwidth, unsigned newheight);
 private:
 	DirectX::XMMATRIX projection;
 	DirectX::XMMATRIX camera;

@@ -28,6 +28,7 @@ public:
 	void InitializeParentReferences(const Drawable & parent) noexcept;
 	void Accept(TechniqueProbe& probe);
 	void Link(RG::RenderGraph& rg);
+	void Unlink();
 private:
 	std::vector<std::shared_ptr<Bindable>> bindables;
 	RG::RenderQueuePass* pTargetPass = nullptr;

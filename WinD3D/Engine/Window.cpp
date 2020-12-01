@@ -22,7 +22,7 @@ Window::WindowClass::WindowClass() noexcept
 	wcWindow.cbClsExtra = 0;
 	wcWindow.cbWndExtra = 0;
 	wcWindow.hInstance = GetInstance();
-	wcWindow.hCursor = nullptr;
+	wcWindow.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wcWindow.hIcon = LoadIcon(wcWindow.hInstance,MAKEINTRESOURCE(IDI_ICON1));
 	wcWindow.hbrBackground = nullptr;
 	wcWindow.lpszMenuName = nullptr;
@@ -52,11 +52,11 @@ Window::Window(unsigned int width, unsigned int height, const char * name):width
 	rWindow.top = 100;
 	rWindow.bottom = height + rWindow.top;
 	// Automatic calculation of window height and width to client region
-	WND_CALL_INFO(AdjustWindowRect(&rWindow, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, TRUE));
+	WND_CALL_INFO(AdjustWindowRect(&rWindow, WS_OVERLAPPEDWINDOW, TRUE));
 
 	hWnd.reset(CreateWindowA(
 		WindowClass::GetName(), name,
-		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
+		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, CW_USEDEFAULT, 
 		rWindow.right - rWindow.left,
 		rWindow.bottom - rWindow.top,
@@ -93,6 +93,16 @@ void Window::SetTitle(std::string_view title)
 	}
 }
 
+UINT Window::GetWidth() const noexcept
+{
+	return width;
+}
+
+UINT Window::GetHeight() const noexcept
+{
+	return height;
+}
+
 void Window::EnableCursor() noexcept
 {
 	cursorEnabled = true;
@@ -120,6 +130,16 @@ bool Window::LoadCalled() const noexcept
 void Window::LoadingComplete() noexcept
 {
 	bLoadCallIssued = false;
+}
+
+bool Window::ResizeCalled() const noexcept
+{
+	return bResizeIssued;
+}
+
+void Window::ResizeComplete() noexcept
+{
+	bResizeIssued = false;
 }
 
 bool Window::DrawGrid() const noexcept
@@ -241,7 +261,16 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		kbd.ClearState();
 		break;
 
-
+	case WM_SIZE:
+	{
+		if (pGfx)
+		{
+			width = LOWORD(lParam);
+			height = HIWORD(lParam);
+			bResizeIssued = true;
+		}
+		break;
+	}
 	case WM_CREATE:
 		AddMenu(hWnd);
 		break;

@@ -25,6 +25,7 @@ public:
 	void Accept(TechniqueProbe& probe);
 	const std::string& GetName() const noexcept;
 	void Link(RG::RenderGraph&);
+	void Unlink();
 private:
 	bool active = true;
 	std::vector<Step> steps;

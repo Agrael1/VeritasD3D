@@ -35,6 +35,7 @@ public:
 	void Accept(TechniqueProbe& probe);
 	UINT GetIndexCount() const noxnd;
 	void LinkTechniques(RG::RenderGraph&);
+	void UnlinkTechniques();
 protected:
 	std::shared_ptr<IndexBuffer> pIndices;
 	std::shared_ptr<VertexBuffer> pVertices;

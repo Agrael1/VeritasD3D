@@ -163,3 +163,28 @@ std::shared_ptr<RenderTarget> Graphics::GetTarget()
 {
 	return pTarget;
 }
+
+void Graphics::OnResize(unsigned newwidth, unsigned newheight)
+{
+	HRESULT hr;
+	pTarget.reset();
+	GFX_THROW_INFO(pSwap->ResizeBuffers(0, newwidth, newheight, DXGI_FORMAT_UNKNOWN, 0));
+	width = newwidth;
+	height = newheight;
+
+	// gain access to texture subresource in swap chain (back buffer)
+	wrl::ComPtr<ID3D11Texture2D> pBackBuffer;
+	GFX_THROW_INFO(pSwap->GetBuffer(0, __uuidof(ID3D11Texture2D), &pBackBuffer));
+	pTarget = std::shared_ptr<RenderTarget>{ new OutputOnlyRenderTarget(*this,pBackBuffer.Get()) };
+
+	// viewport always fullscreen (for now)
+	D3D11_VIEWPORT vp;
+	vp.Width = (float)width;
+	vp.Height = (float)height;
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = 0.0f;
+	vp.TopLeftY = 0.0f;
+	pContext->RSSetViewports(1u, &vp);
+}
+

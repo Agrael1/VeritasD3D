@@ -74,3 +74,8 @@ void PointLight::LinkTechniques(RG::RenderGraph& rg)
 {
 	mesh.LinkTechniques(rg);
 }
+
+void PointLight::UnlinkTechniques()
+{
+	mesh.UnlinkTechniques();
+}

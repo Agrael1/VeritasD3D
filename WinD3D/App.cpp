@@ -13,10 +13,7 @@ App::App(uint32_t width, uint32_t height)
 		{L"Wavefront object file",L"*.obj"}
 	};
 	opener.SetFileTypes(filterSpecs);
-
-	grid.LinkTechniques(rg);
-	light.LinkTechniques(rg);
-
+	CreateRenderGraph();
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 100.0f));
 }
 App::~App()
@@ -47,7 +44,7 @@ void App::DoFrame(float dt)
 	if(model)model->Submit();
 	light.Submit();
 	if(wnd.DrawGrid())grid.Submit();
-	rg.Execute(wnd.Gfx());
+	rg->Execute(wnd.Gfx());
 
 
 	if (ImGui::Begin("Simulation speed",nullptr, 
@@ -68,7 +65,7 @@ void App::DoFrame(float dt)
 
 	// Present
 	wnd.Gfx().EndFrame();
-	rg.Reset();
+	rg->Reset();
 }
 
 void App::ProcessInput(float dt)
@@ -147,9 +144,29 @@ void App::ProcessInput(float dt)
 		{
 			model = std::make_unique<Model>(wnd.Gfx(),ToNarrow(wfilename));
 			Codex::Trim();
-			model->LinkTechniques(rg);
+			model->LinkTechniques(*rg);
 		}
 		wnd.LoadingComplete();
 	}
+
+	if (wnd.ResizeCalled())
+	{
+		grid.UnlinkTechniques();
+		light.UnlinkTechniques();
+		if (model) model->UnlinkTechniques();
+		rg.reset();
+		wnd.Gfx().OnResize(wnd.GetWidth(), wnd.GetHeight());
+		CreateRenderGraph();
+		wnd.ResizeComplete();
+	}
+}
+
+void App::CreateRenderGraph()
+{
+	rg.emplace(wnd.Gfx());
+
+	grid.LinkTechniques(*rg);
+	light.LinkTechniques(*rg);
+	if (model) model->LinkTechniques(*rg);
 }
 
