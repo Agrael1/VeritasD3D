@@ -1,6 +1,8 @@
 #pragma once
 #include "Framework\WinSetup.h"
 #include <wrl.h>
+#include <vector>
+#include <string>
 #include <DXGIDebug.h>
 
 class DXGIInfoManager 
