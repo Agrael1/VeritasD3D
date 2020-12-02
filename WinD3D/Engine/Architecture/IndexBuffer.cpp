@@ -1,6 +1,6 @@
 #include "IndexBuffer.h"
 #include "GraphicsThrows.m"
-#include <Engine/Architecture/Codex.h>
+#include "Codex.h"
 
 IndexBuffer::IndexBuffer(Graphics& gfx, const std::vector<unsigned short>& indices)
 	:

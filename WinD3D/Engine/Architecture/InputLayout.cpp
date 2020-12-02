@@ -1,6 +1,6 @@
 #include "InputLayout.h"
 #include "GraphicsThrows.m"
-#include <Engine/Architecture/Codex.h>
+#include "Codex.h"
 
 InputLayout::InputLayout(Graphics & gfx, DV::VertexLayout layout_in, ID3DBlob * pVertexShaderBytecode)
 	:layout(std::move(layout_in))

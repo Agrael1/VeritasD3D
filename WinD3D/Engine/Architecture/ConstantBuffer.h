@@ -1,6 +1,5 @@
 #pragma once
-#include <Engine/Architecture/Codex.h>
-#include <Engine/Architecture/Bindable.h>
+#include "Codex.h"
 #include "GraphicsThrows.m"
 
 

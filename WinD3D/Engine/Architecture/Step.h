@@ -2,7 +2,7 @@
 #include <vector>
 #include <memory>
 #include "Bindable.h"
-#include <Engine/Graphics.h>
+#include <Graphics.h>
 
 class TechniqueProbe;
 class Drawable;

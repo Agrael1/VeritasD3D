@@ -1,8 +1,8 @@
 #include "Texture.h"
 #include "GraphicsThrows.m"
-#include <Engine/Architecture/Codex.h>
+#include "Codex.h"
 #include <Framework/Utility.h>
-#include <Engine/Entities/Surface.h>
+#include <Entities/Surface.h>
 
 
 Texture::Texture(Graphics& gfx, std::string_view path, UINT slot)

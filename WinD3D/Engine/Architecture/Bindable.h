@@ -1,5 +1,5 @@
 #pragma once
-#include <Engine\Architecture\GraphicsResource.h>
+#include "GraphicsResource.h"
 #include <Framework\noexcept_if.h>
 #include <memory>
 

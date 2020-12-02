@@ -1,6 +1,6 @@
 #include "PixelShader.h"
 #include "GraphicsThrows.m"
-#include <Engine/Architecture/Codex.h>
+#include "Codex.h"
 #include <Framework/Utility.h>
 
 PixelShader::PixelShader(Graphics& gfx, const std::string& path)

@@ -1,6 +1,6 @@
 #include "Node.h"
 #include "Mesh.h"
-#include "ModelProbe.h"
+#include <Probes/ModelProbe.h>
 
 namespace dx = DirectX;
 

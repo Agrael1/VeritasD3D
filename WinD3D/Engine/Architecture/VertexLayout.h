@@ -4,9 +4,9 @@
 #include <DirectXMath.h>
 #include <fmt/printf.h>
 #include <assimp/scene.h>
-#include <Framework\noexcept_if.h>
-#include <Framework\Utility.h>
-#include <Engine\Graphics.h>
+#include <Framework/noexcept_if.h>
+#include <Framework/Utility.h>
+#include <Graphics.h>
 
 #define DVTX_ELEMENT_AI_EXTRACTOR(member) static SysType Extract( const aiMesh& mesh, size_t i ) noexcept {return *reinterpret_cast<const SysType*>(&mesh.member[i]);}
 

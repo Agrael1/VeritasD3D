@@ -1,7 +1,9 @@
 #include "Window.h"
 #include <sstream>
 #include "resource.h"
-#include "ImGUI\imgui_impl_win32.h"
+#include "../ImGUI/imgui_impl_win32.h"
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 enum class MenuItems:UINT_PTR
 {

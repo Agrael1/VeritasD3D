@@ -1,7 +1,7 @@
 #include "BindableCommons.h"
 #include "Drawable.h"
 #include "GraphicsThrows.m"
-#include "Material.h"
+#include <Entities/Material.h>
 
 void Drawable::Submit() const noexcept
 {

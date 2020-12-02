@@ -2,10 +2,10 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include "ModelException.h"
+#include <Framework/ModelException.h>
 #include "Node.h"
 #include "Mesh.h"
-#include <Engine/Architecture/Material.h>
+#include <Entities/Material.h>
 
 namespace dx = DirectX;
 

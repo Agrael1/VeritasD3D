@@ -1,6 +1,6 @@
 #include "Technique.h"
 #include "Drawable.h"
-#include "TechniqueProbe.h"
+#include <Probes/TechniqueProbe.h>
 
 void Technique::Submit(const Drawable& drawable) const noexcept
 {

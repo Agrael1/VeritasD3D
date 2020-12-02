@@ -1,6 +1,6 @@
 #pragma once
 #include <Framework/noexcept_if.h>
-#include <Engine/Graphics.h>
+#include <Graphics.h>
 #include <DirectXMath.h>
 #include <memory>
 #include "Technique.h"

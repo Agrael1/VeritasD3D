@@ -1,5 +1,5 @@
 #pragma once
-#include <Engine\Graphics.h>
+#include <Graphics.h>
 
 class GraphicsResource
 {

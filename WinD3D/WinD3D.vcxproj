@@ -85,6 +85,7 @@
       <PreprocessorDefinitions>IS_DEBUG=true;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableModules>true</EnableModules>
+      <AdditionalIncludeDirectories>;$(ProjectDir)Engine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -98,7 +99,7 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
       <PreprocessorDefinitions>IS_DEBUG=true;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)Assimp\Include;$(ProjectDir)Fmtlib\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Assimp\Include;$(ProjectDir)Fmtlib\include;$(ProjectDir);%(AdditionalIncludeDirectories);$(ProjectDir)Engine</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableModules>true</EnableModules>
@@ -122,6 +123,7 @@
       <CompileAs>CompileAsC</CompileAs>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableModules>true</EnableModules>
+      <AdditionalIncludeDirectories>;$(ProjectDir)Engine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -139,7 +141,7 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);NDEBUG;IS_DEBUG=false</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)Assimp\Include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Assimp\Include;$(ProjectDir);%(AdditionalIncludeDirectories);$(ProjectDir)Engine</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableModules>true</EnableModules>
     </ClCompile>
@@ -150,9 +152,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\ImGUI\imgui.cpp" />
+    <ClCompile Include="..\ImGUI\imgui_demo.cpp" />
+    <ClCompile Include="..\ImGUI\imgui_draw.cpp" />
+    <ClCompile Include="..\ImGUI\imgui_impl_dx11.cpp" />
+    <ClCompile Include="..\ImGUI\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="App.cpp" />
-    <ClCompile Include="Box.cpp" />
-    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Engine\Architecture\BindingPass.cpp" />
     <ClCompile Include="Engine\Architecture\BlendState.cpp" />
     <ClCompile Include="Engine\Architecture\BlurOutlineRenderGraph.cpp" />
@@ -167,7 +173,6 @@
     <ClCompile Include="Engine\Architecture\InputLayout.cpp" />
     <ClCompile Include="Engine\Architecture\Job.cpp" />
     <ClCompile Include="Engine\Architecture\LayoutCodex.cpp" />
-    <ClCompile Include="Engine\Architecture\Material.cpp" />
     <ClCompile Include="Engine\Architecture\NullPixelShader.cpp" />
     <ClCompile Include="Engine\Architecture\Pass.cpp" />
     <ClCompile Include="Engine\Architecture\PixelShader.cpp" />
@@ -189,11 +194,9 @@
     <ClCompile Include="Engine\Architecture\VertexLayout.cpp" />
     <ClCompile Include="Engine\Architecture\VertexShader.cpp" />
     <ClCompile Include="Engine\Architecture\VerticalBlurPass.cpp" />
-    <ClCompile Include="Engine\Entities\GDIPlusManager.cpp" />
-    <ClCompile Include="Engine\Entities\ImGUIManager.cpp" />
+    <ClCompile Include="Engine\Entities\Material.cpp" />
     <ClCompile Include="Engine\Entities\Mesh.cpp" />
     <ClCompile Include="Engine\Entities\Model.cpp" />
-    <ClCompile Include="Engine\Entities\ModelException.cpp" />
     <ClCompile Include="Engine\Entities\Node.cpp" />
     <ClCompile Include="Engine\Entities\ReSurface.cpp" />
     <ClCompile Include="Engine\Entities\Surface.cpp" />
@@ -201,36 +204,32 @@
     <ClCompile Include="Engine\Graphics.cpp" />
     <ClCompile Include="Engine\Keyboard.cpp" />
     <ClCompile Include="Engine\Mouse.cpp" />
+    <ClCompile Include="Engine\Scene\Camera.cpp" />
+    <ClCompile Include="Engine\Scene\PointLight.cpp" />
+    <ClCompile Include="Engine\Scene\SolidSphere.cpp" />
     <ClCompile Include="Engine\Window.cpp" />
     <ClCompile Include="EntryMain.cpp" />
     <ClCompile Include="Framework\DXGIInfoManager.cpp" />
     <ClCompile Include="Framework\Exception.cpp" />
+    <ClCompile Include="Framework\GDIPlusManager.cpp" />
     <ClCompile Include="Framework\GraphicsExceptions.cpp" />
+    <ClCompile Include="Framework\ImGUIManager.cpp" />
+    <ClCompile Include="Framework\ModelException.cpp" />
     <ClCompile Include="Framework\RenderGraphException.cpp" />
     <ClCompile Include="Framework\WindowException.cpp" />
-    <ClCompile Include="Icosahedron.cpp" />
-    <ClCompile Include="ImGUI\imgui.cpp" />
-    <ClCompile Include="ImGUI\imgui_demo.cpp" />
-    <ClCompile Include="ImGUI\imgui_draw.cpp" />
-    <ClCompile Include="ImGUI\imgui_impl_dx11.cpp" />
-    <ClCompile Include="ImGUI\imgui_impl_win32.cpp" />
-    <ClCompile Include="ImGUI\imgui_widgets.cpp" />
-    <ClCompile Include="Melon.cpp" />
-    <ClCompile Include="PointLight.cpp" />
-    <ClCompile Include="Pyramid.cpp" />
-    <ClCompile Include="RePrism.cpp" />
-    <ClCompile Include="Sheet.cpp" />
-    <ClCompile Include="SkinnedBox.cpp" />
-    <ClCompile Include="SolidSphere.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ImGUI\imconfig.h" />
+    <ClInclude Include="..\ImGUI\imgui.h" />
+    <ClInclude Include="..\ImGUI\imgui_impl_dx11.h" />
+    <ClInclude Include="..\ImGUI\imgui_impl_win32.h" />
+    <ClInclude Include="..\ImGUI\imgui_internal.h" />
+    <ClInclude Include="..\ImGUI\imstb_rectpack.h" />
+    <ClInclude Include="..\ImGUI\imstb_textedit.h" />
+    <ClInclude Include="..\ImGUI\imstb_truetype.h" />
     <ClInclude Include="App.h" />
-    <ClInclude Include="BindableCommons.h" />
-    <ClInclude Include="Box.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Cone.h" />
-    <ClInclude Include="Cube.h" />
     <ClInclude Include="Engine\Architecture\Bindable.h" />
+    <ClInclude Include="Engine\Architecture\BindableCommons.h" />
     <ClInclude Include="Engine\Architecture\BindingPass.h" />
     <ClInclude Include="Engine\Architecture\BlendState.h" />
     <ClInclude Include="Engine\Architecture\BlurOutlineDrawingPass.h" />
@@ -243,7 +242,6 @@
     <ClInclude Include="Engine\Architecture\DepthStencil.h" />
     <ClInclude Include="Engine\Architecture\Drawable.h" />
     <ClInclude Include="Engine\Architecture\DynamicConstant.h" />
-    <ClInclude Include="Engine\Architecture\FrameCommander.h" />
     <ClInclude Include="Engine\Architecture\FullscreenPass.h" />
     <ClInclude Include="Engine\Architecture\GraphicsResource.h" />
     <ClInclude Include="Engine\Architecture\HorizontalBlurPass.h" />
@@ -252,7 +250,6 @@
     <ClInclude Include="Engine\Architecture\Job.h" />
     <ClInclude Include="Engine\Architecture\LambertianPass.h" />
     <ClInclude Include="Engine\Architecture\LayoutCodex.h" />
-    <ClInclude Include="Engine\Architecture\Material.h" />
     <ClInclude Include="Engine\Architecture\NullPixelShader.h" />
     <ClInclude Include="Engine\Architecture\OutlineMaskGenerationPass.h" />
     <ClInclude Include="Engine\Architecture\Pass.h" />
@@ -269,7 +266,6 @@
     <ClInclude Include="Engine\Architecture\Stencil.h" />
     <ClInclude Include="Engine\Architecture\Step.h" />
     <ClInclude Include="Engine\Architecture\Technique.h" />
-    <ClInclude Include="Engine\Architecture\TechniqueProbe.h" />
     <ClInclude Include="Engine\Architecture\Texture.h" />
     <ClInclude Include="Engine\Architecture\Topology.h" />
     <ClInclude Include="Engine\Architecture\TransformCBuf.h" />
@@ -278,26 +274,35 @@
     <ClInclude Include="Engine\Architecture\VertexLayout.h" />
     <ClInclude Include="Engine\Architecture\VertexShader.h" />
     <ClInclude Include="Engine\Architecture\VerticalBlurPass.h" />
-    <ClInclude Include="Engine\Entities\GDIPlusManager.h" />
-    <ClInclude Include="Engine\Entities\ImGUIManager.h" />
+    <ClInclude Include="Engine\Entities\Material.h" />
     <ClInclude Include="Engine\Entities\Mesh.h" />
     <ClInclude Include="Engine\Entities\Model.h" />
-    <ClInclude Include="Engine\Entities\ModelException.h" />
-    <ClInclude Include="Engine\Entities\ModelProbe.h" />
     <ClInclude Include="Engine\Entities\Node.h" />
     <ClInclude Include="Engine\Entities\ReSurface.h" />
     <ClInclude Include="Engine\Entities\Surface.h" />
-    <ClInclude Include="Engine\Entities\TestModelProbe.h" />
     <ClInclude Include="Engine\Entities\VFileDialog.h" />
     <ClInclude Include="Engine\Graphics.h" />
     <ClInclude Include="Engine\Keyboard.h" />
     <ClInclude Include="Engine\Mouse.h" />
+    <ClInclude Include="Engine\Probes\ModelProbe.h" />
+    <ClInclude Include="Engine\Probes\TechniqueProbe.h" />
+    <ClInclude Include="Engine\Probes\TestModelProbe.h" />
+    <ClInclude Include="Engine\Scene\Camera.h" />
+    <ClInclude Include="Engine\Scene\Grid.h" />
+    <ClInclude Include="Engine\Scene\IndexedTriangleList.h" />
+    <ClInclude Include="Engine\Scene\Plane.h" />
+    <ClInclude Include="Engine\Scene\PointLight.h" />
+    <ClInclude Include="Engine\Scene\SolidSphere.h" />
+    <ClInclude Include="Engine\Scene\Sphere.h" />
     <ClInclude Include="Engine\Window.h" />
     <ClInclude Include="Framework\DXGIInfoManager.h" />
     <ClInclude Include="Framework\Exception.h" />
+    <ClInclude Include="Framework\GDIPlusManager.h" />
     <ClInclude Include="Framework\GdiSetup.h" />
     <ClInclude Include="Framework\GraphicsExceptions.h" />
+    <ClInclude Include="Framework\ImGUIManager.h" />
     <ClInclude Include="Framework\MathHelper.h" />
+    <ClInclude Include="Framework\ModelException.h" />
     <ClInclude Include="Framework\noexcept_if.h" />
     <ClInclude Include="Framework\RenderGraphException.h" />
     <ClInclude Include="Framework\Utility.h" />
@@ -305,32 +310,7 @@
     <ClInclude Include="Framework\WinSetup.h">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsHeaderUnit</CompileAs>
     </ClInclude>
-    <ClInclude Include="Icosahedron.h" />
-    <ClInclude Include="Icosphere.h" />
-    <ClInclude Include="IDXGIInfoManager.h" />
-    <ClInclude Include="ImGUI\imconfig.h" />
-    <ClInclude Include="ImGUI\imgui.h" />
-    <ClInclude Include="ImGUI\imgui_impl_dx11.h" />
-    <ClInclude Include="ImGUI\imgui_impl_win32.h" />
-    <ClInclude Include="ImGUI\imgui_internal.h" />
-    <ClInclude Include="ImGUI\imstb_rectpack.h" />
-    <ClInclude Include="ImGUI\imstb_textedit.h" />
-    <ClInclude Include="ImGUI\imstb_truetype.h" />
-    <ClInclude Include="IndexedTriangleList.h" />
-    <ClInclude Include="Grid.h" />
-    <ClInclude Include="Melon.h" />
-    <ClInclude Include="Plane.h" />
-    <ClInclude Include="PointLight.h" />
-    <ClInclude Include="Prism.h" />
-    <ClInclude Include="Pyramid.h" />
-    <ClInclude Include="RePrism.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Sheet.h" />
-    <ClInclude Include="SkinnedBox.h" />
-    <ClInclude Include="SolidSphere.h" />
-    <ClInclude Include="Sphere.h" />
-    <ClInclude Include="TestObject.h" />
-    <ClInclude Include="VApp.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc" />
@@ -346,7 +326,6 @@
     <None Include="Engine\Shaders\LightVectorData.hlsli" />
     <None Include="Engine\Shaders\PointLight.hlsli" />
     <None Include="Engine\Shaders\ShaderProcs.hlsli" />
-    <None Include="GraphicsThrows.m" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

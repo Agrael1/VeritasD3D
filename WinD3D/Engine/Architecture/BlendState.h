@@ -1,5 +1,5 @@
 #pragma once
-#include <Engine/Architecture/Bindable.h>
+#include "Bindable.h"
 #include <optional>
 #include <array>
 
@@ -8,6 +8,7 @@ class BlendState : public Bindable
 {
 public:
 	BlendState(Graphics& gfx, bool blending, std::optional<float> factor = {});
+public:
 	void Bind(Graphics& gfx) noxnd override;
 	void SetFactor(float factor) noxnd;
 	float GetFactor() const noxnd;

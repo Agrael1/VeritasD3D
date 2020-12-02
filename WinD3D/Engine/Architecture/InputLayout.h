@@ -1,6 +1,6 @@
 #pragma once
-#include <Engine/Architecture/Bindable.h>
-#include <Engine/Architecture/VertexLayout.h>
+#include "Bindable.h"
+#include "VertexLayout.h"
 
 class InputLayout : public Bindable
 {

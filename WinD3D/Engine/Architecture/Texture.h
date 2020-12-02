@@ -1,5 +1,5 @@
 #pragma once
-#include <Engine/Architecture/Bindable.h>
+#include "Bindable.h"
 
 class Texture : public Bindable
 {

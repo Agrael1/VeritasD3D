@@ -1,10 +1,10 @@
 #include "Graphics.h"
 #include <sstream>
-#include "ImGUI\imgui_impl_dx11.h"
-#include "ImGUI\imgui_impl_win32.h"
+#include "../ImGUI/imgui_impl_dx11.h"
+#include "../ImGUI/imgui_impl_win32.h"
 #include "GraphicsThrows.m"
-#include <Engine\Architecture\DepthStencil.h>
-#include <Engine\Architecture\RenderTarget.h>
+#include <Architecture/DepthStencil.h>
+#include <Architecture/RenderTarget.h>
 
 #pragma comment(lib,"d3d11.lib")
 #pragma comment(lib,"D3DCompiler.lib")

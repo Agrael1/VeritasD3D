@@ -2,7 +2,7 @@
 #include "Bindable.h"
 #include "GraphicsThrows.m"
 #include "DynamicConstant.h"
-#include "TechniqueProbe.h"
+#include <Probes/TechniqueProbe.h>
 
 
 class ConstantBufferEx : public Bindable

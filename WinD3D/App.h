@@ -1,12 +1,13 @@
 #pragma once
-#include <Engine/Entities/VFileDialog.h>
-#include <Engine/Window.h>
-#include <Engine/Entities/ImGUIManager.h>
-#include <Engine/Entities/Model.h>
-#include "Camera.h"
-#include "PointLight.h"
-#include <Engine\Architecture\BlurOutlineRenderGraph.h>
-#include "Grid.h"
+#include <Entities/VFileDialog.h>
+#include <Window.h>
+#include <Framework/ImGUIManager.h>
+#include <Entities/Model.h>
+#include <Scene/Camera.h>
+#include <Scene/PointLight.h>
+#include <Scene/Grid.h>
+#include <Architecture\BlurOutlineRenderGraph.h>
+
 
 class App
 {

@@ -1,6 +1,6 @@
 #pragma once
-#include <Engine/Architecture/ConstantBuffer.h>
-#include <Engine/Architecture/Drawable.h>
+#include "ConstantBuffer.h"
+#include "Drawable.h"
 #include <DirectXMath.h>
 
 class TransformCbuf : public CloningBindable

@@ -2,7 +2,7 @@
 #include "Drawable.h"
 #include "RenderGraph.h"
 #include "RenderQueuePass.h"
-#include "TechniqueProbe.h"
+#include <Probes/TechniqueProbe.h>
 
 Step::Step(std::string targetPassName)
 	:targetPassName{ std::move(targetPassName) }

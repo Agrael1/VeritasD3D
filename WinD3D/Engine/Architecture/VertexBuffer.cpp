@@ -1,5 +1,5 @@
 #include "VertexBuffer.h"
-#include <Engine/Architecture/Codex.h>
+#include "Codex.h"
 
 VertexBuffer::VertexBuffer(Graphics& gfx, const DV::VertexBuffer& vbuf)
 	:

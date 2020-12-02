@@ -1,104 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Файлы исходного кода">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Заголовочные файлы">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Файлы ресурсов">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Заголовочные файлы\Engine">
-      <UniqueIdentifier>{3ef34b3b-91ef-491e-b7b9-652309908444}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Engine">
-      <UniqueIdentifier>{3e5fe48e-64ab-48b0-bfad-ffcef5385d25}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Window">
-      <UniqueIdentifier>{eddc15d2-7938-479f-a159-a8b9d64b3776}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Window">
-      <UniqueIdentifier>{cf3ff23a-ad75-4fae-beb1-eaed3b03d628}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Файлы ресурсов\Images">
       <UniqueIdentifier>{904b3ac4-0756-475d-8141-d73632901c89}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Engine\ImGUI">
-      <UniqueIdentifier>{0079a7bd-0263-4eec-9138-32d5a697c26b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Engine\ImGUI\Core">
-      <UniqueIdentifier>{74100ba4-094b-4881-a94d-ddc59b4b30cc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Engine\ImGUI\Impl">
-      <UniqueIdentifier>{6596a14e-efa5-45a3-8722-55736808dd37}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Engine\ImGUI">
-      <UniqueIdentifier>{dd306305-cba0-47a3-9a8d-bea44eff7c06}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Engine\ImGUI\Core">
-      <UniqueIdentifier>{bc0eb6d9-9ab8-459c-bc20-d91e252f58e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Engine\ImGUI\Impl">
-      <UniqueIdentifier>{6a47bf79-e6f6-411b-82d3-4e29bf596653}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Graphics">
-      <UniqueIdentifier>{8a1dccec-54a8-48dd-8502-619f48a1b07e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Graphics\Objects">
-      <UniqueIdentifier>{f60c432c-80a5-4f07-ba69-f99e55ff1c41}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Graphics\Objects\Bases">
-      <UniqueIdentifier>{074124c2-941a-462e-a829-03cffe266e35}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Graphics\Objects\Geometry">
-      <UniqueIdentifier>{ca4a024b-375e-43b6-9397-79a5d2a469dd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Graphics">
-      <UniqueIdentifier>{96c6a4ef-9569-4b2e-81f2-4b6f1ec57f66}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Graphics\Objects">
-      <UniqueIdentifier>{bfb28d2d-a35d-447c-bbc7-3a48c60dccd1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Graphics\Objects\Geometry">
-      <UniqueIdentifier>{8880a2e9-6d74-4f13-a7f7-8327dd278fe5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Framework">
-      <UniqueIdentifier>{d3da98c1-aa1e-429d-b424-648b856b4867}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Framework\Exceptions">
-      <UniqueIdentifier>{bf2cc866-e6be-4316-8d7e-2295ae3c988a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Framework\Exceptions\Macros">
-      <UniqueIdentifier>{c8a13912-72eb-4044-9736-2eae0cc9524f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Framework">
-      <UniqueIdentifier>{e4bac827-b181-4ad7-bda0-785319e06cb4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Framework\Exceptions">
-      <UniqueIdentifier>{48e6c941-810c-4f44-9b7b-65abefa5c7f8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Architecture">
-      <UniqueIdentifier>{09026b9f-f410-42fd-9f58-bde7006ca9b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Architecture">
-      <UniqueIdentifier>{cf0ddef9-b360-4eb0-b889-54f9c6218443}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Architecture\Bindable">
-      <UniqueIdentifier>{80808386-c8b3-4c29-b92b-a04cefe8ac10}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Architecture\Bindable">
-      <UniqueIdentifier>{dd9d84e4-62e6-4716-aad9-4c603318cc38}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Entities">
-      <UniqueIdentifier>{6112d352-0803-46a0-b2e4-9a278b6355fa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Entities">
-      <UniqueIdentifier>{c06b2447-0d18-440d-8264-658c4acfc9de}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{666e558c-769e-4eed-a311-9335a828cd8e}</UniqueIdentifier>
@@ -115,558 +23,510 @@
     <Filter Include="Shaders\VertexShaders">
       <UniqueIdentifier>{421a567e-b07d-48e3-a352-ad6b2f98d515}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Architecture\Multipass">
-      <UniqueIdentifier>{7671009b-2342-4f1f-9ef0-9361c29b625d}</UniqueIdentifier>
+    <Filter Include="WinD3D">
+      <UniqueIdentifier>{9bc9528b-95ee-4106-9ce2-55e12cdd17ea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Architecture\Multipass">
-      <UniqueIdentifier>{44c0e871-8de0-4e93-8ed2-9f2ea2b81ff5}</UniqueIdentifier>
+    <Filter Include="WinD3D\Bindable">
+      <UniqueIdentifier>{a81f50bf-d120-446a-b15e-22709cb692ac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Architecture\Multipass\Passes">
-      <UniqueIdentifier>{6378b3f8-cce6-4cab-b2ad-e25b721cbf0d}</UniqueIdentifier>
+    <Filter Include="WinD3D\Multipass">
+      <UniqueIdentifier>{49aaebc1-53b0-40d6-8386-febd58fd75a3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Architecture\Multipass\Passes">
-      <UniqueIdentifier>{51dfa0b5-a92e-4f8f-8cbc-f30d0c54294b}</UniqueIdentifier>
+    <Filter Include="WinD3D\Passes">
+      <UniqueIdentifier>{0627b492-cc28-4483-87b9-21953eefc4ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Заголовочные файлы\Engine\Architecture\Multipass\Graphs">
-      <UniqueIdentifier>{47b36fa9-7477-44dd-b91d-3b57853bdad0}</UniqueIdentifier>
+    <Filter Include="WinD3D\Passes\Graphs">
+      <UniqueIdentifier>{415d7d59-eb46-4f3a-951b-c31f6e5082fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы исходного кода\Engine\Architecture\Multipass\Graphs">
-      <UniqueIdentifier>{16d11086-9306-494c-b9b4-de4f9ed9fba8}</UniqueIdentifier>
+    <Filter Include="WinD3D\Dynamics">
+      <UniqueIdentifier>{c805f448-9cd3-4100-a18c-0bc373679870}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinD3D\Drawable">
+      <UniqueIdentifier>{b829bc64-bee8-4512-9428-d3af7355ea10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGUI">
+      <UniqueIdentifier>{c3c1aadf-7d76-47d3-8bc1-3bfa43a0703d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinD3D\Loading">
+      <UniqueIdentifier>{8d80f6e0-5cec-4639-84cb-ea60f71e91ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinD3D\Scene">
+      <UniqueIdentifier>{a2f47379-45e9-420b-8b5c-bc6a91833e8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinD3D\Probes">
+      <UniqueIdentifier>{75f6c65f-128c-40a1-92c6-59e26c05f22f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinD3D\Framework">
+      <UniqueIdentifier>{f602147e-507a-4eff-a4a9-be847ee1b20f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="App.cpp">
-      <Filter>Файлы исходного кода</Filter>
+    <ClCompile Include="..\ImGUI\imgui.cpp">
+      <Filter>ImGUI</Filter>
     </ClCompile>
-    <ClCompile Include="Pyramid.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Objects\Geometry</Filter>
+    <ClCompile Include="..\ImGUI\imgui_demo.cpp">
+      <Filter>ImGUI</Filter>
     </ClCompile>
-    <ClCompile Include="Box.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Objects\Geometry</Filter>
+    <ClCompile Include="..\ImGUI\imgui_draw.cpp">
+      <Filter>ImGUI</Filter>
     </ClCompile>
-    <ClCompile Include="Melon.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Objects\Geometry</Filter>
+    <ClCompile Include="..\ImGUI\imgui_impl_dx11.cpp">
+      <Filter>ImGUI</Filter>
     </ClCompile>
-    <ClCompile Include="RePrism.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Objects\Geometry</Filter>
+    <ClCompile Include="..\ImGUI\imgui_impl_win32.cpp">
+      <Filter>ImGUI</Filter>
     </ClCompile>
-    <ClCompile Include="Icosahedron.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Objects\Geometry</Filter>
-    </ClCompile>
-    <ClCompile Include="Sheet.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Objects\Geometry</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGUI\imgui.cpp">
-      <Filter>Файлы исходного кода\Engine\ImGUI\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGUI\imgui_demo.cpp">
-      <Filter>Файлы исходного кода\Engine\ImGUI\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGUI\imgui_draw.cpp">
-      <Filter>Файлы исходного кода\Engine\ImGUI\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGUI\imgui_widgets.cpp">
-      <Filter>Файлы исходного кода\Engine\ImGUI\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGUI\imgui_impl_dx11.cpp">
-      <Filter>Файлы исходного кода\Engine\ImGUI\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGUI\imgui_impl_win32.cpp">
-      <Filter>Файлы исходного кода\Engine\ImGUI\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="SkinnedBox.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Objects\Geometry</Filter>
-    </ClCompile>
-    <ClCompile Include="PointLight.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="SolidSphere.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Objects\Geometry</Filter>
-    </ClCompile>
-    <ClCompile Include="EntryMain.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Keyboard.cpp">
-      <Filter>Файлы исходного кода\Engine\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Mouse.cpp">
-      <Filter>Файлы исходного кода\Engine\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\DXGIInfoManager.cpp">
-      <Filter>Файлы исходного кода\Framework\Exceptions</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Exception.cpp">
-      <Filter>Файлы исходного кода\Framework\Exceptions</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Graphics.cpp">
-      <Filter>Файлы исходного кода\Engine\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\Drawable.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\TransformCBuf.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\TransformUnified.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\Texture.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\Sampler.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\IndexBuffer.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\InputLayout.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\PixelShader.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\Topology.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\VertexBuffer.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\VertexShader.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Entities\GDIPlusManager.cpp">
-      <Filter>Файлы исходного кода\Engine\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Entities\ImGUIManager.cpp">
-      <Filter>Файлы исходного кода\Engine\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Entities\Model.cpp">
-      <Filter>Файлы исходного кода\Engine\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Entities\ReSurface.cpp">
-      <Filter>Файлы исходного кода\Engine\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Entities\VFileDialog.cpp">
-      <Filter>Файлы исходного кода\Engine\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Window.cpp">
-      <Filter>Файлы исходного кода\Engine\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Файлы исходного кода\Engine\Graphics\Objects</Filter>
+    <ClCompile Include="..\ImGUI\imgui_widgets.cpp">
+      <Filter>ImGUI</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Architecture\BlendState.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\RasterizerState.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Entities\Surface.cpp">
-      <Filter>Файлы исходного кода\Engine\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\DynamicConstant.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\LayoutCodex.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\Stencil.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\Step.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Multipass</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\Job.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Multipass</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\Technique.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Multipass</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\NullPixelShader.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\VertexLayout.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\Material.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Entities\Mesh.cpp">
-      <Filter>Файлы исходного кода\Engine\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Entities\ModelException.cpp">
-      <Filter>Файлы исходного кода\Engine\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Entities\Node.cpp">
-      <Filter>Файлы исходного кода\Engine\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\GraphicsResource.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+      <Filter>WinD3D\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Architecture\DepthStencil.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\GraphicsResource.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\IndexBuffer.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\InputLayout.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\NullPixelShader.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\PixelShader.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\RasterizerState.cpp">
+      <Filter>WinD3D\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Architecture\RenderTarget.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Bindable</Filter>
+      <Filter>WinD3D\Bindable</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Architecture\Pass.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Multipass</Filter>
+    <ClCompile Include="Engine\Architecture\Sampler.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Stencil.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Texture.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Topology.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\TransformCBuf.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\TransformUnified.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\VertexBuffer.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\VertexShader.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Technique.cpp">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Step.cpp">
+      <Filter>WinD3D\Multipass</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Architecture\Sink.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Multipass</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\RenderGraphException.cpp">
-      <Filter>Файлы исходного кода\Framework\Exceptions</Filter>
+      <Filter>WinD3D\Multipass</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Architecture\Source.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Multipass</Filter>
+      <Filter>WinD3D\Multipass</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\GraphicsExceptions.cpp">
-      <Filter>Файлы исходного кода\Framework\Exceptions</Filter>
+    <ClCompile Include="Engine\Architecture\Job.cpp">
+      <Filter>WinD3D\Multipass</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Architecture\BindingPass.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Multipass\Passes</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Architecture\RenderQueuePass.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Multipass\Passes</Filter>
+    <ClCompile Include="Engine\Architecture\Pass.cpp">
+      <Filter>WinD3D\Multipass</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Architecture\BlurOutlineRenderGraph.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Multipass\Graphs</Filter>
+      <Filter>WinD3D\Passes\Graphs</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Architecture\RenderGraph.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Multipass\Graphs</Filter>
+      <Filter>WinD3D\Passes\Graphs</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\BindingPass.cpp">
+      <Filter>WinD3D\Passes</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Architecture\BufferClearPass.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Multipass\Passes</Filter>
+      <Filter>WinD3D\Passes</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Architecture\FullscreenPass.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Multipass\Passes</Filter>
+      <Filter>WinD3D\Passes</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Architecture\HorizontalBlurPass.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Multipass\Passes</Filter>
+      <Filter>WinD3D\Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\RenderQueuePass.cpp">
+      <Filter>WinD3D\Passes</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Architecture\VerticalBlurPass.cpp">
-      <Filter>Файлы исходного кода\Engine\Architecture\Multipass\Passes</Filter>
+      <Filter>WinD3D\Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Drawable.cpp">
+      <Filter>WinD3D\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\LayoutCodex.cpp">
+      <Filter>WinD3D\Dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\DynamicConstant.cpp">
+      <Filter>WinD3D\Dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\VertexLayout.cpp">
+      <Filter>WinD3D\Dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\Material.cpp">
+      <Filter>WinD3D\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\Mesh.cpp">
+      <Filter>WinD3D\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\Model.cpp">
+      <Filter>WinD3D\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\Node.cpp">
+      <Filter>WinD3D\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\ReSurface.cpp">
+      <Filter>WinD3D\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\Surface.cpp">
+      <Filter>WinD3D\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\VFileDialog.cpp">
+      <Filter>WinD3D\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\Camera.cpp">
+      <Filter>WinD3D\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\PointLight.cpp">
+      <Filter>WinD3D\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\SolidSphere.cpp">
+      <Filter>WinD3D\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics.cpp">
+      <Filter>WinD3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Keyboard.cpp">
+      <Filter>WinD3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Mouse.cpp">
+      <Filter>WinD3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Window.cpp">
+      <Filter>WinD3D</Filter>
+    </ClCompile>
+    <ClCompile Include="App.cpp">
+      <Filter>WinD3D</Filter>
+    </ClCompile>
+    <ClCompile Include="EntryMain.cpp">
+      <Filter>WinD3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\DXGIInfoManager.cpp">
+      <Filter>WinD3D\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Exception.cpp">
+      <Filter>WinD3D\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\GDIPlusManager.cpp">
+      <Filter>WinD3D\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\GraphicsExceptions.cpp">
+      <Filter>WinD3D\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\ImGUIManager.cpp">
+      <Filter>WinD3D\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\ModelException.cpp">
+      <Filter>WinD3D\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\RenderGraphException.cpp">
+      <Filter>WinD3D\Framework</Filter>
     </ClCompile>
     <ClCompile Include="Framework\WindowException.cpp">
-      <Filter>Файлы исходного кода\Framework\Exceptions</Filter>
+      <Filter>WinD3D\Framework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h">
-      <Filter>Заголовочные файлы</Filter>
+    <ClInclude Include="..\ImGUI\imconfig.h">
+      <Filter>ImGUI</Filter>
     </ClInclude>
-    <ClInclude Include="App.h">
-      <Filter>Заголовочные файлы</Filter>
+    <ClInclude Include="..\ImGUI\imgui.h">
+      <Filter>ImGUI</Filter>
     </ClInclude>
-    <ClInclude Include="Cone.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects\Bases</Filter>
+    <ClInclude Include="..\ImGUI\imgui_impl_dx11.h">
+      <Filter>ImGUI</Filter>
     </ClInclude>
-    <ClInclude Include="Cube.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects\Bases</Filter>
+    <ClInclude Include="..\ImGUI\imgui_impl_win32.h">
+      <Filter>ImGUI</Filter>
     </ClInclude>
-    <ClInclude Include="IndexedTriangleList.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects\Bases</Filter>
+    <ClInclude Include="..\ImGUI\imgui_internal.h">
+      <Filter>ImGUI</Filter>
     </ClInclude>
-    <ClInclude Include="Sphere.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects\Bases</Filter>
+    <ClInclude Include="..\ImGUI\imstb_rectpack.h">
+      <Filter>ImGUI</Filter>
     </ClInclude>
-    <ClInclude Include="Melon.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects\Geometry</Filter>
+    <ClInclude Include="..\ImGUI\imstb_textedit.h">
+      <Filter>ImGUI</Filter>
     </ClInclude>
-    <ClInclude Include="Pyramid.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Keyboard.h">
-      <Filter>Заголовочные файлы\Engine\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Window.h">
-      <Filter>Заголовочные файлы\Engine\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="Prism.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects\Bases</Filter>
-    </ClInclude>
-    <ClInclude Include="Box.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="RePrism.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="Icosphere.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects\Bases</Filter>
-    </ClInclude>
-    <ClInclude Include="Icosahedron.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="Plane.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects\Bases</Filter>
-    </ClInclude>
-    <ClInclude Include="Sheet.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="SkinnedBox.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGUI\imconfig.h">
-      <Filter>Заголовочные файлы\Engine\ImGUI\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGUI\imgui.h">
-      <Filter>Заголовочные файлы\Engine\ImGUI\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGUI\imgui_internal.h">
-      <Filter>Заголовочные файлы\Engine\ImGUI\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGUI\imstb_rectpack.h">
-      <Filter>Заголовочные файлы\Engine\ImGUI\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGUI\imstb_textedit.h">
-      <Filter>Заголовочные файлы\Engine\ImGUI\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGUI\imstb_truetype.h">
-      <Filter>Заголовочные файлы\Engine\ImGUI\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGUI\imgui_impl_dx11.h">
-      <Filter>Заголовочные файлы\Engine\ImGUI\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGUI\imgui_impl_win32.h">
-      <Filter>Заголовочные файлы\Engine\ImGUI\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="PointLight.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="SolidSphere.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\GdiSetup.h">
-      <Filter>Заголовочные файлы\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Mouse.h">
-      <Filter>Заголовочные файлы\Engine\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\DXGIInfoManager.h">
-      <Filter>Заголовочные файлы\Framework\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics.h">
-      <Filter>Заголовочные файлы\Engine\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="TestObject.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects\Bases</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\Codex.h">
-      <Filter>Заголовочные файлы\Engine\Architecture</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\VertexLayout.h">
-      <Filter>Заголовочные файлы\Engine\Architecture</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\Drawable.h">
-      <Filter>Заголовочные файлы\Engine\Architecture</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Utility.h">
-      <Filter>Заголовочные файлы\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\TransformUnified.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\Bindable.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\TransformCBuf.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\ConstantBuffer.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\Texture.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\Sampler.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\IndexBuffer.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\InputLayout.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\PixelShader.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\Topology.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\VertexBuffer.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\VertexShader.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="BindableCommons.h">
-      <Filter>Заголовочные файлы\Engine\Architecture</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Entities\GDIPlusManager.h">
-      <Filter>Заголовочные файлы\Engine\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Entities\ImGUIManager.h">
-      <Filter>Заголовочные файлы\Engine\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Entities\Model.h">
-      <Filter>Заголовочные файлы\Engine\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Entities\ReSurface.h">
-      <Filter>Заголовочные файлы\Engine\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Entities\VFileDialog.h">
-      <Filter>Заголовочные файлы\Engine\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\noexcept_if.h">
-      <Filter>Заголовочные файлы\Framework</Filter>
+    <ClInclude Include="..\ImGUI\imstb_truetype.h">
+      <Filter>ImGUI</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Architecture\BlendState.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\RasterizerState.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Entities\Surface.h">
-      <Filter>Заголовочные файлы\Engine\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\DynamicConstant.h">
-      <Filter>Заголовочные файлы\Engine\Architecture</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\LayoutCodex.h">
-      <Filter>Заголовочные файлы\Engine\Architecture</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\Stencil.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\Step.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\FrameCommander.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\Job.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\Pass.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\Technique.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\NullPixelShader.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\ConstantBuffersEX.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\Material.h">
-      <Filter>Заголовочные файлы\Engine\Architecture</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Entities\Mesh.h">
-      <Filter>Заголовочные файлы\Engine\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Entities\ModelException.h">
-      <Filter>Заголовочные файлы\Engine\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Entities\Node.h">
-      <Filter>Заголовочные файлы\Engine\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Entities\ModelProbe.h">
-      <Filter>Заголовочные файлы\Engine\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\DepthStencil.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\GraphicsResource.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\RenderTarget.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\Sink.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\Source.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\RenderGraphException.h">
-      <Filter>Заголовочные файлы\Framework\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\SinksT.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\SourcesT.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass</Filter>
+      <Filter>WinD3D\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Architecture\BufferResource.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Bindable</Filter>
+      <Filter>WinD3D\Bindable</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\GraphicsExceptions.h">
-      <Filter>Заголовочные файлы\Framework\Exceptions</Filter>
+    <ClInclude Include="Engine\Architecture\ConstantBuffer.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\ConstantBuffersEX.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\GraphicsResource.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\PixelShader.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Sampler.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Bindable.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\DepthStencil.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\IndexBuffer.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\InputLayout.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\NullPixelShader.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\RasterizerState.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\RenderTarget.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Stencil.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Texture.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Topology.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\TransformCBuf.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\TransformUnified.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\VertexBuffer.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\VertexShader.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Job.h">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Pass.h">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Sink.h">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\SinksT.h">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Source.h">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\SourcesT.h">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Step.h">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Technique.h">
+      <Filter>WinD3D\Multipass</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Architecture\BindingPass.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Passes</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\BlurOutlineRenderGraph.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Graphs</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\RenderQueuePass.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Passes</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\RenderGraph.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Graphs</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\BufferClearPass.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Passes</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\LambertianPass.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Passes</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Architecture\OutlineMaskGenerationPass.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Passes</Filter>
+      <Filter>WinD3D\Passes</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Architecture\BlurOutlineDrawingPass.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Passes</Filter>
+      <Filter>WinD3D\Passes</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Architecture\HorizontalBlurPass.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Passes</Filter>
+    <ClInclude Include="Engine\Architecture\BufferClearPass.h">
+      <Filter>WinD3D\Passes</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Architecture\FullscreenPass.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Passes</Filter>
+      <Filter>WinD3D\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\HorizontalBlurPass.h">
+      <Filter>WinD3D\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\LambertianPass.h">
+      <Filter>WinD3D\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\OutlineMaskGenerationPass.h">
+      <Filter>WinD3D\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\RenderQueuePass.h">
+      <Filter>WinD3D\Passes</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Architecture\VerticalBlurPass.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass\Passes</Filter>
+      <Filter>WinD3D\Passes</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Entities\TestModelProbe.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass</Filter>
+    <ClInclude Include="Engine\Architecture\RenderGraph.h">
+      <Filter>WinD3D\Passes\Graphs</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Architecture\TechniqueProbe.h">
-      <Filter>Заголовочные файлы\Engine\Architecture\Multipass</Filter>
+    <ClInclude Include="Engine\Architecture\BlurOutlineRenderGraph.h">
+      <Filter>WinD3D\Passes\Graphs</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\MathHelper.h">
-      <Filter>Заголовочные файлы\Framework</Filter>
+    <ClInclude Include="Engine\Architecture\VertexLayout.h">
+      <Filter>WinD3D\Dynamics</Filter>
     </ClInclude>
-    <ClInclude Include="Grid.h">
-      <Filter>Заголовочные файлы\Engine\Graphics\Objects</Filter>
+    <ClInclude Include="Engine\Architecture\DynamicConstant.h">
+      <Filter>WinD3D\Dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\LayoutCodex.h">
+      <Filter>WinD3D\Dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Codex.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Drawable.h">
+      <Filter>WinD3D\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\Material.h">
+      <Filter>WinD3D\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\Mesh.h">
+      <Filter>WinD3D\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\Model.h">
+      <Filter>WinD3D\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\Node.h">
+      <Filter>WinD3D\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\ReSurface.h">
+      <Filter>WinD3D\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\Surface.h">
+      <Filter>WinD3D\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\VFileDialog.h">
+      <Filter>WinD3D\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\Camera.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\Grid.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\IndexedTriangleList.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\Plane.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\PointLight.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\SolidSphere.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\Sphere.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Probes\ModelProbe.h">
+      <Filter>WinD3D\Probes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Probes\TechniqueProbe.h">
+      <Filter>WinD3D\Probes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Probes\TestModelProbe.h">
+      <Filter>WinD3D\Probes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics.h">
+      <Filter>WinD3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Keyboard.h">
+      <Filter>WinD3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Mouse.h">
+      <Filter>WinD3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Window.h">
+      <Filter>WinD3D</Filter>
+    </ClInclude>
+    <ClInclude Include="App.h">
+      <Filter>WinD3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\DXGIInfoManager.h">
+      <Filter>WinD3D\Framework</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Exception.h">
-      <Filter>Заголовочные файлы\Framework\Exceptions</Filter>
+      <Filter>WinD3D\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\GDIPlusManager.h">
+      <Filter>WinD3D\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\GraphicsExceptions.h">
+      <Filter>WinD3D\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\ImGUIManager.h">
+      <Filter>WinD3D\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\ModelException.h">
+      <Filter>WinD3D\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\RenderGraphException.h">
+      <Filter>WinD3D\Framework</Filter>
     </ClInclude>
     <ClInclude Include="Framework\WindowExceptions.h">
-      <Filter>Заголовочные файлы\Framework\Exceptions</Filter>
+      <Filter>WinD3D\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\GdiSetup.h">
+      <Filter>WinD3D\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\MathHelper.h">
+      <Filter>WinD3D\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\noexcept_if.h">
+      <Filter>WinD3D\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Utility.h">
+      <Filter>WinD3D\Framework</Filter>
     </ClInclude>
     <ClInclude Include="Framework\WinSetup.h">
-      <Filter>Заголовочные файлы\Framework</Filter>
+      <Filter>WinD3D\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="VApp.h">
-      <Filter>Заголовочные файлы</Filter>
+    <ClInclude Include="resource.h">
+      <Filter>WinD3D</Filter>
     </ClInclude>
-    <ClInclude Include="IDXGIInfoManager.h">
-      <Filter>Заголовочные файлы\Framework\Exceptions</Filter>
+    <ClInclude Include="Engine\Architecture\BindableCommons.h">
+      <Filter>WinD3D\Bindable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -689,9 +549,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GraphicsThrows.m">
-      <Filter>Заголовочные файлы\Framework\Exceptions\Macros</Filter>
-    </None>
     <None Include="Engine\Shaders\LightVectorData.hlsli">
       <Filter>Shaders\Headers</Filter>
     </None>

@@ -1,6 +1,6 @@
 #include "Topology.h"
 #include "GraphicsThrows.m"
-#include <Engine/Architecture/Codex.h>
+#include "Codex.h"
 
 Topology::Topology(Graphics& gfx, D3D11_PRIMITIVE_TOPOLOGY type)
 	:

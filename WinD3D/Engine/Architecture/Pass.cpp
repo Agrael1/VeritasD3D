@@ -1,8 +1,9 @@
 #include "Pass.h"
 #include "Sink.h"
 #include <Framework\RenderGraphException.h>
-#include <fmt\printf.h>
 #include <Framework\Utility.h>
+#include <fmt\printf.h>
+
 
 namespace RG
 {

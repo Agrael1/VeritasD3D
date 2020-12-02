@@ -1,6 +1,6 @@
 #include "RasterizerState.h"
 #include "GraphicsThrows.m"
-#include <Engine/Architecture/Codex.h>
+#include "Codex.h"
 
 
 RasterizerState::RasterizerState(Graphics& gfx, bool twoSided)

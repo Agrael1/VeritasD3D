@@ -1,6 +1,6 @@
 #include "App.h"
-#include "ImGUI/imgui.h"
-#include "Engine/Entities/TestModelProbe.h"
+#include "../ImGUI/imgui.h"
+#include <Probes/TestModelProbe.h>
 
 
 namespace dx = DirectX;

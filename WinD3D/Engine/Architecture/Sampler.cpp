@@ -1,6 +1,6 @@
 #include "Sampler.h"
 #include "GraphicsThrows.m"
-#include <Engine/Architecture/Codex.h>
+#include "Codex.h"
 
 Sampler::Sampler(Graphics& gfx, Type type, bool reflect)
 	:

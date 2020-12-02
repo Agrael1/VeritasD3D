@@ -1,6 +1,6 @@
 #include "VertexShader.h"
 #include "GraphicsThrows.m"
-#include <Engine/Architecture/Codex.h>
+#include "Codex.h"
 #include <Framework/Utility.h>
 
 VertexShader::VertexShader(Graphics& gfx, const std::string& path)
