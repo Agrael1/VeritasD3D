@@ -62,11 +62,11 @@ public:
 		
 		if (auto v = buf["scale"]; v.Exists())
 		{
-			dcheck(ImGui::SliderFloat(tag("Scale"), &v, 1.0f, 2.0f, "%.3f", 3.5f));
+			dcheck(ImGui::SliderFloat(tag("Scale"), &v, 1.0f, 2.0f, "%.3f", ImGuiSliderFlags_Logarithmic));
 		}
 		if (auto v = buf["offset"]; v.Exists())
 		{
-			dcheck(ImGui::SliderFloat(tag("offset"), &v, 0.0f, 1.0f, "%.3f", 2.5f));
+			dcheck(ImGui::SliderFloat(tag("offset"), &v, 0.0f, 1.0f, "%.3f", ImGuiSliderFlags_Logarithmic));
 		}
 		if (auto v = buf["materialColor"]; v.Exists())
 		{
@@ -78,11 +78,11 @@ public:
 		}
 		if (auto v = buf["specularGloss"]; v.Exists())
 		{
-			dcheck(ImGui::SliderFloat(tag("Glossiness"), &v, 1.0f, 100.0f, "%.1f", 1.5f));
+			dcheck(ImGui::SliderFloat(tag("Glossiness"), &v, 1.0f, 100.0f, "%.1f", ImGuiSliderFlags_Logarithmic));
 		}
 		if (auto v = buf["specularWeight"]; v.Exists())
 		{
-			dcheck(ImGui::SliderFloat(tag("Spec. Weight"), &v, 0.0f, 2.0f));
+			dcheck(ImGui::SliderFloat(tag("Spec. Weight"), &v, 0.0f, ImGuiSliderFlags_Logarithmic));
 		}
 		if (auto v = buf["useSpecularMap"]; v.Exists())
 		{
@@ -94,7 +94,7 @@ public:
 		}
 		if (auto v = buf["normalMapWeight"]; v.Exists())
 		{
-			dcheck(ImGui::SliderFloat(tag("Normal Map Weight"), &v, 0.0f, 2.0f));
+			dcheck(ImGui::SliderFloat(tag("Normal Map Weight"), &v, 0.0f, ImGuiSliderFlags_Logarithmic));
 		}
 		return dirty;
 	}

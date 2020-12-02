@@ -560,6 +560,9 @@
     </None>
     <None Include="cpp.hint" />
     <None Include="packages.config" />
+    <None Include="imgui.ini">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shaders\ColorBlendPS.hlsl">

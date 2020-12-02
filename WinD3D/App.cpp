@@ -46,9 +46,12 @@ void App::DoFrame(float dt)
 	if(wnd.DrawGrid())grid.Submit();
 	rg->Execute(wnd.Gfx());
 
+	
+	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), 
+		ImGuiDockNodeFlags_PassthruCentralNode| 
+		ImGuiDockNodeFlags_NoDockingInCentralNode);
 
-	if (ImGui::Begin("Simulation speed",nullptr, 
-		ImGuiWindowFlags_::ImGuiWindowFlags_NoInputs))
+	if (ImGui::Begin("Simulation speed"))
 	{
 		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	}
