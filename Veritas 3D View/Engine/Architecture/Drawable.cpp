@@ -57,6 +57,13 @@ void Drawable::LinkTechniques(RG::RenderGraph& rg)
 		tech.Link(rg);
 	}
 }
+void Drawable::UnlinkTechniques()
+{
+	for (auto& tech : techniques)
+	{
+		tech.Unlink();
+	}
+}
 
 Drawable::~Drawable()
 {}

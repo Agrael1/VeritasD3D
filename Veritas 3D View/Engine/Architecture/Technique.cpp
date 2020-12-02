@@ -64,3 +64,11 @@ void Technique::Link(RG::RenderGraph& rg)
 		step.Link(rg);
 	}
 }
+
+void Technique::Unlink()
+{
+	for (auto& step : steps)
+	{
+		step.Unlink();
+	}
+}

@@ -73,6 +73,13 @@ void Model::LinkTechniques(RG::RenderGraph& rg)
 		pMesh->LinkTechniques(rg);
 	}
 }
+void Model::UnlinkTechniques()
+{
+	for (auto& pMesh : meshPtrs)
+	{
+		pMesh->UnlinkTechniques();
+	}
+}
 
 Model::~Model() noexcept
 {}

@@ -157,6 +157,7 @@ void App::ProcessInput(float dt)
 		rg.reset();
 		wnd.Gfx().OnResize(wnd.GetWidth(), wnd.GetHeight());
 		CreateRenderGraph();
+		wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(wnd.GetHeight()) / float(wnd.GetWidth()), 0.5f, 100.0f));
 		wnd.ResizeComplete();
 	}
 }

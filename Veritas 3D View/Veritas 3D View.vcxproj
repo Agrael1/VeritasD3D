@@ -208,6 +208,17 @@
     <ClInclude Include="MainPage.h">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </ClInclude>
+    <ClInclude Include="Scene\Camera.h" />
+    <ClInclude Include="Scene\Grid.h" />
+    <ClInclude Include="Scene\IndexedTriangleList.h" />
+    <ClInclude Include="Scene\Plane.h" />
+    <ClInclude Include="Scene\PointLight.h" />
+    <ClInclude Include="Scene\SolidSphere.h" />
+    <ClInclude Include="Scene\Sphere.h" />
+    <ClInclude Include="ViewModel.h">
+      <DependentUpon>ViewModel.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -321,6 +332,13 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </ClCompile>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="Scene\Camera.cpp" />
+    <ClCompile Include="Scene\PointLight.cpp" />
+    <ClCompile Include="Scene\SolidSphere.cpp" />
+    <ClCompile Include="ViewModel.cpp">
+      <DependentUpon>ViewModel.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="App.idl">
@@ -328,6 +346,9 @@
     </Midl>
     <Midl Include="MainPage.idl">
       <DependentUpon>MainPage.xaml</DependentUpon>
+    </Midl>
+    <Midl Include="ViewModel.idl">
+      <SubType>Designer</SubType>
     </Midl>
   </ItemGroup>
   <ItemGroup>

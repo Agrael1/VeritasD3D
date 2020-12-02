@@ -66,3 +66,8 @@ void Step::Link(RG::RenderGraph& rg)
 	assert(pTargetPass == nullptr);
 	pTargetPass = &rg.GetRenderQueue(targetPassName);
 }
+
+void Step::Unlink()
+{
+	pTargetPass = nullptr;
+}

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "MainPage.g.h"
+#include "Graphics.h"
 
 namespace winrt::Veritas_3D_View::implementation
 {

@@ -1,0 +1,10 @@
+namespace Veritas_3D_View
+{
+    [bindable]
+    [default_interface]
+    runtimeclass ViewModel 
+    {
+        ViewModel();
+        Int32 MyProperty;
+    }
+}

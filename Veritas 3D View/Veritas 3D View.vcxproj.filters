@@ -135,6 +135,15 @@
     <ClCompile Include="Engine\Entities\Surface.cpp">
       <Filter>WinD3D\Loading</Filter>
     </ClCompile>
+    <ClCompile Include="Scene\Camera.cpp">
+      <Filter>WinD3D\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\PointLight.cpp">
+      <Filter>WinD3D\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SolidSphere.cpp">
+      <Filter>WinD3D\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -315,6 +324,27 @@
     <ClInclude Include="Engine\Probes\ModelProbe.h">
       <Filter>WinD3D\Probes</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\Camera.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Grid.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Plane.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\PointLight.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SolidSphere.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Sphere.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\IndexedTriangleList.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\LockScreenLogo.scale-200.png">
@@ -357,9 +387,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="MainPage.xaml" />
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="Assets">
       <UniqueIdentifier>{a1dd4bf3-058e-446a-9435-f84006c3dc9f}</UniqueIdentifier>
     </Filter>
@@ -396,6 +423,15 @@
     <Filter Include="Assets\dlls">
       <UniqueIdentifier>{dd6762e0-be79-4a31-accd-8c0443d0b018}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Pages">
+      <UniqueIdentifier>{8fd195a3-efbe-40d8-a772-75216835a598}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewModels">
+      <UniqueIdentifier>{57e10d60-6611-4334-a703-ff0e4c9d2952}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinD3D\Scene">
+      <UniqueIdentifier>{67d1af5a-092d-4be2-be14-fed3ee7f0917}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -406,5 +442,15 @@
     <Text Include="readme.txt">
       <Filter>Assets</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="MainPage.xaml">
+      <Filter>Pages</Filter>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="ViewModel.idl">
+      <Filter>ViewModels</Filter>
+    </Midl>
   </ItemGroup>
 </Project>
