@@ -53,7 +53,7 @@ public:
 	void RestyleComplete()noexcept;
 	Style GetStyle()const noexcept;
 
-	static std::optional<WPARAM> ProcessMessages()noexcept;
+	std::optional<WPARAM> ProcessMessages()const noexcept;
 	Graphics& Gfx();
 private:
 	static LRESULT WINAPI HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -82,6 +82,7 @@ private:
 	wil::unique_hmenu menu;
 	wil::unique_hmenu OptionsMenu;
 	wil::unique_hmenu StylesMenu;
+	wil::unique_haccel Accelerator;
 	std::unique_ptr<Graphics> pGfx;
 	std::vector<BYTE> rawBuffer;
 };

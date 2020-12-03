@@ -320,7 +320,6 @@
     <Image Include="Images\kappa50.png" />
     <Image Include="TheLostReality.ico" />
     <Image Include="TLR.ico" />
-    <Image Include="toolbar1.bmp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
@@ -331,7 +330,6 @@
       <DeploymentContent>true</DeploymentContent>
     </None>
     <None Include="packages.config" />
-    <None Include="ribbon1.mfcribbon-ms" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\Shaders\BlurOutline_PS.hlsl">

@@ -25,7 +25,7 @@ int App::Go()
 	float dt = 0.01f;
 	while (true)
 	{
-		const auto a = Window::ProcessMessages();
+		const auto a = wnd.ProcessMessages();
 		if (a)
 		{
 			return (int)a.value();

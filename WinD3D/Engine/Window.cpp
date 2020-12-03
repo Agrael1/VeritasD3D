@@ -13,8 +13,29 @@ enum class MenuItems:UINT_PTR
 	Style_VGUI = ID_STYLES_VGUI,
 	Style_Dark = ID_STYLES_DARK,
 	Style_Cherry = ID_STYLES_CHERRY,
+	About = ID_HELP_ABOUT,
 };
 
+
+
+INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	UNREFERENCED_PARAMETER(lParam);
+	switch (message)
+	{
+	case WM_INITDIALOG:
+		return (INT_PTR)TRUE;
+
+	case WM_COMMAND:
+		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+		{
+			EndDialog(hDlg, LOWORD(wParam));
+			return (INT_PTR)TRUE;
+		}
+		break;
+	}
+	return (INT_PTR)FALSE;
+}
 
 
 Window::WindowClass Window::WindowClass::wndClass;
@@ -30,7 +51,7 @@ Window::WindowClass::WindowClass() noexcept
 	wcWindow.cbWndExtra = 0;
 	wcWindow.hInstance = GetInstance();
 	wcWindow.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wcWindow.hIcon = LoadIcon(wcWindow.hInstance,MAKEINTRESOURCE(IDI_ICON1));
+	wcWindow.hIcon = LoadIcon(wcWindow.hInstance, MAKEINTRESOURCE(IDI_ICON1));
 	wcWindow.hbrBackground = nullptr;
 	wcWindow.lpszMenuName = MAKEINTRESOURCE(IDR_MENU1);
 	wcWindow.hIconSm = nullptr;
@@ -74,6 +95,8 @@ Window::Window(unsigned int width, unsigned int height, const char * name):width
 	// Error checks
 	if (!hWnd) throw WND_LAST_EXCEPT();
 	ShowWindow(hWnd.get(), SW_SHOWDEFAULT);
+
+	Accelerator.reset(LoadAccelerators(WindowClass::GetInstance(), MAKEINTRESOURCE(IDR_ACCELERATOR1)));
 	
 	// Init GUI (only one window supported)
 	WND_CALL_INFO(ImGui_ImplWin32_Init(hWnd.get()));
@@ -195,18 +218,24 @@ void Window::DisableImGuiMouse() noexcept
 	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
 }
 
-std::optional<WPARAM> Window::ProcessMessages() noexcept
+std::optional<WPARAM> Window::ProcessMessages()const noexcept
 {
 	MSG msg;
 	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 	{
-		if (msg.message == WM_QUIT)
+		if (!TranslateAccelerator(
+			hWnd.get(),  // handle to receiving window 
+			Accelerator.get(),    // handle to active accelerator table 
+			&msg))         // message data 
 		{
-			return msg.wParam;
-		}
+			if (msg.message == WM_QUIT)
+			{
+				return msg.wParam;
+			}
 
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
 	}
 	return{};
 }
@@ -279,7 +308,7 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		CheckMenuRadioItem(StylesMenu.get(), 0, 2, 0, MF_BYPOSITION);
 		break;
 	case WM_COMMAND:
-		switch (MenuItems(wParam))
+		switch (MenuItems(LOWORD(wParam)))
 		{
 		case MenuItems::Load:
 			bLoadCallIssued = true;
@@ -323,6 +352,9 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				style = Style::Cherry;
 				bRestyleIssued = true;
 			}
+			break;
+		case MenuItems::About:
+			DialogBox(WindowClass::GetInstance(), MAKEINTRESOURCE(IDD_DIALOG1), hWnd, About);
 			break;
 		default:
 			break;
