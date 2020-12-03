@@ -9,6 +9,13 @@
 
 class Window 
 {
+public:
+	enum class Style
+	{
+		VGUI,
+		Dark,
+		Cherry
+	};
 private:
 	class WindowClass
 	{
@@ -41,6 +48,11 @@ public:
 	void ResizeComplete()noexcept;
 	bool DrawGrid()const noexcept;
 	void SetTitle(std::string_view title);
+
+	bool RestyleCalled()const noexcept;
+	void RestyleComplete()noexcept;
+	Style GetStyle()const noexcept;
+
 	static std::optional<WPARAM> ProcessMessages()noexcept;
 	Graphics& Gfx();
 private:
@@ -54,7 +66,6 @@ private:
 	void HideCursor() noexcept;
 	void EnableImGuiMouse() noexcept;
 	void DisableImGuiMouse() noexcept;
-	void AddMenu(HWND hWnd);
 public:
 	Keyboard kbd;
 	Mouse mouse;
@@ -63,11 +74,14 @@ private:
 	bool bLoadCallIssued = false;
 	bool bGridEnabled = true;
 	bool bResizeIssued = false;
+	bool bRestyleIssued = false;
 	int width;
 	int height;
+	Style style;
 	wil::unique_hwnd hWnd;
 	wil::unique_hmenu menu;
 	wil::unique_hmenu OptionsMenu;
+	wil::unique_hmenu StylesMenu;
 	std::unique_ptr<Graphics> pGfx;
 	std::vector<BYTE> rawBuffer;
 };

@@ -7,10 +7,15 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 enum class MenuItems:UINT_PTR
 {
-	Load,
-	Exit,
-	ShowGrid
+	Load = ID_FILE_LOADMODEL,
+	Exit = ID_FILE_EXIT,
+	ShowGrid = ID_OPTIONS_DRAWGRID,
+	Style_VGUI = ID_STYLES_VGUI,
+	Style_Dark = ID_STYLES_DARK,
+	Style_Cherry = ID_STYLES_CHERRY,
 };
+
+
 
 Window::WindowClass Window::WindowClass::wndClass;
 
@@ -27,7 +32,7 @@ Window::WindowClass::WindowClass() noexcept
 	wcWindow.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wcWindow.hIcon = LoadIcon(wcWindow.hInstance,MAKEINTRESOURCE(IDI_ICON1));
 	wcWindow.hbrBackground = nullptr;
-	wcWindow.lpszMenuName = nullptr;
+	wcWindow.lpszMenuName = MAKEINTRESOURCE(IDR_MENU1);
 	wcWindow.hIconSm = nullptr;
 	wcWindow.lpszClassName = GetName();
 	RegisterClassExA(&wcWindow);
@@ -95,11 +100,23 @@ void Window::SetTitle(std::string_view title)
 	}
 }
 
+bool Window::RestyleCalled() const noexcept
+{
+	return bRestyleIssued;
+}
+void Window::RestyleComplete() noexcept
+{
+	bRestyleIssued = false;
+}
+Window::Style Window::GetStyle() const noexcept
+{
+	return style;
+}
+
 UINT Window::GetWidth() const noexcept
 {
 	return width;
 }
-
 UINT Window::GetHeight() const noexcept
 {
 	return height;
@@ -176,24 +193,6 @@ void Window::EnableImGuiMouse() noexcept
 void Window::DisableImGuiMouse() noexcept
 {
 	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
-}
-
-void Window::AddMenu(HWND hWnd)
-{
-	menu.reset( CreateMenu() );
-	HMENU hFileMenu = CreateMenu();
-	OptionsMenu.reset(CreateMenu());
-	HMENU hHelpMenu = CreateMenu();
-	AppendMenu(hFileMenu, MF_STRING, UINT_PTR(MenuItems::Load), TEXT("Load"));
-	AppendMenu(hFileMenu, MF_SEPARATOR, 0, NULL);
-	AppendMenu(hFileMenu, MF_STRING, UINT_PTR(MenuItems::Exit), TEXT("Exit"));
-
-	AppendMenu(OptionsMenu.get(), MF_CHECKED, UINT_PTR(MenuItems::ShowGrid), TEXT("Draw Grid"));
-
-	AppendMenu(menu.get(), MF_POPUP, (UINT_PTR)hFileMenu, TEXT("File"));
-	AppendMenu(menu.get(), MF_POPUP, (UINT_PTR)OptionsMenu.get(), TEXT("Options"));
-	AppendMenu(menu.get(), MF_POPUP, (UINT_PTR)hHelpMenu, TEXT("Help"));
-	SetMenu(hWnd, menu.get());
 }
 
 std::optional<WPARAM> Window::ProcessMessages() noexcept
@@ -274,7 +273,10 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 	case WM_CREATE:
-		AddMenu(hWnd);
+		menu.reset(GetMenu(hWnd));
+		OptionsMenu.reset(GetSubMenu(menu.get(), 1));
+		StylesMenu.reset(GetSubMenu(menu.get(), 2));
+		CheckMenuRadioItem(StylesMenu.get(), 0, 2, 0, MF_BYPOSITION);
 		break;
 	case WM_COMMAND:
 		switch (MenuItems(wParam))
@@ -297,6 +299,31 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			SetMenuItemInfo(OptionsMenu.get(), 0, true, &mii);
 			break;
 		}
+		case MenuItems::Style_VGUI:
+			CheckMenuRadioItem(StylesMenu.get(), 0, 2, 0, MF_BYPOSITION);
+			if (style != Style::VGUI)
+			{
+				style = Style::VGUI;
+				bRestyleIssued = true;
+			}
+
+			break;
+		case MenuItems::Style_Dark:
+			CheckMenuRadioItem(StylesMenu.get(), 0, 2, 1, MF_BYPOSITION);
+			if (style != Style::Dark)
+			{
+				style = Style::Dark;
+				bRestyleIssued = true;
+			}
+			break;
+		case MenuItems::Style_Cherry:
+			CheckMenuRadioItem(StylesMenu.get(), 0, 2, 2, MF_BYPOSITION);
+			if (style != Style::Cherry)
+			{
+				style = Style::Cherry;
+				bRestyleIssued = true;
+			}
+			break;
 		default:
 			break;
 		}

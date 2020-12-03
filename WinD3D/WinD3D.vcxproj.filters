@@ -547,6 +547,9 @@
     <Image Include="TLR.ico">
       <Filter>Файлы ресурсов</Filter>
     </Image>
+    <Image Include="toolbar1.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shaders\LightVectorData.hlsli">
@@ -561,6 +564,9 @@
     <None Include="cpp.hint" />
     <None Include="packages.config" />
     <None Include="imgui.ini">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="ribbon1.mfcribbon-ms">
       <Filter>Файлы ресурсов</Filter>
     </None>
   </ItemGroup>
