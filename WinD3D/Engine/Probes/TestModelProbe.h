@@ -10,7 +10,7 @@
 #include <DirectXMath.h>
 #include "../ImGUI/imgui.h"
 
-DirectX::XMFLOAT3 ExtractEulerAngles(const DirectX::XMFLOAT4X4& mat)
+inline DirectX::XMFLOAT3 ExtractEulerAngles(const DirectX::XMFLOAT4X4& mat)
 {
 	DirectX::XMFLOAT3 euler;
 
@@ -28,11 +28,11 @@ DirectX::XMFLOAT3 ExtractEulerAngles(const DirectX::XMFLOAT4X4& mat)
 
 	return euler;
 }
-DirectX::XMFLOAT3 ExtractTranslation(const DirectX::XMFLOAT4X4& matrix)
+inline DirectX::XMFLOAT3 ExtractTranslation(const DirectX::XMFLOAT4X4& matrix)
 {
 	return { matrix._41,matrix._42,matrix._43 };
 }
-float ExtractScale(const DirectX::XMFLOAT4X4& matrix)
+inline float ExtractScale(const DirectX::XMFLOAT4X4& matrix)
 {
 	return { matrix._11 };
 }
@@ -119,6 +119,10 @@ class DeselectingTP : public TechniqueProbe
 class MP : ModelProbe
 {
 public:
+	void Reset()noexcept
+	{
+		pSelectedNode = nullptr;
+	}
 	void SpawnWindow(Model& model)
 	{
 		namespace dx = DirectX;

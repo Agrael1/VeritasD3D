@@ -12,7 +12,7 @@ VFileDialog::~VFileDialog()
 {
 }
 
-void VFileDialog::SetFileTypes(std::span<COMDLG_FILTERSPEC> filters)
+void VFileDialog::SetFileTypes(std::span<const COMDLG_FILTERSPEC> filters)
 {
 	HRESULT hr;
 	if (!(dwFlags&FOS_STRICTFILETYPES))

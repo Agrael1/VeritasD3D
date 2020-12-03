@@ -13,6 +13,7 @@ public:
 	bool UsesAlpha() const noexcept;
 private:
 	static UINT CalculateNumberOfMipLevels(UINT width, UINT height) noexcept;
+	void ResolveToDefault(Graphics& gfx);
 private:
 	unsigned int slot;
 protected:

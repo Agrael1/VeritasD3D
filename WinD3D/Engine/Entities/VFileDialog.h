@@ -18,7 +18,7 @@ public:
 public:
 	~VFileDialog();
 public:
-	void SetFileTypes(std::span<COMDLG_FILTERSPEC> filters);
+	void SetFileTypes(std::span<const COMDLG_FILTERSPEC> filters);
 	std::wstring GetFilePath();
 	void SetDefaultFolder(std::wstring_view FolderPath);
 protected:

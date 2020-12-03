@@ -15,7 +15,9 @@ class Surface
 		std::string note;
 	};
 public:
-	Surface(std::string_view filepath);
+	Surface() = default;
+public:
+	bool FromFile(std::string_view filepath);
 public:
 	UINT GetWidth()const noexcept;
 	UINT GetHeight()const noexcept;

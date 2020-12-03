@@ -28,15 +28,11 @@ const std::string& Surface::LoadException::GetNote() const noexcept
 	return note;
 }
 
-
-Surface::Surface(std::string_view filepath)
+bool Surface::FromFile(std::string_view filepath)
 {
 	HRESULT hr = DirectX::LoadFromWICFile(ToWide(filepath).c_str(), DirectX::WIC_FLAGS_NONE, nullptr, image);
 
-	if (FAILED(hr))
-	{
-		throw Surface::LoadException(__LINE__, __FILE__, filepath.data(), "Failed to load image", hr);
-	}
+	if (FAILED(hr))return false;
 
 	if (image.GetImage(0, 0, 0)->format != format)
 	{
@@ -55,6 +51,7 @@ Surface::Surface(std::string_view filepath)
 		}
 		image = std::move(converted);
 	}
+	return true;
 }
 
 UINT Surface::GetWidth()const noexcept

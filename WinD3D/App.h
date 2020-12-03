@@ -6,7 +6,8 @@
 #include <Scene/Camera.h>
 #include <Scene/PointLight.h>
 #include <Scene/Grid.h>
-#include <Architecture\BlurOutlineRenderGraph.h>
+#include <Architecture/BlurOutlineRenderGraph.h>
+#include <Probes/TestModelProbe.h>
 
 
 class App
@@ -32,5 +33,7 @@ private:
 	std::unique_ptr<Model> model;
 	VFileOpenDialog opener;
 	float speed = 1.0f;
+
+	MP modelProbe;
 };
 
