@@ -7,7 +7,6 @@
 
 class Graphics;
 
-
 namespace RG
 {
 	class Source;

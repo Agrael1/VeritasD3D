@@ -7,8 +7,8 @@ VertexShader::VertexShader(Graphics& gfx, const std::string& path)
 	:path(path)
 {
 	INFOMAN(gfx);
-
-	GFX_THROW_INFO(D3DReadFileToBlob(ToWide(path).c_str(), &pBytecodeBlob));
+	const std::wstring ShaderFolder{ L"VShader\\" };
+	GFX_THROW_INFO(D3DReadFileToBlob((ShaderFolder + ToWide(path)).c_str(), &pBytecodeBlob));
 	GFX_THROW_INFO(GetDevice(gfx)->CreateVertexShader(
 		pBytecodeBlob->GetBufferPointer(),
 		pBytecodeBlob->GetBufferSize(),

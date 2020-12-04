@@ -59,6 +59,9 @@
     <Filter Include="WinD3D\Framework">
       <UniqueIdentifier>{f602147e-507a-4eff-a4a9-be847ee1b20f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы ресурсов\dlls">
+      <UniqueIdentifier>{7833760d-4709-4044-a328-6874013f0c7c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ImGUI\imgui.cpp">
@@ -562,6 +565,12 @@
     <None Include="packages.config" />
     <None Include="imgui.ini">
       <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="..\shared\bin\assimp\x64\Release\assimp-vc142-mt.dll">
+      <Filter>Файлы ресурсов\dlls</Filter>
+    </None>
+    <None Include="..\shared\bin\assimp\x64\Debug\assimp-vc142-mtd.dll">
+      <Filter>Файлы ресурсов\dlls</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

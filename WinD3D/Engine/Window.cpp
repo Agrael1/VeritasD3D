@@ -189,6 +189,11 @@ bool Window::DrawGrid() const noexcept
 	return bGridEnabled;
 }
 
+bool Window::IsActive() const noexcept
+{
+	return bActive;
+}
+
 void Window::ConfineCursor() noexcept
 {
 	RECT rect;
@@ -236,6 +241,10 @@ std::optional<WPARAM> Window::ProcessMessages()const noexcept
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
+	}
+	if (!bActive)
+	{
+		WaitMessage();
 	}
 	return{};
 }
@@ -290,11 +299,22 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_KILLFOCUS:
 		kbd.ClearState();
 		break;
-
+	case WM_SYSCOMMAND:
+		if (wParam == SC_MINIMIZE)
+		{
+			bActive = false;
+		}
+		if (wParam == SC_RESTORE)
+		{
+			bActive = true;
+		}
+		break;
 	case WM_SIZE:
 	{
 		if (pGfx)
 		{
+			if (!LOWORD(lParam) || !HIWORD(lParam))
+				break;
 			width = LOWORD(lParam);
 			height = HIWORD(lParam);
 			bResizeIssued = true;

@@ -75,6 +75,8 @@ int App::Go()
 
 void App::DoFrame(float dt)
 {
+	if (!wnd.IsActive())return;
+
 	const auto s = dt*speed;
 	wnd.Gfx().BeginFrame(0.2f, 0.2f, 0.2f);
 	wnd.Gfx().SetCamera(cam.GetViewMatrix());

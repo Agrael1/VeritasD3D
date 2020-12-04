@@ -47,6 +47,7 @@ public:
 	bool ResizeCalled() const noexcept;
 	void ResizeComplete()noexcept;
 	bool DrawGrid()const noexcept;
+	bool IsActive()const noexcept;
 	void SetTitle(std::string_view title);
 
 	bool RestyleCalled()const noexcept;
@@ -75,6 +76,7 @@ private:
 	bool bGridEnabled = true;
 	bool bResizeIssued = false;
 	bool bRestyleIssued = false;
+	bool bActive = true;
 	int width;
 	int height;
 	Style style;
