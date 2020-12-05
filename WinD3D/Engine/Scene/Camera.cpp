@@ -24,7 +24,7 @@ DirectX::XMMATRIX Camera::GetViewMatrix() const noexcept
 	const dx::XMVECTOR forwardBaseVector = dx::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 	// apply the camera rotations to a base vector
 	const auto lookVector = dx::XMVector3Transform(forwardBaseVector,
-		dx::XMMatrixRotationRollPitchYawFromVector(dx::XMLoadFloat2A(&rot))
+		dx::XMMatrixRotationRollPitchYawFromVector(dx::XMLoadFloat2(&rot))
 	);
 	// generate camera transform (applied to all objects to arrange them relative
 	// to camera position/orientation in world) from cam position and direction
@@ -55,18 +55,24 @@ void Camera::Reset() noexcept
 {
 	pos = { -4.5f, 6.2f, -4.7f };
 	rot = { DirectX::XM_PIDIV4, DirectX::XM_PIDIV4 };
+	orbit = { 0.0f,0.0f };
 }
 void Camera::Rotate(float dx, float dy) noexcept
 {
 	rot.y = wrap_angle(rot.y + dx * rotationSpeed);
 	rot.x = std::clamp(rot.x + dy * rotationSpeed, 0.995f * -dx::XM_PIDIV2, 0.995f * dx::XM_PIDIV2);
 }
+void Camera::Orbit(float dx, float dy) noexcept
+{
+	orbit.y = wrap_angle(orbit.y + dx * rotationSpeed);
+	orbit.x = std::clamp(orbit.x + dy * rotationSpeed, 0.995f * -dx::XM_PIDIV2, 0.995f * dx::XM_PIDIV2);
+}
 void Camera::Translate(DirectX::XMFLOAT3A translation) noexcept
 {
 	using namespace dx;
 	dx::XMStoreFloat3A(&pos, dx::XMLoadFloat3A(&pos) + dx::XMVector3Transform(
 		dx::XMLoadFloat3A(&translation),
-		dx::XMMatrixRotationRollPitchYawFromVector(dx::XMLoadFloat2A(&rot)) *
+		dx::XMMatrixRotationRollPitchYawFromVector(dx::XMLoadFloat2(&rot)) *
 		dx::XMMatrixScaling(travelSpeed, travelSpeed, travelSpeed)
 	));
 }

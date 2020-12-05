@@ -1,4 +1,6 @@
+#include "pch.h"
 #include "PointLight.h"
+
 
 PointLight::PointLight(Graphics& gfx, float radius)
 	:

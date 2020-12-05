@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Node.h"
 #include "Mesh.h"
-#include "ModelProbe.h"
+#include <Engine/Probes/ModelProbe.h>
 
 namespace dx = DirectX;
 
