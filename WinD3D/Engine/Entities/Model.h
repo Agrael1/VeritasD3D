@@ -1,9 +1,11 @@
 #pragma once
-#include <Engine/Graphics.h>
+#include <Graphics.h>
 #include <string>
 #include <memory>
 #include <filesystem>
 #include <Framework/noexcept_if.h>
+#include <Entities/Material.h>
+#include <pplawait.h>
 
 class Node;
 class Mesh;
@@ -28,6 +30,8 @@ public:
 	void UnlinkTechniques();
 	~Model() noexcept;
 private:
+	static concurrency::task<void> 
+		MakeMaterialsAsync(Graphics& gfx, std::vector<Material>& materials, const aiScene* pScene, std::string_view pathString);
 	static std::unique_ptr<Mesh> ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials, const std::filesystem::path& path, float scale);
 	std::unique_ptr<Node> ParseNode(int& nextId, const aiNode& node, float scale) noexcept;
 private:

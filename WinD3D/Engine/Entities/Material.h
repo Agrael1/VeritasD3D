@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <Architecture/VertexLayout.h>
 #include <Architecture/Technique.h>
+#include <pplawait.h>
 
 struct aiMaterial;
 struct aiMesh;
@@ -13,7 +14,9 @@ class IndexBuffer;
 class Material
 {
 public:
+	Material() = default;
 	Material(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noxnd;
+	concurrency::task<void> MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path)noxnd;
 public:
 	DV::VertexBuffer ExtractVertices(const aiMesh& mesh) const noexcept;
 	std::vector<unsigned short> ExtractIndices(const aiMesh& mesh) const noexcept;

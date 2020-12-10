@@ -29,7 +29,7 @@ Technique::Technique(std::string name, bool startActive) noexcept
 
 void Technique::AddStep(Step step) noexcept
 {
-	steps.push_back(std::move(step));
+	steps.emplace_back(std::move(step));
 }
 
 bool Technique::IsActive() const noexcept

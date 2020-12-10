@@ -51,6 +51,11 @@ bool Surface::FromFile(std::string_view filepath)
 		}
 		image = std::move(converted);
 	}
+
+	DirectX::ScratchImage mipped;
+	DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(),
+		image.GetMetadata(), DirectX::TEX_FILTER_DEFAULT, 0, mipped);
+	image = std::move(mipped);
 	return true;
 }
 

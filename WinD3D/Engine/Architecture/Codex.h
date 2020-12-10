@@ -22,17 +22,9 @@ private:
 	std::shared_ptr<T> _Resolve(Graphics& gfx, Params&& ...p)noxnd
 	{
 		const auto key = T::GenerateUID(std::forward<Params>(p)...);
-		const auto i = binds.find(key);
-		if (i == binds.end())
-		{
-			auto bind = std::make_shared<T>(gfx, std::forward<Params>(p)...);
-			binds[key] = bind;
-			return bind;
-		}
-		else
-		{
-			return std::static_pointer_cast<T>(i->second);
-		}
+		if(binds.find(key) == binds.end())
+			binds.try_emplace(key, std::make_shared<T>(gfx, std::forward<Params>(p)...));
+		return std::static_pointer_cast<T>(binds.at(key));
 	}
 	void _Trim()noxnd
 	{

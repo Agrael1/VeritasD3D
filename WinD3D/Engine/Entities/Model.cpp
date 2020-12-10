@@ -33,13 +33,10 @@ Model::Model(Graphics& gfx, std::string_view pathString, const float scale)
 		throw ModelException(__LINE__, __FILE__, imp.GetErrorString());
 	}
 
-	// parse materials
+	//parse materials
 	std::vector<Material> materials;
-	materials.reserve(pScene->mNumMaterials);
-	for (size_t i = 0; i < pScene->mNumMaterials; i++)
-	{
-		materials.emplace_back(gfx, *pScene->mMaterials[i], pathString);
-	}
+	materials.resize(pScene->mNumMaterials);
+	MakeMaterialsAsync(gfx, materials, pScene, pathString).get();
 
 	for (size_t i = 0; i < pScene->mNumMeshes; i++)
 	{
@@ -49,6 +46,21 @@ Model::Model(Graphics& gfx, std::string_view pathString, const float scale)
 
 	int nextId = 0;
 	pRoot = ParseNode(nextId, *pScene->mRootNode, scale);
+}
+
+concurrency::task<void> Model::MakeMaterialsAsync(Graphics& gfx, std::vector<Material>& materials, const aiScene* pScene, std::string_view pathString )
+{
+	std::vector<concurrency::task<void>> tasks;
+	tasks.reserve(pScene->mNumMaterials);
+	for (size_t i = 0; auto& mat: materials)
+	{
+		tasks.emplace_back(std::move(mat.MakeMaterialAsync(gfx, *pScene->mMaterials[i], pathString)));
+		i++;
+	}
+	for (auto& t : tasks)
+	{
+		co_await t;
+	}
 }
 
 void Model::Submit() const noxnd

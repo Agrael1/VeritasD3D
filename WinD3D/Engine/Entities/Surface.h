@@ -22,6 +22,10 @@ public:
 	UINT GetWidth()const noexcept;
 	UINT GetHeight()const noexcept;
 	UINT GetStride()const noexcept;
+	auto* operator ->()
+	{
+		return &image;
+	}
 	bool UsesAlpha()const noexcept;
 	void* GetBufferPtr()const noexcept;
 private:
