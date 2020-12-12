@@ -1,6 +1,5 @@
 #include "App.h"
 #include "../ImGUI/imgui.h"
-#include <Framework/ModelException.h>
 
 constexpr COMDLG_FILTERSPEC filterSpecs[] =
 {
@@ -10,7 +9,6 @@ constexpr COMDLG_FILTERSPEC filterSpecs[] =
 	{L"Biovision BVH", L"*.bvh"},
 	{L"3D Studio Max 3DS", L"*.3ds"},
 	{L"3D Studio Max ASE", L"*.ase"},
-	{L"Wavefront Object", L"*.obj"},
 	{L"Stanford Polygon Library", L"*.ply"},
 	{L"AutoCAD DXF", L"*.dxf"},
 	{L"IFC - STEP", L"*.ifc"},
@@ -48,8 +46,8 @@ constexpr COMDLG_FILTERSPEC filterSpecs[] =
 
 namespace dx = DirectX;
 
-App::App(uint32_t width, uint32_t height) 
-	: wnd(width, height,"VTest"), light(wnd.Gfx()), grid(wnd.Gfx())
+App::App(uint32_t width, uint32_t height)
+	: wnd(width, height, "VTest"), light(wnd.Gfx()), grid(wnd.Gfx())
 {
 	opener.SetFileTypes(filterSpecs);
 	CreateRenderGraph();
@@ -77,19 +75,19 @@ void App::DoFrame(float dt)
 {
 	if (!wnd.IsActive())return;
 
-	const auto s = dt*speed;
+	const auto s = dt * speed;
 	wnd.Gfx().BeginFrame(0.2f, 0.2f, 0.2f);
 	wnd.Gfx().SetCamera(cam.GetViewMatrix());
 	light.Bind(wnd.Gfx(), cam.GetViewMatrix());
-	
-	if(model)model->Submit();
+
+	if (model)model->Submit();
 	light.Submit();
-	if(wnd.DrawGrid())grid.Submit();
+	if (wnd.DrawGrid())grid.Submit();
 	rg->Execute(wnd.Gfx());
 
-	
-	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), 
-		ImGuiDockNodeFlags_PassthruCentralNode| 
+
+	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(),
+		ImGuiDockNodeFlags_PassthruCentralNode |
 		ImGuiDockNodeFlags_NoDockingInCentralNode);
 
 	if (ImGui::Begin("Simulation speed"))
@@ -227,14 +225,14 @@ winrt::fire_and_forget App::ReloadModelAsync()
 	auto wfilename = opener.GetFilePath();
 	if (!wfilename.empty())
 	{
-		try
-		{
-			co_await Model::MakeModelAsync(swap, wnd.Gfx(), ToNarrow(wfilename));
-		}
-		catch (const ModelException& e)
-		{
-			MessageBox(nullptr, e.what(), e.GetType(), MB_OK | MB_ICONEXCLAMATION);
-		}
+		co_await concurrency::create_task([=]()->concurrency::task<void>
+			{
+				co_await Model::MakeModelAsync(swap, wnd.Gfx(), ToNarrow(wfilename));
+			});
+
+		if(!swap)
+			MessageBox(nullptr, "Model file was corrupted or empty", 
+				"Model Exception", MB_OK | MB_ICONEXCLAMATION);
 	}
 	bModelLoaded.store(true);
 }

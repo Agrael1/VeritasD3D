@@ -10,7 +10,6 @@ int WINAPI WinMain(
 )
 {
 	winrt::init_apartment();
-
 	try
 	{
 		return App{1280, 720}.Go();

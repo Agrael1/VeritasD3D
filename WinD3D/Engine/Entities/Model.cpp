@@ -87,10 +87,7 @@ Model::MakeModelAsync(std::unique_ptr<Model>& to, Graphics& gfx, std::string_vie
 
 	auto v = imp.GetErrorString();
 
-	if (pScene == nullptr) {
-		throw ModelException(__LINE__, __FILE__, imp.GetErrorString());
-	}
-	if (!pScene->mNumMeshes)
+	if (!pScene->mNumMeshes||pScene == nullptr)
 	{
 		to.reset();
 		co_return;
