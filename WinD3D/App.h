@@ -37,6 +37,13 @@ private:
 	float speed = 1.0f;
 
 	MP modelProbe;
-	std::atomic_bool bModelLoaded = false;
+
+	enum class ModelLoadState : uint8_t
+	{
+		Unloaded,
+		InProgress,
+		Finish
+	};
+	std::atomic<ModelLoadState> state = ModelLoadState::Unloaded;
 };
 

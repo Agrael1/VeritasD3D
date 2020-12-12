@@ -168,9 +168,9 @@ bool Window::LoadCalled() const noexcept
 {
 	return bLoadCallIssued;
 }
-
 void Window::LoadingComplete() noexcept
 {
+	EnableMenuItem(FileMenu.get(), 0, MF_BYPOSITION | MF_ENABLED);
 	bLoadCallIssued = false;
 }
 
@@ -178,7 +178,6 @@ bool Window::ResizeCalled() const noexcept
 {
 	return bResizeIssued;
 }
-
 void Window::ResizeComplete() noexcept
 {
 	bResizeIssued = false;
@@ -188,7 +187,6 @@ bool Window::DrawGrid() const noexcept
 {
 	return bGridEnabled;
 }
-
 bool Window::IsActive() const noexcept
 {
 	return bActive;
@@ -323,6 +321,7 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	case WM_CREATE:
 		menu.reset(GetMenu(hWnd));
+		FileMenu.reset(GetSubMenu(menu.get(), 0));
 		OptionsMenu.reset(GetSubMenu(menu.get(), 1));
 		StylesMenu.reset(GetSubMenu(menu.get(), 2));
 		CheckMenuRadioItem(StylesMenu.get(), 0, 2, 0, MF_BYPOSITION);
@@ -331,6 +330,7 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		switch (MenuItems(LOWORD(wParam)))
 		{
 		case MenuItems::Load:
+			EnableMenuItem(FileMenu.get(), 0, MF_BYPOSITION | MF_GRAYED);
 			bLoadCallIssued = true;
 			break;
 		case MenuItems::Exit:

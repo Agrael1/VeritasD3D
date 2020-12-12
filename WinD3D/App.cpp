@@ -179,17 +179,26 @@ void App::ProcessInput(float dt)
 
 	if (wnd.LoadCalled())
 	{
-		ReloadModelAsync();
-		wnd.LoadingComplete();
-	}
-	if (bModelLoaded)
-	{
-		model.reset(swap.release());
-		Codex::Trim();
-		if (model)
-			model->LinkTechniques(*rg);
-		modelProbe.Reset();
-		bModelLoaded.store(false);
+		switch (state)
+		{
+		using enum ModelLoadState;
+		case Unloaded:
+			state = InProgress; 
+			ReloadModelAsync(); 
+			break;
+		case Finish:
+		{
+			model.reset(swap.release());
+			Codex::Trim();
+			if (model)
+				model->LinkTechniques(*rg);
+			modelProbe.Reset();
+			state = Unloaded;
+			wnd.LoadingComplete();
+			break;
+		}
+		default:break;
+		}
 	}
 
 	if (wnd.ResizeCalled())
@@ -234,6 +243,6 @@ winrt::fire_and_forget App::ReloadModelAsync()
 			MessageBox(nullptr, "Model file was corrupted or empty", 
 				"Model Exception", MB_OK | MB_ICONEXCLAMATION);
 	}
-	bModelLoaded.store(true);
+	state = ModelLoadState::Finish;
 }
 

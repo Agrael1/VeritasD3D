@@ -82,6 +82,7 @@ private:
 	Style style;
 	wil::unique_hwnd hWnd;
 	wil::unique_hmenu menu;
+	wil::unique_hmenu FileMenu;
 	wil::unique_hmenu OptionsMenu;
 	wil::unique_hmenu StylesMenu;
 	wil::unique_haccel Accelerator;
