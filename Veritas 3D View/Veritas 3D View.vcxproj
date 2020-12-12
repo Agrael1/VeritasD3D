@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.201113.7\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.201113.7\build\native\Microsoft.Windows.CppWinRT.props')" />
+  <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.props')" />
   <PropertyGroup Label="Globals">
     <CppWinRTOptimized>true</CppWinRTOptimized>
     <CppWinRTRootNamespaceAutoMerge>true</CppWinRTRootNamespaceAutoMerge>
@@ -143,6 +143,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BindableCommons.h" />
+    <ClInclude Include="CameraPage.xaml.h">
+      <DependentUpon>CameraPage.xaml</DependentUpon>
+    </ClInclude>
     <ClInclude Include="DXGIInfoManager.h" />
     <ClInclude Include="Engine\Architecture\Bindable.h" />
     <ClInclude Include="Engine\Architecture\BindingPass.h" />
@@ -201,6 +204,9 @@
     <ClInclude Include="Framework\noexcept_if.h" />
     <ClInclude Include="Framework\Utility.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="LightningPage.xaml.h">
+      <DependentUpon>LightningPage.xaml</DependentUpon>
+    </ClInclude>
     <ClInclude Include="pch.h" />
     <ClInclude Include="App.h">
       <DependentUpon>App.xaml</DependentUpon>
@@ -215,16 +221,34 @@
     <ClInclude Include="Scene\PointLight.h" />
     <ClInclude Include="Scene\SolidSphere.h" />
     <ClInclude Include="Scene\Sphere.h" />
+    <ClInclude Include="TranslationPage.xaml.h">
+      <DependentUpon>TranslationPage.xaml</DependentUpon>
+    </ClInclude>
     <ClInclude Include="ViewModel.h">
       <DependentUpon>ViewModel.idl</DependentUpon>
       <SubType>Code</SubType>
+    </ClInclude>
+    <ClInclude Include="WelcomePage.xaml.h">
+      <DependentUpon>WelcomePage.xaml</DependentUpon>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="CameraPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="LightningPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TranslationPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WelcomePage.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
@@ -243,6 +267,9 @@
     <Image Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CameraPage.xaml.cpp">
+      <DependentUpon>CameraPage.xaml</DependentUpon>
+    </ClCompile>
     <ClCompile Include="DXGIInfoManager.cpp" />
     <ClCompile Include="Engine\Architecture\Bindable.cpp" />
     <ClCompile Include="Engine\Architecture\BindingPass.cpp" />
@@ -322,6 +349,9 @@
     <ClCompile Include="Engine\Entities\Node.cpp" />
     <ClCompile Include="Engine\Entities\Surface.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="LightningPage.xaml.cpp">
+      <DependentUpon>LightningPage.xaml</DependentUpon>
+    </ClCompile>
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -335,21 +365,31 @@
     <ClCompile Include="Scene\Camera.cpp" />
     <ClCompile Include="Scene\PointLight.cpp" />
     <ClCompile Include="Scene\SolidSphere.cpp" />
+    <ClCompile Include="TranslationPage.xaml.cpp">
+      <DependentUpon>TranslationPage.xaml</DependentUpon>
+    </ClCompile>
     <ClCompile Include="ViewModel.cpp">
       <DependentUpon>ViewModel.idl</DependentUpon>
       <SubType>Code</SubType>
+    </ClCompile>
+    <ClCompile Include="WelcomePage.xaml.cpp">
+      <DependentUpon>WelcomePage.xaml</DependentUpon>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="App.idl">
       <DependentUpon>App.xaml</DependentUpon>
     </Midl>
+    <Midl Include="CameraPage.idl" />
+    <Midl Include="LightningPage.idl" />
     <Midl Include="MainPage.idl">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Midl>
+    <Midl Include="TranslationPage.idl" />
     <Midl Include="ViewModel.idl">
       <SubType>Designer</SubType>
     </Midl>
+    <Midl Include="WelcomePage.idl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\shared\bin\assimp\x64\Debug\assimp-vc142-mtd.dll">
@@ -369,19 +409,21 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.201113.7\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.201113.7\build\native\Microsoft.Windows.CppWinRT.targets')" />
     <Import Project="..\packages\directxmath.2020.8.3.1\build\native\directxmath.targets" Condition="Exists('..\packages\directxmath.2020.8.3.1\build\native\directxmath.targets')" />
     <Import Project="..\packages\fmt.7.0.1\build\fmt.targets" Condition="Exists('..\packages\fmt.7.0.1\build\fmt.targets')" />
     <Import Project="..\packages\directxtex_desktop_win10.2020.11.12.1\build\native\directxtex_desktop_win10.targets" Condition="Exists('..\packages\directxtex_desktop_win10.2020.11.12.1\build\native\directxtex_desktop_win10.targets')" />
+    <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.targets')" />
+    <Import Project="..\packages\Microsoft.UI.Xaml.2.5.0\build\native\Microsoft.UI.Xaml.targets" Condition="Exists('..\packages\Microsoft.UI.Xaml.2.5.0\build\native\Microsoft.UI.Xaml.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.201113.7\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.201113.7\build\native\Microsoft.Windows.CppWinRT.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.201113.7\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.201113.7\build\native\Microsoft.Windows.CppWinRT.targets'))" />
     <Error Condition="!Exists('..\packages\directxmath.2020.8.3.1\build\native\directxmath.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxmath.2020.8.3.1\build\native\directxmath.targets'))" />
     <Error Condition="!Exists('..\packages\fmt.7.0.1\build\fmt.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\fmt.7.0.1\build\fmt.targets'))" />
     <Error Condition="!Exists('..\packages\directxtex_desktop_win10.2020.11.12.1\build\native\directxtex_desktop_win10.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtex_desktop_win10.2020.11.12.1\build\native\directxtex_desktop_win10.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.UI.Xaml.2.5.0\build\native\Microsoft.UI.Xaml.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.UI.Xaml.2.5.0\build\native\Microsoft.UI.Xaml.targets'))" />
   </Target>
 </Project>

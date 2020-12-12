@@ -5,8 +5,100 @@
     xmlns:local="using:Veritas_3D_View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d">
     
-    <SwapChainPanel x:Name="RenderCasing" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="0,0,0,0"></SwapChainPanel>
+    <SwapChainPanel x:Name="RenderCasing" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="0,0,0,0">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <!--TOP BAR-->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="126"/>
+                </Grid.ColumnDefinitions>
+                <muxc:MenuBar x:Name="menuBar" VerticalAlignment="Top" Grid.Column="0">
+                    <muxc:MenuBarItem Title="File">
+                        <MenuFlyoutItem Text="Open...">
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Modifiers="Control" Key="O"/>
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutSeparator/>
+                        <MenuFlyoutItem Text="Exit"/>
+                    </muxc:MenuBarItem>
+
+                    <muxc:MenuBarItem Title="View">
+                        <ToggleMenuFlyoutItem Text="Show sidebar">
+                        </ToggleMenuFlyoutItem>
+                        <MenuFlyoutItem x:Name="moveSidebarOption" Text="Move sidebar right"/>
+                    </muxc:MenuBarItem>
+
+                    <muxc:MenuBarItem Title="Help">
+                        <MenuFlyoutItem Text="View Help">
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem Text="About"/>
+                    </muxc:MenuBarItem>
+                </muxc:MenuBar>
+                <TextBlock Text="WinD3D12" x:Name="AppTitleBar" VerticalAlignment="Stretch" Grid.Column="1" HorizontalAlignment="Stretch" Padding="0,10,0,0"/>
+            </Grid>
+            <!--SPLIT VIEW-->
+            <SplitView x:Name="splitView" Grid.Row="1" PaneBackground="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
+           OpenPaneLength="324" CompactPaneLength="68" DisplayMode="CompactInline" IsPaneOpen="False">
+                <SplitView.Pane>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0">
+                            <AppBarToggleButton x:Name="cameraButton" Label="Camera" Checked="cameraButton_Checked" Unchecked="cameraButton_Unchecked" Height="68" Width="68" >
+                                <AppBarToggleButton.Icon>
+                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE722;"/>
+                                </AppBarToggleButton.Icon>
+                            </AppBarToggleButton>
+                            <AppBarToggleButton x:Name="lightningButton" Label="Lightning" Checked="lightningButton_Checked " Unchecked="cameraButton_Unchecked" Width="68" Height="68">
+                                <AppBarToggleButton.Icon>
+                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE706;"/>
+                                </AppBarToggleButton.Icon>
+                            </AppBarToggleButton>
+                            <AppBarToggleButton x:Name="translationButton" Label="Translation" Checked="translationButton_Checked" Unchecked="cameraButton_Unchecked" Width="68" Height="68" >
+                                <AppBarToggleButton.Icon>
+                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE740;"/>
+                                </AppBarToggleButton.Icon>
+                            </AppBarToggleButton>
+                        </StackPanel>
+                        <Frame Name="SplitFrame" CacheSize="0" Grid.Column="1" Grid.RowSpan="3"/>
+                    </Grid>
+                </SplitView.Pane>
+                <!--TAB VIEW-->
+                <muxc:TabView x:Name="MainTabView" IsAddTabButtonVisible="False" TabCloseRequested="TabView_TabCloseRequested">
+                    <!--Key shortcuts-->
+                    <muxc:TabView.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="W" Modifiers="Control" Invoked="CloseSelectedTabKeyboardAccelerator_Invoked"/>
+                    </muxc:TabView.KeyboardAccelerators>
+                    <!--Tabs-->
+                    <muxc:TabView.TabItems>
+                        <muxc:TabViewItem Header="Welcome">
+                            <Frame Name="WelcomeFrame"/>
+                        </muxc:TabViewItem>
+                    </muxc:TabView.TabItems>
+                </muxc:TabView>
+            </SplitView>
+        </Grid>
+    </SwapChainPanel>
+    
 
 </Page>

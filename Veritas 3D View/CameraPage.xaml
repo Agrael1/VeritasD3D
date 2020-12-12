@@ -1,0 +1,60 @@
+﻿<Page
+    x:Class="Veritas_3D_View.CameraPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Veritas_3D_View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <StackPanel Margin="15,10,0,0">
+        <TextBlock Text="Position"/>
+        <StackPanel Orientation="Horizontal" Margin="15,10,0,0">
+            <Button Content="-"/>
+            <TextBox/>
+            <Button Content="+"/>
+            <TextBlock Text="X" VerticalAlignment="Center" Margin="15,0,0,0"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="15,10,0,0">
+            <Button Content="-"/>
+            <TextBox/>
+            <Button Content="+"/>
+            <TextBlock Text="Y" VerticalAlignment="Center" Margin="15,0,0,0"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="15,10,0,10">
+            <Button Content="-"/>
+            <TextBox/>
+            <Button Content="+"/>
+            <TextBlock Text="Z" VerticalAlignment="Center" Margin="15,0,0,0"/>
+        </StackPanel>
+        <!--Reset position-->
+        <Button Content="Reset" Margin="15,0,0,15"/>
+
+        <TextBlock Text="Orientation"/>
+        <!--Along X axis-->
+        <StackPanel Orientation="Horizontal" Margin="15,10,0,0">
+            <Slider Width="100" Minimum="0" Maximum="360" StepFrequency="10"
+        SmallChange="10" LargeChange="90" Value="180" />
+            <TextBox Margin="10,0,0,0"/>
+            <TextBlock Text="Pan" VerticalAlignment="Center" Margin="15,0,0,0"/>
+        </StackPanel>
+        <!--Along Y axis-->
+        <StackPanel Orientation="Horizontal" Margin="15,10,0,0">
+            <Slider Width="100" Minimum="0" Maximum="360" StepFrequency="10"
+        SmallChange="10" LargeChange="90" Value="180" />
+            <TextBox Margin="10,0,0,0"/>
+            <TextBlock Text="Tilt" VerticalAlignment="Center" Margin="15,0,0,0"/>
+        </StackPanel>
+        <!--Along Z axis-->
+        <StackPanel Orientation="Horizontal" Margin="15,10,0,0">
+            <Slider Width="100" Minimum="0" Maximum="360" StepFrequency="10"
+        SmallChange="10" LargeChange="90" Value="180"/>
+            <TextBox Margin="10,0,0,0"/>
+            <TextBlock Text="Roll" VerticalAlignment="Center" Margin="15,0,0,0"/>
+        </StackPanel>
+        <!--Reset orientation-->
+        <Button Content="Reset" Margin="15,10,0,0"/>
+    </StackPanel>
+</Page>

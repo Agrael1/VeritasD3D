@@ -1,0 +1,56 @@
+﻿<Page
+    x:Class="Veritas_3D_View.LightningPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Veritas_3D_View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    Width="392"
+    Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
+    <!--TODO automatize maxheight-->
+    <!--find a way to bind to main page actual height-->
+    <ScrollViewer
+        ZoomMode="Disabled" 
+        HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled"
+        VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Visible">
+        <StackPanel Margin="15,10,0,0" Width="377">
+            <TextBlock Text="Position"/>
+            <StackPanel Orientation="Horizontal" Margin="15,10,0,0">
+                <Button Content="-"/>
+                <TextBox/>
+                <Button Content="+"/>
+                <TextBlock Text="X" VerticalAlignment="Center" Margin="15,0,0,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="15,10,0,0">
+                <Button Content="-"/>
+                <TextBox/>
+                <Button Content="+"/>
+                <TextBlock Text="Y" VerticalAlignment="Center" Margin="15,0,0,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="15,10,0,10">
+                <Button Content="-"/>
+                <TextBox/>
+                <Button Content="+"/>
+                <TextBlock Text="Z" VerticalAlignment="Center" Margin="15,0,0,0"/>
+            </StackPanel>
+            <!--Reset position-->
+            <Button Content="Reset" Margin="15,0,0,15"/>
+
+            <TextBlock Text="Color"/>
+            <muxc:ColorPicker
+                Margin="15,10,0,0"
+                IsMoreButtonVisible="True"
+                IsColorSliderVisible="True"
+                IsColorChannelTextInputVisible="True"
+                IsHexInputVisible="True"
+                IsAlphaEnabled="False"
+                IsAlphaSliderVisible="False"
+                IsAlphaTextInputVisible="False"
+                HorizontalAlignment="Left">
+            </muxc:ColorPicker>
+            <Button Content="Reset" Margin="15,10,0,15"/>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

@@ -1,0 +1,8 @@
+namespace Veritas_3D_View
+{
+    [default_interface]
+    runtimeclass TranslationPage : Windows.UI.Xaml.Controls.Page
+    {
+        TranslationPage();
+    }
+}

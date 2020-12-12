@@ -447,10 +447,34 @@
     <Page Include="MainPage.xaml">
       <Filter>Pages</Filter>
     </Page>
+    <Page Include="WelcomePage.xaml">
+      <Filter>Pages</Filter>
+    </Page>
+    <Page Include="CameraPage.xaml">
+      <Filter>Pages</Filter>
+    </Page>
+    <Page Include="LightningPage.xaml">
+      <Filter>Pages</Filter>
+    </Page>
+    <Page Include="TranslationPage.xaml">
+      <Filter>Pages</Filter>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="ViewModel.idl">
       <Filter>ViewModels</Filter>
+    </Midl>
+    <Midl Include="CameraPage.idl">
+      <Filter>Pages</Filter>
+    </Midl>
+    <Midl Include="LightningPage.idl">
+      <Filter>Pages</Filter>
+    </Midl>
+    <Midl Include="TranslationPage.idl">
+      <Filter>Pages</Filter>
+    </Midl>
+    <Midl Include="WelcomePage.idl">
+      <Filter>Pages</Filter>
     </Midl>
   </ItemGroup>
 </Project>
