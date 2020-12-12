@@ -45,5 +45,6 @@ private:
 		Finish
 	};
 	std::atomic<ModelLoadState> state = ModelLoadState::Unloaded;
+	bool bFlightMode = false;
 };
 

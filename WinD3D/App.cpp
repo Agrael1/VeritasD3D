@@ -119,19 +119,29 @@ void App::ProcessInput(float dt)
 
 		switch (e->GetCode())
 		{
+		case 'F':
 		case VK_INSERT:
 			if (wnd.CursorEnabled())
 			{
+				bFlightMode = true;
 				wnd.DisableCursor();
 				wnd.mouse.EnableRaw();
 			}
 			else
 			{
+				bFlightMode = false;
 				wnd.EnableCursor();
 				wnd.mouse.DisableRaw();
 			}
 			break;
 		case VK_ESCAPE:
+			if (bFlightMode)
+			{
+				bFlightMode = false;
+				wnd.EnableCursor();
+				wnd.mouse.DisableRaw();
+				break;
+			}
 			PostQuitMessage(0);
 			return;
 		}
