@@ -20,23 +20,7 @@ Texture::Texture(Graphics& gfx, std::string_view path, UINT slot)
 		ResolveToDefault(gfx);
 		return;
 	}
-
-
 	hasAlpha = s.UsesAlpha();
-
-	//create texture resource
-	D3D11_TEXTURE2D_DESC texDesc = {};
-	texDesc.Width = s.GetWidth();
-	texDesc.Height = s.GetHeight();
-	texDesc.MipLevels = 0;
-	texDesc.ArraySize = 1;
-	texDesc.Format = DXGI_FORMAT::DXGI_FORMAT_B8G8R8A8_UNORM;
-	texDesc.SampleDesc.Count = 1;
-	texDesc.SampleDesc.Quality = 0;
-	texDesc.Usage = D3D11_USAGE_DEFAULT;
-	texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
-	texDesc.CPUAccessFlags = 0;
-	texDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
 
 	GFX_THROW_INFO(DirectX::CreateShaderResourceView(GetDevice(gfx),
 		s->GetImages(), s->GetImageCount(),
@@ -100,13 +84,10 @@ void Texture::ResolveToDefault(Graphics& gfx)
 	texDesc.Usage = D3D11_USAGE_DEFAULT;
 	texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
 	texDesc.CPUAccessFlags = 0;
-	texDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
+	texDesc.MiscFlags = 0;
 
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> pTexture;
-	GFX_THROW_INFO(GetDevice(gfx)->CreateTexture2D(
-		&texDesc,
-		nullptr,
-		&pTexture));
+
 
 	const uint32_t* pmap = nullptr;
 
@@ -119,16 +100,21 @@ void Texture::ResolveToDefault(Graphics& gfx)
 		pmap = &DefaultDifTexture; break;
 	}
 
-	GetContext(gfx)->UpdateSubresource(
-		pTexture.Get(), 0u, nullptr, pmap, sizeof(*pmap), 0u
-	);
+	D3D11_SUBRESOURCE_DATA sd = { 0 };
+	sd.pSysMem = pmap;
+	sd.SysMemPitch = 4;
+
+	GFX_THROW_INFO(GetDevice(gfx)->CreateTexture2D(
+		&texDesc,
+		&sd,
+		&pTexture));
 
 	// create a resource view
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Format = texDesc.Format;
 	srvDesc.ViewDimension = D3D11_SRV_DIMENSION::D3D11_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MostDetailedMip = 0;
-	srvDesc.Texture2D.MipLevels = -1;
+	srvDesc.Texture2D.MipLevels = 1;
 
 	GFX_THROW_INFO(GetDevice(gfx)->CreateShaderResourceView
 	(
