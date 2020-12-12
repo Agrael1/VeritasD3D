@@ -1,4 +1,6 @@
 #include "App.h"
+#include <winrt/base.h>
+
 
 int WINAPI WinMain(
 	_In_ HINSTANCE hInstance,
@@ -7,6 +9,8 @@ int WINAPI WinMain(
 	_In_ int nShowCmd
 )
 {
+	winrt::init_apartment();
+
 	try
 	{
 		return App{1280, 720}.Go();

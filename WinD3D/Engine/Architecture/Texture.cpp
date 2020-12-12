@@ -42,6 +42,7 @@ Texture::Texture(Graphics& gfx, std::string_view path, UINT slot)
 		s->GetImages(), s->GetImageCount(),
 		s->GetMetadata(), &pTextureView
 	));
+	
 }
 
 void Texture::Bind(Graphics& gfx)noxnd

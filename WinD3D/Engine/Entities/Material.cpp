@@ -167,7 +167,9 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 		techniques.push_back(std::move(outline));
 	}
 }
-concurrency::task<void> Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noexcept(!IS_DEBUG)
+
+winrt::Windows::Foundation::IAsyncAction
+Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noexcept(!IS_DEBUG)
 {
 	modelPath = path.string();
 	const auto rootPath = path.parent_path().string() + "\\";

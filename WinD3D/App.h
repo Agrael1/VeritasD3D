@@ -21,6 +21,8 @@ private:
 	void DoFrame(float dt);
 	void ProcessInput(float dt);
 	void CreateRenderGraph();
+	winrt::fire_and_forget
+		ReloadModelAsync();
 private:
 	ImGUIManager imgui;
 	Window wnd;
@@ -30,10 +32,11 @@ private:
 	PointLight light;
 
 	Grid grid;
-	std::unique_ptr<Model> model;
+	std::unique_ptr<Model> model, swap;
 	VFileOpenDialog opener;
 	float speed = 1.0f;
 
 	MP modelProbe;
+	std::atomic_bool bModelLoaded = false;
 };
 

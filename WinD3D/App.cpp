@@ -181,22 +181,17 @@ void App::ProcessInput(float dt)
 
 	if (wnd.LoadCalled())
 	{
-		auto wfilename = opener.GetFilePath();
-		if (!wfilename.empty())
-		{
-			try
-			{
-				model = std::make_unique<Model>(wnd.Gfx(),ToNarrow(wfilename));
-				Codex::Trim();
-				model->LinkTechniques(*rg);
-				modelProbe.Reset();
-			}
-			catch (const ModelException& e)
-			{
-				MessageBox(nullptr, e.what(), e.GetType(), MB_OK | MB_ICONEXCLAMATION);
-			}
-		}
+		ReloadModelAsync();
 		wnd.LoadingComplete();
+	}
+	if (bModelLoaded)
+	{
+		model.reset(swap.release());
+		Codex::Trim();
+		if (model)
+			model->LinkTechniques(*rg);
+		modelProbe.Reset();
+		bModelLoaded.store(false);
 	}
 
 	if (wnd.ResizeCalled())
@@ -225,5 +220,22 @@ void App::CreateRenderGraph()
 	grid.LinkTechniques(*rg);
 	light.LinkTechniques(*rg);
 	if (model) model->LinkTechniques(*rg);
+}
+
+winrt::fire_and_forget App::ReloadModelAsync()
+{
+	auto wfilename = opener.GetFilePath();
+	if (!wfilename.empty())
+	{
+		try
+		{
+			co_await Model::MakeModelAsync(swap, wnd.Gfx(), ToNarrow(wfilename));
+		}
+		catch (const ModelException& e)
+		{
+			MessageBox(nullptr, e.what(), e.GetType(), MB_OK | MB_ICONEXCLAMATION);
+		}
+	}
+	bModelLoaded.store(true);
 }
 

@@ -1,13 +1,14 @@
 #pragma once
-#include <unordered_map>
 #include <memory>
 #include <type_traits>
 #include "Bindable.h"
+#include <concurrent_unordered_map.h>
+
 
 class Codex
 {
 public:
-	template<class T, typename ...Params> 
+	template<class T, typename ...Params>
 	static std::shared_ptr<T> Resolve(Graphics& gfx, Params&& ...p)noxnd
 	{
 		static_assert(std::is_base_of<Bindable, T>::value, "Can only resolve classes derived from Bindable");
@@ -22,8 +23,10 @@ private:
 	std::shared_ptr<T> _Resolve(Graphics& gfx, Params&& ...p)noxnd
 	{
 		const auto key = T::GenerateUID(std::forward<Params>(p)...);
-		if(binds.find(key) == binds.end())
-			binds.try_emplace(key, std::make_shared<T>(gfx, std::forward<Params>(p)...));
+
+		if (binds.find(key) == binds.end()) {
+			binds.insert({ key, std::make_shared<T>(gfx, std::forward<Params>(p)...) });
+		}
 		return std::static_pointer_cast<T>(binds.at(key));
 	}
 	void _Trim()noxnd
@@ -36,7 +39,7 @@ private:
 			if (bind.second.use_count() == 1)todelete.push_back(&bind.first);
 		}
 		for (auto& bind : todelete)
-			binds.erase(*bind);
+			binds.unsafe_erase(*bind);
 	}
 	static Codex& Get()
 	{
@@ -44,5 +47,5 @@ private:
 		return codex;
 	}
 private:
-	std::unordered_map<std::string, std::shared_ptr<Bindable>> binds;
+	concurrency::concurrent_unordered_map<std::string, std::shared_ptr<Bindable>> binds;
 };

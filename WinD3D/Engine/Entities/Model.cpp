@@ -17,6 +17,24 @@ DirectX::XMMATRIX ScaleTranslation(DirectX::XMMATRIX matrix, float scale)
 	return matrix;
 }
 
+winrt::Windows::Foundation::IAsyncAction
+MakeMaterialsAsync(Graphics& gfx, std::vector<Material>& materials, const aiScene* pScene, std::string_view pathString)
+{
+	std::vector<winrt::Windows::Foundation::IAsyncAction> tasks;
+	tasks.reserve(pScene->mNumMaterials);
+
+	for (size_t i = 0; auto & mat: materials)
+	{
+		tasks.emplace_back(mat.MakeMaterialAsync(gfx, *pScene->mMaterials[i], pathString));
+		i++;
+	}
+	for (auto& t : tasks)
+	{
+		co_await t;
+	}
+}
+
+
 Model::Model(Graphics& gfx, std::string_view pathString, const float scale)
 {
 	Assimp::Importer imp;
@@ -35,8 +53,12 @@ Model::Model(Graphics& gfx, std::string_view pathString, const float scale)
 
 	//parse materials
 	std::vector<Material> materials;
-	materials.resize(pScene->mNumMaterials);
-	MakeMaterialsAsync(gfx, materials, pScene, pathString).get();
+	materials.reserve(pScene->mNumMaterials);
+
+	for (size_t i = 0; i< pScene->mNumMaterials; i++)
+	{
+		materials.emplace_back(gfx, *pScene->mMaterials[i], pathString);
+	}
 
 	for (size_t i = 0; i < pScene->mNumMeshes; i++)
 	{
@@ -48,20 +70,52 @@ Model::Model(Graphics& gfx, std::string_view pathString, const float scale)
 	pRoot = ParseNode(nextId, *pScene->mRootNode, scale);
 }
 
-concurrency::task<void> Model::MakeMaterialsAsync(Graphics& gfx, std::vector<Material>& materials, const aiScene* pScene, std::string_view pathString )
+
+winrt::Windows::Foundation::IAsyncAction
+Model::MakeModelAsync(std::unique_ptr<Model>& to, Graphics& gfx, std::string_view pathString, float scale)
 {
-	std::vector<concurrency::task<void>> tasks;
-	tasks.reserve(pScene->mNumMaterials);
-	for (size_t i = 0; auto& mat: materials)
-	{
-		tasks.emplace_back(std::move(mat.MakeMaterialAsync(gfx, *pScene->mMaterials[i], pathString)));
-		i++;
+	std::unique_ptr<Model> out (new Model());
+
+	Assimp::Importer imp;
+	const auto pScene = imp.ReadFile(pathString.data(),
+		aiProcess_Triangulate |
+		aiProcess_JoinIdenticalVertices |
+		aiProcess_ConvertToLeftHanded |
+		aiProcess_GenNormals |
+		aiProcess_CalcTangentSpace
+	);
+
+	auto v = imp.GetErrorString();
+
+	if (pScene == nullptr) {
+		throw ModelException(__LINE__, __FILE__, imp.GetErrorString());
 	}
-	for (auto& t : tasks)
+	if (!pScene->mNumMeshes)
 	{
-		co_await t;
+		to.reset();
+		co_return;
 	}
+
+
+	out->meshPtrs.reserve(pScene->mNumMeshes);
+
+	std::vector<Material> materials;
+	materials.resize(pScene->mNumMaterials);
+	co_await MakeMaterialsAsync(gfx, materials, pScene, pathString);
+
+	//parse materials
+	for (size_t i = 0; i < pScene->mNumMeshes; i++)
+	{
+		const auto& mesh = *pScene->mMeshes[i];
+		out->meshPtrs.push_back(std::make_unique<Mesh>(gfx, materials[mesh.mMaterialIndex], mesh, scale));
+	}
+
+	int nextId = 0;
+	out->pRoot = out->ParseNode(nextId, *pScene->mRootNode, scale);
+	to.reset(out.release());
 }
+
+
 
 void Model::Submit() const noxnd
 {
@@ -96,6 +150,8 @@ void Model::UnlinkTechniques()
 
 Model::~Model() noexcept
 {}
+
+
 
 std::unique_ptr<Node> Model::ParseNode(int& nextId, const aiNode& node, float scale) noexcept
 {
