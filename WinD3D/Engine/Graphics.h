@@ -13,7 +13,7 @@ class Graphics
 {
 	friend class GraphicsResource;
 public:
-	Graphics( HWND hWnd, unsigned width, unsigned height);
+	Graphics(HWND hWnd, unsigned width, unsigned height);
 	Graphics(const Graphics&) = delete;
 	Graphics& operator=(const Graphics&) = delete;
 	~Graphics();

@@ -173,7 +173,7 @@ void App::ProcessInput(float dt)
 		{
 			cam.Translate({ 0.0f,dt,0.0f });
 		}
-		if (wnd.kbd.KeyIsPressed(VK_CONTROL))
+		if (wnd.kbd.KeyIsPressed('C'))
 		{
 			cam.Translate({ 0.0f,-dt,0.0f });
 		}
@@ -191,10 +191,10 @@ void App::ProcessInput(float dt)
 	{
 		switch (state)
 		{
-		using enum ModelLoadState;
+			using enum ModelLoadState;
 		case Unloaded:
-			state = InProgress; 
-			ReloadModelAsync(); 
+			state = InProgress;
+			ReloadModelAsync();
 			break;
 		case Finish:
 		{
@@ -241,17 +241,15 @@ void App::CreateRenderGraph()
 
 winrt::fire_and_forget App::ReloadModelAsync()
 {
+	co_await winrt::resume_background();
 	auto wfilename = opener.GetFilePath();
+
 	if (!wfilename.empty())
 	{
-		co_await concurrency::create_task([=]()->concurrency::task<void>
-			{
-				co_await Model::MakeModelAsync(swap, wnd.Gfx(), ToNarrow(wfilename));
-			});
+		co_await Model::MakeModelAsync(swap, wnd.Gfx(), ToNarrow(wfilename));
 
-		if(!swap)
-			MessageBox(nullptr, "Model file was corrupted or empty", 
-				"Model Exception", MB_OK | MB_ICONEXCLAMATION);
+		if (!swap) MessageBox(nullptr, "Model file was corrupted or empty",
+			"Model Exception", MB_OK | MB_ICONEXCLAMATION);
 	}
 	state = ModelLoadState::Finish;
 }

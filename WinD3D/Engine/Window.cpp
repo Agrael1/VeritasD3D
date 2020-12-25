@@ -5,7 +5,7 @@
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-enum class MenuItems:UINT_PTR
+enum class MenuItems :UINT_PTR
 {
 	Load = ID_FILE_LOADMODEL,
 	Exit = ID_FILE_EXIT,
@@ -15,8 +15,6 @@ enum class MenuItems:UINT_PTR
 	Style_Cherry = ID_STYLES_CHERRY,
 	About = ID_HELP_ABOUT,
 };
-
-
 
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -36,7 +34,6 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	return (INT_PTR)FALSE;
 }
-
 
 Window::WindowClass Window::WindowClass::wndClass;
 
@@ -62,7 +59,7 @@ Window::WindowClass::~WindowClass()
 {
 	UnregisterClass(wndClassName, GetInstance());
 }
-const char * Window::WindowClass::GetName() noexcept
+const char* Window::WindowClass::GetName() noexcept
 {
 	return wndClassName;
 }
@@ -72,7 +69,7 @@ HINSTANCE Window::WindowClass::GetInstance() noexcept
 }
 
 // Window namespace
-Window::Window(unsigned int width, unsigned int height, const char * name):width(width),height(height)
+Window::Window(unsigned int width, unsigned int height, const char* name) :width(width), height(height)
 {
 	RECT rWindow;
 	rWindow.left = 100;
@@ -85,7 +82,7 @@ Window::Window(unsigned int width, unsigned int height, const char * name):width
 	hWnd.reset(CreateWindowA(
 		WindowClass::GetName(), name,
 		WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, CW_USEDEFAULT, 
+		CW_USEDEFAULT, CW_USEDEFAULT,
 		rWindow.right - rWindow.left,
 		rWindow.bottom - rWindow.top,
 		nullptr, nullptr,
@@ -97,7 +94,7 @@ Window::Window(unsigned int width, unsigned int height, const char * name):width
 	ShowWindow(hWnd.get(), SW_SHOWDEFAULT);
 
 	Accelerator.reset(LoadAccelerators(WindowClass::GetInstance(), MAKEINTRESOURCE(IDR_ACCELERATOR1)));
-	
+
 	// Init GUI (only one window supported)
 	WND_CALL_INFO(ImGui_ImplWin32_Init(hWnd.get()));
 
@@ -246,7 +243,7 @@ std::optional<WPARAM> Window::ProcessMessages()const noexcept
 	}
 	return{};
 }
-Graphics & Window::Gfx()
+Graphics& Window::Gfx()
 {
 	if (!pGfx)
 	{
@@ -269,14 +266,14 @@ LRESULT WINAPI Window::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM
 
 		return pWnd->HandleMsg(hWnd, msg, wParam, lParam);
 	}
-	return DefWindowProc(hWnd,msg,wParam,lParam);
+	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 LRESULT WINAPI Window::HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	// retrieve ptr to win class
 	Window* const pWnd = reinterpret_cast<Window*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 	// forward msg to class handler
-	return pWnd->HandleMsg(hWnd,msg,wParam,lParam);
+	return pWnd->HandleMsg(hWnd, msg, wParam, lParam);
 }
 LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -343,7 +340,7 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			{
 				.cbSize = sizeof(MENUITEMINFO),
 				.fMask = MIIM_STATE,
-				.fState = UINT(bGridEnabled? MFS_CHECKED: MFS_UNCHECKED)
+				.fState = UINT(bGridEnabled ? MFS_CHECKED : MFS_UNCHECKED)
 			};
 			SetMenuItemInfo(OptionsMenu.get(), 0, true, &mii);
 			break;

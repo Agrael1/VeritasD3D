@@ -7,8 +7,14 @@
 #include <memory>
 #include <optional>
 
-class Window 
+namespace ver
 {
+	class FileOpenDialog;
+}
+
+class Window
+{
+	friend class ver::FileOpenDialog;
 public:
 	enum class Style
 	{

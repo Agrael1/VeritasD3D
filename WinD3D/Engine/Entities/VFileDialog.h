@@ -29,14 +29,14 @@ protected:
 class VFileOpenDialog : public VFileDialog
 {
 public:
-	VFileOpenDialog();	
+	VFileOpenDialog();
 };
 
 class VFileSaveDialog : public VFileDialog
 {
 public:
 	VFileSaveDialog();
-	void SetDefaultItem(const std::wstring & name);
+	void SetDefaultItem(const std::wstring& name);
 };
 
 #define VFD_THROW( hrcall ) if(FAILED(hr = hrcall)) {throw VFileDialog::HRException( __LINE__,__FILE__,(hr) );}

@@ -259,6 +259,9 @@
     <ClCompile Include="Framework\WindowException.cpp">
       <Filter>WinD3D\Framework</Filter>
     </ClCompile>
+    <ClCompile Include="FilePicker.cpp">
+      <Filter>WinD3D\Loading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ImGUI\imconfig.h">
@@ -530,6 +533,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Architecture\BindableCommons.h">
       <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="FilePicker.h">
+      <Filter>WinD3D\Loading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

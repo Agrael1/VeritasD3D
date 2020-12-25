@@ -16,7 +16,7 @@ namespace dx = DirectX;
 Graphics::Graphics(HWND hWnd, unsigned width, unsigned height)
 	: width(width),
 	height(height),
-	projection(DirectX::XMMatrixIdentity()), 
+	projection(DirectX::XMMatrixIdentity()),
 	camera(DirectX::XMMatrixIdentity())
 {
 	DXGI_SWAP_CHAIN_DESC sd = {};
