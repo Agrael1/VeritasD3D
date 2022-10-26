@@ -8,6 +8,7 @@ class RenderTarget;
 class DepthStencil : public Bindable, public BufferResource
 {
 	friend RenderTarget;
+	friend class RenderTargetArray;
 public:
 	void BindAsBuffer(Graphics& gfx) noxnd override;
 	void BindAsBuffer(Graphics& gfx, BufferResource* renderTarget) noxnd override;

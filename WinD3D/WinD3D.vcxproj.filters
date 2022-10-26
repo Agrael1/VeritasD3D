@@ -62,6 +62,9 @@
     <Filter Include="Файлы ресурсов\dlls">
       <UniqueIdentifier>{7833760d-4709-4044-a328-6874013f0c7c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WinD3D\Text">
+      <UniqueIdentifier>{8d57ffea-f589-440d-9d93-29a6d5df0276}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ImGUI\imgui.cpp">
@@ -261,6 +264,33 @@
     </ClCompile>
     <ClCompile Include="FilePicker.cpp">
       <Filter>WinD3D\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="MediaEngine.cpp">
+      <Filter>WinD3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Galaxy.cpp">
+      <Filter>WinD3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\GalaxyRenderGraph.cpp">
+      <Filter>WinD3D\Passes\Graphs</Filter>
+    </ClCompile>
+    <ClCompile Include="Star.cpp">
+      <Filter>WinD3D</Filter>
+    </ClCompile>
+    <ClCompile Include="ttf2mesh.c">
+      <Filter>WinD3D\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="ttfcpp.cpp">
+      <Filter>WinD3D\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>WinD3D\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\DeferredRenderGraph.cpp">
+      <Filter>WinD3D\Passes\Graphs</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\LightingPass.cpp">
+      <Filter>WinD3D\Passes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -537,6 +567,39 @@
     <ClInclude Include="FilePicker.h">
       <Filter>WinD3D\Loading</Filter>
     </ClInclude>
+    <ClInclude Include="MediaEngine.h">
+      <Filter>WinD3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Galaxy.h">
+      <Filter>WinD3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\GalaxyRenderGraph.h">
+      <Filter>WinD3D\Passes\Graphs</Filter>
+    </ClInclude>
+    <ClInclude Include="Datastars.h">
+      <Filter>WinD3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Star.h">
+      <Filter>WinD3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ttf2mesh.h">
+      <Filter>WinD3D\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="ttfcpp.h">
+      <Filter>WinD3D\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredRenderGraph.h">
+      <Filter>WinD3D\Passes\Graphs</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\GbufferPass.h">
+      <Filter>WinD3D\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\LightingPass.h">
+      <Filter>WinD3D\Passes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc">
@@ -577,6 +640,9 @@
     </None>
     <None Include="..\shared\bin\assimp\x64\Debug\assimp-vc142-mtd.dll">
       <Filter>Файлы ресурсов\dlls</Filter>
+    </None>
+    <None Include="Engine\Shaders\lights.hlsli">
+      <Filter>Shaders\Headers</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -649,5 +715,20 @@
     <FxCompile Include="Engine\Shaders\Fullscreen_VS.hlsl">
       <Filter>Shaders\VertexShaders</Filter>
     </FxCompile>
+    <FxCompile Include="Engine\Shaders\phong.vs.hlsl">
+      <Filter>Shaders\VertexShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\phong.ps.hlsl">
+      <Filter>Shaders\PixelShades</Filter>
+    </FxCompile>
+    <FxCompile Include="fullscreen.vs.hlsl">
+      <Filter>Shaders\VertexShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\fullscreen.ps.hlsl">
+      <Filter>Shaders\PixelShades</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
   </ItemGroup>
 </Project>

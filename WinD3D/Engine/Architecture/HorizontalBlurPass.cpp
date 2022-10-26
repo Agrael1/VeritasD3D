@@ -20,7 +20,7 @@ namespace RG
 
 		// the renderTarget is internally sourced and then exported as a Bindable
 		renderTarget = std::make_shared<ShaderInputRenderTarget>(gfx, fullWidth / 2, fullHeight / 2, 0u);
-		RegisterSource(DirectBindableSource<RenderTarget>::Make("scratchOut", renderTarget));
+		RegisterSource(DirectBindableSource<IRenderTarget>::Make("scratchOut", renderTarget));
 	}
 
 	// this override is necessary because we cannot (yet) link input bindables directly into

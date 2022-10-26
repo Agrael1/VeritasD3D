@@ -104,7 +104,7 @@ namespace RG
 				}
 				if (!bound)
 				{
-					throw RGC_EXCEPTION(fmt::sprintf("Output named [%s] not found in globals", si->GetOutputName()));
+					throw RGC_EXCEPTION(std::format("Output named [{}] not found in globals", si->GetOutputName()));
 				}
 			}
 			else // find source from within existing passes

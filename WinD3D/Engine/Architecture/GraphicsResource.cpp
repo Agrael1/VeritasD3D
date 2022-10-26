@@ -2,7 +2,7 @@
 #include <stdexcept>
 
 
-ID3D11DeviceContext* GraphicsResource::GetContext(Graphics& gfx) noexcept
+ID3D11DeviceContext* GraphicsResource::GetContext(const Graphics& gfx) noexcept
 {
 	return gfx.pContext.Get();
 }

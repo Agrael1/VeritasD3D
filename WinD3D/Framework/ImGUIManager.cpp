@@ -168,3 +168,15 @@ void ImGUIManager::SetStyle(Style s)
         break;
     }
 }
+
+void ImGUIManager::Begin() const noexcept
+{
+    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(),
+        ImGuiDockNodeFlags_PassthruCentralNode |
+        ImGuiDockNodeFlags_NoDockingInCentralNode);
+    if (ImGui::Begin("Simulation speed"))
+    {
+        ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    }
+    ImGui::End();
+}

@@ -11,6 +11,9 @@ class RenderTarget;
 
 class Graphics
 {
+	//Delet this
+	friend class App;
+
 	friend class GraphicsResource;
 public:
 	Graphics(HWND hWnd, unsigned width, unsigned height);

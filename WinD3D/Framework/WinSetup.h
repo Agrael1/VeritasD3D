@@ -1,6 +1,6 @@
 #pragma once
 #ifndef WINSETUP_SUPPRESS
-#define _WIN32_WINNT 0x0601
+#define _WIN32_WINNT 0x0602
 #include <sdkddkver.h>
 
 #ifndef FULL_WINOPT

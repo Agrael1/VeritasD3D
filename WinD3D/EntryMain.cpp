@@ -1,5 +1,6 @@
 #include "App.h"
 #include <winrt/base.h>
+#include "Galaxy.h"
 
 
 int WINAPI WinMain(
@@ -12,7 +13,8 @@ int WINAPI WinMain(
 	winrt::init_apartment();
 	try
 	{
-		return App{1280, 720}.Go();
+		return App{ 1280, 720 }.Go();
+		//return Galaxy{1280, 720}.Go();
 	}
 	catch (const Exception& e)
 	{

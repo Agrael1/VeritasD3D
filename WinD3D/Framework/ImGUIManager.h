@@ -14,4 +14,5 @@ public:
 	~ImGUIManager();
 public:
 	void SetStyle(Style s);
+	void Begin()const noexcept;
 };

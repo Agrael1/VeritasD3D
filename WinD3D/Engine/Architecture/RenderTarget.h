@@ -1,10 +1,23 @@
 #pragma once
 #include "Bindable.h"
 #include "BufferResource.h"
+#include <span>
+
+#include <winrt/Windows.Foundation.h>
+namespace winrt {
+	using winrt::Windows::Foundation::IAsyncAction;
+}
+
 
 class DepthStencil;
 
-class RenderTarget : public Bindable, public BufferResource
+class IRenderTarget: public Bindable, public BufferResource
+{
+public:
+	virtual void BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDepthStencilView) noxnd = 0;
+};
+
+class RenderTarget : public IRenderTarget
 {
 public:
 	void BindAsBuffer(Graphics& gfx) noxnd override;
@@ -15,7 +28,7 @@ public:
 	UINT GetWidth() const noexcept;
 	UINT GetHeight() const noexcept;
 private:
-	void BindAsBuffer(Graphics& gfx, ID3D11DepthStencilView* pDepthStencilView) noxnd;
+	void BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDepthStencilView) noxnd;
 protected:
 	RenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture);
 	RenderTarget(Graphics& gfx, UINT width, UINT height);
@@ -43,4 +56,29 @@ public:
 	void Bind(Graphics& gfx) noxnd override;
 private:
 	OutputOnlyRenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture);
+};
+
+class RenderTargetArray : public IRenderTarget
+{
+public:
+	RenderTargetArray() = default;
+	winrt::IAsyncAction InitializeAsync(Graphics& gfx, uint32_t xwidth, uint32_t xheight, uint32_t slot);
+	void BindAsBuffer(Graphics& gfx) noxnd override;
+	void BindAsBuffer(Graphics& gfx, BufferResource* depthStencil) noxnd override;
+	void BindAsBuffer(Graphics& gfx, DepthStencil* depthStencil) noxnd;
+
+	void Clear(Graphics& gfx) noxnd override;
+	void Clear(Graphics& gfx, const std::array<float, 4>& color) noxnd;
+public:
+	uint32_t GetWidth() const noexcept { return width; }
+	uint32_t GetHeight() const noexcept { return height; }
+	void Bind(Graphics& gfx) noxnd override;
+private:
+	void BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDepthStencilView) noxnd;
+protected:
+	uint32_t slot = 0u;
+	uint32_t width = 0u;
+	uint32_t height = 0u;
+	std::array<winrt::com_ptr<ID3D11RenderTargetView>, 4> targets;
+	std::array<winrt::com_ptr<ID3D11ShaderResourceView>, 4> resource_views;
 };

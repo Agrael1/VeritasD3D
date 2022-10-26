@@ -47,7 +47,7 @@ constexpr COMDLG_FILTERSPEC filterSpecs[] =
 namespace dx = DirectX;
 
 App::App(uint32_t width, uint32_t height)
-	: wnd(width, height, "VTest"), light(wnd.Gfx()), grid(wnd.Gfx())
+	: wnd(width, height, "VTest"), light(wnd.Gfx()), /*grid(wnd.Gfx()),*/ text(wnd.Gfx(), 1.0), ss(wnd.Gfx(), 1.0)
 {
 	opener.SetFileTypes(filterSpecs);
 	CreateRenderGraph();
@@ -80,9 +80,12 @@ void App::DoFrame(float dt)
 	wnd.Gfx().SetCamera(cam.GetViewMatrix());
 	light.Bind(wnd.Gfx(), cam.GetViewMatrix());
 
-	if (model)model->Submit();
+	//if (model)model->Submit();
 	light.Submit();
-	if (wnd.DrawGrid())grid.Submit();
+	text.Submit();
+	//ss.Submit();
+
+	//if (wnd.DrawGrid())grid.Submit();
 	rg->Execute(wnd.Gfx());
 
 
@@ -96,8 +99,8 @@ void App::DoFrame(float dt)
 	}
 	ImGui::End();
 
-	if (model)
-		modelProbe.SpawnWindow(*model);	// imgui windows
+	//if (model)
+		//modelProbe.SpawnWindow(*model);	// imgui windows
 
 	ProcessInput(dt);
 	cam.SpawnControlWindow();
@@ -198,10 +201,10 @@ void App::ProcessInput(float dt)
 			break;
 		case Finish:
 		{
-			model.reset(swap.release());
+			//model.reset(swap.release());
 			Codex::Trim();
-			if (model)
-				model->LinkTechniques(*rg);
+			//if (model)
+				//model->LinkTechniques(*rg);
 			modelProbe.Reset();
 			state = Unloaded;
 			wnd.LoadingComplete();
@@ -213,9 +216,11 @@ void App::ProcessInput(float dt)
 
 	if (wnd.ResizeCalled())
 	{
-		grid.UnlinkTechniques();
+		//grid.UnlinkTechniques();
 		light.UnlinkTechniques();
-		if (model) model->UnlinkTechniques();
+		text.UnlinkTechniques();
+		ss.UnlinkTechniques();
+		//if (model) model->UnlinkTechniques();
 		rg.reset();
 		wnd.Gfx().OnResize(wnd.GetWidth(), wnd.GetHeight());
 		CreateRenderGraph();
@@ -234,9 +239,11 @@ void App::CreateRenderGraph()
 {
 	rg.emplace(wnd.Gfx());
 
-	grid.LinkTechniques(*rg);
+	//grid.LinkTechniques(*rg);
 	light.LinkTechniques(*rg);
-	if (model) model->LinkTechniques(*rg);
+	text.LinkTechniques(*rg);
+	ss.LinkTechniques(*rg);
+	//if (model) model->LinkTechniques(*rg);
 }
 
 winrt::fire_and_forget App::ReloadModelAsync()
@@ -246,10 +253,10 @@ winrt::fire_and_forget App::ReloadModelAsync()
 
 	if (!wfilename.empty())
 	{
-		co_await Model::MakeModelAsync(swap, wnd.Gfx(), ToNarrow(wfilename));
+		//co_await Model::MakeModelAsync(swap, wnd.Gfx(), ToNarrow(wfilename));
 
-		if (!swap) MessageBox(nullptr, "Model file was corrupted or empty",
-			"Model Exception", MB_OK | MB_ICONEXCLAMATION);
+		//if (!swap) MessageBox(nullptr, "Model file was corrupted or empty",
+			//"Model Exception", MB_OK | MB_ICONEXCLAMATION);
 	}
 	state = ModelLoadState::Finish;
 }

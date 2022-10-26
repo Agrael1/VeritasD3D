@@ -21,7 +21,7 @@ namespace RG
 			AddBind(PixelShader::Resolve(gfx, "Solid_PS.cso"));
 			AddBind(Stencil::Resolve(gfx, Stencil::Mode::Mask));
 			AddBind(BlendState::Resolve(gfx, false));
-			RegisterSource(DirectBindableSource<RenderTarget>::Make("scratchOut", renderTarget));
+			RegisterSource(DirectBindableSource<IRenderTarget>::Make("scratchOut", renderTarget));
 		}
 		void Execute(Graphics& gfx) const noxnd override
 		{

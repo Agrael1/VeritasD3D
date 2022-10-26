@@ -1,9 +1,9 @@
 #pragma once
 #include "Pass.h"
-#include "Sink.h"
+#include "SinksT.h"
 
 class Bindable;
-class RenderTarget;
+class IRenderTarget;
 class DepthStencil;
 
 namespace RG
@@ -24,7 +24,7 @@ namespace RG
 			binds.emplace_back();
 			RegisterSink(std::make_unique<ContainerBindableSink<T>>(std::move(name), binds, index));
 		}
-		std::shared_ptr<RenderTarget> renderTarget;
+		std::shared_ptr<IRenderTarget> renderTarget;
 		std::shared_ptr<DepthStencil> depthStencil;
 	private:
 		void BindBufferResources(Graphics& gfx) const noxnd;

@@ -20,10 +20,10 @@ namespace RG
 		AddBindSink<RenderTarget>("scratchIn");
 		AddBindSink<CachingPixelConstantBufferEx>("kernel");
 		RegisterSink(DirectBindableSink<CachingPixelConstantBufferEx>::Make("direction", direction));
-		RegisterSink(DirectBufferSink<RenderTarget>::Make("renderTarget", renderTarget));
+		RegisterSink(DirectBufferSink<IRenderTarget>::Make("renderTarget", renderTarget));
 		RegisterSink(DirectBufferSink<DepthStencil>::Make("depthStencil", depthStencil));
 
-		RegisterSource(DirectBufferSource<RenderTarget>::Make("renderTarget", renderTarget));
+		RegisterSource(DirectBufferSource<IRenderTarget>::Make("renderTarget", renderTarget));
 		RegisterSource(DirectBufferSource<DepthStencil>::Make("depthStencil", depthStencil));
 	}
 

@@ -2,7 +2,7 @@
 #include "Sink.h"
 #include <memory>
 #include <Framework\RenderGraphException.h>
-#include <fmt\printf.h>
+#include <format>
 #include "BufferResource.h"
 
 namespace RG
@@ -28,7 +28,7 @@ namespace RG
 			auto p = std::dynamic_pointer_cast<T>(source.YieldBuffer());
 			if (!p)
 			{
-				auto msg = fmt::sprintf("Binding input[%s] to output [%s.%s] { %s } not compatible with { %s }",
+				auto msg = std::format("Binding input[{}] to output [{}.{}] {{ {} }} not compatible with {{ {} }}",
 					GetRegisteredName(),
 					GetPassName(),
 					GetOutputName(),
@@ -66,7 +66,7 @@ namespace RG
 			auto p = std::dynamic_pointer_cast<T>(source.YieldBindable());
 			if (!p)
 			{
-				auto msg = fmt::sprintf("Binding input[%s] to output [%s.%s] { %s } not compatible with { %s }",
+				auto msg = std::format("Binding input[{}] to output [{}.{}] {{ {} }} not compatible with {{ {} }}",
 					GetRegisteredName(),
 					GetPassName(),
 					GetOutputName(),
@@ -110,7 +110,7 @@ namespace RG
 			auto p = std::dynamic_pointer_cast<T>(source.YieldBindable());
 			if (!p)
 			{
-				auto msg = fmt::sprintf("Binding input[%s] to output [%s.%s] { %s } not compatible with { %s }",
+				auto msg = std::format("Binding input[{}] to output [{}.{}] {{ {} }} not compatible with {{ {} }}",
 					GetRegisteredName(),
 					GetPassName(),
 					GetOutputName(),

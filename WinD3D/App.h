@@ -7,8 +7,9 @@
 #include <Scene/PointLight.h>
 #include <Scene/Grid.h>
 #include <Architecture/BlurOutlineRenderGraph.h>
+#include <DeferredRenderGraph.h>
 #include <Probes/TestModelProbe.h>
-
+#include "Text.h"
 
 class App
 {
@@ -28,11 +29,12 @@ private:
 	Window wnd;
 	Camera cam;
 
-	std::optional<RG::BlurOutlineRenderGraph> rg;
+	//std::optional<RG::BlurOutlineRenderGraph> rg;
+	std::optional<RG::DeferredRenderGraph> rg;
 	PointLight light;
 
-	Grid grid;
-	std::unique_ptr<Model> model, swap;
+	//Grid grid;
+	//std::unique_ptr<Model> model, swap;
 	VFileOpenDialog opener;
 	float speed = 1.0f;
 
@@ -46,5 +48,8 @@ private:
 	};
 	std::atomic<ModelLoadState> state = ModelLoadState::Unloaded;
 	bool bFlightMode = false;
+
+	ver::Text text;
+	SolidSphere ss;
 };
 

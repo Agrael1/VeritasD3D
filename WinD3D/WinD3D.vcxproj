@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.201217.4\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.201217.4\build\native\Microsoft.Windows.CppWinRT.props')" />
+  <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.220929.3\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.220929.3\build\native\Microsoft.Windows.CppWinRT.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -29,28 +29,28 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -104,6 +104,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableModules>true</EnableModules>
       <DisableSpecificWarnings>5104;5105;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(SolutionDir)shared\bin\assimp\x64\$(Configuration)\assimp-vc142-mtd.lib;$(directxtex-LibPath)\DirectXTex.lib;$(SolutionDir)packages\DXSDK_Missing.1.1.2\Lib\native\x64\DxErr.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -163,16 +164,19 @@
     <ClCompile Include="Engine\Architecture\BlendState.cpp" />
     <ClCompile Include="Engine\Architecture\BlurOutlineRenderGraph.cpp" />
     <ClCompile Include="Engine\Architecture\BufferClearPass.cpp" />
+    <ClCompile Include="Engine\Architecture\DeferredRenderGraph.cpp" />
     <ClCompile Include="Engine\Architecture\DepthStencil.cpp" />
     <ClCompile Include="Engine\Architecture\Drawable.cpp" />
     <ClCompile Include="Engine\Architecture\DynamicConstant.cpp" />
     <ClCompile Include="Engine\Architecture\FullscreenPass.cpp" />
+    <ClCompile Include="Engine\Architecture\GalaxyRenderGraph.cpp" />
     <ClCompile Include="Engine\Architecture\GraphicsResource.cpp" />
     <ClCompile Include="Engine\Architecture\HorizontalBlurPass.cpp" />
     <ClCompile Include="Engine\Architecture\IndexBuffer.cpp" />
     <ClCompile Include="Engine\Architecture\InputLayout.cpp" />
     <ClCompile Include="Engine\Architecture\Job.cpp" />
     <ClCompile Include="Engine\Architecture\LayoutCodex.cpp" />
+    <ClCompile Include="Engine\Architecture\LightingPass.cpp" />
     <ClCompile Include="Engine\Architecture\NullPixelShader.cpp" />
     <ClCompile Include="Engine\Architecture\Pass.cpp" />
     <ClCompile Include="Engine\Architecture\PixelShader.cpp" />
@@ -218,6 +222,14 @@
     <ClCompile Include="Framework\ModelException.cpp" />
     <ClCompile Include="Framework\RenderGraphException.cpp" />
     <ClCompile Include="Framework\WindowException.cpp" />
+    <ClCompile Include="Galaxy.cpp" />
+    <ClCompile Include="MediaEngine.cpp" />
+    <ClCompile Include="Star.cpp" />
+    <ClCompile Include="Text.cpp" />
+    <ClCompile Include="ttf2mesh.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="ttfcpp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ImGUI\imconfig.h" />
@@ -229,6 +241,8 @@
     <ClInclude Include="..\ImGUI\imstb_textedit.h" />
     <ClInclude Include="..\ImGUI\imstb_truetype.h" />
     <ClInclude Include="App.h" />
+    <ClInclude Include="Datastars.h" />
+    <ClInclude Include="DeferredRenderGraph.h" />
     <ClInclude Include="Engine\Architecture\Bindable.h" />
     <ClInclude Include="Engine\Architecture\BindableCommons.h" />
     <ClInclude Include="Engine\Architecture\BindingPass.h" />
@@ -244,6 +258,8 @@
     <ClInclude Include="Engine\Architecture\Drawable.h" />
     <ClInclude Include="Engine\Architecture\DynamicConstant.h" />
     <ClInclude Include="Engine\Architecture\FullscreenPass.h" />
+    <ClInclude Include="Engine\Architecture\GalaxyRenderGraph.h" />
+    <ClInclude Include="Engine\Architecture\GbufferPass.h" />
     <ClInclude Include="Engine\Architecture\GraphicsResource.h" />
     <ClInclude Include="Engine\Architecture\HorizontalBlurPass.h" />
     <ClInclude Include="Engine\Architecture\IndexBuffer.h" />
@@ -251,6 +267,7 @@
     <ClInclude Include="Engine\Architecture\Job.h" />
     <ClInclude Include="Engine\Architecture\LambertianPass.h" />
     <ClInclude Include="Engine\Architecture\LayoutCodex.h" />
+    <ClInclude Include="Engine\Architecture\LightingPass.h" />
     <ClInclude Include="Engine\Architecture\NullPixelShader.h" />
     <ClInclude Include="Engine\Architecture\OutlineMaskGenerationPass.h" />
     <ClInclude Include="Engine\Architecture\Pass.h" />
@@ -312,7 +329,13 @@
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsHeaderUnit</CompileAs>
     </ClInclude>
     <ClInclude Include="FilePicker.h" />
+    <ClInclude Include="Galaxy.h" />
+    <ClInclude Include="MediaEngine.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Star.h" />
+    <ClInclude Include="Text.h" />
+    <ClInclude Include="ttf2mesh.h" />
+    <ClInclude Include="ttfcpp.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc" />
@@ -333,6 +356,7 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
     </None>
     <None Include="cpp.hint" />
+    <None Include="Engine\Shaders\lights.hlsli" />
     <None Include="Engine\Shaders\LightVectorData.hlsli" />
     <None Include="Engine\Shaders\PointLight.hlsli" />
     <None Include="Engine\Shaders\ShaderProcs.hlsli" />
@@ -388,6 +412,14 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="Engine\Shaders\fullscreen.ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">6.0</ShaderModel>
+      <EnableUnboundedDescriptorTables Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableUnboundedDescriptorTables>
+    </FxCompile>
     <FxCompile Include="Engine\Shaders\Fullscreen_VS.hlsl">
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)VShader\%(Filename).cso</ObjectFileOutput>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
@@ -399,6 +431,18 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0_level_9_3</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)VShader\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\phong.ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\phong.vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Engine\Shaders\PhongDifMskSpcNrm_VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
@@ -542,31 +586,37 @@
     </FxCompile>
     <FxCompile Include="Engine\Shaders\TexturePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)VShader\%(Filename).cso</ObjectFileOutput>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Engine\Shaders\TextureVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)VShader\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="fullscreen.vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\Microsoft.Windows.ImplementationLibrary.1.0.201120.3\build\native\Microsoft.Windows.ImplementationLibrary.targets" Condition="Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.201120.3\build\native\Microsoft.Windows.ImplementationLibrary.targets')" />
     <Import Project="..\packages\fmt.7.0.1\build\fmt.targets" Condition="Exists('..\packages\fmt.7.0.1\build\fmt.targets')" />
-    <Import Project="..\packages\directxtex_desktop_win10.2020.11.12.1\build\native\directxtex_desktop_win10.targets" Condition="Exists('..\packages\directxtex_desktop_win10.2020.11.12.1\build\native\directxtex_desktop_win10.targets')" />
-    <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.201217.4\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.201217.4\build\native\Microsoft.Windows.CppWinRT.targets')" />
+    <Import Project="..\packages\directxtex_desktop_win10.2022.10.18.1\build\native\directxtex_desktop_win10.targets" Condition="Exists('..\packages\directxtex_desktop_win10.2022.10.18.1\build\native\directxtex_desktop_win10.targets')" />
+    <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.220929.3\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.220929.3\build\native\Microsoft.Windows.CppWinRT.targets')" />
+    <Import Project="..\packages\Microsoft.Windows.ImplementationLibrary.1.0.220914.1\build\native\Microsoft.Windows.ImplementationLibrary.targets" Condition="Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.220914.1\build\native\Microsoft.Windows.ImplementationLibrary.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.201120.3\build\native\Microsoft.Windows.ImplementationLibrary.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.ImplementationLibrary.1.0.201120.3\build\native\Microsoft.Windows.ImplementationLibrary.targets'))" />
     <Error Condition="!Exists('..\packages\fmt.7.0.1\build\fmt.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\fmt.7.0.1\build\fmt.targets'))" />
-    <Error Condition="!Exists('..\packages\directxtex_desktop_win10.2020.11.12.1\build\native\directxtex_desktop_win10.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtex_desktop_win10.2020.11.12.1\build\native\directxtex_desktop_win10.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.201217.4\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.201217.4\build\native\Microsoft.Windows.CppWinRT.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.201217.4\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.201217.4\build\native\Microsoft.Windows.CppWinRT.targets'))" />
+    <Error Condition="!Exists('..\packages\directxtex_desktop_win10.2022.10.18.1\build\native\directxtex_desktop_win10.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtex_desktop_win10.2022.10.18.1\build\native\directxtex_desktop_win10.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.220929.3\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.220929.3\build\native\Microsoft.Windows.CppWinRT.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.220929.3\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.220929.3\build\native\Microsoft.Windows.CppWinRT.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.220914.1\build\native\Microsoft.Windows.ImplementationLibrary.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.ImplementationLibrary.1.0.220914.1\build\native\Microsoft.Windows.ImplementationLibrary.targets'))" />
   </Target>
 </Project>

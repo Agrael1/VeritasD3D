@@ -178,7 +178,7 @@ void Graphics::OnResize(unsigned newwidth, unsigned newheight)
 	pTarget = std::shared_ptr<RenderTarget>{ new OutputOnlyRenderTarget(*this,pBackBuffer.Get()) };
 
 	// viewport always fullscreen (for now)
-	D3D11_VIEWPORT vp;
+	D3D11_VIEWPORT vp{};
 	vp.Width = (float)width;
 	vp.Height = (float)height;
 	vp.MinDepth = 0.0f;

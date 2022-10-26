@@ -2,7 +2,7 @@
 #include <vector>
 #include <array>
 #include <DirectXMath.h>
-#include <fmt/printf.h>
+#include <format>
 #include <assimp/scene.h>
 #include <Framework/noexcept_if.h>
 #include <Framework/Utility.h>
@@ -175,7 +175,7 @@ namespace DV
 				}
 			}
 #if _DEBUG
-			auto error = fmt::sprintf(L"Couldn't resolve type name %s", Typenames[size_t(Type)]);
+			auto error = std::format(L"Couldn't resolve type name {}", Typenames[size_t(Type)]);
 			_wassert(error.c_str(),__FILEW__,__LINE__);
 #endif
 			return elements.front();
