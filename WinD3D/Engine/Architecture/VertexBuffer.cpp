@@ -51,3 +51,9 @@ std::string VertexBuffer::GetUID() const noexcept
 {
 	return GenerateUID(tag);
 }
+
+void NullVertexBuffer::Bind(Graphics& gfx) noexcept(!IS_DEBUG)
+{
+	INFOMAN_NOHR(gfx);
+	GFX_THROW_INFO_ONLY(GetContext(gfx)->IASetVertexBuffers(0u, 0u, nullptr, nullptr, nullptr));
+}

@@ -1,7 +1,7 @@
 struct VSQuadOut
 {
-    float4 position : SV_Position;
     float2 texcoord : TexCoord;
+    float4 position : SV_Position;
 };
 VSQuadOut main(uint VertexID : SV_VertexID)
 { // ouputs a full screen quad with tex coords

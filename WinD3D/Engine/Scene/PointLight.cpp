@@ -1,5 +1,6 @@
 #include "PointLight.h"
 #include "../ImGUI/imgui.h"
+#include "PointLight2.h"
 
 PointLight::PointLight(Graphics& gfx, float radius)
 	:
@@ -8,6 +9,7 @@ PointLight::PointLight(Graphics& gfx, float radius)
 {
 	Reset();
 }
+
 
 void PointLight::SpawnControlWindow() noexcept
 {

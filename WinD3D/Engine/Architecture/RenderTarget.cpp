@@ -164,7 +164,7 @@ winrt::com_ptr<ID3D11RenderTargetView> GetRTV(ID3D11Device* dev, uint32_t width,
 	textureDesc.Height = height;
 	textureDesc.MipLevels = 1;
 	textureDesc.ArraySize = 1;
-	textureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	textureDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	textureDesc.SampleDesc.Count = 1;
 	textureDesc.SampleDesc.Quality = 0;
 	textureDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -194,7 +194,7 @@ winrt::com_ptr<ID3D11ShaderResourceView> GetSRV(ID3D11Device* dev, ID3D11RenderT
 
 	// create the resource view on the texture
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-	srvDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	srvDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MostDetailedMip = 0;
 	srvDesc.Texture2D.MipLevels = 1;
@@ -247,18 +247,20 @@ winrt::IAsyncAction RenderTargetArray::InitializeAsync(Graphics& gfx, uint32_t w
 		resource_views[i] = GetSRV(GetDevice(gfx), targets[i].get());
 	}
 	this->slot = slot;
+	this->width = width;
+	this->height = height;
 }
 
 void RenderTargetArray::Bind(Graphics& gfx) noexcept(!IS_DEBUG)
 {
 	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(slot, resource_views.size(), (ID3D11ShaderResourceView**)&resource_views));
+	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(slot, uint32_t(resource_views.size()), (ID3D11ShaderResourceView**)&resource_views));
 }
 
 void RenderTargetArray::BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDepthStencilView) noexcept(!IS_DEBUG)
 {
 	INFOMAN_NOHR(gfx);
-	GetContext(gfx)->OMSetRenderTargets(targets.size(), reinterpret_cast<ID3D11RenderTargetView* const*>(targets.data()), pDepthStencilView);
+	GetContext(gfx)->OMSetRenderTargets(uint32_t(targets.size()), reinterpret_cast<ID3D11RenderTargetView* const*>(targets.data()), pDepthStencilView);
 
 	// configure viewport
 	D3D11_VIEWPORT vp{};

@@ -292,6 +292,22 @@
     <ClCompile Include="Engine\Architecture\LightingPass.cpp">
       <Filter>WinD3D\Passes</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Architecture\Light.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\ConstantBuffer2.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\PointLight2.cpp">
+      <Filter>WinD3D\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\SolidSphere2.cpp">
+      <Filter>WinD3D\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\IndexBuffer2.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\FullscreenEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ImGUI\imconfig.h">
@@ -600,6 +616,28 @@
     <ClInclude Include="Engine\Architecture\LightingPass.h">
       <Filter>WinD3D\Passes</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Architecture\pch.h" />
+    <ClInclude Include="Engine\Architecture\Light.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\ConstantBuffer2.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\AsyncResource.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\PointLight2.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\SolidSphere2.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\IndexBuffer2.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\FullscreenEffect.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinD3D.rc">
@@ -725,6 +763,12 @@
       <Filter>Shaders\VertexShaders</Filter>
     </FxCompile>
     <FxCompile Include="Engine\Shaders\fullscreen.ps.hlsl">
+      <Filter>Shaders\PixelShades</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\solid.vs.hlsl">
+      <Filter>Shaders\VertexShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\solid.ps.hlsl">
       <Filter>Shaders\PixelShades</Filter>
     </FxCompile>
   </ItemGroup>

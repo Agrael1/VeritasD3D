@@ -10,10 +10,12 @@ Texture2D specular;
 SamplerState splr;
 
 
-float4 main(float3 xview_pos : Position, float2 tc : Texcoord) : SV_Target
+float4 main(float2 tc : Texcoord) : SV_Target
 {
     float3 view_pos = position.Sample(splr, tc).xyz;
-    float3 diffuse_col = diffuse.Sample(splr, tc).rgb;
+    
+    float3 diffuse_col = diffuse.Sample(splr, tc).xyz;
+    return diffuse.Sample(splr, tc);
     float3 view_normal = normal.Sample(splr, tc).xyz;
     float4 specular_sample = specular.Sample(splr, tc);
     float3 specular_color = specular_sample.xyz;
@@ -24,7 +26,8 @@ float4 main(float3 xview_pos : Position, float2 tc : Texcoord) : SV_Target
     for (uint i = 0; i < count; i++)
     {
         PointLight l = lights[i];
-        const LightVectorData lv = CalculateLightVectorData(l.viewLightPos, view_pos);
+        
+        const LightVectorData lv = CalculateLightVectorData(mul(l.viewLightPos, view).xyz, view_pos);
     
 	    // attenuation
         const float att = Attenuate(l.attConst, l.attLin, l.attQuad, lv.distToL);

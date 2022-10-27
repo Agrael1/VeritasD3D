@@ -20,9 +20,8 @@ namespace RG
 			renderTarget = rts;
 
 			RegisterSink(DirectBufferSink<DepthStencil>::Make("depthStencil", depthStencil));
-			RegisterSource(DirectBufferSource<RenderTargetArray>::Make("targets", (std::shared_ptr<RenderTargetArray>&)(renderTarget)));
-
-			AddBind(Stencil::Resolve(gfx, Stencil::Mode::Off));
+			RegisterSource(DirectBindableSource<RenderTargetArray>::Make("targets", (std::shared_ptr<RenderTargetArray>&)(renderTarget)));
+			RegisterSource(DirectBufferSource<DepthStencil>::Make("depthStencil", depthStencil));
 		}
 	};
 }

@@ -3,6 +3,8 @@
 #include "Galaxy.h"
 
 
+
+
 int WINAPI WinMain(
 	_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -13,7 +15,9 @@ int WINAPI WinMain(
 	winrt::init_apartment();
 	try
 	{
-		return App{ 1280, 720 }.Go();
+		App a{ 1280, 720 };
+		a.InitializeAsync().get();
+		return a.Go();
 		//return Galaxy{1280, 720}.Go();
 	}
 	catch (const Exception& e)

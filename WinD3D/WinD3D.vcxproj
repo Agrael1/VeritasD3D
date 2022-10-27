@@ -105,6 +105,8 @@
       <EnableModules>true</EnableModules>
       <DisableSpecificWarnings>5104;5105;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(SolutionDir)shared\bin\assimp\x64\$(Configuration)\assimp-vc142-mtd.lib;$(directxtex-LibPath)\DirectXTex.lib;$(SolutionDir)packages\DXSDK_Missing.1.1.2\Lib\native\x64\DxErr.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -164,18 +166,22 @@
     <ClCompile Include="Engine\Architecture\BlendState.cpp" />
     <ClCompile Include="Engine\Architecture\BlurOutlineRenderGraph.cpp" />
     <ClCompile Include="Engine\Architecture\BufferClearPass.cpp" />
+    <ClCompile Include="Engine\Architecture\ConstantBuffer2.cpp" />
     <ClCompile Include="Engine\Architecture\DeferredRenderGraph.cpp" />
     <ClCompile Include="Engine\Architecture\DepthStencil.cpp" />
     <ClCompile Include="Engine\Architecture\Drawable.cpp" />
     <ClCompile Include="Engine\Architecture\DynamicConstant.cpp" />
+    <ClCompile Include="Engine\Architecture\FullscreenEffect.cpp" />
     <ClCompile Include="Engine\Architecture\FullscreenPass.cpp" />
     <ClCompile Include="Engine\Architecture\GalaxyRenderGraph.cpp" />
     <ClCompile Include="Engine\Architecture\GraphicsResource.cpp" />
     <ClCompile Include="Engine\Architecture\HorizontalBlurPass.cpp" />
     <ClCompile Include="Engine\Architecture\IndexBuffer.cpp" />
+    <ClCompile Include="Engine\Architecture\IndexBuffer2.cpp" />
     <ClCompile Include="Engine\Architecture\InputLayout.cpp" />
     <ClCompile Include="Engine\Architecture\Job.cpp" />
     <ClCompile Include="Engine\Architecture\LayoutCodex.cpp" />
+    <ClCompile Include="Engine\Architecture\Light.cpp" />
     <ClCompile Include="Engine\Architecture\LightingPass.cpp" />
     <ClCompile Include="Engine\Architecture\NullPixelShader.cpp" />
     <ClCompile Include="Engine\Architecture\Pass.cpp" />
@@ -210,7 +216,9 @@
     <ClCompile Include="Engine\Mouse.cpp" />
     <ClCompile Include="Engine\Scene\Camera.cpp" />
     <ClCompile Include="Engine\Scene\PointLight.cpp" />
+    <ClCompile Include="Engine\Scene\PointLight2.cpp" />
     <ClCompile Include="Engine\Scene\SolidSphere.cpp" />
+    <ClCompile Include="Engine\Scene\SolidSphere2.cpp" />
     <ClCompile Include="Engine\Window.cpp" />
     <ClCompile Include="EntryMain.cpp" />
     <ClCompile Include="FilePicker.cpp" />
@@ -243,6 +251,7 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="Datastars.h" />
     <ClInclude Include="DeferredRenderGraph.h" />
+    <ClInclude Include="Engine\Architecture\AsyncResource.h" />
     <ClInclude Include="Engine\Architecture\Bindable.h" />
     <ClInclude Include="Engine\Architecture\BindableCommons.h" />
     <ClInclude Include="Engine\Architecture\BindingPass.h" />
@@ -253,24 +262,29 @@
     <ClInclude Include="Engine\Architecture\BufferResource.h" />
     <ClInclude Include="Engine\Architecture\Codex.h" />
     <ClInclude Include="Engine\Architecture\ConstantBuffer.h" />
+    <ClInclude Include="Engine\Architecture\ConstantBuffer2.h" />
     <ClInclude Include="Engine\Architecture\ConstantBuffersEX.h" />
     <ClInclude Include="Engine\Architecture\DepthStencil.h" />
     <ClInclude Include="Engine\Architecture\Drawable.h" />
     <ClInclude Include="Engine\Architecture\DynamicConstant.h" />
+    <ClInclude Include="Engine\Architecture\FullscreenEffect.h" />
     <ClInclude Include="Engine\Architecture\FullscreenPass.h" />
     <ClInclude Include="Engine\Architecture\GalaxyRenderGraph.h" />
     <ClInclude Include="Engine\Architecture\GbufferPass.h" />
     <ClInclude Include="Engine\Architecture\GraphicsResource.h" />
     <ClInclude Include="Engine\Architecture\HorizontalBlurPass.h" />
     <ClInclude Include="Engine\Architecture\IndexBuffer.h" />
+    <ClInclude Include="Engine\Architecture\IndexBuffer2.h" />
     <ClInclude Include="Engine\Architecture\InputLayout.h" />
     <ClInclude Include="Engine\Architecture\Job.h" />
     <ClInclude Include="Engine\Architecture\LambertianPass.h" />
     <ClInclude Include="Engine\Architecture\LayoutCodex.h" />
+    <ClInclude Include="Engine\Architecture\Light.h" />
     <ClInclude Include="Engine\Architecture\LightingPass.h" />
     <ClInclude Include="Engine\Architecture\NullPixelShader.h" />
     <ClInclude Include="Engine\Architecture\OutlineMaskGenerationPass.h" />
     <ClInclude Include="Engine\Architecture\Pass.h" />
+    <ClInclude Include="Engine\Architecture\pch.h" />
     <ClInclude Include="Engine\Architecture\PixelShader.h" />
     <ClInclude Include="Engine\Architecture\RasterizerState.h" />
     <ClInclude Include="Engine\Architecture\RenderGraph.h" />
@@ -310,7 +324,9 @@
     <ClInclude Include="Engine\Scene\IndexedTriangleList.h" />
     <ClInclude Include="Engine\Scene\Plane.h" />
     <ClInclude Include="Engine\Scene\PointLight.h" />
+    <ClInclude Include="Engine\Scene\PointLight2.h" />
     <ClInclude Include="Engine\Scene\SolidSphere.h" />
+    <ClInclude Include="Engine\Scene\SolidSphere2.h" />
     <ClInclude Include="Engine\Scene\Sphere.h" />
     <ClInclude Include="Engine\Window.h" />
     <ClInclude Include="Framework\DXGIInfoManager.h" />
@@ -417,8 +433,9 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">6.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <EnableUnboundedDescriptorTables Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableUnboundedDescriptorTables>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)VShader\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="Engine\Shaders\Fullscreen_VS.hlsl">
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)VShader\%(Filename).cso</ObjectFileOutput>
@@ -437,12 +454,14 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)VShader\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="Engine\Shaders\phong.vs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)VShader\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="Engine\Shaders\PhongDifMskSpcNrm_VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
@@ -564,6 +583,20 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)VShader\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="Engine\Shaders\solid.ps.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)VShader\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\solid.vs.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)VShader\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="Engine\Shaders\Solid_PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)VShader\%(Filename).cso</ObjectFileOutput>
@@ -600,6 +633,8 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)VShader\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

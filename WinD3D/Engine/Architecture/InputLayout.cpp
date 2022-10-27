@@ -43,3 +43,4 @@ std::string InputLayout::GenerateUID(const DV::VertexLayout& layout, ID3DBlob* p
 	using namespace std::string_literals;
 	return typeid(InputLayout).name() + "#"s + layout.GetCode();
 }
+

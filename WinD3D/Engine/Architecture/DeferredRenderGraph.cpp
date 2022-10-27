@@ -19,15 +19,15 @@ RG::DeferredRenderGraph::DeferredRenderGraph(Graphics& gfx)
 		AppendPass(std::move(pass));
 	}
 	{
-		auto pass = std::make_unique<GBufferPass>(gfx, "gbuf");
+		auto pass = std::make_unique<GBufferPass>(gfx, "lambertian");
 		pass->SetSinkLinkage("depthStencil", "clearDS.buffer");
 		AppendPass(std::move(pass));
 	}
 	{
 		auto pass = std::make_unique<LightingPass>(gfx, "light");
-		pass->SetSinkLinkage("targets", "gbuf.targets");
+		pass->SetSinkLinkage("targets", "lambertian.targets");
 		pass->SetSinkLinkage("renderTarget", "clearRT.buffer");
-		pass->SetSinkLinkage("depthStencil", "clearDS.buffer");
+		pass->SetSinkLinkage("depthStencil", "lambertian.depthStencil");
 		AppendPass(std::move(pass));
 	}
 	SetSinkTarget("backbuffer", "light.renderTarget");

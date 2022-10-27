@@ -2,7 +2,6 @@
 #include "Codex.h"
 #include "GraphicsThrows.m"
 
-
 template<typename C>
 class ConstantBuffer : public Bindable
 {

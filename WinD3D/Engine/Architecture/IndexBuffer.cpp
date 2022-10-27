@@ -50,3 +50,4 @@ std::string IndexBuffer::GetUID() const noexcept
 {
 	return GenerateUID_(tag);
 }
+

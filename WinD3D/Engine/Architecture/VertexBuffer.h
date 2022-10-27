@@ -28,3 +28,11 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
 	DV::VertexLayout layout;
 };
+
+class NullVertexBuffer : public Bindable
+{
+public:
+	NullVertexBuffer() = default;
+public:
+	void Bind(Graphics& gfx) noxnd override;
+};

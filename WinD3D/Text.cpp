@@ -20,9 +20,7 @@ Text::Text(Graphics& gfx, float radius)
 
 	auto xmodel = gl.to_mesh3d(15, 0.1);
 	auto lay = DV::VertexLayout{}
-		+ DV::VertexLayout::ElementType::Position3D
-		+ DV::VertexLayout::ElementType::Normal
-		+ DV::VertexLayout::ElementType::Texture2D;
+		+ DV::VertexLayout::ElementType::Position3D;
 
 
 	auto& mo = xmodel.get();

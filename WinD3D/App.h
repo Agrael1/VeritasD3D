@@ -4,18 +4,22 @@
 #include <Framework/ImGUIManager.h>
 #include <Entities/Model.h>
 #include <Scene/Camera.h>
-#include <Scene/PointLight.h>
+#include <Scene/PointLight2.h>
 #include <Scene/Grid.h>
 #include <Architecture/BlurOutlineRenderGraph.h>
 #include <DeferredRenderGraph.h>
 #include <Probes/TestModelProbe.h>
+#include <Architecture/Light.h>
 #include "Text.h"
+#include <Scene/PointLight.h>
+#include <Architecture/GalaxyRenderGraph.h>
 
 class App
 {
 public:
 	App(uint32_t width, uint32_t height);
 	~App();
+	winrt::IAsyncAction InitializeAsync();
 public:
 	int Go();
 private:
@@ -29,9 +33,9 @@ private:
 	Window wnd;
 	Camera cam;
 
-	//std::optional<RG::BlurOutlineRenderGraph> rg;
+	//std::optional<RG::GalaxyRenderGraph> rg;
 	std::optional<RG::DeferredRenderGraph> rg;
-	PointLight light;
+	//PointLight light;
 
 	//Grid grid;
 	//std::unique_ptr<Model> model, swap;
@@ -50,6 +54,8 @@ private:
 	bool bFlightMode = false;
 
 	ver::Text text;
-	SolidSphere ss;
+	ver::SolidSphere ss;
+	ver::LightBuffer lights;
+	//ver::LightSphere sphere;
 };
 

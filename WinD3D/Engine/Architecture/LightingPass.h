@@ -9,7 +9,5 @@ namespace RG
 	public:
 		LightingPass(Graphics& gfx, std::string name) noxnd;
 		void Execute(Graphics& gfx) const noxnd override;
-	private:
-		std::shared_ptr<RenderTargetArray> rts;
 	};
 }

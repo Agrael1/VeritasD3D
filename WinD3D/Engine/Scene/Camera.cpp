@@ -53,7 +53,7 @@ void Camera::SpawnControlWindow() noexcept
 }
 void Camera::Reset() noexcept
 {
-	pos = { -4.5f, 6.2f, -4.7f };
+	pos = { 8.6f, 12.1f, -0.7f };
 	rot = { DirectX::XM_PIDIV4, DirectX::XM_PIDIV4 };
 	orbit = { 0.0f,0.0f };
 }

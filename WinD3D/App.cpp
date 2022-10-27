@@ -47,14 +47,23 @@ constexpr COMDLG_FILTERSPEC filterSpecs[] =
 namespace dx = DirectX;
 
 App::App(uint32_t width, uint32_t height)
-	: wnd(width, height, "VTest"), light(wnd.Gfx()), /*grid(wnd.Gfx()),*/ text(wnd.Gfx(), 1.0), ss(wnd.Gfx(), 1.0)
+	: wnd(width, height, "VTest")/*, light(wnd.Gfx()), grid(wnd.Gfx())*/, text(wnd.Gfx(), 1.0)/*, ss(wnd.Gfx(), 1.0)*/
 {
 	opener.SetFileTypes(filterSpecs);
-	CreateRenderGraph();
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 100.0f));
 }
 App::~App()
 {
+}
+
+winrt::IAsyncAction App::InitializeAsync()
+{
+	co_await /*winrt::when_all(*/lights.InitializeAsync(wnd.Gfx())/*,
+		sphere.InitializeAsync(lights, wnd.Gfx()))*/;
+	co_await ss.InitializeAsync(wnd.Gfx(), 1.0);
+	CreateRenderGraph();
+	ss.SetPos({ 10.0f,9.0f,2.5f });
+	co_return;
 }
 
 int App::Go()
@@ -78,13 +87,17 @@ void App::DoFrame(float dt)
 	const auto s = dt * speed;
 	wnd.Gfx().BeginFrame(0.2f, 0.2f, 0.2f);
 	wnd.Gfx().SetCamera(cam.GetViewMatrix());
-	light.Bind(wnd.Gfx(), cam.GetViewMatrix());
+	//sphere.Bind(wnd.Gfx());
+	//lights.Bind(wnd.Gfx());
+	//light.Bind(wnd.Gfx(), cam.GetViewMatrix());
 
 	//if (model)model->Submit();
-	light.Submit();
-	text.Submit();
-	//ss.Submit();
+	//light.Submit();
+	//text.Submit();
+	ss.Submit();
 
+
+	//sphere.Submit();
 	//if (wnd.DrawGrid())grid.Submit();
 	rg->Execute(wnd.Gfx());
 
@@ -104,7 +117,8 @@ void App::DoFrame(float dt)
 
 	ProcessInput(dt);
 	cam.SpawnControlWindow();
-	light.SpawnControlWindow();
+	//sphere.SpawnControlWindow();
+	//light.SpawnControlWindow();
 
 	// Present
 	wnd.Gfx().EndFrame();
@@ -217,8 +231,9 @@ void App::ProcessInput(float dt)
 	if (wnd.ResizeCalled())
 	{
 		//grid.UnlinkTechniques();
-		light.UnlinkTechniques();
-		text.UnlinkTechniques();
+		//sphere.UnlinkTechniques();
+		//light.UnlinkTechniques();
+		//text.UnlinkTechniques();
 		ss.UnlinkTechniques();
 		//if (model) model->UnlinkTechniques();
 		rg.reset();
@@ -240,8 +255,9 @@ void App::CreateRenderGraph()
 	rg.emplace(wnd.Gfx());
 
 	//grid.LinkTechniques(*rg);
-	light.LinkTechniques(*rg);
-	text.LinkTechniques(*rg);
+	//sphere.LinkTechniques(*rg);
+	//light.LinkTechniques(*rg);
+	//text.LinkTechniques(*rg);
 	ss.LinkTechniques(*rg);
 	//if (model) model->LinkTechniques(*rg);
 }
