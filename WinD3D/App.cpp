@@ -48,6 +48,7 @@ namespace dx = DirectX;
 
 App::App(uint32_t width, uint32_t height)
 	: wnd(width, height, "VTest")/*, light(wnd.Gfx()), grid(wnd.Gfx())*/, text(wnd.Gfx(), 1.0)/*, ss(wnd.Gfx(), 1.0)*/
+	, model(new Model(wnd.Gfx(), R"(D:\Repos\WinD3D\WinD3D\Models\brick_wall\brick_wall.obj)"))
 {
 	opener.SetFileTypes(filterSpecs);
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 100.0f));
@@ -58,11 +59,11 @@ App::~App()
 
 winrt::IAsyncAction App::InitializeAsync()
 {
-	co_await /*winrt::when_all(*/lights.InitializeAsync(wnd.Gfx())/*,
-		sphere.InitializeAsync(lights, wnd.Gfx()))*/;
-	co_await ss.InitializeAsync(wnd.Gfx(), 1.0);
+	co_await winrt::when_all(lights.InitializeAsync(wnd.Gfx()),
+		sphere.InitializeAsync(lights, wnd.Gfx()));
+	//co_await ss.InitializeAsync(wnd.Gfx(), 1.0);
 	CreateRenderGraph();
-	ss.SetPos({ 10.0f,9.0f,2.5f });
+	//ss.SetPos({ 10.0f,9.0f,2.5f });
 	co_return;
 }
 
@@ -87,17 +88,17 @@ void App::DoFrame(float dt)
 	const auto s = dt * speed;
 	wnd.Gfx().BeginFrame(0.2f, 0.2f, 0.2f);
 	wnd.Gfx().SetCamera(cam.GetViewMatrix());
-	//sphere.Bind(wnd.Gfx());
-	//lights.Bind(wnd.Gfx());
+	sphere.Bind(wnd.Gfx());
+	lights.Bind(wnd.Gfx());
 	//light.Bind(wnd.Gfx(), cam.GetViewMatrix());
 
-	//if (model)model->Submit();
+	if (model)model->Submit();
 	//light.Submit();
 	//text.Submit();
-	ss.Submit();
+	//ss.Submit();
 
 
-	//sphere.Submit();
+	sphere.Submit();
 	//if (wnd.DrawGrid())grid.Submit();
 	rg->Execute(wnd.Gfx());
 
@@ -112,12 +113,12 @@ void App::DoFrame(float dt)
 	}
 	ImGui::End();
 
-	//if (model)
-		//modelProbe.SpawnWindow(*model);	// imgui windows
+	if (model)
+		modelProbe.SpawnWindow(*model);	// imgui windows
 
 	ProcessInput(dt);
 	cam.SpawnControlWindow();
-	//sphere.SpawnControlWindow();
+	sphere.SpawnControlWindow();
 	//light.SpawnControlWindow();
 
 	// Present
@@ -215,10 +216,10 @@ void App::ProcessInput(float dt)
 			break;
 		case Finish:
 		{
-			//model.reset(swap.release());
+			model.reset(swap.release());
 			Codex::Trim();
-			//if (model)
-				//model->LinkTechniques(*rg);
+			if (model)
+				model->LinkTechniques(*rg);
 			modelProbe.Reset();
 			state = Unloaded;
 			wnd.LoadingComplete();
@@ -231,11 +232,11 @@ void App::ProcessInput(float dt)
 	if (wnd.ResizeCalled())
 	{
 		//grid.UnlinkTechniques();
-		//sphere.UnlinkTechniques();
+		sphere.UnlinkTechniques();
 		//light.UnlinkTechniques();
 		//text.UnlinkTechniques();
-		ss.UnlinkTechniques();
-		//if (model) model->UnlinkTechniques();
+		//ss.UnlinkTechniques();
+		if (model) model->UnlinkTechniques();
 		rg.reset();
 		wnd.Gfx().OnResize(wnd.GetWidth(), wnd.GetHeight());
 		CreateRenderGraph();
@@ -255,11 +256,11 @@ void App::CreateRenderGraph()
 	rg.emplace(wnd.Gfx());
 
 	//grid.LinkTechniques(*rg);
-	//sphere.LinkTechniques(*rg);
+	sphere.LinkTechniques(*rg);
 	//light.LinkTechniques(*rg);
 	//text.LinkTechniques(*rg);
-	ss.LinkTechniques(*rg);
-	//if (model) model->LinkTechniques(*rg);
+	//ss.LinkTechniques(*rg);
+	if (model) model->LinkTechniques(*rg);
 }
 
 winrt::fire_and_forget App::ReloadModelAsync()
@@ -269,10 +270,11 @@ winrt::fire_and_forget App::ReloadModelAsync()
 
 	if (!wfilename.empty())
 	{
+		swap = std::make_unique<Model>(wnd.Gfx(), ToNarrow(wfilename));
 		//co_await Model::MakeModelAsync(swap, wnd.Gfx(), ToNarrow(wfilename));
 
-		//if (!swap) MessageBox(nullptr, "Model file was corrupted or empty",
-			//"Model Exception", MB_OK | MB_ICONEXCLAMATION);
+		if (!swap) MessageBox(nullptr, "Model file was corrupted or empty",
+			"Model Exception", MB_OK | MB_ICONEXCLAMATION);
 	}
 	state = ModelLoadState::Finish;
 }

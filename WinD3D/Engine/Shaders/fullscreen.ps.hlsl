@@ -12,14 +12,21 @@ SamplerState splr;
 
 float4 main(float2 tc : Texcoord) : SV_Target
 {
-    float3 view_pos = position.Sample(splr, tc).xyz;
-    
     float3 diffuse_col = diffuse.Sample(splr, tc).xyz;
-    return diffuse.Sample(splr, tc);
-    float3 view_normal = normal.Sample(splr, tc).xyz;
+    float4 normal_samle = normal.Sample(splr, tc);
+    
+    // solid objects
+    [flatten]
+    if (normal_samle.w == 0.0)
+        return float4(diffuse_col, 1.0f);
+    
+    float3 view_normal = normal_samle.xyz;
+    
+    float3 view_pos = position.Sample(splr, tc).xyz;
     float4 specular_sample = specular.Sample(splr, tc);
     float3 specular_color = specular_sample.xyz;
     float specular_gloss = specular_sample.w;
+    
     
     float3 final_color = 0.0f;
     float3 final_spec = 0.0f;
@@ -33,7 +40,12 @@ float4 main(float2 tc : Texcoord) : SV_Target
         const float att = Attenuate(l.attConst, l.attLin, l.attQuad, lv.distToL);
         
         const float3 dc = l.diffuseColor * l.diffuseIntensity;
-        const float3 dot1 = dot(lv.dirToL, view_normal);
+        const float dot1 = dot(lv.dirToL, view_normal);
+        
+        [flatten]
+        if (dot1 <= 0.0f)
+            continue;
+        
         const float3 diffuse = dc * att * max(0.0f, dot1);
         
         // calculate reflected light vector

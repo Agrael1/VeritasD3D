@@ -9,7 +9,7 @@ namespace ver
 {
 	struct alignas(alignof(DirectX::XMVECTOR)) PointLightConsts
 	{
-		DirectX::XMFLOAT3A pos;
+		DirectX::XMFLOAT4A pos;
 
 		DirectX::XMFLOAT3 diffuse;
 		float diffuseIntensity;

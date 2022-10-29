@@ -4,7 +4,7 @@
 
 namespace RG
 {
-	class LightingPass : public BindingPass
+	class LightingPass : public BindingPass, public GraphicsResource
 	{
 	public:
 		LightingPass(Graphics& gfx, std::string name) noxnd;

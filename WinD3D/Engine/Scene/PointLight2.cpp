@@ -46,7 +46,7 @@ void ver::LightSphere::SpawnControlWindow() noexcept
 void ver::LightSphere::Reset() noexcept
 {
 	*cbData = {
-		{ 10.0f,9.0f,2.5f },
+		{ 10.0f,9.0f,2.5f,1.0f },
 		{ 1.0f,1.0f,1.0f },
 		1.0f,
 		1.0f,
@@ -60,7 +60,7 @@ void ver::LightSphere::Submit() const noexcept(!IS_DEBUG)
 {
 	if (changed)
 	{
-		mesh.SetPos(cbData->pos);
+		mesh.SetPos((DirectX::XMFLOAT3A&)cbData->pos);
 		mesh.SetColor(cbData->diffuse);
 	}
 	mesh.Submit();

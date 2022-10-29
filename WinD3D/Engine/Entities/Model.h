@@ -19,8 +19,11 @@ namespace RG
 class Model
 {
 public:
+	Model() = default;
 	Model(Graphics& gfx, std::string_view pathString, float scale = 1.0f);
 	~Model() noexcept;
+
+	winrt::Windows::Foundation::IAsyncAction InitializeAsync(Graphics& gfx, std::string_view pathString, float scale = 1.0f);
 public:
 	void Submit() const noxnd;
 	void SetRootTransform(DirectX::FXMMATRIX tf) noexcept;
@@ -31,7 +34,6 @@ public:
 	static winrt::Windows::Foundation::IAsyncAction
 		MakeModelAsync(std::unique_ptr<Model>& to, Graphics& gfx, std::string_view pathString, float scale = 1.0f);
 private:
-	Model() = default;
 	static std::unique_ptr<Mesh> ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials, const std::filesystem::path& path, float scale);
 	std::unique_ptr<Node> ParseNode(int& nextId, const aiNode& node, float scale) noexcept;
 private:

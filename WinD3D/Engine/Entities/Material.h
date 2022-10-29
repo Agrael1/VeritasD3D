@@ -5,7 +5,7 @@
 #include <Architecture/VertexLayout.h>
 #include <Architecture/Technique.h>
 
-#include <winrt/Windows.Foundation.h>
+#include "Architecture/pch.h"
 
 struct aiMaterial;
 struct aiMesh;
@@ -17,6 +17,8 @@ class Material
 public:
 	Material() = default;
 	Material(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noxnd;
+
+
 	winrt::Windows::Foundation::IAsyncAction
 		MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path)noxnd;
 public:

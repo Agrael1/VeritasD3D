@@ -65,6 +65,12 @@
     <Filter Include="WinD3D\Text">
       <UniqueIdentifier>{8d57ffea-f589-440d-9d93-29a6d5df0276}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\PixelShades\New">
+      <UniqueIdentifier>{f20605d2-cdc0-42d4-a6c7-9c06ca75cadc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\VertexShaders\New">
+      <UniqueIdentifier>{6bc41bcc-1153-4432-815b-fab7b7efd1f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ImGUI\imgui.cpp">
@@ -307,7 +313,12 @@
     <ClCompile Include="Engine\Architecture\IndexBuffer2.cpp">
       <Filter>WinD3D\Bindable</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Architecture\FullscreenEffect.cpp" />
+    <ClCompile Include="Engine\Architecture\GbufferPass.cpp">
+      <Filter>WinD3D\Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\FullscreenEffect.cpp">
+      <Filter>WinD3D\Passes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ImGUI\imconfig.h">
@@ -753,23 +764,47 @@
     <FxCompile Include="Engine\Shaders\Fullscreen_VS.hlsl">
       <Filter>Shaders\VertexShaders</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shaders\phong.vs.hlsl">
-      <Filter>Shaders\VertexShaders</Filter>
+    <FxCompile Include="Engine\Shaders\phong.dif.spc.nrm.ps.hlsl">
+      <Filter>Shaders\PixelShades\New</Filter>
     </FxCompile>
-    <FxCompile Include="Engine\Shaders\phong.ps.hlsl">
-      <Filter>Shaders\PixelShades</Filter>
+    <FxCompile Include="Engine\Shaders\phong.dif.ps.hlsl">
+      <Filter>Shaders\PixelShades\New</Filter>
     </FxCompile>
-    <FxCompile Include="fullscreen.vs.hlsl">
-      <Filter>Shaders\VertexShaders</Filter>
+    <FxCompile Include="Engine\Shaders\phong.dif.nrm.ps.hlsl">
+      <Filter>Shaders\PixelShades\New</Filter>
     </FxCompile>
     <FxCompile Include="Engine\Shaders\fullscreen.ps.hlsl">
-      <Filter>Shaders\PixelShades</Filter>
-    </FxCompile>
-    <FxCompile Include="Engine\Shaders\solid.vs.hlsl">
-      <Filter>Shaders\VertexShaders</Filter>
+      <Filter>Shaders\PixelShades\New</Filter>
     </FxCompile>
     <FxCompile Include="Engine\Shaders\solid.ps.hlsl">
-      <Filter>Shaders\PixelShades</Filter>
+      <Filter>Shaders\PixelShades\New</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\phong.dif.spc.ps.hlsl">
+      <Filter>Shaders\PixelShades\New</Filter>
+    </FxCompile>
+    <FxCompile Include="fullscreen.vs.hlsl">
+      <Filter>Shaders\VertexShaders\New</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\phong.vs.hlsl">
+      <Filter>Shaders\VertexShaders\New</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\solid.vs.hlsl">
+      <Filter>Shaders\VertexShaders\New</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\phong.dif.spc.nrm.vs.hlsl">
+      <Filter>Shaders\VertexShaders\New</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\phong.dif.nrm.vs.hlsl">
+      <Filter>Shaders\VertexShaders\New</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\phong.dif.spc.vs.hlsl">
+      <Filter>Shaders\VertexShaders\New</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\phong.dif.vs.hlsl">
+      <Filter>Shaders\VertexShaders\New</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\Shaders\phong.ps.hlsl">
+      <Filter>Shaders\PixelShades\New</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

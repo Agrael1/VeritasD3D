@@ -17,13 +17,13 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 	{
 		Technique phong{ "Phong" };
 		Step step("lambertian");
-		std::string shaderCode = "Phong";
+		std::string shaderCode = "phong.";
 		aiString texFileName;
 
 		// common (pre)
 		vtxLayout
-			+ DV::Type::Normal
-			+ DV::Type::Position3D;
+			+ DV::Type::Position3D
+			+ DV::Type::Normal;
 		DC::RawLayout pscLayout;
 		bool hasTexture = false;
 		bool hasGlossAlpha = false;
@@ -34,15 +34,15 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 			if (material.GetTexture(aiTextureType_DIFFUSE, 0, &texFileName) == aiReturn_SUCCESS)
 			{
 				hasTexture = true;
-				shaderCode += "Dif";
+				shaderCode += "dif.";
 				vtxLayout
 					+ DV::Type::Texture2D;
 				auto tex = Texture::Resolve(gfx, rootPath + texFileName.C_Str());
-				if (tex->UsesAlpha())
-				{
-					hasAlpha = true;
-					shaderCode += "Msk";
-				}
+				//if (tex->UsesAlpha())
+				//{
+				//	hasAlpha = true;
+				//	shaderCode += "msk";
+				//}
 				step.AddBindable(std::move(tex));
 			}
 			else
@@ -56,7 +56,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 			if (material.GetTexture(aiTextureType_SPECULAR, 0, &texFileName) == aiReturn_SUCCESS)
 			{
 				hasTexture = true;
-				shaderCode += "Spc";
+				shaderCode += "spc.";
 				vtxLayout
 					+ DV::Type::Texture2D;
 				auto tex = Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 1);
@@ -76,7 +76,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 			if (material.GetTexture(aiTextureType_NORMALS, 0, &texFileName) == aiReturn_SUCCESS)
 			{
 				hasTexture = true;
-				shaderCode += "Nrm";
+				shaderCode += "nrm.";
 				vtxLayout
 					+ DV::Type::Texture2D
 					+ DV::Type::Tangent
@@ -90,10 +90,10 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 		// common (post)
 		{
 			step.AddBindable(std::make_shared<TransformCbuf>(gfx, 0u));
-			auto pvs = VertexShader::Resolve(gfx, shaderCode + "_VS.cso");
+			auto pvs = VertexShader::Resolve(gfx, shaderCode + "vs.cso");
 			auto pvsbc = pvs->GetBytecode();
 			step.AddBindable(std::move(pvs));
-			step.AddBindable(PixelShader::Resolve(gfx, shaderCode + "_PS.cso"));
+			step.AddBindable(PixelShader::Resolve(gfx, shaderCode + "ps.cso"));
 			step.AddBindable(InputLayout::Resolve(gfx, vtxLayout, pvsbc));
 			if (hasTexture)
 			{
@@ -130,42 +130,42 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 		techniques.push_back(std::move(phong));
 	}
 	// outline technique
-	{
-		Technique outline("Outline", false);
-		{
-			Step mask("outlineMask");
+	//{
+	//	Technique outline("Outline", false);
+	//	{
+	//		Step mask("outlineMask");
 
-			// TODO: better sub-layout generation tech for future consideration maybe
-			mask.AddBindable(InputLayout::Resolve(gfx, vtxLayout, VertexShader::Resolve(gfx, "Solid_VS.cso")->GetBytecode()));
+	//		// TODO: better sub-layout generation tech for future consideration maybe
+	//		mask.AddBindable(InputLayout::Resolve(gfx, vtxLayout, VertexShader::Resolve(gfx, "Solid_VS.cso")->GetBytecode()));
 
-			mask.AddBindable(std::make_shared<TransformCbuf>(gfx));
+	//		mask.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
-			// TODO: might need to specify rasterizer when doubled-sided models start being used
+	//		// TODO: might need to specify rasterizer when doubled-sided models start being used
 
-			outline.AddStep(std::move(mask));
-		}
-		{
-			Step draw("outlineDraw");
+	//		outline.AddStep(std::move(mask));
+	//	}
+	//	{
+	//		Step draw("outlineDraw");
 
-			{
-				DC::RawLayout lay;
-				lay.Add({ {DC::Type::Float3,"materialColor"} });
-				auto buf = DC::Buffer(std::move(lay));
-				buf["materialColor"] = DirectX::XMFLOAT3{ 1.0f,0.4f,0.4f };
-				draw.AddBindable(std::make_shared<CachingPixelConstantBufferEx>(gfx, buf, 1u));
-			}
+	//		{
+	//			DC::RawLayout lay;
+	//			lay.Add({ {DC::Type::Float3,"materialColor"} });
+	//			auto buf = DC::Buffer(std::move(lay));
+	//			buf["materialColor"] = DirectX::XMFLOAT3{ 1.0f,0.4f,0.4f };
+	//			draw.AddBindable(std::make_shared<CachingPixelConstantBufferEx>(gfx, buf, 1u));
+	//		}
 
-			// TODO: better sub-layout generation tech for future consideration maybe
-			draw.AddBindable(InputLayout::Resolve(gfx, vtxLayout, VertexShader::Resolve(gfx, "Solid_VS.cso")->GetBytecode()));
+	//		// TODO: better sub-layout generation tech for future consideration maybe
+	//		draw.AddBindable(InputLayout::Resolve(gfx, vtxLayout, VertexShader::Resolve(gfx, "Solid_VS.cso")->GetBytecode()));
 
-			draw.AddBindable(std::make_shared<TransformCbuf>(gfx));
+	//		draw.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
-			// TODO: might need to specify rasterizer when doubled-sided models start being used
+	//		// TODO: might need to specify rasterizer when doubled-sided models start being used
 
-			outline.AddStep(std::move(draw));
-		}
-		techniques.push_back(std::move(outline));
-	}
+	//		outline.AddStep(std::move(draw));
+	//	}
+	//	techniques.push_back(std::move(outline));
+	//}
 }
 
 winrt::Windows::Foundation::IAsyncAction
@@ -185,7 +185,7 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 	{
 		Technique phong{ "Phong" };
 		Step step("lambertian");
-		std::string shaderCode = "Phong";
+		std::string shaderCode = "phong.";
 		aiString texFileName;
 
 		// common (pre)
@@ -204,7 +204,7 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 			if (bHasDiffuse = (material.GetTexture(aiTextureType_DIFFUSE, 0, &texFileName) == aiReturn_SUCCESS))
 			{
 				hasTexture = true;
-				shaderCode += "Dif";
+				shaderCode += "dif.";
 				vtxLayout
 					+ DV::Type::Texture2D;
 				texes.emplace_back(Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str()));
@@ -219,7 +219,7 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 			if (bHasSpecular = (material.GetTexture(aiTextureType_SPECULAR, 0, &texFileName) == aiReturn_SUCCESS))
 			{
 				hasTexture = true;
-				shaderCode += "Spc";
+				shaderCode += "spc.";
 				vtxLayout
 					+ DV::Type::Texture2D;
 				texes.emplace_back(Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 1));
@@ -237,7 +237,7 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 			if (bHasNormal = (material.GetTexture(aiTextureType_NORMALS, 0, &texFileName) == aiReturn_SUCCESS))
 			{
 				hasTexture = true;
-				shaderCode += "Nrm";
+				shaderCode += "nrm.";
 				vtxLayout
 					+ DV::Type::Texture2D
 					+ DV::Type::Tangent
@@ -255,7 +255,7 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 		}
 
 		
-		if (bHasDiffuse)
+		/*if (bHasDiffuse)
 		{
 			bool hasAlpha = false;
 			if (texes[0].get()->UsesAlpha())
@@ -264,7 +264,7 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 				shaderCode.insert( 8, "Msk");
 			}
 			step.AddBindable(RasterizerState::Resolve(gfx, hasAlpha));
-		}
+		}*/
 		if (bHasSpecular)
 		{
 			hasGlossAlpha = texes[1].get()->UsesAlpha();
@@ -278,10 +278,10 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 		// common (post)
 		{
 			step.AddBindable(std::make_shared<TransformCbuf>(gfx, 0u));
-			auto pvs = VertexShader::Resolve(gfx, shaderCode + "_VS.cso");
+			auto pvs = VertexShader::Resolve(gfx, shaderCode + "vs.cso");
 			auto pvsbc = pvs->GetBytecode();
 			step.AddBindable(std::move(pvs));
-			step.AddBindable(PixelShader::Resolve(gfx, shaderCode + "_PS.cso"));
+			step.AddBindable(PixelShader::Resolve(gfx, shaderCode + "ps.cso"));
 			step.AddBindable(InputLayout::Resolve(gfx, vtxLayout, pvsbc));
 			if (hasTexture)
 			{
@@ -318,42 +318,42 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 		techniques.push_back(std::move(phong));
 	}
 	// outline technique
-	{
-		Technique outline("Outline", false);
-		{
-			Step mask("outlineMask");
+	//{
+	//	Technique outline("Outline", false);
+	//	{
+	//		Step mask("outlineMask");
 
-			// TODO: better sub-layout generation tech for future consideration maybe
-			mask.AddBindable(InputLayout::Resolve(gfx, vtxLayout, VertexShader::Resolve(gfx, "Solid_VS.cso")->GetBytecode()));
+	//		// TODO: better sub-layout generation tech for future consideration maybe
+	//		mask.AddBindable(InputLayout::Resolve(gfx, vtxLayout, VertexShader::Resolve(gfx, "Solid_VS.cso")->GetBytecode()));
 
-			mask.AddBindable(std::make_shared<TransformCbuf>(gfx));
+	//		mask.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
-			// TODO: might need to specify rasterizer when doubled-sided models start being used
+	//		// TODO: might need to specify rasterizer when doubled-sided models start being used
 
-			outline.AddStep(std::move(mask));
-		}
-		{
-			Step draw("outlineDraw");
+	//		outline.AddStep(std::move(mask));
+	//	}
+	//	{
+	//		Step draw("outlineDraw");
 
-			{
-				DC::RawLayout lay;
-				lay.Add({ {DC::Type::Float3,"materialColor"} });
-				auto buf = DC::Buffer(std::move(lay));
-				buf["materialColor"] = DirectX::XMFLOAT3{ 1.0f,0.4f,0.4f };
-				draw.AddBindable(std::make_shared<CachingPixelConstantBufferEx>(gfx, buf, 1u));
-			}
+	//		{
+	//			DC::RawLayout lay;
+	//			lay.Add({ {DC::Type::Float3,"materialColor"} });
+	//			auto buf = DC::Buffer(std::move(lay));
+	//			buf["materialColor"] = DirectX::XMFLOAT3{ 1.0f,0.4f,0.4f };
+	//			draw.AddBindable(std::make_shared<CachingPixelConstantBufferEx>(gfx, buf, 1u));
+	//		}
 
-			// TODO: better sub-layout generation tech for future consideration maybe
-			draw.AddBindable(InputLayout::Resolve(gfx, vtxLayout, VertexShader::Resolve(gfx, "Solid_VS.cso")->GetBytecode()));
+	//		// TODO: better sub-layout generation tech for future consideration maybe
+	//		draw.AddBindable(InputLayout::Resolve(gfx, vtxLayout, VertexShader::Resolve(gfx, "Solid_VS.cso")->GetBytecode()));
 
-			draw.AddBindable(std::make_shared<TransformCbuf>(gfx));
+	//		draw.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
-			// TODO: might need to specify rasterizer when doubled-sided models start being used
+	//		// TODO: might need to specify rasterizer when doubled-sided models start being used
 
-			outline.AddStep(std::move(draw));
-		}
-		techniques.push_back(std::move(outline));
-	}
+	//		outline.AddStep(std::move(draw));
+	//	}
+	//	techniques.push_back(std::move(outline));
+	//}
 }
 DV::VertexBuffer Material::ExtractVertices(const aiMesh& mesh) const noexcept
 {

@@ -9,7 +9,7 @@
 
 namespace RG
 {
-	class GBufferPass : public RenderQueuePass
+	class GBufferPass : public RenderQueuePass, public GraphicsResource
 	{
 	public:
 		GBufferPass(Graphics& gfx, std::string name)
@@ -22,6 +22,11 @@ namespace RG
 			RegisterSink(DirectBufferSink<DepthStencil>::Make("depthStencil", depthStencil));
 			RegisterSource(DirectBindableSource<RenderTargetArray>::Make("targets", (std::shared_ptr<RenderTargetArray>&)(renderTarget)));
 			RegisterSource(DirectBufferSource<DepthStencil>::Make("depthStencil", depthStencil));
+		}
+		void Execute(Graphics& gfx) const noxnd override
+		{
+			((std::shared_ptr<RenderTargetArray>&)(renderTarget))->Clear(gfx);
+			RenderQueuePass::Execute(gfx);
 		}
 	};
 }

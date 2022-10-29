@@ -13,7 +13,7 @@ winrt::IAsyncAction ver::LightBuffer::InitializeAsync(Graphics& gfx)
 
 void ver::LightBuffer::Bind(Graphics& gfx)
 {
-	auto view = gfx.GetCamera();
+	auto view = DirectX::XMMatrixTranspose(gfx.GetCamera());
 	DirectX::XMStoreFloat4x4A(&data.view_matrix, view);
 	cbuf.Update(gfx, data);
 	cbuf.Bind(gfx);
