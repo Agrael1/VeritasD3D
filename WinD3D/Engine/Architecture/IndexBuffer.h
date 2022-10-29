@@ -1,5 +1,5 @@
 #pragma once
-#include <Engine/Architecture/Bindable.h>
+#include "Bindable.h"
 #include <memory>
 
 class IndexBuffer : public Bindable
@@ -8,7 +8,7 @@ public:
 	IndexBuffer(Graphics& gfx, const std::vector<unsigned short>& indices);
 	IndexBuffer(Graphics& gfx, std::string tag, const std::vector<unsigned short>& indices);
 public:
-	void Bind(Graphics& gfx) noexcept override;
+	void Bind(Graphics& gfx) noxnd override;
 	UINT GetCount() const noexcept;
 
 	static std::shared_ptr<IndexBuffer> Resolve(Graphics& gfx, const std::string& tag,

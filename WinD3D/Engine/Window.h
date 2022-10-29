@@ -1,5 +1,5 @@
 #pragma once
-#include <Framework\Exception.h>
+#include <Framework/WindowExceptions.h>
 
 #include "Keyboard.h"
 #include "Mouse.h"
@@ -7,34 +7,22 @@
 #include <memory>
 #include <optional>
 
-class Window 
+namespace ver
 {
+	class FileOpenDialog;
+}
+
+class Window
+{
+	friend class ver::FileOpenDialog;
 public:
-	class WindowException :public Exception
+	enum class Style
 	{
-		using Exception::Exception;
-	public:
-		static std::string TranslateErrorCode(HRESULT hr)noexcept;
-	};
-	class HrException :public WindowException
-	{
-	public:
-		HrException(int line, const char* file, HRESULT hr);
-		const char* what() const noexcept override;
-		const char* GetType()const noexcept override;
-		HRESULT GetErrorCode() const noexcept;
-		std::string GetErrorDescription() const noexcept;
-	private:
-		HRESULT hResult;
-	};
-	class NoGfxException :public WindowException
-	{
-	public:
-		using WindowException::WindowException;
-		const char* GetType()const noexcept override;
+		VGUI,
+		Dark,
+		Cherry
 	};
 private:
-	// Registration of window
 	class WindowClass
 	{
 	public:
@@ -55,16 +43,29 @@ public:
 	Window(const Window&) = delete;
 	Window& operator=(const Window&) = delete;
 public:
+	UINT GetWidth() const noexcept;
+	UINT GetHeight() const noexcept;
 	void EnableCursor() noexcept;
 	void DisableCursor() noexcept;
 	bool CursorEnabled() const noexcept;
+	bool LoadCalled() const noexcept;
+	void LoadingComplete()noexcept;
+	bool ResizeCalled() const noexcept;
+	void ResizeComplete()noexcept;
+	bool DrawGrid()const noexcept;
+	bool IsActive()const noexcept;
 	void SetTitle(std::string_view title);
-	static std::optional<WPARAM> ProcessMessages()noexcept;
+
+	bool RestyleCalled()const noexcept;
+	void RestyleComplete()noexcept;
+	Style GetStyle()const noexcept;
+
+	std::optional<WPARAM> ProcessMessages()const noexcept;
 	Graphics& Gfx();
 private:
 	static LRESULT WINAPI HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	static LRESULT WINAPI HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
+	LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	void ConfineCursor() noexcept;
 	void FreeCursor() noexcept;
@@ -77,14 +78,21 @@ public:
 	Mouse mouse;
 private:
 	bool cursorEnabled = true;
+	bool bLoadCallIssued = false;
+	bool bGridEnabled = true;
+	bool bResizeIssued = false;
+	bool bRestyleIssued = false;
+	bool bActive = true;
 	int width;
 	int height;
-	HWND hWnd;
+	Style style;
+	wil::unique_hwnd hWnd;
+	wil::unique_hmenu menu;
+	wil::unique_hmenu FileMenu;
+	wil::unique_hmenu OptionsMenu;
+	wil::unique_hmenu StylesMenu;
+	wil::unique_haccel Accelerator;
 	std::unique_ptr<Graphics> pGfx;
 	std::vector<BYTE> rawBuffer;
 };
 
-#define WND_EXCEPT( hr ) Window::HrException( __LINE__,__FILE__,(hr) )
-#define WND_LAST_EXCEPT() Window::HrException( __LINE__,__FILE__,GetLastError() )
-#define WND_NOGFX_EXCEPT() Window::NoGfxException( __LINE__,__FILE__ )
-#define WND_CALL_INFO(call) if(!(call)) throw(WND_LAST_EXCEPT())

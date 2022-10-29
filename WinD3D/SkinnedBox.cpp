@@ -23,7 +23,7 @@ TestCube::TestCube(Graphics& gfx, float size)
 	{
 		Technique shade("Shade");
 		{
-			Step only(0);
+			Step only("lambertian");
 
 			only.AddBindable(Texture::Resolve(gfx, "Materials\\crate_diffuse.png"));
 			only.AddBindable(Sampler::Resolve(gfx));
@@ -56,9 +56,9 @@ TestCube::TestCube(Graphics& gfx, float size)
 	{
 		Technique outline("Outline");
 		{
-			Step mask(1);
+			Step mask("outlineMask");
 
-			auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
+			auto pvs = VertexShader::Resolve(gfx, "Solid_VS.cso");
 			auto pvsbc = pvs->GetBytecode();
 			mask.AddBindable(std::move(pvs));
 
@@ -71,15 +71,15 @@ TestCube::TestCube(Graphics& gfx, float size)
 			outline.AddStep(std::move(mask));
 		}
 		{
-			Step draw(2);
+			Step draw("outlineDraw");
 
 			// these can be pass-constant (tricky due to layout issues)
-			auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
+			auto pvs = VertexShader::Resolve(gfx, "Solid_VS.cso");
 			auto pvsbc = pvs->GetBytecode();
 			draw.AddBindable(std::move(pvs));
 
 			// this can be pass-constant
-			draw.AddBindable(PixelShader::Resolve(gfx, "SolidPS.cso"));
+			draw.AddBindable(PixelShader::Resolve(gfx, "Solid_PS.cso"));
 
 			DC::RawLayout lay;
 			lay.Add({ {DC::Type::Float4, "color"} });
@@ -118,7 +118,7 @@ TestCube::TestCube(Graphics& gfx, float size)
 				static DC::RawLayout MakeLayout()
 				{
 					DC::RawLayout layout;
-					layout.Add({ {DC::Type::Float,"scale"} });
+					layout.Add(DC::Type::Float,"scale");
 					return layout;
 				}
 			private:

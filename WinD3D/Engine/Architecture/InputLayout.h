@@ -1,6 +1,6 @@
 #pragma once
-#include <Engine/Architecture/Bindable.h>
-#include <Engine/Architecture/VertexLayout.h>
+#include "Bindable.h"
+#include "VertexLayout.h"
 
 class InputLayout : public Bindable
 {
@@ -9,8 +9,9 @@ public:
 		DV::VertexLayout layout,
 		ID3DBlob* pVertexShaderBytecode);
 public:
-	void Bind(Graphics& gfx) noexcept override;
+	void Bind(Graphics& gfx) noxnd override;
 	std::string GetUID()const noexcept override;
+	const DV::VertexLayout GetLayout() const noexcept;
 public:
 	static std::shared_ptr<InputLayout> Resolve(Graphics& gfx,
 		const DV::VertexLayout& layout, ID3DBlob* pVertexShaderBytecode);

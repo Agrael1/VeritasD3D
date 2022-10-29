@@ -1,7 +1,39 @@
 #include "Window.h"
 #include <sstream>
 #include "resource.h"
-#include "ImGUI\imgui_impl_win32.h"
+#include "../ImGUI/imgui_impl_win32.h"
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+enum class MenuItems :UINT_PTR
+{
+	Load = ID_FILE_LOADMODEL,
+	Exit = ID_FILE_EXIT,
+	ShowGrid = ID_OPTIONS_DRAWGRID,
+	Style_VGUI = ID_STYLES_VGUI,
+	Style_Dark = ID_STYLES_DARK,
+	Style_Cherry = ID_STYLES_CHERRY,
+	About = ID_HELP_ABOUT,
+};
+
+INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	UNREFERENCED_PARAMETER(lParam);
+	switch (message)
+	{
+	case WM_INITDIALOG:
+		return (INT_PTR)TRUE;
+
+	case WM_COMMAND:
+		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+		{
+			EndDialog(hDlg, LOWORD(wParam));
+			return (INT_PTR)TRUE;
+		}
+		break;
+	}
+	return (INT_PTR)FALSE;
+}
 
 Window::WindowClass Window::WindowClass::wndClass;
 
@@ -15,10 +47,10 @@ Window::WindowClass::WindowClass() noexcept
 	wcWindow.cbClsExtra = 0;
 	wcWindow.cbWndExtra = 0;
 	wcWindow.hInstance = GetInstance();
-	wcWindow.hCursor = nullptr;
-	wcWindow.hIcon = LoadIcon(wcWindow.hInstance,MAKEINTRESOURCE(IDI_ICON2));
+	wcWindow.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wcWindow.hIcon = LoadIcon(wcWindow.hInstance, MAKEINTRESOURCE(IDI_ICON1));
 	wcWindow.hbrBackground = nullptr;
-	wcWindow.lpszMenuName = nullptr;
+	wcWindow.lpszMenuName = MAKEINTRESOURCE(IDR_MENU1);
 	wcWindow.hIconSm = nullptr;
 	wcWindow.lpszClassName = GetName();
 	RegisterClassExA(&wcWindow);
@@ -27,7 +59,7 @@ Window::WindowClass::~WindowClass()
 {
 	UnregisterClass(wndClassName, GetInstance());
 }
-const char * Window::WindowClass::GetName() noexcept
+const char* Window::WindowClass::GetName() noexcept
 {
 	return wndClassName;
 }
@@ -37,7 +69,7 @@ HINSTANCE Window::WindowClass::GetInstance() noexcept
 }
 
 // Window namespace
-Window::Window(unsigned int width, unsigned int height, const char * name):width(width),height(height)
+Window::Window(unsigned int width, unsigned int height, const char* name) :width(width), height(height)
 {
 	RECT rWindow;
 	rWindow.left = 100;
@@ -45,27 +77,29 @@ Window::Window(unsigned int width, unsigned int height, const char * name):width
 	rWindow.top = 100;
 	rWindow.bottom = height + rWindow.top;
 	// Automatic calculation of window height and width to client region
-	WND_CALL_INFO(AdjustWindowRect(&rWindow, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE));
+	WND_CALL_INFO(AdjustWindowRect(&rWindow, WS_OVERLAPPEDWINDOW, TRUE));
 
-	hWnd = CreateWindowA(
+	hWnd.reset(CreateWindowA(
 		WindowClass::GetName(), name,
-		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
-		CW_USEDEFAULT, CW_USEDEFAULT, 
+		WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT, CW_USEDEFAULT,
 		rWindow.right - rWindow.left,
 		rWindow.bottom - rWindow.top,
 		nullptr, nullptr,
 		WindowClass::GetInstance(), this
-	);
+	));
 
 	// Error checks
 	if (!hWnd) throw WND_LAST_EXCEPT();
-	ShowWindow(hWnd, SW_SHOWDEFAULT);
-	
+	ShowWindow(hWnd.get(), SW_SHOWDEFAULT);
+
+	Accelerator.reset(LoadAccelerators(WindowClass::GetInstance(), MAKEINTRESOURCE(IDR_ACCELERATOR1)));
+
 	// Init GUI (only one window supported)
-	WND_CALL_INFO(ImGui_ImplWin32_Init(hWnd));
+	WND_CALL_INFO(ImGui_ImplWin32_Init(hWnd.get()));
 
 	// Create Graphics object
-	pGfx = std::make_unique<Graphics>(hWnd, width, height);
+	pGfx = std::make_unique<Graphics>(hWnd.get(), width, height);
 
 	RAWINPUTDEVICE rid;
 	rid.usUsagePage = 0x01; // mouse page
@@ -77,14 +111,35 @@ Window::Window(unsigned int width, unsigned int height, const char * name):width
 Window::~Window()
 {
 	ImGui_ImplWin32_Shutdown();
-	DestroyWindow(hWnd);
 }
 void Window::SetTitle(std::string_view title)
 {
-	if (!SetWindowText(this->hWnd, title.data()))
+	if (!SetWindowText(hWnd.get(), title.data()))
 	{
 		throw WND_LAST_EXCEPT();
 	}
+}
+
+bool Window::RestyleCalled() const noexcept
+{
+	return bRestyleIssued;
+}
+void Window::RestyleComplete() noexcept
+{
+	bRestyleIssued = false;
+}
+Window::Style Window::GetStyle() const noexcept
+{
+	return style;
+}
+
+UINT Window::GetWidth() const noexcept
+{
+	return width;
+}
+UINT Window::GetHeight() const noexcept
+{
+	return height;
 }
 
 void Window::EnableCursor() noexcept
@@ -106,11 +161,39 @@ bool Window::CursorEnabled() const noexcept
 	return cursorEnabled;
 }
 
+bool Window::LoadCalled() const noexcept
+{
+	return bLoadCallIssued;
+}
+void Window::LoadingComplete() noexcept
+{
+	EnableMenuItem(FileMenu.get(), 0, MF_BYPOSITION | MF_ENABLED);
+	bLoadCallIssued = false;
+}
+
+bool Window::ResizeCalled() const noexcept
+{
+	return bResizeIssued;
+}
+void Window::ResizeComplete() noexcept
+{
+	bResizeIssued = false;
+}
+
+bool Window::DrawGrid() const noexcept
+{
+	return bGridEnabled;
+}
+bool Window::IsActive() const noexcept
+{
+	return bActive;
+}
+
 void Window::ConfineCursor() noexcept
 {
 	RECT rect;
-	GetClientRect(hWnd, &rect);
-	MapWindowPoints(hWnd, nullptr, reinterpret_cast<POINT*>(&rect), 2);
+	GetClientRect(hWnd.get(), &rect);
+	MapWindowPoints(hWnd.get(), nullptr, reinterpret_cast<POINT*>(&rect), 2);
 	ClipCursor(&rect);
 }
 void Window::FreeCursor() noexcept
@@ -135,22 +218,32 @@ void Window::DisableImGuiMouse() noexcept
 	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
 }
 
-std::optional<WPARAM> Window::ProcessMessages() noexcept
+std::optional<WPARAM> Window::ProcessMessages()const noexcept
 {
 	MSG msg;
 	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 	{
-		if (msg.message == WM_QUIT)
+		if (!TranslateAccelerator(
+			hWnd.get(),  // handle to receiving window 
+			Accelerator.get(),    // handle to active accelerator table 
+			&msg))         // message data 
 		{
-			return msg.wParam;
-		}
+			if (msg.message == WM_QUIT)
+			{
+				return msg.wParam;
+			}
 
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+	}
+	if (!bActive)
+	{
+		WaitMessage();
 	}
 	return{};
 }
-Graphics & Window::Gfx()
+Graphics& Window::Gfx()
 {
 	if (!pGfx)
 	{
@@ -173,16 +266,16 @@ LRESULT WINAPI Window::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM
 
 		return pWnd->HandleMsg(hWnd, msg, wParam, lParam);
 	}
-	return DefWindowProc(hWnd,msg,wParam,lParam);
+	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 LRESULT WINAPI Window::HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	// retrieve ptr to win class
 	Window* const pWnd = reinterpret_cast<Window*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 	// forward msg to class handler
-	return pWnd->HandleMsg(hWnd,msg,wParam,lParam);
+	return pWnd->HandleMsg(hWnd, msg, wParam, lParam);
 }
-LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
+LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
 	{
@@ -200,6 +293,89 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 		// clear keystate when window loses focus to prevent input getting "stuck"
 	case WM_KILLFOCUS:
 		kbd.ClearState();
+		break;
+	case WM_SYSCOMMAND:
+		if (wParam == SC_MINIMIZE)
+		{
+			bActive = false;
+		}
+		if (wParam == SC_RESTORE)
+		{
+			bActive = true;
+		}
+		break;
+	case WM_SIZE:
+	{
+		if (pGfx)
+		{
+			if (!LOWORD(lParam) || !HIWORD(lParam))
+				break;
+			width = LOWORD(lParam);
+			height = HIWORD(lParam);
+			bResizeIssued = true;
+		}
+		break;
+	}
+	case WM_CREATE:
+		menu.reset(GetMenu(hWnd));
+		FileMenu.reset(GetSubMenu(menu.get(), 0));
+		OptionsMenu.reset(GetSubMenu(menu.get(), 1));
+		StylesMenu.reset(GetSubMenu(menu.get(), 2));
+		CheckMenuRadioItem(StylesMenu.get(), 0, 2, 0, MF_BYPOSITION);
+		break;
+	case WM_COMMAND:
+		switch (MenuItems(LOWORD(wParam)))
+		{
+		case MenuItems::Load:
+			EnableMenuItem(FileMenu.get(), 0, MF_BYPOSITION | MF_GRAYED);
+			bLoadCallIssued = true;
+			break;
+		case MenuItems::Exit:
+			PostQuitMessage(0);
+			return 0;
+		case MenuItems::ShowGrid:
+		{
+			bGridEnabled ^= 1;
+			MENUITEMINFO mii
+			{
+				.cbSize = sizeof(MENUITEMINFO),
+				.fMask = MIIM_STATE,
+				.fState = UINT(bGridEnabled ? MFS_CHECKED : MFS_UNCHECKED)
+			};
+			SetMenuItemInfo(OptionsMenu.get(), 0, true, &mii);
+			break;
+		}
+		case MenuItems::Style_VGUI:
+			CheckMenuRadioItem(StylesMenu.get(), 0, 2, 0, MF_BYPOSITION);
+			if (style != Style::VGUI)
+			{
+				style = Style::VGUI;
+				bRestyleIssued = true;
+			}
+
+			break;
+		case MenuItems::Style_Dark:
+			CheckMenuRadioItem(StylesMenu.get(), 0, 2, 1, MF_BYPOSITION);
+			if (style != Style::Dark)
+			{
+				style = Style::Dark;
+				bRestyleIssued = true;
+			}
+			break;
+		case MenuItems::Style_Cherry:
+			CheckMenuRadioItem(StylesMenu.get(), 0, 2, 2, MF_BYPOSITION);
+			if (style != Style::Cherry)
+			{
+				style = Style::Cherry;
+				bRestyleIssued = true;
+			}
+			break;
+		case MenuItems::About:
+			DialogBox(WindowClass::GetInstance(), MAKEINTRESOURCE(IDD_DIALOG1), hWnd, About);
+			break;
+		default:
+			break;
+		}
 		break;
 	case WM_ACTIVATE:
 		// confine/free cursor on window to foreground/background if cursor disabled
@@ -417,51 +593,4 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 	}
 
 	return DefWindowProc(hWnd, msg, wParam, lParam);
-}
-
-//Window Exception
-Window::HrException::HrException(int line, const char * file, HRESULT hr)
-	:WindowException(line,file),hResult(hr)
-{}
-std::string Window::WindowException::TranslateErrorCode(HRESULT hr) noexcept
-{
-	char* pMsgBuf = nullptr;
-	DWORD nMsgLen = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
-		FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPSTR>(&pMsgBuf),
-		0, nullptr);
-
-	if (nMsgLen == 0)
-	{
-		return "Unknown error";
-	}
-	std::string errorString = pMsgBuf;
-	LocalFree(pMsgBuf);
-	return errorString;
-}
-HRESULT Window::HrException::GetErrorCode() const noexcept
-{
-	return hResult;
-}
-std::string Window::HrException::GetErrorDescription() const noexcept
-{
-	return WindowException::TranslateErrorCode(hResult);
-}
-const char* Window::HrException::GetType()const noexcept
-{
-	return "Vertas Window Exception";
-}
-const char* Window::HrException::what() const noexcept
-{
-	std::ostringstream oss;
-	oss << GetType() << std::endl
-		<< "[Error Code] 0x" << std::hex << std::uppercase << GetErrorCode()
-		<< std::dec << " (" << (unsigned long)GetErrorCode() << ")" << std::endl
-		<< "[Description] " << GetErrorDescription() << std::endl
-		<< GetOriginString();
-	whatBuffer = oss.str();
-	return whatBuffer.c_str();
-}
-const char* Window::NoGfxException::GetType() const noexcept
-{
-	return "Veritas Window Exception [No Graphics]";
 }

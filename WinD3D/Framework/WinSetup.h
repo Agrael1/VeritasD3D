@@ -1,21 +1,21 @@
 #pragma once
-
-#define _WIN32_WINNT 0x0601
+#ifndef WINSETUP_SUPPRESS
+#define _WIN32_WINNT 0x0602
 #include <sdkddkver.h>
 
 #ifndef FULL_WINOPT
 #define WIN32_LEAN_AND_MEAN
 #define NOGDICAPMASKS
 #define NOSYSMETRICS
-#define NOMENUS
+//#define NOMENUS
 #define NOICONS
-#define NOSYSCOMMANDS
+//#define NOSYSCOMMANDS
 #define NORASTEROPS
 #define OEMRESOURCE
 #define NOATOM
 #define NOCLIPBOARD
 #define NOCOLOR
-#define NOCTLMGR
+//#define NOCTLMGR
 #define NODRAWTEXT
 #define NOKERNEL
 #define NONLS
@@ -43,3 +43,6 @@
 #define STRICT
 
 #include <Windows.h>
+#endif // !WINSETUP_SUPPRESS
+
+

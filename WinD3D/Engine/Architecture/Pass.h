@@ -1,26 +1,38 @@
 #pragma once
-#include <Engine/Graphics.h>
-#include "Job.h"
+#include <string>
 #include <vector>
+#include <memory>
+#include <span>
+#include <Framework\noexcept_if.h>
 
-class Pass
+class Graphics;
+
+namespace RG
 {
-public:
-	void Accept(Job job) noexcept
+	class Source;
+	class Sink;
+
+	class Pass
 	{
-		jobs.push_back(job);
-	}
-	void Execute(Graphics& gfx) const noxnd
-	{
-		for (const auto& j : jobs)
-		{
-			j.Execute(gfx);
-		}
-	}
-	void Reset() noexcept
-	{
-		jobs.clear();
-	}
-private:
-	std::vector<Job> jobs;
-};
+	public:
+		explicit Pass(std::string name) noexcept;
+		Pass(std::string_view name)noexcept;
+		virtual ~Pass();
+	public:
+		virtual void Execute(Graphics& gfx)const noxnd = 0;
+		virtual void Reset()noxnd;
+		virtual void Finalize();
+		std::string_view GetName() const noexcept;
+		std::span<const std::unique_ptr<Sink>> GetSinks()const;
+		Source& GetSource(std::string_view registeredName)const;
+		Sink& GetSink(std::string_view registeredName)const;
+		void SetSinkLinkage(std::string_view registeredName, const std::string& target);
+	protected:
+		void RegisterSink(std::unique_ptr<Sink> sink);
+		void RegisterSource(std::unique_ptr<Source>);
+	private:
+		std::vector<std::unique_ptr<Sink>> sinks;
+		std::vector<std::unique_ptr<Source>> sources;
+		std::string name;
+	};
+}

@@ -1,14 +1,14 @@
 #include "VertexShader.h"
 #include "GraphicsThrows.m"
-#include <Engine/Architecture/Codex.h>
+#include "Codex.h"
 #include <Framework/Utility.h>
 
 VertexShader::VertexShader(Graphics& gfx, const std::string& path)
 	:path(path)
 {
 	INFOMAN(gfx);
-
-	GFX_THROW_INFO(D3DReadFileToBlob(ToWide(path).c_str(), &pBytecodeBlob));
+	const std::wstring ShaderFolder{ L"VShader\\" };
+	GFX_THROW_INFO(D3DReadFileToBlob((ShaderFolder + ToWide(path)).c_str(), &pBytecodeBlob));
 	GFX_THROW_INFO(GetDevice(gfx)->CreateVertexShader(
 		pBytecodeBlob->GetBufferPointer(),
 		pBytecodeBlob->GetBufferSize(),
@@ -17,9 +17,10 @@ VertexShader::VertexShader(Graphics& gfx, const std::string& path)
 	));
 }
 
-void VertexShader::Bind(Graphics& gfx) noexcept
+void VertexShader::Bind(Graphics& gfx) noxnd
 {
-	GetContext(gfx)->VSSetShader(pVertexShader.Get(), nullptr, 0u);
+	INFOMAN_NOHR(gfx);
+	GFX_THROW_INFO_ONLY(GetContext(gfx)->VSSetShader(pVertexShader.Get(), nullptr, 0u));
 }
 
 ID3DBlob* VertexShader::GetBytecode() const noexcept

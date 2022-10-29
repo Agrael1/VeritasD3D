@@ -2,20 +2,38 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include "ModelException.h"
+#include <Framework/ModelException.h>
 #include "Node.h"
 #include "Mesh.h"
-#include <Engine/Architecture/Material.h>
+#include <Entities/Material.h>
 
 namespace dx = DirectX;
 
 DirectX::XMMATRIX ScaleTranslation(DirectX::XMMATRIX matrix, float scale)
 {
 	dx::XMVECTOR s = _mm_load1_ps(&scale);
-	s = _mm_add_ps(_mm_and_ps(s, dx::g_XMMask3),dx::g_XMIdentityR3);
-	matrix.r[3] = _mm_mul_ps(matrix.r[3], s);
+	s = _mm_and_ps(s, dx::g_XMMask3);
+	matrix.r[3] = _mm_add_ps(_mm_mul_ps(matrix.r[3], s), dx::g_XMIdentityR3);
 	return matrix;
 }
+
+winrt::Windows::Foundation::IAsyncAction
+MakeMaterialsAsync(Graphics& gfx, std::vector<Material>& materials, const aiScene* pScene, std::string_view pathString)
+{
+	std::vector<winrt::Windows::Foundation::IAsyncAction> tasks;
+	tasks.reserve(pScene->mNumMaterials);
+
+	for (size_t i = 0; auto & mat: materials)
+	{
+		tasks.emplace_back(mat.MakeMaterialAsync(gfx, *pScene->mMaterials[i], pathString));
+		i++;
+	}
+	for (auto& t : tasks)
+	{
+		co_await t;
+	}
+}
+
 
 Model::Model(Graphics& gfx, std::string_view pathString, const float scale)
 {
@@ -33,10 +51,11 @@ Model::Model(Graphics& gfx, std::string_view pathString, const float scale)
 		throw ModelException(__LINE__, __FILE__, imp.GetErrorString());
 	}
 
-	// parse materials
+	//parse materials
 	std::vector<Material> materials;
 	materials.reserve(pScene->mNumMaterials);
-	for (size_t i = 0; i < pScene->mNumMaterials; i++)
+
+	for (size_t i = 0; i< pScene->mNumMaterials; i++)
 	{
 		materials.emplace_back(gfx, *pScene->mMaterials[i], pathString);
 	}
@@ -51,13 +70,53 @@ Model::Model(Graphics& gfx, std::string_view pathString, const float scale)
 	pRoot = ParseNode(nextId, *pScene->mRootNode, scale);
 }
 
-void Model::Submit(FrameCommander& frame) const noxnd
+
+winrt::Windows::Foundation::IAsyncAction
+Model::MakeModelAsync(std::unique_ptr<Model>& to, Graphics& gfx, std::string_view pathString, float scale)
 {
-	// I'm still not happy about updating parameters (i.e. mutating a bindable GPU state
-	// which is part of a mesh which is part of a node which is part of the model that is
-	// const in this call) Can probably do this elsewhere
-	//pWindow->ApplyParameters();
-	pRoot->Submit(frame, dx::XMMatrixIdentity());
+	std::unique_ptr<Model> out (new Model());
+
+	Assimp::Importer imp;
+	const auto pScene = imp.ReadFile(pathString.data(),
+		aiProcess_Triangulate |
+		aiProcess_JoinIdenticalVertices |
+		aiProcess_ConvertToLeftHanded |
+		aiProcess_GenNormals |
+		aiProcess_CalcTangentSpace
+	);
+
+	auto v = imp.GetErrorString();
+
+	if (!pScene->mNumMeshes||pScene == nullptr)
+	{
+		to.reset();
+		co_return;
+	}
+
+
+	out->meshPtrs.reserve(pScene->mNumMeshes);
+
+	std::vector<Material> materials;
+	materials.resize(pScene->mNumMaterials);
+	co_await MakeMaterialsAsync(gfx, materials, pScene, pathString);
+
+	//parse materials
+	for (size_t i = 0; i < pScene->mNumMeshes; i++)
+	{
+		const auto& mesh = *pScene->mMeshes[i];
+		out->meshPtrs.push_back(std::make_unique<Mesh>(gfx, materials[mesh.mMaterialIndex], mesh, scale));
+	}
+
+	int nextId = 0;
+	out->pRoot = out->ParseNode(nextId, *pScene->mRootNode, scale);
+	to.reset(out.release());
+}
+
+
+
+void Model::Submit() const noxnd
+{
+	pRoot->Submit(DirectX::XMMatrixIdentity());
 }
 
 void Model::SetRootTransform(DirectX::FXMMATRIX tf) noexcept
@@ -69,6 +128,27 @@ void Model::Accept(ModelProbe& probe)
 {
 	pRoot->Accept(probe);
 }
+
+void Model::LinkTechniques(RG::RenderGraph& rg)
+{
+	for (auto& pMesh : meshPtrs)
+	{
+		pMesh->LinkTechniques(rg);
+	}
+}
+
+void Model::UnlinkTechniques()
+{
+	for (auto& pMesh : meshPtrs)
+	{
+		pMesh->UnlinkTechniques();
+	}
+}
+
+Model::~Model() noexcept
+{}
+
+
 
 std::unique_ptr<Node> Model::ParseNode(int& nextId, const aiNode& node, float scale) noexcept
 {

@@ -1,0 +1,456 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="Graphics.cpp">
+      <Filter>WinD3D</Filter>
+    </ClCompile>
+    <ClCompile Include="DXGIInfoManager.cpp">
+      <Filter>WinD3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\GraphicsResource.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\RenderTarget.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\DepthStencil.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\BlendState.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\DynamicConstant.cpp">
+      <Filter>WinD3D\Dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\IndexBuffer.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Drawable.cpp">
+      <Filter>WinD3D\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Bindable.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\InputLayout.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\LayoutCodex.cpp">
+      <Filter>WinD3D\Dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\PixelShader.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\NullPixelShader.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\RasterizerState.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Sampler.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Stencil.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Texture.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Topology.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\TransformCBuf.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\TransformUnified.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\VertexBuffer.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\VertexLayout.cpp">
+      <Filter>WinD3D\Dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\VertexShader.cpp">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Sink.cpp">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Source.cpp">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Step.cpp">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\RenderGraph.cpp">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Pass.cpp">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Job.cpp">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\Technique.cpp">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\BindingPass.cpp">
+      <Filter>WinD3D\Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\BlurOutlineRenderGraph.cpp">
+      <Filter>WinD3D\Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\BufferClearPass.cpp">
+      <Filter>WinD3D\Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\FullscreenPass.cpp">
+      <Filter>WinD3D\Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\HorizontalBlurPass.cpp">
+      <Filter>WinD3D\Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\RenderQueuePass.cpp">
+      <Filter>WinD3D\Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Architecture\VerticalBlurPass.cpp">
+      <Filter>WinD3D\Passes</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\Material.cpp">
+      <Filter>WinD3D\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\Mesh.cpp">
+      <Filter>WinD3D\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\Model.cpp">
+      <Filter>WinD3D\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\Node.cpp">
+      <Filter>WinD3D\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entities\Surface.cpp">
+      <Filter>WinD3D\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Camera.cpp">
+      <Filter>WinD3D\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\PointLight.cpp">
+      <Filter>WinD3D\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SolidSphere.cpp">
+      <Filter>WinD3D\Scene</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Graphics.h">
+      <Filter>WinD3D</Filter>
+    </ClInclude>
+    <ClInclude Include="DXGIInfoManager.h">
+      <Filter>WinD3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\GraphicsResource.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Bindable.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\MathHelper.h">
+      <Filter>WinD3D\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\noexcept_if.h">
+      <Filter>WinD3D\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Utility.h">
+      <Filter>WinD3D\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\BufferResource.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\RenderTarget.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\DepthStencil.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\BlendState.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Codex.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\ConstantBuffer.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\ConstantBuffersEX.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\DynamicConstant.h">
+      <Filter>WinD3D\Dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\IndexBuffer.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Drawable.h">
+      <Filter>WinD3D\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="BindableCommons.h">
+      <Filter>WinD3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\InputLayout.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\LayoutCodex.h">
+      <Filter>WinD3D\Dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\PixelShader.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\NullPixelShader.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\RasterizerState.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Sampler.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Stencil.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Texture.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Topology.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\TransformCBuf.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\TransformUnified.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\VertexBuffer.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\VertexLayout.h">
+      <Filter>WinD3D\Dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\VertexShader.h">
+      <Filter>WinD3D\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Sink.h">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Source.h">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\SinksT.h">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\SourcesT.h">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Step.h">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\RenderGraph.h">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Pass.h">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Job.h">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\Technique.h">
+      <Filter>WinD3D\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\BindingPass.h">
+      <Filter>WinD3D\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\BlurOutlineDrawingPass.h">
+      <Filter>WinD3D\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\BlurOutlineRenderGraph.h">
+      <Filter>WinD3D\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\BufferClearPass.h">
+      <Filter>WinD3D\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\FullscreenPass.h">
+      <Filter>WinD3D\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\HorizontalBlurPass.h">
+      <Filter>WinD3D\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\RenderQueuePass.h">
+      <Filter>WinD3D\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\LambertianPass.h">
+      <Filter>WinD3D\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\VerticalBlurPass.h">
+      <Filter>WinD3D\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Architecture\OutlineMaskGenerationPass.h">
+      <Filter>WinD3D\Passes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\Material.h">
+      <Filter>WinD3D\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\Mesh.h">
+      <Filter>WinD3D\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\Model.h">
+      <Filter>WinD3D\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\Node.h">
+      <Filter>WinD3D\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Entities\Surface.h">
+      <Filter>WinD3D\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Probes\TechniqueProbe.h">
+      <Filter>WinD3D\Probes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Probes\TestModelProbe.h">
+      <Filter>WinD3D\Probes</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Probes\ModelProbe.h">
+      <Filter>WinD3D\Probes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Camera.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Grid.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Plane.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\PointLight.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SolidSphere.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Sphere.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\IndexedTriangleList.h">
+      <Filter>WinD3D\Scene</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\LockScreenLogo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\SplashScreen.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square150x150Logo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\StoreLogo.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Wide310x150Logo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include="PropertySheet.props">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include="GraphicsThrows.h">
+      <Filter>WinD3D\Framework</Filter>
+    </None>
+    <None Include="..\shared\bin\assimp\x64\Debug\assimp-vc142-mtd.dll">
+      <Filter>Assets\dlls</Filter>
+    </None>
+    <None Include="..\shared\bin\assimp\x64\Release\assimp-vc142-mt.dll">
+      <Filter>Assets\dlls</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{a1dd4bf3-058e-446a-9435-f84006c3dc9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{f923cfd4-b67b-434a-b347-063270b1d79d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinD3D">
+      <UniqueIdentifier>{bac41316-6458-41dd-80ec-b9f0f86a0f4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinD3D\Bindable">
+      <UniqueIdentifier>{e776b533-84d5-4d61-80dd-8e4ac96039e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinD3D\Framework">
+      <UniqueIdentifier>{d70d1650-8480-44b3-b1f2-49b3b398a0aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinD3D\Multipass">
+      <UniqueIdentifier>{574117ca-037c-4861-ae20-909540dce33e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinD3D\Drawable">
+      <UniqueIdentifier>{ed6371ba-b924-4fbc-a0c9-6fa1a4ec9d3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinD3D\Dynamics">
+      <UniqueIdentifier>{ee29b50c-d1f2-4b2c-afc7-3b822810cbac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinD3D\Passes">
+      <UniqueIdentifier>{af2ddde6-a9fb-4f6e-be19-f8a7daaead62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinD3D\Loading">
+      <UniqueIdentifier>{4c08b7f5-16a4-41ca-9339-2cf2b7b62bcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinD3D\Probes">
+      <UniqueIdentifier>{719db407-c6f6-41e1-ace6-da796a8b8fa4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\dlls">
+      <UniqueIdentifier>{dd6762e0-be79-4a31-accd-8c0443d0b018}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pages">
+      <UniqueIdentifier>{8fd195a3-efbe-40d8-a772-75216835a598}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewModels">
+      <UniqueIdentifier>{57e10d60-6611-4334-a703-ff0e4c9d2952}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinD3D\Scene">
+      <UniqueIdentifier>{67d1af5a-092d-4be2-be14-fed3ee7f0917}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <Filter>Resources</Filter>
+    </AppxManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="readme.txt">
+      <Filter>Assets</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="MainPage.xaml">
+      <Filter>Pages</Filter>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="ViewModel.idl">
+      <Filter>ViewModels</Filter>
+    </Midl>
+  </ItemGroup>
+</Project>

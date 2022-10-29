@@ -1,40 +1,42 @@
 #pragma once
-#define FULL_WINOPT
-#include "Engine\Window.h"
-#include <ShObjIdl.h>
+#include <Framework/WindowExceptions.h>
+#include <shtypes.h>
 #include <wrl.h>
-#include <vector>
+#include <span>
 
 // Helper Class
 class VFileDialog
 {
 public:
-	class HRException : public Window::HrException
+	class HRException : public HrException
 	{
 	public:
-		using Window::HrException::HrException;
+		using HrException::HrException;
 		const char* GetType()const noexcept override;
 	};
+
 public:
-	void SetFileTypes(const std::vector<COMDLG_FILTERSPEC> filters);
+	~VFileDialog();
+public:
+	void SetFileTypes(std::span<const COMDLG_FILTERSPEC> filters);
 	std::wstring GetFilePath();
-	void SetDefaultFolder(std::wstring FolderPath);
+	void SetDefaultFolder(std::wstring_view FolderPath);
 protected:
 	DWORD dwFlags;
-	Microsoft::WRL::ComPtr<IFileDialog> pDialog;
+	Microsoft::WRL::ComPtr<struct IFileDialog> pDialog;
 };
 
 class VFileOpenDialog : public VFileDialog
 {
 public:
-	VFileOpenDialog();	
+	VFileOpenDialog();
 };
 
 class VFileSaveDialog : public VFileDialog
 {
 public:
 	VFileSaveDialog();
-	void SetDefaultItem(const std::wstring & name);
+	void SetDefaultItem(const std::wstring& name);
 };
 
 #define VFD_THROW( hrcall ) if(FAILED(hr = hrcall)) {throw VFileDialog::HRException( __LINE__,__FILE__,(hr) );}

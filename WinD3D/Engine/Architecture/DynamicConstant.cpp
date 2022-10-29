@@ -17,6 +17,7 @@ namespace DC
 		struct Array : public LayoutElement::ExtraDataBase
 		{
 			std::optional<LayoutElement> layoutElement;
+			size_t element_size;
 			size_t size;
 		};
 	};
@@ -46,7 +47,7 @@ namespace DC
 		assert("Indexing into non-array" && type == Type::Array);
 		const auto& data = static_cast<ExtraData::Array&>(*pExtraData);
 		assert(index < data.size);
-		return { offset + data.layoutElement->GetSizeInBytes() * index,&*data.layoutElement };
+		return { offset + data.element_size * index,&*data.layoutElement };
 	}
 	LayoutElement& LayoutElement::operator[](std::string_view key) noxnd
 	{
@@ -193,6 +194,7 @@ namespace DC
 		assert(data.size != 0u);
 		offset = AdvanceToBoundary(offsetIn);
 		data.layoutElement->Finalize(*offset);
+		data.element_size = LayoutElement::AdvanceToBoundary(data.layoutElement->GetSizeInBytes());
 		return GetOffsetEnd();
 	}
 	bool LayoutElement::CrossesBoundary(size_t offset, size_t size) noexcept
@@ -245,7 +247,7 @@ namespace DC
 		:
 		Layout{std::make_shared<LayoutElement>( Type::Struct ) }
 	{}
-	LayoutElement& RawLayout::operator[](const std::string& key) noxnd
+	LayoutElement& RawLayout::operator[](std::string_view key) noxnd
 	{
 		return (*pRoot)[key];
 	}
@@ -274,7 +276,7 @@ namespace DC
 	{
 		return pRoot;
 	}
-	const LayoutElement& CookedLayout::operator[](const std::string& key) const noxnd
+	const LayoutElement& CookedLayout::operator[](std::string_view key) const noxnd
 	{
 		return (*pRoot)[key];
 	}
@@ -367,11 +369,11 @@ namespace DC
 		pLayoutRoot(std::move(buf.pLayoutRoot)),
 		bytes(std::move(buf.bytes))
 	{}
-	ElementRef Buffer::operator[](const std::string& key) noxnd
+	ElementRef Buffer::operator[](std::string_view key) noxnd
 	{
 		return { &(*pLayoutRoot)[key],bytes.data(),0u };
 	}
-	ConstElementRef Buffer::operator[](const std::string& key) const noxnd
+	ConstElementRef Buffer::operator[](std::string_view key) const noxnd
 	{
 		return { &(*pLayoutRoot)[key],bytes.data(),0u };
 	}

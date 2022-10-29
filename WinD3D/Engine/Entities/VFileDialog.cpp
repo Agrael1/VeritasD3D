@@ -1,12 +1,18 @@
-#include "VFileDialog.h"
+#define FULL_WINOPT
 #include <ShlObj.h>
+#include "VFileDialog.h"
+
 
 const char* VFileDialog::HRException::GetType()const noexcept
 {
 	return "Veritas File Exception";
 }
 
-void VFileDialog::SetFileTypes(const std::vector<COMDLG_FILTERSPEC> filters)
+VFileDialog::~VFileDialog()
+{
+}
+
+void VFileDialog::SetFileTypes(std::span<const COMDLG_FILTERSPEC> filters)
 {
 	HRESULT hr;
 	if (!(dwFlags&FOS_STRICTFILETYPES))
@@ -33,9 +39,9 @@ std::wstring VFileDialog::GetFilePath()
 	}
 	return std::wstring();
 }
-void VFileDialog::SetDefaultFolder(std::wstring FolderPath)
+void VFileDialog::SetDefaultFolder(std::wstring_view FolderPath)
 {
-	PIDLIST_ABSOLUTE DefItem = ILCreateFromPathW(FolderPath.c_str());
+	PIDLIST_ABSOLUTE DefItem = ILCreateFromPathW(FolderPath.data());
 	if (DefItem)
 	{
 		Microsoft::WRL::ComPtr<IShellItem> FolderDesc;

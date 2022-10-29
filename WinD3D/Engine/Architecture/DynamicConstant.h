@@ -14,7 +14,8 @@
 	X(Float3)\
 	X(Float4)\
 	X(Matrix)\
-	X(Bool)
+	X(Bool)\
+	X(Integer)
 
 namespace DC
 {
@@ -76,6 +77,13 @@ namespace DC
 		static constexpr size_t hlslSize = 4u;
 		static constexpr bool valid = true;
 		static constexpr const char* code = "B";
+	};
+	template<> struct Map< Type::Integer >
+	{
+		using SysType = int;
+		static constexpr size_t hlslSize = sizeof(SysType);
+		static constexpr const char* code = "IN";
+		static constexpr bool valid = true;
 	};
 
 	#define X(el) static_assert(Map<Type::el>::valid, "Missing map implementation for " #el);
@@ -196,6 +204,8 @@ namespace DC
 		std::shared_ptr<LayoutElement> pRoot;
 	};
 
+
+
 	// Raw layout represents a layout that has not yet been finalized and registered
 	// structure can be edited by adding layout nodes
 	class RawLayout : public Layout
@@ -204,7 +214,12 @@ namespace DC
 	public:
 		RawLayout() noexcept;
 	public:
-		LayoutElement& operator[](const std::string& key) noxnd;		// key into the root Struct
+		LayoutElement& operator[](std::string_view key) noxnd;		// key into the root Struct
+		LayoutElement& Add(Type addedType, std::string name) noxnd
+		{
+			pRoot->Add(addedType, std::move(name));
+			return *pRoot;
+		}
 		LayoutElement& Add(std::initializer_list<LayoutElement::LayoutPair> pairs) noxnd
 		{
 			return pRoot->Add(std::move(pairs));
@@ -214,6 +229,7 @@ namespace DC
 		std::shared_ptr<LayoutElement> DeliverRoot() noexcept;// finalize the layout and then relinquish (by yielding the root layout element)
 	};
 
+
 	// CookedLayout represend a completed and registered Layout shell object
 	// layout tree is fixed
 	class CookedLayout : public Layout
@@ -221,15 +237,11 @@ namespace DC
 		friend class LayoutCodex;
 		friend class Buffer;
 	public:
-		// key into the root Struct (const to disable mutation of the layout)
-		const LayoutElement& operator[](const std::string& key) const noxnd;
-		// get a share on layout tree root
-		std::shared_ptr<LayoutElement> ShareRoot() const noexcept;
+		const LayoutElement& operator[](std::string_view key) const noxnd; // key into the root Struct (const to disable mutation of the layout)
+		std::shared_ptr<LayoutElement> ShareRoot() const noexcept;// get a share on layout tree root
 	private:
-		// this ctor used by Codex to return cooked layouts
-		CookedLayout(std::shared_ptr<LayoutElement> pRoot) noexcept;
-		// use to pilfer the layout tree
-		std::shared_ptr<LayoutElement> RelinquishRoot() const noexcept;
+		CookedLayout(std::shared_ptr<LayoutElement> pRoot) noexcept; // this ctor used by Codex to return cooked layouts
+		std::shared_ptr<LayoutElement> RelinquishRoot() const noexcept; // use to pilfer the layout tree
 	};
 
 
@@ -365,8 +377,8 @@ namespace DC
 		// the buffer that has once been pilfered must not be used :x
 		Buffer(Buffer&&) noexcept;
 	public:
-		ElementRef operator[](const std::string& key) noxnd;
-		ConstElementRef operator[](const std::string& key) const noxnd;
+		ElementRef operator[](std::string_view key) noxnd;
+		ConstElementRef operator[](std::string_view key) const noxnd;
 	public:
 		// get the raw bytes
 		const char* GetData() const noexcept;

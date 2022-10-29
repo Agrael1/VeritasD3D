@@ -1,13 +1,12 @@
 #pragma once
 #include <vector>
 #include <array>
-#include <type_traits>
 #include <DirectXMath.h>
+#include <format>
 #include <assimp/scene.h>
-#include <Framework\noexcept_if.h>
-#include <Framework\Utility.h>
-#include <Fmtlib\include\fmt\printf.h>
-#include <Engine\Graphics.h>
+#include <Framework/noexcept_if.h>
+#include <Framework/Utility.h>
+#include <Graphics.h>
 
 #define DVTX_ELEMENT_AI_EXTRACTOR(member) static SysType Extract( const aiMesh& mesh, size_t i ) noexcept {return *reinterpret_cast<const SysType*>(&mesh.member[i]);}
 
@@ -176,7 +175,7 @@ namespace DV
 				}
 			}
 #if _DEBUG
-			auto error = fmt::sprintf(L"Couldn't resolve type name %s", Typenames[size_t(Type)]);
+			auto error = std::format(L"Couldn't resolve type name {}", Typenames[size_t(Type)]);
 			_wassert(error.c_str(),__FILEW__,__LINE__);
 #endif
 			return elements.front();
@@ -190,7 +189,7 @@ namespace DV
 		}
 
 
-		bool VertexLayout::Has(ElementType type) const noexcept;		
+		bool Has(ElementType type) const noexcept;		
 		VertexLayout& operator +(ElementType Type)noxnd
 		{
 			if (!Has(Type))
@@ -327,7 +326,7 @@ namespace DV
 	class VertexBuffer
 	{
 	public:
-		VertexBuffer::VertexBuffer(VertexLayout layout, size_t size = 0) noxnd;
+		VertexBuffer(VertexLayout layout, size_t size = 0) noxnd;
 		VertexBuffer(VertexLayout layout, const aiMesh& mesh);
 	public:
 		const VertexLayout& GetLayout() const noexcept;

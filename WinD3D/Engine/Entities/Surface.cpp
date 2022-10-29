@@ -1,4 +1,4 @@
-#include <Engine/Window.h> //just for TranslateErrorCode
+#include <Framework/WindowExceptions.h>
 #include <fmt/printf.h>
 #include "Surface.h"
 #include <Framework/Utility.h>
@@ -11,7 +11,7 @@ Surface::LoadException::LoadException(int line, const char* file, std::string_vi
 	using namespace std::string_literals;
 	note = std::move(
 		"[Error]: "s + Note + "\n" 
-		+ Window::WindowException::TranslateErrorCode(hr) + "\n" 
+		+ WindowException::TranslateErrorCode(hr) + "\n" 
 		+ "[File]: " + filepath.data());
 }
 const char* Surface::LoadException::what() const noexcept
@@ -28,15 +28,11 @@ const std::string& Surface::LoadException::GetNote() const noexcept
 	return note;
 }
 
-
-Surface::Surface(std::string_view filepath)
+bool Surface::FromFile(std::string_view filepath)
 {
 	HRESULT hr = DirectX::LoadFromWICFile(ToWide(filepath).c_str(), DirectX::WIC_FLAGS_NONE, nullptr, image);
 
-	if (FAILED(hr))
-	{
-		throw Surface::LoadException(__LINE__, __FILE__, filepath.data(), "Failed to load image", hr);
-	}
+	if (FAILED(hr))return false;
 
 	if (image.GetImage(0, 0, 0)->format != format)
 	{
@@ -55,6 +51,12 @@ Surface::Surface(std::string_view filepath)
 		}
 		image = std::move(converted);
 	}
+
+	DirectX::ScratchImage mipped;
+	DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(),
+		image.GetMetadata(), DirectX::TEX_FILTER_DEFAULT, 0, mipped);
+	image = std::move(mipped);
+	return true;
 }
 
 UINT Surface::GetWidth()const noexcept

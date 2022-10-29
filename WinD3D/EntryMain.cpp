@@ -1,4 +1,9 @@
 #include "App.h"
+#include <winrt/base.h>
+#include "Galaxy.h"
+
+
+
 
 int WINAPI WinMain(
 	_In_ HINSTANCE hInstance,
@@ -7,9 +12,13 @@ int WINAPI WinMain(
 	_In_ int nShowCmd
 )
 {
+	winrt::init_apartment();
 	try
 	{
-		return App{}.Go();
+		App a{ 1280, 720 };
+		a.InitializeAsync().get();
+		return a.Go();
+		//return Galaxy{1280, 720}.Go();
 	}
 	catch (const Exception& e)
 	{

@@ -1,6 +1,6 @@
 #pragma once
-#include <Engine/Architecture/ConstantBuffer.h>
-#include <Engine/Architecture/Drawable.h>
+#include "ConstantBuffer.h"
+#include "Drawable.h"
 #include <DirectXMath.h>
 
 class TransformCbuf : public CloningBindable
@@ -13,7 +13,7 @@ protected:
 	};
 public:
 	TransformCbuf(Graphics& gfx, UINT slot = 0u);
-	void Bind(Graphics& gfx) noexcept override;
+	void Bind(Graphics& gfx) noxnd override;
 	void InitializeParentReference(const Drawable& parent) noexcept override;
 	std::unique_ptr<CloningBindable> Clone() const noexcept override;
 protected:

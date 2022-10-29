@@ -1,6 +1,6 @@
 #include "InputLayout.h"
 #include "GraphicsThrows.m"
-#include <Engine/Architecture/Codex.h>
+#include "Codex.h"
 
 InputLayout::InputLayout(Graphics & gfx, DV::VertexLayout layout_in, ID3DBlob * pVertexShaderBytecode)
 	:layout(std::move(layout_in))
@@ -17,13 +17,19 @@ InputLayout::InputLayout(Graphics & gfx, DV::VertexLayout layout_in, ID3DBlob * 
 	));
 }
 
-void InputLayout::Bind(Graphics& gfx) noexcept
+void InputLayout::Bind(Graphics& gfx) noxnd
 {
-	GetContext(gfx)->IASetInputLayout(pInputLayout.Get());
+	INFOMAN_NOHR(gfx);
+	GFX_THROW_INFO_ONLY(GetContext(gfx)->IASetInputLayout(pInputLayout.Get()));
 }
 std::string InputLayout::GetUID() const noexcept
 {
 	return GenerateUID(layout);
+}
+
+const DV::VertexLayout InputLayout::GetLayout() const noexcept
+{
+	return layout;
 }
 
 std::shared_ptr<InputLayout> InputLayout::Resolve(Graphics& gfx,
@@ -37,3 +43,4 @@ std::string InputLayout::GenerateUID(const DV::VertexLayout& layout, ID3DBlob* p
 	using namespace std::string_literals;
 	return typeid(InputLayout).name() + "#"s + layout.GetCode();
 }
+

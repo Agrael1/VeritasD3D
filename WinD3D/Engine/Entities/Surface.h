@@ -1,5 +1,5 @@
 #pragma once
-#include <dxtex/DirectXTex.h>
+#include <DirectXTex.h>
 #include <Framework/Exception.h> 
 
 class Surface
@@ -15,11 +15,17 @@ class Surface
 		std::string note;
 	};
 public:
-	Surface(std::string_view filepath);
+	Surface() = default;
+public:
+	bool FromFile(std::string_view filepath);
 public:
 	UINT GetWidth()const noexcept;
 	UINT GetHeight()const noexcept;
 	UINT GetStride()const noexcept;
+	auto* operator ->()
+	{
+		return &image;
+	}
 	bool UsesAlpha()const noexcept;
 	void* GetBufferPtr()const noexcept;
 private:
