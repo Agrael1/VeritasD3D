@@ -5,12 +5,12 @@ using namespace ver;
 
 ID3D11DeviceContext* GraphicsResource::GetContext(const Graphics& gfx) noexcept
 {
-	return gfx.pContext.Get();
+	return gfx.pContext.get();
 }
 
 ID3D11Device* GraphicsResource::GetDevice(const Graphics& gfx) noexcept
 {
-	return gfx.pDevice.Get();
+	return gfx.pDevice.get();
 }
 
 DXGIInfoManager* GraphicsResource::GetInfoManager(Graphics& gfx) noexcept

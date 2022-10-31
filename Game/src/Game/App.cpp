@@ -232,12 +232,6 @@ void App::ProcessInput(float dt)
 
 	if (wnd.ResizeCalled())
 	{
-		//grid.UnlinkTechniques();
-		sphere.UnlinkTechniques();
-		//light.UnlinkTechniques();
-		text.UnlinkTechniques();
-		//ss.UnlinkTechniques();
-		if (model) model->UnlinkTechniques();
 		rg.reset();
 		wnd.Gfx().OnResize(wnd.GetWidth(), wnd.GetHeight());
 		CreateRenderGraph();

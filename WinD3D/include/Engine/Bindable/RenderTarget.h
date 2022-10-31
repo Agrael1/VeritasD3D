@@ -1,6 +1,6 @@
 #pragma once
 #include <Engine/Bindable/Bindable.h>
-#include "BufferResource.h"
+#include <Engine/Bindable/BufferResource.h>
 #include <span>
 
 
@@ -23,7 +23,7 @@ public:
 	UINT GetWidth() const noexcept;
 	UINT GetHeight() const noexcept;
 private:
-	void BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDepthStencilView) noxnd;
+	void BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDepthStencilView) noxnd override;
 protected:
 	RenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture);
 	RenderTarget(Graphics& gfx, UINT width, UINT height);
@@ -47,8 +47,15 @@ private:
 class OutputOnlyRenderTarget : public RenderTarget
 {
 	friend Graphics;
+protected:
+	static std::shared_ptr<OutputOnlyRenderTarget> create(Graphics& gfx, ID3D11Texture2D* pTexture)
+	{
+		return std::shared_ptr<OutputOnlyRenderTarget>{ new OutputOnlyRenderTarget(gfx, pTexture) };
+	}
 public:
 	void Bind(Graphics& gfx) noxnd override;
+	void ReleaseBuffer();
+	void Reset(Graphics& gfx, ID3D11Texture2D* pTexture);
 private:
 	OutputOnlyRenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture);
 };
@@ -69,7 +76,7 @@ public:
 	uint32_t GetHeight() const noexcept { return height; }
 	void Bind(Graphics& gfx) noxnd override;
 private:
-	void BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDepthStencilView) noxnd;
+	void BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDepthStencilView) noxnd override;
 protected:
 	uint32_t slot = 0u;
 	uint32_t width = 0u;

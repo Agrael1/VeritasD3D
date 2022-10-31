@@ -86,7 +86,7 @@ void RenderTarget::BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDepthSte
 	GetContext(gfx)->OMSetRenderTargets(1, pTargetView.GetAddressOf(), pDepthStencilView);
 
 	// configure viewport
-	D3D11_VIEWPORT vp;
+	D3D11_VIEWPORT vp{};
 	vp.Width = (float)width;
 	vp.Height = (float)height;
 	vp.MinDepth = 0.0f;
@@ -148,6 +148,29 @@ void ShaderInputRenderTarget::Bind(Graphics& gfx) noxnd
 void OutputOnlyRenderTarget::Bind(Graphics& gfx) noxnd
 {
 	assert("Cannot bind OuputOnlyRenderTarget as shader input" && false);
+}
+void OutputOnlyRenderTarget::ReleaseBuffer()
+{
+	pTargetView.Reset();
+}
+void OutputOnlyRenderTarget::Reset(Graphics& gfx, ID3D11Texture2D* pTexture)
+{
+	INFOMAN(gfx);
+
+	// get information from texture about dimensions
+	D3D11_TEXTURE2D_DESC textureDesc;
+	pTexture->GetDesc(&textureDesc);
+	width = textureDesc.Width;
+	height = textureDesc.Height;
+
+	// create the target view on the texture
+	D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
+	rtvDesc.Format = textureDesc.Format;
+	rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	rtvDesc.Texture2D = D3D11_TEX2D_RTV{ 0 };
+	GFX_THROW_INFO(GetDevice(gfx)->CreateRenderTargetView(
+		pTexture, &rtvDesc, &pTargetView
+	));
 }
 
 OutputOnlyRenderTarget::OutputOnlyRenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture)

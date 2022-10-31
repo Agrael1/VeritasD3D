@@ -1,6 +1,7 @@
 #include <Engine/Util/DXGIInfoManager.h>
 #include <Engine/Util/WindowExceptions.h>
 #include <Engine/Graphics.h>
+#include <Engine/Util/GraphicsExceptions.h>
 #include <memory>
 
 #include <Engine/Deprecated/GraphicsThrows.h>

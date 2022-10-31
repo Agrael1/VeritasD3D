@@ -25,6 +25,10 @@ namespace ver
 	}
 }
 
+#ifdef DEBUG_MODE
+#include <Engine/Util/Timer.h>
+#endif // DEBUG_MODE
+
 
 #undef min
 #undef max

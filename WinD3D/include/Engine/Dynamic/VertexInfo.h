@@ -4,8 +4,6 @@
 #include <d3d11_4.h>
 
 
-#define DVTX_ELEMENT_AI_EXTRACTOR(member) //static SysType Extract( const aiMesh& mesh, size_t i ) noexcept {return *reinterpret_cast<const SysType*>(&mesh.member[i]);}
-
 #define LAYOUT_ELEMENT_TYPES \
 	X( Position2D ) \
 	X( Position3D ) \
@@ -54,7 +52,6 @@ namespace ver::dv
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 			static constexpr const char* semantic = "Position";
 			static constexpr const char* code = "P2";
-			DVTX_ELEMENT_AI_EXTRACTOR(mVertices)
 		};
 		template<> struct Map<ElementType::Position3D>
 		{
@@ -62,7 +59,6 @@ namespace ver::dv
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Position";
 			static constexpr const char* code = "P3";
-			DVTX_ELEMENT_AI_EXTRACTOR(mVertices)
 		};
 		template<> struct Map<ElementType::Texture2D>
 		{
@@ -70,7 +66,6 @@ namespace ver::dv
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 			static constexpr const char* semantic = "Texcoord";
 			static constexpr const char* code = "T2";
-			DVTX_ELEMENT_AI_EXTRACTOR(mTextureCoords[0])
 		};
 		template<> struct Map<ElementType::Texture3D>
 		{
@@ -78,7 +73,6 @@ namespace ver::dv
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Texcoord";
 			static constexpr const char* code = "T3";
-			DVTX_ELEMENT_AI_EXTRACTOR(mTextureCoords[0])
 		};
 		template<> struct Map<ElementType::Normal>
 		{
@@ -86,7 +80,6 @@ namespace ver::dv
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Normal";
 			static constexpr const char* code = "N";
-			DVTX_ELEMENT_AI_EXTRACTOR(mNormals)
 		};
 		template<> struct Map<ElementType::Tangent>
 		{
@@ -94,7 +87,6 @@ namespace ver::dv
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Tangent";
 			static constexpr const char* code = "Nt";
-			DVTX_ELEMENT_AI_EXTRACTOR(mTangents)
 		};
 		template<> struct Map<ElementType::Bitangent>
 		{
@@ -102,7 +94,6 @@ namespace ver::dv
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Bitangent";
 			static constexpr const char* code = "Nb";
-			DVTX_ELEMENT_AI_EXTRACTOR(mBitangents)
 		};
 		template<> struct Map<ElementType::Float3Color>
 		{
@@ -110,7 +101,6 @@ namespace ver::dv
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Color";
 			static constexpr const char* code = "C3";
-			DVTX_ELEMENT_AI_EXTRACTOR(mColors[0])
 		};
 		template<> struct Map<ElementType::Float4Color>
 		{
@@ -118,7 +108,6 @@ namespace ver::dv
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			static constexpr const char* semantic = "Color";
 			static constexpr const char* code = "C4";
-			DVTX_ELEMENT_AI_EXTRACTOR(mColors[0])
 		};
 		template<> struct Map<ElementType::BGRAColor>
 		{
@@ -126,7 +115,6 @@ namespace ver::dv
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 			static constexpr const char* semantic = "Color";
 			static constexpr const char* code = "C8";
-			DVTX_ELEMENT_AI_EXTRACTOR(mColors[0])
 		};
 		template<> struct Map<ElementType::Count>
 		{
@@ -134,7 +122,6 @@ namespace ver::dv
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_UNKNOWN;
 			static constexpr const char* semantic = "!INVALID!";
 			static constexpr const char* code = "!INV!";
-			DVTX_ELEMENT_AI_EXTRACTOR(mFaces)
 		};
 	};
 

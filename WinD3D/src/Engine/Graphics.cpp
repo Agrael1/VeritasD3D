@@ -3,10 +3,10 @@
 #include <bindings/imgui_impl_dx11.h>
 #include <bindings/imgui_impl_win32.h>
 #include <Engine/Deprecated/GraphicsThrows.h>
+#include <Engine/Util/GraphicsExceptions.h>
 #include <Engine/Bindable/DepthStencil.h>
 #include <Engine/Bindable/RenderTarget.h>
 
-namespace wrl = Microsoft::WRL;
 namespace dx = DirectX;
 
 // Graphics
@@ -52,19 +52,19 @@ Graphics::Graphics(HWND hWnd, unsigned width, unsigned height)
 		0,
 		D3D11_SDK_VERSION,
 		&sd,
-		(IDXGISwapChain**)pSwap.ReleaseAndGetAddressOf(),
-		&pDevice,
+		pSwap.put(),
+		pDevice.put(),
 		nullptr,
-		&pContext
+		pContext.put()
 	));
 
 	// gain access to texture subresource in swap chain (back buffer)
-	wrl::ComPtr<ID3D11Texture2D> pBackBuffer;
-	GFX_THROW_INFO(pSwap->GetBuffer(0, __uuidof(ID3D11Texture2D), &pBackBuffer));
-	pTarget = std::shared_ptr<RenderTarget>{ new OutputOnlyRenderTarget(*this,pBackBuffer.Get()) };
+	winrt::com_ptr<ID3D11Texture2D> pBackBuffer;
+	GFX_THROW_INFO(pSwap->GetBuffer(0, __uuidof(ID3D11Texture2D), pBackBuffer.put_void()));
+	pTarget = OutputOnlyRenderTarget::create(*this, pBackBuffer.get());
 
 	// viewport always fullscreen (for now)
-	D3D11_VIEWPORT vp;
+	D3D11_VIEWPORT vp{};
 	vp.Width = (float)width;
 	vp.Height = (float)height;
 	vp.MinDepth = 0.0f;
@@ -74,7 +74,7 @@ Graphics::Graphics(HWND hWnd, unsigned width, unsigned height)
 	pContext->RSSetViewports(1u, &vp);
 
 	// init imgui d3d impl
-	ImGui_ImplDX11_Init(pDevice.Get(), pContext.Get());
+	ImGui_ImplDX11_Init(pDevice.get(), pContext.get());
 }
 Graphics::~Graphics()
 {
@@ -102,6 +102,7 @@ void Graphics::BeginFrame(float r, float g, float b) noexcept
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 	}
+	pTarget->Clear(*this, { r,g,b,1.0 });
 }
 void Graphics::EndFrame()
 {
@@ -129,51 +130,22 @@ void Graphics::EndFrame()
 		}
 	}
 }
-DirectX::XMMATRIX Graphics::GetCamera() const noexcept
-{
-	return camera;
-}
-void Graphics::SetCamera(DirectX::XMMATRIX Camera)noexcept
-{
-	camera = Camera;
-}
-void Graphics::SetProjection(DirectX::FXMMATRIX proj) noexcept
-{
-	projection = proj;
-}
-DirectX::XMMATRIX Graphics::GetProjection() const noexcept
-{
-	return projection;
-}
 void Graphics::DrawIndexed(UINT count) noxnd
 {
 	GFX_THROW_INFO_ONLY(pContext->DrawIndexed(count, 0u, 0u));
 }
-UINT Graphics::GetWidth() const noexcept
-{
-	return width;
-}
-UINT Graphics::GetHeight() const noexcept
-{
-	return height;
-}
-std::shared_ptr<RenderTarget> Graphics::GetTarget()
-{
-	return pTarget;
-}
-
 void Graphics::OnResize(unsigned newwidth, unsigned newheight)
 {
 	HRESULT hr;
-	pTarget.reset();
+	pTarget->ReleaseBuffer();
 	GFX_THROW_INFO(pSwap->ResizeBuffers(0, newwidth, newheight, DXGI_FORMAT_UNKNOWN, 0));
 	width = newwidth;
 	height = newheight;
 
 	// gain access to texture subresource in swap chain (back buffer)
-	wrl::ComPtr<ID3D11Texture2D> pBackBuffer;
-	GFX_THROW_INFO(pSwap->GetBuffer(0, __uuidof(ID3D11Texture2D), &pBackBuffer));
-	pTarget = std::shared_ptr<RenderTarget>{ new OutputOnlyRenderTarget(*this,pBackBuffer.Get()) };
+	winrt::com_ptr<ID3D11Texture2D> pBackBuffer;
+	GFX_THROW_INFO(pSwap->GetBuffer(0, __uuidof(ID3D11Texture2D), pBackBuffer.put_void()));
+	pTarget->Reset(*this, pBackBuffer.get());
 
 	// viewport always fullscreen (for now)
 	D3D11_VIEWPORT vp{};

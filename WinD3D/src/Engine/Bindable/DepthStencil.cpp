@@ -1,6 +1,7 @@
 #include <Engine/Bindable/DepthStencil.h>
 #include <Engine/Deprecated/GraphicsThrows.h>
 #include <Engine/Bindable/RenderTarget.h>
+#include <Engine/Util/GraphicsExceptions.h>
 #include <Engine/Graphics.h>
 
 
@@ -90,7 +91,6 @@ OutputOnlyDepthStencil::OutputOnlyDepthStencil(Graphics& gfx)
 	:
 	OutputOnlyDepthStencil(gfx, gfx.GetWidth(), gfx.GetHeight())
 {}
-
 OutputOnlyDepthStencil::OutputOnlyDepthStencil(Graphics& gfx, UINT width, UINT height)
 	:
 	DepthStencil(gfx, width, height, false)
