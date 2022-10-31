@@ -82,28 +82,22 @@ Text::Text(Graphics& gfx, float radius)
 {
 	ttfcached br{ "C:\\Windows\\fonts\\arial.ttf" };
 
-	auto xmodel = br.get_text3d(u"Hello, world!\nBUILTWAY\nčesko řř ů¨¨\nMaelström", 15, 0.1);
-	auto lay = DV::VertexLayout{}
-	+ DV::VertexLayout::ElementType::Position3D;
-
-	auto vbuf = DV::VertexBuffer{ lay };
-	for (auto&& i : xmodel.vertices)
-		vbuf.EmplaceBack(i);
+	auto xmodel = br.get_text3d(u"Hello, world!\nBUILTWAY\nčesko řř ů¨¨\nMaelström", 15, 0.1f);
+	auto lay = ver::dv::VertexLayout{ ver::dv::ElementType::Position3D };
+	lay.append(ver::dv::ElementType::Normal);
 
 	namespace dx = DirectX;
 	const auto geometryTag = "$stext." + std::to_string(radius);
+	std::array<void*, 2> data{xmodel.vertices.data(), xmodel.normals.data()};
 
 	std::vector<uint16_t> a{};
 
 	for (auto i : xmodel.indices)
-		a.push_back(i);
-
-	IndexedTriangleList model{ vbuf,  a };
-
+		a.push_back(uint16_t(i));
 
 	//model.Deform(dx::XMMatrixScalingFromVector(dx::XMVectorReplicate(radius)));
-	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
-	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
+	pVertices = std::make_shared<VertexMultibuffer>(gfx, lay, data, xmodel.vertices.size());
+	pIndices = IndexBuffer::Resolve(gfx, geometryTag, a);
 	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	{
@@ -118,7 +112,7 @@ Text::Text(Graphics& gfx, float radius)
 
 
 		only.AddBindable(colorBuffer);
-		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
+		only.AddBindable(InputLayout::Resolve(gfx, lay, pvsbc));
 		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
 		solid.AddStep(std::move(only));

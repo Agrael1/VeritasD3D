@@ -136,7 +136,7 @@ namespace ttf
 	public:
 		ttf_bridge(std::filesystem::path p);
 		ttf_bridge(ttf_t* p) :xttf(p) {};
-		ttf_bridge(std::span<uint8_t> memory) noexcept { ttf_load_from_mem(memory.data(), memory.size(), &xttf, false); }
+		ttf_bridge(std::span<uint8_t> memory) noexcept { ttf_load_from_mem(memory.data(), int(memory.size()), &xttf, false); }
 		ttf_bridge(const ttf_bridge&) = delete;
 		ttf_bridge(ttf_bridge&& other) noexcept : xttf(other.xttf) { other.xttf = nullptr; }
 		~ttf_bridge() { ttf_free(xttf); }

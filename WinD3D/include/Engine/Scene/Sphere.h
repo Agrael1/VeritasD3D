@@ -6,7 +6,7 @@
 class Sphere
 {
 public:
-	static IndexedTriangleList MakeTesselated(DV::VertexLayout layout, unsigned latDiv, unsigned longDiv)
+	static IndexedTriangleList MakeTesselated(ver::dv::VertexLayout layout, unsigned latDiv, unsigned longDiv)
 	{
 		namespace dx = DirectX;
 		assert(latDiv >= 3);
@@ -17,7 +17,7 @@ public:
 		const float lattitudeAngle = dx::XM_PI / latDiv;
 		const float longitudeAngle = 2.0f * dx::XM_PI / longDiv;
 		
-		DV::VertexBuffer vb{ std::move(layout) };
+		ver::dv::VertexBuffer vb{ std::move(layout) };
 		for (size_t iLat = 1; iLat < latDiv; iLat++)
 		{
 			const auto latBase = dx::XMVector3Transform(
@@ -32,22 +32,22 @@ public:
 					dx::XMMatrixRotationZ(longitudeAngle * iLong)
 				);
 				dx::XMStoreFloat3(&calculatedPos, v);
-				vb.EmplaceBack(calculatedPos);
+				vb.emplace_back(calculatedPos);
 			}
 		}
 
 		// add the cap vertices
-		const auto iNorthPole = (unsigned short)vb.Count();
+		const auto iNorthPole = (unsigned short)vb.count();
 		{
 			dx::XMFLOAT3 northPos;
 			dx::XMStoreFloat3(&northPos, base);
-			vb.EmplaceBack(northPos);
+			vb.emplace_back(northPos);
 		}
-		const auto iSouthPole = (unsigned short)vb.Count();
+		const auto iSouthPole = (unsigned short)vb.count();
 		{
 			dx::XMFLOAT3 southPos;
 			dx::XMStoreFloat3(&southPos, dx::XMVectorNegate(base));
-			vb.EmplaceBack(southPos);
+			vb.emplace_back(southPos);
 		}
 
 		const auto calcIdx = [latDiv, longDiv](unsigned short iLat, unsigned short iLong)
@@ -98,14 +98,11 @@ public:
 		return { std::move(vb),std::move(indices) };
 	}
 
-	static IndexedTriangleList Make(std::optional<DV::VertexLayout> layout = std::nullopt)
+	static IndexedTriangleList Make(std::optional<ver::dv::VertexLayout> layout = std::nullopt)
 	{
-		using Element = DV::VertexLayout::ElementType;
+		using Element = ver::dv::ElementType;
 		if (!layout)
-		{
-			layout = DV::VertexLayout{}
-			+ Element::Position3D;
-		}
+			layout.emplace(Element::Position3D);
 		return MakeTesselated(std::move(*layout), 12, 24);
 	}
 };

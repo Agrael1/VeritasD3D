@@ -10,6 +10,7 @@
 	X( Position2D ) \
 	X( Position3D ) \
 	X( Texture2D ) \
+	X( Texture3D ) \
 	X( Normal ) \
 	X( Tangent ) \
 	X( Bitangent ) \
@@ -69,6 +70,14 @@ namespace ver::dv
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 			static constexpr const char* semantic = "Texcoord";
 			static constexpr const char* code = "T2";
+			DVTX_ELEMENT_AI_EXTRACTOR(mTextureCoords[0])
+		};
+		template<> struct Map<ElementType::Texture3D>
+		{
+			using SysType = DirectX::XMFLOAT3;
+			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
+			static constexpr const char* semantic = "Texcoord";
+			static constexpr const char* code = "T3";
 			DVTX_ELEMENT_AI_EXTRACTOR(mTextureCoords[0])
 		};
 		template<> struct Map<ElementType::Normal>

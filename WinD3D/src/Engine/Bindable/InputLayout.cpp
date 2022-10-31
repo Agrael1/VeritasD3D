@@ -4,8 +4,8 @@
 #include <Engine/Util/DXGIInfoManager.h>
 #include <Engine/Util/GraphicsExceptions.h>
 
-InputLayout::InputLayout(Graphics & gfx, DV::VertexLayout layout_in, ID3DBlob * pVertexShaderBytecode, bool multi)
-	:layout(std::move(layout_in))
+InputLayout::InputLayout(Graphics & gfx, ver::dv::LayoutSpan layout, ID3DBlob * pVertexShaderBytecode, bool multi)
+	:tag(GenerateUID(layout, nullptr, multi))
 {
 	INFOMAN(gfx);
 
@@ -26,23 +26,18 @@ void InputLayout::Bind(Graphics& gfx) noxnd
 }
 std::string InputLayout::GetUID() const noexcept
 {
-	return GenerateUID(layout);
-}
-
-const DV::VertexLayout InputLayout::GetLayout() const noexcept
-{
-	return layout;
+	return tag;
 }
 
 std::shared_ptr<InputLayout> InputLayout::Resolve(Graphics& gfx,
-	const DV::VertexLayout& layout, ID3DBlob* pVertexShaderBytecode, bool multi)
+	ver::dv::LayoutSpan layout, ID3DBlob* pVertexShaderBytecode, bool multi)
 {
-	return ver::Codex::Resolve<InputLayout>(gfx, layout, pVertexShaderBytecode, multi);;
+	return ver::Codex::Resolve<InputLayout>(gfx, layout, pVertexShaderBytecode, multi);
 }
 
-std::string InputLayout::GenerateUID(const DV::VertexLayout& layout, ID3DBlob* pVertexShaderBytecode, bool multi)
+std::string InputLayout::GenerateUID(ver::dv::LayoutSpan layout, ID3DBlob* pVertexShaderBytecode, bool multi)
 {
 	using namespace std::string_literals;
-	return typeid(InputLayout).name() + "#"s + layout.GetCode() + std::to_string(multi);
+	return typeid(InputLayout).name() + "#"s + layout.code() + std::to_string(multi);
 }
 

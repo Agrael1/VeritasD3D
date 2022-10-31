@@ -30,7 +30,7 @@ ver::SolidSphere::SolidSphere(Graphics& gfx, float radius)
 
 
 		only.AddBindable(colorBuffer);
-		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
+		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.layout(), pvsbc));
 		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
 		solid.AddStep(std::move(only));
@@ -61,7 +61,7 @@ winrt::IAsyncAction ver::SolidSphere::InitializeAsync(Graphics& gfx, float radiu
 
 
 		only.AddBindable(colorBuffer);
-		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
+		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.layout(), pvsbc));
 		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
 		solid.AddStep(std::move(only));

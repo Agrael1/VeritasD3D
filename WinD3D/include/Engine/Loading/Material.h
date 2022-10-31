@@ -2,7 +2,7 @@
 #include <Engine/Graphics.h>
 #include <vector>
 #include <filesystem>
-#include <Engine/Dynamic/VertexLayout.h>
+#include <Engine/Dynamic/VertexBuffer.h>
 #include <Engine/Rendering/Technique.h>
 
 struct aiMaterial;
@@ -18,7 +18,6 @@ public:
 	winrt::Windows::Foundation::IAsyncAction
 		MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path)noxnd;
 public:
-	DV::VertexBuffer ExtractVertices(const aiMesh& mesh) const noexcept;
 	std::vector<unsigned short> ExtractIndices(const aiMesh& mesh) const noexcept;
 	std::shared_ptr<Bindable> MakeVertexBindable(Graphics& gfx, const aiMesh& mesh, float scale = 1.0f) const noxnd;
 	std::shared_ptr<IndexBuffer> MakeIndexBindable(Graphics& gfx, const aiMesh& mesh) const noxnd;
@@ -26,7 +25,7 @@ public:
 private:
 	std::string MakeMeshTag(const aiMesh& mesh) const noexcept;
 private:
-	DV::VertexLayout vtxLayout;
+	ver::dv::VertexLayout vtxLayout;
 	std::vector<Technique> techniques;
 	std::string modelPath;
 	std::string name;

@@ -6,25 +6,24 @@ namespace RG
 {
 	namespace dx = DirectX;
 
-	FullscreenPass::FullscreenPass(const std::string name, Graphics& gfx) noxnd
+	FullscreenPass::FullscreenPass(std::string name, Graphics& gfx) noxnd
 		:
 	BindingPass(std::move(name))
 	{
 		// setup fullscreen geometry
-		DV::VertexLayout lay;
-		lay
-			+ DV::Type::Position2D;
-		DV::VertexBuffer bufFull{ lay };
-		bufFull.EmplaceBack(dx::XMFLOAT2{ -1,1 });
-		bufFull.EmplaceBack(dx::XMFLOAT2{ 1,1 });
-		bufFull.EmplaceBack(dx::XMFLOAT2{ -1,-1 });
-		bufFull.EmplaceBack(dx::XMFLOAT2{ 1,-1 });
+		ver::dv::VertexLayout lay{ ver::dv::ElementType::Position2D };
+		ver::dv::VertexBuffer bufFull{ std::move(lay) };
+		bufFull.emplace_back(dx::XMFLOAT2{ -1,1 });
+		bufFull.emplace_back(dx::XMFLOAT2{ 1,1 });
+		bufFull.emplace_back(dx::XMFLOAT2{ -1,-1 });
+		bufFull.emplace_back(dx::XMFLOAT2{ 1,-1 });
+
 		AddBind(VertexBuffer::Resolve(gfx, "$Full", std::move(bufFull)));
 		std::vector<unsigned short> indices = { 0,1,2,1,3,2 };
 		AddBind(IndexBuffer::Resolve(gfx, "$Full", std::move(indices)));
 		// setup other common fullscreen bindables
 		auto vs = VertexShader::Resolve(gfx, "Fullscreen_VS.cso");
-		AddBind(InputLayout::Resolve(gfx, lay, vs->GetBytecode()));
+		AddBind(InputLayout::Resolve(gfx, bufFull.layout(), vs->GetBytecode()));
 		AddBind(std::move(vs));
 		AddBind(Topology::Resolve(gfx));
 		AddBind(RasterizerState::Resolve(gfx, false));

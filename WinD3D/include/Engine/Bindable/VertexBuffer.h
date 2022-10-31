@@ -1,18 +1,17 @@
 #pragma once
 #include <Engine/Bindable/Bindable.h>
-#include <Engine/Dynamic/VertexLayout.h>
+#include <Engine/Dynamic/VertexBuffer.h>
 #include <memory>
 
 class VertexBuffer : public Bindable
 {
 public:
-	VertexBuffer(Graphics& gfx, const std::string& tag, const DV::VertexBuffer& vbuf);
-	VertexBuffer(Graphics& gfx, const DV::VertexBuffer& vbuf);
+	VertexBuffer(Graphics& gfx, const std::string& tag, ver::dv::VertexSpan vbuf);
+	VertexBuffer(Graphics& gfx, ver::dv::VertexSpan vbuf);
 public:
-	const DV::VertexLayout& GetLayout() const noexcept;
 	void Bind(Graphics& gfx) noxnd override;
 	static std::shared_ptr<VertexBuffer> Resolve(Graphics& gfx, const std::string& tag,
-		const DV::VertexBuffer& vbuf);
+		ver::dv::VertexSpan vbuf);
 	template<typename...Ignore>
 	static std::string GenerateUID(const std::string& tag, Ignore&&...ignore)
 	{
@@ -23,18 +22,17 @@ private:
 	static std::string GenerateUID_(const std::string& tag);
 protected:
 	std::string tag;
-	UINT stride;
+	uint32_t stride;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
-	DV::VertexLayout layout;
 };
 
 
 class VertexMultibuffer : public Bindable
 {
 public:
-	VertexMultibuffer(Graphics& gfx, DV::VertexLayout vbuf, std::span<void*> data, size_t num_verts);
+	VertexMultibuffer(Graphics& gfx, ver::dv::LayoutSpan vbuf, std::span<void*> data, size_t num_verts);
 public:
-	//dv::LayoutSpan GetLayout() const noexcept { return DV::LayoutSpan(layout); }
+	//dv::LayoutSpan GetLayout() const noexcept { return ver::dv::LayoutSpan(layout); }
 	void Bind(Graphics& gfx) noxnd override;
 protected:
 	std::vector<uint32_t> strides;

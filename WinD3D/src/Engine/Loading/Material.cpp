@@ -3,10 +3,13 @@
 #include <Engine/Bindable/ConstantBuffersEx.h>
 #include <Engine/Dynamic/DynamicConstant.h>
 #include <assimp/types.h>
+#include <assimp/material.h>
+#include <assimp/mesh.h>
 
 Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noxnd
 	:modelPath(path.string())
 {
+	using enum ver::dv::ElementType;
 	const auto rootPath = path.parent_path().string() + "\\";
 	{
 		aiString tempName;
@@ -21,9 +24,8 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 		aiString texFileName;
 
 		// common (pre)
-		vtxLayout
-			+ DV::Type::Position3D
-			+ DV::Type::Normal;
+		vtxLayout.append(Position3D);
+		vtxLayout.append(Normal);
 		DC::RawLayout pscLayout;
 		bool hasTexture = false;
 		bool hasGlossAlpha = false;
@@ -35,8 +37,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 			{
 				hasTexture = true;
 				shaderCode += "dif.";
-				vtxLayout
-					+ DV::Type::Texture3D;
+				vtxLayout.append(Texture3D);
 				auto tex = ver::Texture::Resolve(gfx, rootPath + texFileName.C_Str());
 				//if (tex->UsesAlpha())
 				//{
@@ -57,8 +58,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 			{
 				hasTexture = true;
 				shaderCode += "spc.";
-				vtxLayout
-					+ DV::Type::Texture3D;
+				vtxLayout.append(Texture3D);
 				auto tex = ver::Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 1);
 				hasGlossAlpha = tex->UsesAlpha();
 				step.AddBindable(std::move(tex));
@@ -77,10 +77,9 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 			{
 				hasTexture = true;
 				shaderCode += "nrm.";
-				vtxLayout
-					+ DV::Type::Texture3D
-					+ DV::Type::Tangent
-					+ DV::Type::Bitangent;
+				vtxLayout.append(Texture3D);
+				vtxLayout.append(Tangent);
+				vtxLayout.append(Bitangent);
 				step.AddBindable(ver::Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 2));
 				pscLayout.Add({
 					{DC::Type::Bool,"useNormalMap"},
@@ -171,6 +170,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 winrt::Windows::Foundation::IAsyncAction
 Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noxnd
 {
+	using enum ver::dv::ElementType;
 	modelPath = path.string();
 	const auto rootPath = path.parent_path().string() + "\\";
 	{
@@ -189,9 +189,8 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 		aiString texFileName;
 
 		// common (pre)
-		vtxLayout
-			+ DV::Type::Normal
-			+ DV::Type::Position3D;
+		vtxLayout.append(Position3D);
+		vtxLayout.append(Normal);
 		DC::RawLayout pscLayout;
 		bool hasTexture = false;
 		bool hasGlossAlpha = false;
@@ -205,8 +204,7 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 			{
 				hasTexture = true;
 				shaderCode += "dif.";
-				vtxLayout
-					+ DV::Type::Texture3D;
+				vtxLayout.append(Texture3D);
 				texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str()));
 			}
 			else
@@ -220,8 +218,7 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 			{
 				hasTexture = true;
 				shaderCode += "spc.";
-				vtxLayout
-					+ DV::Type::Texture3D;
+				vtxLayout.append(Texture3D);
 				texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 1));
 				pscLayout.Add({
 					{DC::Type::Bool, "useGlossAlpha"},
@@ -238,10 +235,9 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 			{
 				hasTexture = true;
 				shaderCode += "nrm.";
-				vtxLayout
-					+ DV::Type::Texture3D
-					+ DV::Type::Tangent
-					+ DV::Type::Bitangent;
+				vtxLayout.append(Texture3D);
+				vtxLayout.append(Tangent);
+				vtxLayout.append(Bitangent);
 				texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 2));
 				pscLayout.Add({
 					{DC::Type::Bool,"useNormalMap"},
@@ -355,10 +351,6 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 	//	techniques.push_back(std::move(outline));
 	//}
 }
-DV::VertexBuffer Material::ExtractVertices(const aiMesh& mesh) const noexcept
-{
-	return { vtxLayout,mesh };
-}
 std::vector<unsigned short> Material::ExtractIndices(const aiMesh& mesh) const noexcept
 {
 	std::vector<unsigned short> indices;
@@ -378,15 +370,15 @@ std::vector<unsigned short> Material::ExtractIndices(const aiMesh& mesh) const n
 
 std::shared_ptr<Bindable> Material::MakeVertexBindable(Graphics& gfx, const aiMesh& mesh, float scale) const noxnd
 {
-	void* a[size_t(DV::Type::Count)]{};
+	void* a[size_t(ver::dv::ElementType::Count)]{};
 	std::pmr::monotonic_buffer_resource b{ a, sizeof(a) };
 	std::pmr::vector<void*> vb{decltype(vb)::allocator_type{&b}};
 	vb.reserve(vtxLayout.count());
 	vb.push_back(mesh.mVertices);
 	vb.push_back(mesh.mNormals);
-	if (vtxLayout.contains(DV::Type::Texture3D))
+	if (vtxLayout.contains(ver::dv::ElementType::Texture3D))
 		vb.push_back(mesh.mTextureCoords[0]);
-	if (vtxLayout.contains(DV::Type::Tangent))
+	if (vtxLayout.contains(ver::dv::ElementType::Tangent))
 	{
 		vb.push_back(mesh.mTangents);
 		vb.push_back(mesh.mBitangents);
