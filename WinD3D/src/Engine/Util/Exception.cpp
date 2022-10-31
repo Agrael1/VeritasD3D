@@ -1,29 +1,24 @@
-#include <Engine/Util/Exception.h>
+#include <Engine/Util/exception.h>
 #include <format>
 
-Exception::Exception(unsigned int line, const char * file) noexcept
-	:line(line),file(file)
+using namespace ver;
+
+exception::exception(std::source_location sl) noexcept
+	:sl(std::move(sl))
 {}
 
-const char * Exception::GetType() const noexcept
+std::string exception::origin() const noexcept
 {
-	return "Veritas Exception";
+	return std::format("[File]: {}\n[Line]: {}\n[Function]: {}", file(), line(), function());
 }
-int Exception::GetLine() const noexcept
+const char* exception::what() const noexcept
 {
-	return line;
-}
-std::string_view Exception::GetFile() const noexcept
-{
-	return file;
-}
-std::string Exception::GetOriginString() const noexcept
-{
-	return std::format("[File]: {}\n[Line]: {}", file, line);
-}
-const char* Exception::what() const noexcept
-{
-	if (whatBuffer.empty()) 
-		whatBuffer = GetType() + '\n' + GetOriginString();
+	if (whatBuffer.empty())
+		whatBuffer = std::format("{}\n{}", type(), origin());
 	return whatBuffer.c_str();
+}
+
+void ver::exception::WriteToOutput()const noexcept
+{
+	OutputDebugString(what());
 }

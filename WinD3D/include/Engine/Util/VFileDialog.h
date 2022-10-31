@@ -8,14 +8,6 @@
 class VFileDialog
 {
 public:
-	class HRException : public HrException
-	{
-	public:
-		using HrException::HrException;
-		const char* GetType()const noexcept override;
-	};
-
-public:
 	~VFileDialog();
 public:
 	void SetFileTypes(std::span<const COMDLG_FILTERSPEC> filters);
@@ -39,4 +31,4 @@ public:
 	void SetDefaultItem(const std::wstring& name);
 };
 
-#define VFD_THROW( hrcall ) if(FAILED(hr = hrcall)) {throw VFileDialog::HRException( __LINE__,__FILE__,(hr) );}
+#define VFD_THROW( hrcall ) if(FAILED(hr = hrcall)) {throw ver::make_error<ver::hr_error>( {(hr)} );}

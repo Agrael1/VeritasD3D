@@ -11,9 +11,9 @@ int main()
 		a.InitializeAsync().get();
 		return a.Go();
 	}
-	catch (const Exception& e)
+	catch (const ver::exception& e)
 	{
-		MessageBox(nullptr, e.what(), e.GetType(), MB_OK | MB_ICONEXCLAMATION);
+		MessageBox(nullptr, e.what(), e.type().data(), MB_OK | MB_ICONEXCLAMATION);
 	}
 	catch(const std::exception& e)
 	{

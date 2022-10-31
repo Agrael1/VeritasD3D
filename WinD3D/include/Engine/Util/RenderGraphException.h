@@ -1,19 +1,25 @@
 #pragma once
 #include "Exception.h"
 
-#define RGC_EXCEPTION( message ) RenderGraphCompileException( (message),__LINE__,__FILE__ )
+#define RGC_EXCEPTION( message ) ver::make_error<ver::rg::RenderGraphCompileException>({message});
 
-namespace RG
+namespace ver::rg
 {
-	class RenderGraphCompileException : public Exception
+	class RenderGraphCompileException : public ver::exception
 	{
 	public:
-		RenderGraphCompileException(std::string message, int line, const char* file) noexcept;
+		RenderGraphCompileException(std::string message, std::source_location sl = std::source_location::current()) noexcept;
 	public:
 		const char* what() const noexcept override;
-		const char* GetType() const noexcept override;
-		const std::string& GetMessage() const noexcept;
+		std::string_view type() const noexcept override
+		{
+			return "Render Graph Compile Exception";
+		}
+		std::string_view message() const noexcept
+		{
+			return _message;
+		}
 	private:
-		std::string message;
+		std::string _message;
 	};
 }

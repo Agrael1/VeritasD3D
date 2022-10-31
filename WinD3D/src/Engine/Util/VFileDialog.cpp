@@ -1,11 +1,6 @@
 #include <ShlObj.h>
 #include <Engine/Util/VFileDialog.h>
-
-
-const char* VFileDialog::HRException::GetType()const noexcept
-{
-	return "Veritas File Exception";
-}
+#include <Engine/Util/GraphicsExceptions.h>
 
 VFileDialog::~VFileDialog()
 {

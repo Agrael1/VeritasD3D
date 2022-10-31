@@ -30,7 +30,7 @@ Model::Model(Graphics& gfx, std::string_view pathString, const float scale)
 	);
 
 	if (pScene == nullptr || !pScene->HasMeshes())
-		throw ModelException(__LINE__, __FILE__, imp.GetErrorString());
+		throw ver::make_error<ver::ModelException>({ imp.GetErrorString() });
 
 	//parse materials
 	std::vector<Material> materials;

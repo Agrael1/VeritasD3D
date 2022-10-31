@@ -1,44 +1,55 @@
 #pragma once
 #include <Engine/Util/Exception.h>
 #include <vector>
-#include <string>
 
-namespace GFX
+namespace ver
 {
-	class GException :public Exception
-	{
-		using Exception::Exception;
-	};
-	class HrException :public GException
+	class hr_error :public exception
 	{
 	public:
-		HrException(int line, const char* file, HRESULT hr, std::vector<std::string> messages = {})noexcept;
+		hr_error(winrt::hresult hr, std::vector<std::string> messages = {}, std::source_location sl = std::source_location::current())noexcept;
 	public:
 		const char* what()const noexcept override;
-		const char* GetType()const noexcept override;
-		HRESULT GetErrorCode()const noexcept;
-		std::string GetErrorString()const noexcept;
-		std::string GetErrorDescription()const noexcept;
-		std::string GetErrorInfo()const noexcept;
+		std::string_view type()const noexcept override
+		{
+			return "Veritas Graphics Exception";
+		}
+		winrt::hresult GetErrorCode()const noexcept
+		{
+			return hr;
+		}
+		std::string_view GetErrorInfo()const noexcept
+		{
+			return info;
+		}
+		std::string_view GetErrorString()const noexcept;
+		std::string_view GetErrorDescription()const noexcept;
 	private:
-		HRESULT hr;
+		winrt::hresult hr;
 		std::string info;
 	};
-	class DeviceRemovedException : public HrException
+
+	class DeviceRemovedException : public hr_error
 	{
-		using HrException::HrException;
+		using hr_error::hr_error;
 	public:
-		const char* GetType()const noexcept override;
-	private:
-		std::string reason;
+		std::string_view type()const noexcept override
+		{
+			return "Graphics Device Exception [Device Removed](DXGI_ERROR_DEVICE_REMOVED)";
+		}
 	};
-	class ContextException : public GException
+
+
+	class ContextException : public exception
 	{
 	public:
-		ContextException(int line, const char* file, std::vector<std::string> messages = {})noexcept;
+		ContextException(std::vector<std::string> messages = {}, std::source_location sl = std::source_location::current())noexcept;
 	public:
 		const char* what()const noexcept override;
-		const char* GetType()const noexcept override;
+		std::string_view type()const noexcept override
+		{
+			return "Veritas Graphics Info Exception";
+		}
 		std::string GetErrorInfo()const noexcept;
 	private:
 		std::string info;

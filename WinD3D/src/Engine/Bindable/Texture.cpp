@@ -84,8 +84,7 @@ Texture::ResolveAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot)
 
 std::string Texture::GenerateUID(const std::filesystem::path& path, uint32_t slot)
 {
-	using namespace std::string_literals;
-	return typeid(Texture).name() + "#"s + path.string() + "#" + std::to_string(slot);
+	return std::format("{}#{}#{}",typeid(Texture).name(),path.string(),std::to_string(slot));
 }
 std::string Texture::GetUID() const noexcept
 {

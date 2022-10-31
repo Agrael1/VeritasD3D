@@ -48,7 +48,7 @@ constexpr COMDLG_FILTERSPEC filterSpecs[] =
 namespace dx = DirectX;
 
 App::App(uint32_t width, uint32_t height)
-	: wnd(width, height, "VTest"), gfx(wnd.GetHandle(), width, height)/*, light(gfx), grid(gfx)*/, text(gfx, 1.0)/*, ss(gfx, 1.0)*/
+	: wnd(width, height, "VTest"), gfx(wnd.GetHandle(), width, height), text(gfx, 1.0)
 	, model(new Model(gfx, R"(D:\Repos\WinD3D\Game\models\Wooden Crate\Wooden Crate.obj)"))
 {
 	opener.SetFileTypes(filterSpecs);
@@ -62,9 +62,7 @@ winrt::IAsyncAction App::InitializeAsync()
 {
 	co_await winrt::when_all(lights.InitializeAsync(gfx),
 		sphere.InitializeAsync(lights, gfx));
-	//co_await ss.InitializeAsync(gfx, 1.0);
 	CreateRenderGraph();
-	//ss.SetPos({ 10.0f,9.0f,2.5f });
 	co_return;
 }
 
@@ -91,16 +89,9 @@ void App::DoFrame(float dt)
 	gfx.SetCamera(cam.GetViewMatrix());
 	sphere.Bind(gfx);
 	lights.Bind(gfx);
-	//light.Bind(gfx, cam.GetViewMatrix());
 
 	if (model)model->Submit();
-	//light.Submit();
-	//text.Submit();
-	//ss.Submit();
-
-
 	sphere.Submit();
-	//if (wnd.DrawGrid())grid.Submit();
 	rg->Execute(gfx);
 
 
@@ -120,7 +111,6 @@ void App::DoFrame(float dt)
 	ProcessInput(dt);
 	cam.SpawnControlWindow();
 	sphere.SpawnControlWindow();
-	//light.SpawnControlWindow();
 
 	// Present
 	gfx.EndFrame();
@@ -250,11 +240,8 @@ void App::CreateRenderGraph()
 {
 	rg.emplace(gfx);
 
-	//grid.LinkTechniques(*rg);
 	sphere.LinkTechniques(*rg);
-	//light.LinkTechniques(*rg);
 	text.LinkTechniques(*rg);
-	//ss.LinkTechniques(*rg);
 	if (model) model->LinkTechniques(*rg);
 }
 
@@ -266,8 +253,6 @@ winrt::fire_and_forget App::ReloadModelAsync()
 	if (!wfilename.empty())
 	{
 		swap = std::make_unique<Model>(gfx, ToNarrow(wfilename));
-		//co_await Model::MakeModelAsync(swap, gfx, ToNarrow(wfilename));
-
 		if (!swap) MessageBox(nullptr, "Model file was corrupted or empty",
 			"Model Exception", MB_OK | MB_ICONEXCLAMATION);
 	}
