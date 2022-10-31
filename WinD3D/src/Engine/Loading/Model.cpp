@@ -17,23 +17,6 @@ DirectX::XMMATRIX ScaleTranslation(DirectX::XMMATRIX matrix, float scale)
 	return matrix;
 }
 
-winrt::Windows::Foundation::IAsyncAction
-MakeMaterialsAsync(Graphics& gfx, std::vector<Material>& materials, const aiScene* pScene, std::string_view pathString)
-{
-	std::vector<winrt::Windows::Foundation::IAsyncAction> tasks;
-	tasks.reserve(pScene->mNumMaterials);
-
-	for (size_t i = 0; auto & mat: materials)
-	{
-		tasks.emplace_back(mat.MakeMaterialAsync(gfx, *pScene->mMaterials[i], pathString));
-		i++;
-	}
-	for (auto& t : tasks)
-	{
-		co_await t;
-	}
-}
-
 
 Model::Model(Graphics& gfx, std::string_view pathString, const float scale)
 {
@@ -95,8 +78,16 @@ Model::MakeModelAsync(std::unique_ptr<Model>& to, Graphics& gfx, std::string_vie
 	out->meshPtrs.reserve(pScene->mNumMeshes);
 
 	std::vector<Material> materials;
+	std::vector<winrt::Windows::Foundation::IAsyncAction> tasks;
 	materials.resize(pScene->mNumMaterials);
-	co_await MakeMaterialsAsync(gfx, materials, pScene, pathString);
+	tasks.reserve(pScene->mNumMaterials);
+
+	for (size_t i = 0; auto & mat: materials)
+	{
+		tasks.emplace_back(mat.MakeMaterialAsync(gfx, *pScene->mMaterials[i], pathString));
+		i++;
+	}
+	co_await ver::when_all(tasks);
 
 	//parse materials
 	for (size_t i = 0; i < pScene->mNumMeshes; i++)

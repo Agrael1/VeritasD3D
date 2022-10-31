@@ -36,7 +36,7 @@ public:
 	void UnlinkTechniques();
 protected:
 	std::shared_ptr<IndexBuffer> pIndices;
-	std::shared_ptr<VertexBuffer> pVertices;
+	std::shared_ptr<Bindable> pVertices;
 	std::shared_ptr<Topology> pTopology;
 	std::vector<Technique> techniques;
 };

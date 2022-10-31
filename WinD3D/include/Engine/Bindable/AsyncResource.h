@@ -25,4 +25,11 @@ namespace ver
 		co_await x->InitializeAsync(std::forward<Args>(args)...);
 		co_return x;
 	}
+	template<class C, class ... Args>
+	concurrency::task<std::unique_ptr<C>> make_unique_async(Args&&... args)
+	{
+		auto x = std::make_unique<C>();
+		co_await x->InitializeAsync(std::forward<Args>(args)...);
+		co_return x;
+	}
 }

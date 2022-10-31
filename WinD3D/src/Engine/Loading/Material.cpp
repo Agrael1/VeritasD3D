@@ -36,7 +36,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 				hasTexture = true;
 				shaderCode += "dif.";
 				vtxLayout
-					+ DV::Type::Texture2D;
+					+ DV::Type::Texture3D;
 				auto tex = ver::Texture::Resolve(gfx, rootPath + texFileName.C_Str());
 				//if (tex->UsesAlpha())
 				//{
@@ -58,7 +58,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 				hasTexture = true;
 				shaderCode += "spc.";
 				vtxLayout
-					+ DV::Type::Texture2D;
+					+ DV::Type::Texture3D;
 				auto tex = ver::Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 1);
 				hasGlossAlpha = tex->UsesAlpha();
 				step.AddBindable(std::move(tex));
@@ -78,7 +78,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 				hasTexture = true;
 				shaderCode += "nrm.";
 				vtxLayout
-					+ DV::Type::Texture2D
+					+ DV::Type::Texture3D
 					+ DV::Type::Tangent
 					+ DV::Type::Bitangent;
 				step.AddBindable(ver::Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 2));
@@ -94,7 +94,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 			auto pvsbc = pvs->GetBytecode();
 			step.AddBindable(std::move(pvs));
 			step.AddBindable(PixelShader::Resolve(gfx, shaderCode + "ps.cso"));
-			step.AddBindable(InputLayout::Resolve(gfx, vtxLayout, pvsbc));
+			step.AddBindable(InputLayout::Resolve(gfx, vtxLayout, pvsbc, true));
 			if (hasTexture)
 			{
 				step.AddBindable(Sampler::Resolve(gfx));
@@ -206,7 +206,7 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 				hasTexture = true;
 				shaderCode += "dif.";
 				vtxLayout
-					+ DV::Type::Texture2D;
+					+ DV::Type::Texture3D;
 				texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str()));
 			}
 			else
@@ -221,7 +221,7 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 				hasTexture = true;
 				shaderCode += "spc.";
 				vtxLayout
-					+ DV::Type::Texture2D;
+					+ DV::Type::Texture3D;
 				texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 1));
 				pscLayout.Add({
 					{DC::Type::Bool, "useGlossAlpha"},
@@ -239,7 +239,7 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 				hasTexture = true;
 				shaderCode += "nrm.";
 				vtxLayout
-					+ DV::Type::Texture2D
+					+ DV::Type::Texture3D
 					+ DV::Type::Tangent
 					+ DV::Type::Bitangent;
 				texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 2));
@@ -282,7 +282,7 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 			auto pvsbc = pvs->GetBytecode();
 			step.AddBindable(std::move(pvs));
 			step.AddBindable(PixelShader::Resolve(gfx, shaderCode + "ps.cso"));
-			step.AddBindable(InputLayout::Resolve(gfx, vtxLayout, pvsbc));
+			step.AddBindable(InputLayout::Resolve(gfx, vtxLayout, pvsbc, true));
 			if (hasTexture)
 			{
 				step.AddBindable(Sampler::Resolve(gfx));
@@ -373,20 +373,25 @@ std::vector<unsigned short> Material::ExtractIndices(const aiMesh& mesh) const n
 	}
 	return indices;
 }
-std::shared_ptr<VertexBuffer> Material::MakeVertexBindable(Graphics& gfx, const aiMesh& mesh, float scale) const noxnd
+
+#include <memory_resource>
+
+std::shared_ptr<Bindable> Material::MakeVertexBindable(Graphics& gfx, const aiMesh& mesh, float scale) const noxnd
 {
-	auto vtc = ExtractVertices(mesh);
-	if (scale != 1.0f)
+	void* a[size_t(DV::Type::Count)]{};
+	std::pmr::monotonic_buffer_resource b{ a, sizeof(a) };
+	std::pmr::vector<void*> vb{decltype(vb)::allocator_type{&b}};
+	vb.reserve(vtxLayout.count());
+	vb.push_back(mesh.mVertices);
+	vb.push_back(mesh.mNormals);
+	if (vtxLayout.contains(DV::Type::Texture3D))
+		vb.push_back(mesh.mTextureCoords[0]);
+	if (vtxLayout.contains(DV::Type::Tangent))
 	{
-		for (auto i = 0u; i < vtc.Count(); i++)
-		{
-			DirectX::XMFLOAT3& pos = vtc[i].Attr<DV::VertexLayout::ElementType::Position3D>();
-			pos.x *= scale;
-			pos.y *= scale;
-			pos.z *= scale;
-		}
+		vb.push_back(mesh.mTangents);
+		vb.push_back(mesh.mBitangents);
 	}
-	return VertexBuffer::Resolve(gfx, MakeMeshTag(mesh), std::move(vtc));
+	return std::make_shared<VertexMultibuffer>(gfx, vtxLayout, vb, mesh.mNumVertices);
 }
 std::shared_ptr<IndexBuffer> Material::MakeIndexBindable(Graphics& gfx, const aiMesh& mesh) const noxnd
 {

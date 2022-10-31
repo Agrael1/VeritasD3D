@@ -55,8 +55,34 @@ std::string VertexBuffer::GetUID() const noexcept
 	return GenerateUID(tag);
 }
 
-void NullVertexBuffer::Bind(Graphics& gfx) noxnd
+VertexMultibuffer::VertexMultibuffer(Graphics& gfx, DV::VertexLayout lay, std::span<void*> data, size_t num_verts)
 {
+	size_t c = lay.count();
+	buffers.resize(c);
+	strides.resize(c);
+
+	INFOMAN(gfx);
+
+	D3D11_BUFFER_DESC bd = {};
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.CPUAccessFlags = 0u;
+	bd.MiscFlags = 0u;
+
+	D3D11_SUBRESOURCE_DATA sd = {};
+
+	auto s = lay.span();
+	for (size_t i = 0; i < c; i++)
+	{
+		bd.ByteWidth = uint32_t(s[i].Size() * num_verts);
+		bd.StructureByteStride = strides[i] = s[i].Size();
+		sd.pSysMem = data[i];
+		GFX_THROW_INFO(GetDevice(gfx)->CreateBuffer(&bd, &sd, buffers[i].put()));
+	}
+}
+void VertexMultibuffer::Bind(Graphics& gfx) noxnd
+{
+	const uint32_t offsets[size_t(DV::Type::Count)]{};
 	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->IASetVertexBuffers(0u, 0u, nullptr, nullptr, nullptr));
+	GFX_THROW_INFO_ONLY(GetContext(gfx)->IASetVertexBuffers(0u, buffers.size(), reinterpret_cast<ID3D11Buffer* const*>(buffers.data()), strides.data(), offsets));
 }

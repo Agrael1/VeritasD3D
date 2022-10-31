@@ -5,6 +5,7 @@
 #include <format>
 #include <assimp/scene.h>
 #include <d3d11_4.h>
+#include <ranges>
 
 
 #define DVTX_ELEMENT_AI_EXTRACTOR(member) static SysType Extract( const aiMesh& mesh, size_t i ) noexcept {return *reinterpret_cast<const SysType*>(&mesh.member[i]);}
@@ -13,6 +14,7 @@
 	X( Position2D ) \
 	X( Position3D ) \
 	X( Texture2D ) \
+	X( Texture3D ) \
 	X( Normal ) \
 	X( Tangent ) \
 	X( Bitangent ) \
@@ -67,6 +69,14 @@ namespace DV
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 			static constexpr const char* semantic = "Texcoord";
 			static constexpr const char* code = "T2";
+			DVTX_ELEMENT_AI_EXTRACTOR(mTextureCoords[0])
+		};
+		template<> struct Map<ElementType::Texture3D>
+		{
+			using SysType = DirectX::XMFLOAT3;
+			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
+			static constexpr const char* semantic = "Texcoord";
+			static constexpr const char* code = "T3";
 			DVTX_ELEMENT_AI_EXTRACTOR(mTextureCoords[0])
 		};
 		template<> struct Map<ElementType::Normal>
@@ -189,11 +199,19 @@ namespace DV
 
 
 		bool Has(ElementType type) const noexcept;		
+		constexpr bool contains(ElementType type) const noexcept
+		{
+			return std::ranges::find_if(elements, [type](const Element& e) {return e.GetType() == type; }) != elements.end();
+		}
 		VertexLayout& operator +(ElementType Type)noxnd
 		{
-			if (!Has(Type))
-				elements.emplace_back(Type, Size());
+			append(Type);
 			return *this;
+		}
+		constexpr void append(ElementType Type)noxnd
+		{
+			if (!contains(Type))
+				elements.emplace_back(Type, Size());
 		}
 
 		friend bool operator==(const VertexLayout& lhs, const VertexLayout& rhs)
@@ -209,6 +227,10 @@ namespace DV
 		{
 			return elements.size();
 		}
+		size_t count() const noexcept
+		{
+			return elements.size();
+		}
 		std::vector<D3D11_INPUT_ELEMENT_DESC> GetD3DLayout() const noxnd
 		{
 			std::vector<D3D11_INPUT_ELEMENT_DESC> desc;
@@ -216,6 +238,20 @@ namespace DV
 			for (const auto& e : elements)
 			{
 				desc.push_back(e.GetDesc());
+			}
+			return desc;
+		}
+		std::vector<D3D11_INPUT_ELEMENT_DESC> GetD3DMultilayout() const noexcept
+		{
+			std::vector<D3D11_INPUT_ELEMENT_DESC> desc;
+			desc.reserve(GetElementCount());
+			uint32_t slot = 0;
+			for (const auto& e : elements)
+			{
+				auto d = e.GetDesc();
+				d.InputSlot = slot++;
+				d.AlignedByteOffset = 0;
+				desc.push_back(d);
 			}
 			return desc;
 		}
@@ -227,6 +263,10 @@ namespace DV
 				code += e.GetCode();
 			}
 			return code;
+		}
+		std::span<const Element> span()const noexcept
+		{
+			return elements;
 		}
 	private:
 		std::vector<Element> elements;

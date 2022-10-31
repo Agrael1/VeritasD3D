@@ -20,7 +20,7 @@ public:
 public:
 	DV::VertexBuffer ExtractVertices(const aiMesh& mesh) const noexcept;
 	std::vector<unsigned short> ExtractIndices(const aiMesh& mesh) const noexcept;
-	std::shared_ptr<VertexBuffer> MakeVertexBindable(Graphics& gfx, const aiMesh& mesh, float scale = 1.0f) const noxnd;
+	std::shared_ptr<Bindable> MakeVertexBindable(Graphics& gfx, const aiMesh& mesh, float scale = 1.0f) const noxnd;
 	std::shared_ptr<IndexBuffer> MakeIndexBindable(Graphics& gfx, const aiMesh& mesh) const noxnd;
 	std::vector<Technique> GetTechniques() const noexcept;
 private:

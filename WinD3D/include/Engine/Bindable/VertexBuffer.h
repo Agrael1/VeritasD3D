@@ -28,10 +28,15 @@ protected:
 	DV::VertexLayout layout;
 };
 
-class NullVertexBuffer : public Bindable
+
+class VertexMultibuffer : public Bindable
 {
 public:
-	NullVertexBuffer() = default;
+	VertexMultibuffer(Graphics& gfx, DV::VertexLayout vbuf, std::span<void*> data, size_t num_verts);
 public:
+	//dv::LayoutSpan GetLayout() const noexcept { return DV::LayoutSpan(layout); }
 	void Bind(Graphics& gfx) noxnd override;
+protected:
+	std::vector<uint32_t> strides;
+	std::vector< winrt::com_ptr<ID3D11Buffer>> buffers;
 };
