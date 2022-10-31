@@ -48,11 +48,11 @@ constexpr COMDLG_FILTERSPEC filterSpecs[] =
 namespace dx = DirectX;
 
 App::App(uint32_t width, uint32_t height)
-	: wnd(width, height, "VTest")/*, light(wnd.Gfx()), grid(wnd.Gfx())*/, text(wnd.Gfx(), 1.0)/*, ss(wnd.Gfx(), 1.0)*/
-	, model(new Model(wnd.Gfx(), R"(D:\Repos\WinD3D\Game\models\Wooden Crate\Wooden Crate.obj)"))
+	: wnd(width, height, "VTest"), gfx(wnd.GetHandle(), width, height)/*, light(gfx), grid(gfx)*/, text(gfx, 1.0)/*, ss(gfx, 1.0)*/
+	, model(new Model(gfx, R"(D:\Repos\WinD3D\Game\models\Wooden Crate\Wooden Crate.obj)"))
 {
 	opener.SetFileTypes(filterSpecs);
-	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 100.0f));
+	gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 100.0f));
 }
 App::~App()
 {
@@ -60,9 +60,9 @@ App::~App()
 
 winrt::IAsyncAction App::InitializeAsync()
 {
-	co_await winrt::when_all(lights.InitializeAsync(wnd.Gfx()),
-		sphere.InitializeAsync(lights, wnd.Gfx()));
-	//co_await ss.InitializeAsync(wnd.Gfx(), 1.0);
+	co_await winrt::when_all(lights.InitializeAsync(gfx),
+		sphere.InitializeAsync(lights, gfx));
+	//co_await ss.InitializeAsync(gfx, 1.0);
 	CreateRenderGraph();
 	//ss.SetPos({ 10.0f,9.0f,2.5f });
 	co_return;
@@ -87,11 +87,11 @@ void App::DoFrame(float dt)
 	if (!wnd.IsActive())return;
 
 	const auto s = dt * speed;
-	wnd.Gfx().BeginFrame(0.2f, 0.2f, 0.2f);
-	wnd.Gfx().SetCamera(cam.GetViewMatrix());
-	sphere.Bind(wnd.Gfx());
-	lights.Bind(wnd.Gfx());
-	//light.Bind(wnd.Gfx(), cam.GetViewMatrix());
+	gfx.BeginFrame(0.2f, 0.2f, 0.2f);
+	gfx.SetCamera(cam.GetViewMatrix());
+	sphere.Bind(gfx);
+	lights.Bind(gfx);
+	//light.Bind(gfx, cam.GetViewMatrix());
 
 	if (model)model->Submit();
 	//light.Submit();
@@ -101,7 +101,7 @@ void App::DoFrame(float dt)
 
 	sphere.Submit();
 	//if (wnd.DrawGrid())grid.Submit();
-	rg->Execute(wnd.Gfx());
+	rg->Execute(gfx);
 
 
 	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(),
@@ -123,7 +123,7 @@ void App::DoFrame(float dt)
 	//light.SpawnControlWindow();
 
 	// Present
-	wnd.Gfx().EndFrame();
+	gfx.EndFrame();
 	rg->Reset();
 }
 
@@ -233,9 +233,9 @@ void App::ProcessInput(float dt)
 	if (wnd.ResizeCalled())
 	{
 		rg.reset();
-		wnd.Gfx().OnResize(wnd.GetWidth(), wnd.GetHeight());
+		gfx.OnResize(wnd.GetWidth(), wnd.GetHeight());
 		CreateRenderGraph();
-		wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(wnd.GetHeight()) / float(wnd.GetWidth()), 0.5f, 100.0f));
+		gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(wnd.GetHeight()) / float(wnd.GetWidth()), 0.5f, 100.0f));
 		wnd.ResizeComplete();
 	}
 
@@ -248,7 +248,7 @@ void App::ProcessInput(float dt)
 
 void App::CreateRenderGraph()
 {
-	rg.emplace(wnd.Gfx());
+	rg.emplace(gfx);
 
 	//grid.LinkTechniques(*rg);
 	sphere.LinkTechniques(*rg);
@@ -265,8 +265,8 @@ winrt::fire_and_forget App::ReloadModelAsync()
 
 	if (!wfilename.empty())
 	{
-		swap = std::make_unique<Model>(wnd.Gfx(), ToNarrow(wfilename));
-		//co_await Model::MakeModelAsync(swap, wnd.Gfx(), ToNarrow(wfilename));
+		swap = std::make_unique<Model>(gfx, ToNarrow(wfilename));
+		//co_await Model::MakeModelAsync(swap, gfx, ToNarrow(wfilename));
 
 		if (!swap) MessageBox(nullptr, "Model file was corrupted or empty",
 			"Model Exception", MB_OK | MB_ICONEXCLAMATION);

@@ -25,15 +25,13 @@ private:
 	winrt::fire_and_forget
 		ReloadModelAsync();
 private:
+	Camera cam;
 	ImGUIManager imgui;
 	Window wnd;
-	Camera cam;
+	Graphics gfx;
 
-	//std::optional<RG::GalaxyRenderGraph> rg;
 	std::optional<RG::DeferredRenderGraph> rg;
-	//PointLight light;
 
-	//Grid grid;
 	std::unique_ptr<Model> model, swap;
 	VFileOpenDialog opener;
 	float speed = 1.0f;
@@ -50,7 +48,6 @@ private:
 	bool bFlightMode = false;
 
 	ver::Text text;
-	//ver::SolidSphere ss;
 	ver::LightBuffer lights;
 	ver::LightSphere sphere;
 };

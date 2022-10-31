@@ -98,9 +98,6 @@ Window::Window(unsigned int width, unsigned int height, const char* name) :width
 	// Init GUI (only one window supported)
 	WND_CALL_INFO(ImGui_ImplWin32_Init(hWnd.get()));
 
-	// Create Graphics object
-	pGfx = std::make_unique<Graphics>(hWnd.get(), width, height);
-
 	RAWINPUTDEVICE rid;
 	rid.usUsagePage = 0x01; // mouse page
 	rid.usUsage = 0x02; // mouse usage
@@ -243,14 +240,6 @@ std::optional<WPARAM> Window::ProcessMessages()const noexcept
 	}
 	return{};
 }
-Graphics& Window::Gfx()
-{
-	if (!pGfx)
-	{
-		throw WND_NOGFX_EXCEPT();
-	}
-	return *pGfx;
-}
 LRESULT WINAPI Window::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	// Create routine initializer
@@ -305,17 +294,12 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case WM_SIZE:
-	{
-		if (pGfx)
-		{
-			if (!LOWORD(lParam) || !HIWORD(lParam))
-				break;
-			width = LOWORD(lParam);
-			height = HIWORD(lParam);
-			bResizeIssued = true;
-		}
+		if (!LOWORD(lParam) || !HIWORD(lParam))
+			break;
+		width = LOWORD(lParam);
+		height = HIWORD(lParam);
+		bResizeIssued = true;
 		break;
-	}
 	case WM_CREATE:
 		menu.reset(GetMenu(hWnd));
 		FileMenu.reset(GetSubMenu(menu.get(), 0));

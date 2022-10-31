@@ -4,7 +4,6 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include <Engine/Graphics.h>
-#include <memory>
 #include <optional>
 
 namespace ver
@@ -59,9 +58,9 @@ public:
 	bool RestyleCalled()const noexcept;
 	void RestyleComplete()noexcept;
 	Style GetStyle()const noexcept;
+	HWND GetHandle()const noexcept { return hWnd.get(); }
 
 	std::optional<WPARAM> ProcessMessages()const noexcept;
-	Graphics& Gfx();
 private:
 	static LRESULT WINAPI HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	static LRESULT WINAPI HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -92,7 +91,6 @@ private:
 	wil::unique_hmenu OptionsMenu;
 	wil::unique_hmenu StylesMenu;
 	wil::unique_haccel Accelerator;
-	std::unique_ptr<Graphics> pGfx;
 	std::vector<BYTE> rawBuffer;
 };
 
