@@ -37,7 +37,7 @@ const DV::VertexLayout InputLayout::GetLayout() const noexcept
 std::shared_ptr<InputLayout> InputLayout::Resolve(Graphics& gfx,
 	const DV::VertexLayout& layout, ID3DBlob* pVertexShaderBytecode)
 {
-	return Codex::Resolve<InputLayout>(gfx, layout, pVertexShaderBytecode);;
+	return ver::Codex::Resolve<InputLayout>(gfx, layout, pVertexShaderBytecode);;
 }
 
 std::string InputLayout::GenerateUID(const DV::VertexLayout& layout, ID3DBlob* pVertexShaderBytecode)

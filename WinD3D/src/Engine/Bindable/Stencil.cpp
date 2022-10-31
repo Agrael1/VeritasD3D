@@ -38,7 +38,7 @@ void Stencil::Bind(Graphics& gfx) noxnd
 }
 std::shared_ptr<Stencil> Stencil::Resolve(Graphics& gfx, Mode mode)
 {
-    return Codex::Resolve<Stencil>(gfx, mode);
+    return ver::Codex::Resolve<Stencil>(gfx, mode);
 }
 std::string Stencil::GenerateUID(Mode mode)
 {

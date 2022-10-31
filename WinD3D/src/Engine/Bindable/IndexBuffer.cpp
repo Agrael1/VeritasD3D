@@ -41,7 +41,7 @@ std::shared_ptr<IndexBuffer> IndexBuffer::Resolve(Graphics& gfx, const std::stri
 	const std::vector<unsigned short>& indices)
 {
 	assert(tag != "?");
-	return Codex::Resolve<IndexBuffer>(gfx, tag, indices);
+	return ver::Codex::Resolve<IndexBuffer>(gfx, tag, indices);
 }
 std::string IndexBuffer::GenerateUID_(const std::string& tag)
 {

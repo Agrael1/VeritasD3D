@@ -24,7 +24,7 @@ void RasterizerState::Bind(Graphics& gfx) noxnd
 
 std::shared_ptr<RasterizerState> RasterizerState::Resolve(Graphics& gfx, bool twoSided)
 {
-	return Codex::Resolve<RasterizerState>(gfx, twoSided);
+	return ver::Codex::Resolve<RasterizerState>(gfx, twoSided);
 }
 std::string RasterizerState::GenerateUID(bool twoSided)
 {

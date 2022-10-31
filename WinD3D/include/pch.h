@@ -9,5 +9,11 @@ namespace winrt
 	using Windows::Foundation::IAsyncAction;
 }
 
+template<class C>
+inline auto** array_view(winrt::com_ptr<C>& self)
+{
+	return reinterpret_cast<C**>(&self);
+}
+
 #undef min
 #undef max

@@ -1,72 +1,95 @@
 #include <Engine/Bindable/Texture.h>
 #include <Engine/Deprecated/GraphicsThrows.h>
 #include <Engine/Bindable/Codex.h>
-#include <Engine/Util/Utility.h>
-#include <Engine/Deprecated/Surface.h>
 #include <Engine/Util/DXGIInfoManager.h>
 #include <Engine/Util/GraphicsExceptions.h>
+#include <DirectXTex.h>
+
+using namespace ver;
 
 constexpr uint32_t DefaultDifTexture = 0xffffffff;
 constexpr uint32_t DefaultNrmTexture = 0xff8080ff;
 constexpr uint32_t DefaultSpcTexture = 0xffffffff;
+inline constexpr DXGI_FORMAT format = DXGI_FORMAT::DXGI_FORMAT_B8G8R8A8_UNORM;
 
-
-Texture::Texture(Graphics& gfx, std::string_view path, UINT slot)
-	:slot(slot), path(path)
+std::optional<DirectX::ScratchImage> LoadWICTexture(std::wstring_view path)
 {
-	INFOMAN(gfx);
+	DirectX::ScratchImage image;
+	HRESULT hr = (DirectX::LoadFromWICFile(path.data(), DirectX::WIC_FLAGS_NONE, nullptr, image));
+	if (hr < 0) return{};
 
-	Surface s;
-	if (!s.FromFile(path))
+	if (image.GetImage(0, 0, 0)->format != format)
 	{
-		ResolveToDefault(gfx);
-		return;
-	}
-	hasAlpha = s.UsesAlpha();
+		DirectX::ScratchImage converted;
+		hr = DirectX::Convert(
+			*image.GetImage(0, 0, 0),
+			format,
+			DirectX::TEX_FILTER_DEFAULT,
+			DirectX::TEX_THRESHOLD_DEFAULT,
+			converted
+		);
 
-	GFX_THROW_INFO(DirectX::CreateShaderResourceView(GetDevice(gfx),
-		s->GetImages(), s->GetImageCount(),
-		s->GetMetadata(), &pTextureView
+		if (hr < 0) return{};
+		image = std::move(converted);
+	}
+
+	DirectX::ScratchImage mipped;
+	hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(),
+		image.GetMetadata(), DirectX::TEX_FILTER_DEFAULT, 0, mipped);
+	if (hr < 0) return{};
+	return mipped;
+}
+
+Texture::Texture(Graphics& gfx, std::filesystem::path path, uint32_t slot)
+	:slot(slot), path(std::move(path))
+{
+	Initialize(gfx);
+}
+
+winrt::IAsyncAction Texture::InitializeAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot)
+{
+	co_await winrt::resume_background();
+	this->path = std::move(path);
+	this->slot = slot;
+	Initialize(gfx);
+}
+void Texture::Initialize(Graphics& gfx)
+{
+	auto texture = LoadWICTexture(path.c_str());
+	if (!texture) return ResolveToDefault(gfx);
+
+	hasAlpha = texture->IsAlphaAllOpaque();
+
+	winrt::check_hresult(DirectX::CreateShaderResourceView(GetDevice(gfx),
+		texture->GetImages(), texture->GetImageCount(),
+		texture->GetMetadata(), pTextureView.put()
 	));
-	s->Release();
 }
 
 void Texture::Bind(Graphics& gfx)noxnd
 {
 	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(slot, 1u, pTextureView.GetAddressOf()));
+	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(slot, 1u, array_view(pTextureView)));
 }
-std::shared_ptr<Texture> Texture::Resolve(Graphics& gfx, std::string_view path, UINT slot)
+std::shared_ptr<Texture> Texture::Resolve(Graphics& gfx, std::filesystem::path path, uint32_t slot)
 {
-	return Codex::Resolve<Texture>(gfx, path, slot);
+	return ver::Codex::Resolve<Texture>(gfx, std::move(path), slot);
 }
 concurrency::task<std::shared_ptr<Texture>>
-Texture::ResolveAsync(Graphics& gfx, std::string path, UINT slot)
+Texture::ResolveAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot)
 {
-	return concurrency::create_task(
-		[&gfx, path, slot]() {
-			return Codex::Resolve<Texture>(gfx, path, slot); 
-		});
+	return ver::Codex::ResolveAsync<Texture>(gfx, std::move(path), slot);
 }
-std::string Texture::GenerateUID(std::string_view path, UINT slot)
+
+
+std::string Texture::GenerateUID(const std::filesystem::path& path, uint32_t slot)
 {
 	using namespace std::string_literals;
-	return typeid(Texture).name() + "#"s + path.data() + "#" + std::to_string(slot);
+	return typeid(Texture).name() + "#"s + path.string() + "#" + std::to_string(slot);
 }
 std::string Texture::GetUID() const noexcept
 {
 	return GenerateUID(path, slot);
-}
-
-bool Texture::UsesAlpha() const noexcept
-{
-	return hasAlpha;
-}
-UINT Texture::CalculateNumberOfMipLevels(UINT width, UINT height) noexcept
-{
-	const float xSteps = std::ceil(log2((float)width));
-	const float ySteps = std::ceil(log2((float)height));
-	return (UINT)std::max(xSteps, ySteps);
 }
 
 void Texture::ResolveToDefault(Graphics& gfx)
@@ -88,7 +111,7 @@ void Texture::ResolveToDefault(Graphics& gfx)
 	texDesc.CPUAccessFlags = 0;
 	texDesc.MiscFlags = 0;
 
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> pTexture;
+	winrt::com_ptr<ID3D11Texture2D> pTexture;
 
 
 	const uint32_t* pmap = nullptr;
@@ -109,7 +132,7 @@ void Texture::ResolveToDefault(Graphics& gfx)
 	GFX_THROW_INFO(GetDevice(gfx)->CreateTexture2D(
 		&texDesc,
 		&sd,
-		&pTexture));
+		pTexture.put()));
 
 	// create a resource view
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
@@ -120,6 +143,6 @@ void Texture::ResolveToDefault(Graphics& gfx)
 
 	GFX_THROW_INFO(GetDevice(gfx)->CreateShaderResourceView
 	(
-		pTexture.Get(), &srvDesc, &pTextureView
+		pTexture.get(), &srvDesc, pTextureView.put()
 	));
 }

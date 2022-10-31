@@ -37,7 +37,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 				shaderCode += "dif.";
 				vtxLayout
 					+ DV::Type::Texture2D;
-				auto tex = Texture::Resolve(gfx, rootPath + texFileName.C_Str());
+				auto tex = ver::Texture::Resolve(gfx, rootPath + texFileName.C_Str());
 				//if (tex->UsesAlpha())
 				//{
 				//	hasAlpha = true;
@@ -59,7 +59,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 				shaderCode += "spc.";
 				vtxLayout
 					+ DV::Type::Texture2D;
-				auto tex = Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 1);
+				auto tex = ver::Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 1);
 				hasGlossAlpha = tex->UsesAlpha();
 				step.AddBindable(std::move(tex));
 				pscLayout.Add({
@@ -81,7 +81,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 					+ DV::Type::Texture2D
 					+ DV::Type::Tangent
 					+ DV::Type::Bitangent;
-				step.AddBindable(Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 2));
+				step.AddBindable(ver::Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 2));
 				pscLayout.Add({
 					{DC::Type::Bool,"useNormalMap"},
 					{DC::Type::Float,"normalMapWeight"} });
@@ -179,7 +179,7 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 		name = tempName.C_Str();
 	}
 
-	std::vector<concurrency::task<std::shared_ptr<Texture>>> texes;
+	std::vector<concurrency::task<std::shared_ptr<ver::Texture>>> texes;
 	texes.reserve(3);
 	// phong technique
 	{
@@ -207,7 +207,7 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 				shaderCode += "dif.";
 				vtxLayout
 					+ DV::Type::Texture2D;
-				texes.emplace_back(Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str()));
+				texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str()));
 			}
 			else
 			{
@@ -222,7 +222,7 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 				shaderCode += "spc.";
 				vtxLayout
 					+ DV::Type::Texture2D;
-				texes.emplace_back(Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 1));
+				texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 1));
 				pscLayout.Add({
 					{DC::Type::Bool, "useGlossAlpha"},
 					{DC::Type::Bool,"useSpecularMap"} });
@@ -242,7 +242,7 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 					+ DV::Type::Texture2D
 					+ DV::Type::Tangent
 					+ DV::Type::Bitangent;
-				texes.emplace_back(Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 2));
+				texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 2));
 				pscLayout.Add({
 					{DC::Type::Bool,"useNormalMap"},
 					{DC::Type::Float,"normalMapWeight"} });

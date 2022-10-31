@@ -14,7 +14,7 @@ void NullPixelShader::Bind(Graphics& gfx) noxnd
 }
 std::shared_ptr<NullPixelShader> NullPixelShader::Resolve(Graphics& gfx)
 {
-	return Codex::Resolve<NullPixelShader>(gfx);
+	return ver::Codex::Resolve<NullPixelShader>(gfx);
 }
 std::string NullPixelShader::GenerateUID()
 {

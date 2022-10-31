@@ -34,7 +34,7 @@ void PixelShader::Bind(Graphics& gfx) noxnd
 }
 std::shared_ptr<PixelShader> PixelShader::Resolve(Graphics& gfx, std::filesystem::path path)
 {
-	return Codex::Resolve<PixelShader>(gfx, std::move(path));
+	return ver::Codex::Resolve<PixelShader>(gfx, std::move(path));
 }
 std::string PixelShader::GenerateUID(const std::filesystem::path& path)
 {

@@ -93,9 +93,9 @@ void App::DoFrame(float dt)
 	lights.Bind(wnd.Gfx());
 	//light.Bind(wnd.Gfx(), cam.GetViewMatrix());
 
-	//if (model)model->Submit();
+	if (model)model->Submit();
 	//light.Submit();
-	text.Submit();
+	//text.Submit();
 	//ss.Submit();
 
 
@@ -218,7 +218,7 @@ void App::ProcessInput(float dt)
 		case Finish:
 		{
 			model.reset(swap.release());
-			Codex::Trim();
+			ver::Codex::Trim();
 			if (model)
 				model->LinkTechniques(*rg);
 			modelProbe.Reset();

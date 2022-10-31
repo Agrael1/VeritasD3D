@@ -46,10 +46,8 @@ Model::Model(Graphics& gfx, std::string_view pathString, const float scale)
 		aiProcess_CalcTangentSpace
 	);
 
-	if (pScene == nullptr)
-	{
+	if (pScene == nullptr || !pScene->HasMeshes())
 		throw ModelException(__LINE__, __FILE__, imp.GetErrorString());
-	}
 
 	//parse materials
 	std::vector<Material> materials;
@@ -113,6 +111,11 @@ Model::MakeModelAsync(std::unique_ptr<Model>& to, Graphics& gfx, std::string_vie
 }
 
 
+
+winrt::Windows::Foundation::IAsyncAction Model::InitializeAsync(Graphics& gfx, std::string_view pathString, float scale)
+{
+	return winrt::Windows::Foundation::IAsyncAction();
+}
 
 void Model::Submit() const noxnd
 {

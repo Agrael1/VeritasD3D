@@ -1,7 +1,7 @@
 #pragma once
-#include <Engine/Graphics.h>
 #include <filesystem>
 
+class Graphics;
 class Node;
 class Mesh;
 class ModelWindow;
@@ -20,7 +20,6 @@ public:
 	Model() = default;
 	Model(Graphics& gfx, std::string_view pathString, float scale = 1.0f);
 	~Model() noexcept;
-
 	winrt::Windows::Foundation::IAsyncAction InitializeAsync(Graphics& gfx, std::string_view pathString, float scale = 1.0f);
 public:
 	void Submit() const noxnd;

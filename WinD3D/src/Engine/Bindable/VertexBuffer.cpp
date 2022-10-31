@@ -43,7 +43,7 @@ std::shared_ptr<VertexBuffer> VertexBuffer::Resolve(Graphics& gfx, const std::st
 	const DV::VertexBuffer& vbuf)
 {
 	assert(tag != "?");
-	return Codex::Resolve<VertexBuffer>(gfx, tag, vbuf);
+	return ver::Codex::Resolve<VertexBuffer>(gfx, tag, vbuf);
 }
 std::string VertexBuffer::GenerateUID_(const std::string& tag)
 {

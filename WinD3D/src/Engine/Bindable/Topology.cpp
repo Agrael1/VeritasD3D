@@ -17,7 +17,7 @@ void Topology::Bind(Graphics& gfx) noxnd
 
 std::shared_ptr<Topology> Topology::Resolve(Graphics& gfx, D3D11_PRIMITIVE_TOPOLOGY type)
 {
-	return Codex::Resolve<Topology>(gfx, type);
+	return ver::Codex::Resolve<Topology>(gfx, type);
 }
 std::string Topology::GenerateUID(D3D11_PRIMITIVE_TOPOLOGY type)
 {

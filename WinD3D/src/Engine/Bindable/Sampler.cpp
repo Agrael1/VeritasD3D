@@ -35,7 +35,7 @@ void Sampler::Bind(Graphics& gfx) noxnd
 }
 std::shared_ptr<Sampler> Sampler::Resolve(Graphics& gfx, Type type, bool reflect)
 {
-	return Codex::Resolve<Sampler>(gfx, type, reflect);
+	return ver::Codex::Resolve<Sampler>(gfx, type, reflect);
 }
 std::string Sampler::GenerateUID(Type type, bool reflect)
 {
