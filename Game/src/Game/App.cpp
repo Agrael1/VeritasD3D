@@ -49,7 +49,7 @@ namespace dx = DirectX;
 
 App::App(uint32_t width, uint32_t height)
 	: wnd(width, height, "VTest"), gfx(wnd.GetHandle(), width, height), text(gfx, 1.0)
-	, model(new Model(gfx, R"(D:\Repos\WinD3D\Game\models\Wooden Crate\Wooden Crate.obj)"))
+	, model(new Model(gfx, R"(C:\Users\Agrae\Desktop\face\files\face.obj)"))
 {
 	opener.SetFileTypes(filterSpecs);
 	gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 100.0f));

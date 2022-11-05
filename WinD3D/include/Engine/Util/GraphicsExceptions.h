@@ -54,4 +54,10 @@ namespace ver
 	private:
 		std::string info;
 	};
+
+
+	inline void check_hresult(winrt::hresult hr)
+	{
+		if (hr < 0)throw make_error<hr_error>(hr);
+	}
 }

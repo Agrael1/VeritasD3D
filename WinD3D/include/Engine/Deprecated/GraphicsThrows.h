@@ -3,7 +3,7 @@
 // HRESULT hr should exist in the local scope for these macros to work
 
 #define GFX_EXCEPT_NOINFO(hr) ver::make_error<ver::hr_error>(hr)
-#define GFX_THROW_NOINFO(hrcall) if( FAILED( hr = (hrcall) ) ) throw ver::make_error<ver::hr_error>({hr})
+#define GFX_THROW_NOINFO(hrcall) ver::check_hresult(hrcall)
 
 #ifndef NDEBUG
 #define GFX_EXCEPT(hr) ver::make_error<ver::hr_error>({hr, infoManager.GetMessages()})

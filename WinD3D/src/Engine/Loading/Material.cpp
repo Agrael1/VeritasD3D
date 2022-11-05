@@ -368,12 +368,20 @@ std::vector<unsigned short> Material::ExtractIndices(const aiMesh& mesh) const n
 
 #include <memory_resource>
 
+void prescale(std::span<aiVector3D> mesh, float scale)
+{
+	for (auto& i : mesh)
+		i *= scale;
+}
+
 std::shared_ptr<Bindable> Material::MakeVertexBindable(Graphics& gfx, const aiMesh& mesh, float scale) const noxnd
 {
 	void* a[size_t(ver::dv::ElementType::Count)]{};
 	std::pmr::monotonic_buffer_resource b{ a, sizeof(a) };
 	std::pmr::vector<void*> vb{decltype(vb)::allocator_type{&b}};
 	vb.reserve(vtxLayout.count());
+	prescale({ mesh.mVertices, mesh.mNumVertices }, scale);
+
 	vb.push_back(mesh.mVertices);
 	vb.push_back(mesh.mNormals);
 	if (vtxLayout.contains(ver::dv::ElementType::Texture3D))
