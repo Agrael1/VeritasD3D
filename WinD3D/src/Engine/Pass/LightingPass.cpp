@@ -15,6 +15,7 @@ RG::LightingPass::LightingPass(Graphics& gfx, std::string name) noxnd
 	RegisterSink(DirectBufferSink<IRenderTarget>::Make("renderTarget", renderTarget));
 	RegisterSink(DirectBufferSink<DepthStencil>::Make("depthStencil", depthStencil));
 	RegisterSource(DirectBufferSource<IRenderTarget>::Make("renderTarget", renderTarget));
+	RegisterSource(DirectBufferSource<DepthStencil>::Make("depthStencil", depthStencil));
 
 	AddBind(Sampler::Resolve(gfx));
 	AddBind(std::make_shared<ver::IndexBuffer>(gfx, "$$full", std::array< const uint16_t, 3>{ 0, 1, 2 }));

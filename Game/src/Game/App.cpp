@@ -48,11 +48,16 @@ constexpr COMDLG_FILTERSPEC filterSpecs[] =
 namespace dx = DirectX;
 
 App::App(uint32_t width, uint32_t height)
-	: wnd(width, height, "VTest"), gfx(wnd.GetHandle(), width, height), text(gfx, 1.0)
-	, model(new Model(gfx, R"(C:\Users\Agrae\Desktop\face\files\face.obj)"))
+	: wnd(width, height, "VTest"), gfx(wnd.GetHandle(), width, height)//, text(gfx, 1.0)
+	//, model(new Model(gfx, R"(C:\Users\Agrae\Desktop\aaa\resources\models\nyra\scene.gltf)"))
+	, player(scene)
+	, scene(physics)
+	, level (physics, gfx, uR"(C:\Users\Agrae\Desktop\face\files\face2.obj)")
+	,cam(player.GetCamera())
 {
 	opener.SetFileTypes(filterSpecs);
 	gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 100.0f));
+	level.AddToScene(scene);
 }
 App::~App()
 {
@@ -68,7 +73,7 @@ winrt::IAsyncAction App::InitializeAsync()
 
 int App::Go()
 {
-	float dt = 0.01f;
+	float dt = 1.0f/60.0f;
 	while (true)
 	{
 		const auto a = wnd.ProcessMessages();
@@ -76,21 +81,26 @@ int App::Go()
 		{
 			return (int)a.value();
 		}
+		scene.get_scene().simulate(dt);
 		DoFrame(dt);
+		scene.get_scene().fetchResults(true);
 	}
 }
 
 void App::DoFrame(float dt)
 {
 	if (!wnd.IsActive())return;
-
 	const auto s = dt * speed;
+
+
+
 	gfx.BeginFrame(0.2f, 0.2f, 0.2f);
-	gfx.SetCamera(cam.GetViewMatrix());
+	gfx.SetCamera(player.GetCamera().GetViewMatrix());
 	sphere.Bind(gfx);
 	lights.Bind(gfx);
 
-	if (model)model->Submit();
+	//if (model)model->Submit();
+	level.Submit();
 	sphere.Submit();
 	rg->Execute(gfx);
 
@@ -105,11 +115,11 @@ void App::DoFrame(float dt)
 	}
 	ImGui::End();
 
-	if (model)
-		modelProbe.SpawnWindow(*model);	// imgui windows
+	//if (model)
+		//modelProbe.SpawnWindow(*model);	// imgui windows
 
 	ProcessInput(dt);
-	cam.SpawnControlWindow();
+	//cam.SpawnControlWindow();
 	sphere.SpawnControlWindow();
 
 	// Present
@@ -196,29 +206,29 @@ void App::ProcessInput(float dt)
 		}
 	}
 
-	if (wnd.LoadCalled())
-	{
-		switch (state)
-		{
-			using enum ModelLoadState;
-		case Unloaded:
-			state = InProgress;
-			ReloadModelAsync();
-			break;
-		case Finish:
-		{
-			model.reset(swap.release());
-			ver::Codex::Trim();
-			if (model)
-				model->LinkTechniques(*rg);
-			modelProbe.Reset();
-			state = Unloaded;
-			wnd.LoadingComplete();
-			break;
-		}
-		default:break;
-		}
-	}
+	//if (wnd.LoadCalled())
+	//{
+	//	switch (state)
+	//	{
+	//		using enum ModelLoadState;
+	//	case Unloaded:
+	//		state = InProgress;
+	//		ReloadModelAsync();
+	//		break;
+	//	case Finish:
+	//	{
+	//		//model.reset(swap.release());
+	//		ver::Codex::Trim();
+	//		//if (model)
+	//		//	model->LinkTechniques(*rg);
+	//		modelProbe.Reset();
+	//		state = Unloaded;
+	//		wnd.LoadingComplete();
+	//		break;
+	//	}
+	//	default:break;
+	//	}
+	//}
 
 	if (wnd.ResizeCalled())
 	{
@@ -241,21 +251,22 @@ void App::CreateRenderGraph()
 	rg.emplace(gfx);
 
 	sphere.LinkTechniques(*rg);
-	text.LinkTechniques(*rg);
-	if (model) model->LinkTechniques(*rg);
+	//text.LinkTechniques(*rg);
+	//if (model) model->LinkTechniques(*rg);
+	level.GetWorld().LinkTechniques(*rg);
 }
 
 winrt::fire_and_forget App::ReloadModelAsync()
 {
 	co_await winrt::resume_background();
-	auto wfilename = opener.GetFilePath();
+	//auto wfilename = opener.GetFilePath();
 
-	if (!wfilename.empty())
-	{
-		swap = std::make_unique<Model>(gfx, ToNarrow(wfilename));
-		if (!swap) MessageBox(nullptr, "Model file was corrupted or empty",
-			"Model Exception", MB_OK | MB_ICONEXCLAMATION);
-	}
-	state = ModelLoadState::Finish;
+	//if (!wfilename.empty())
+	//{
+	//	swap = std::make_unique<Model>(gfx, ToNarrow(wfilename));
+	//	if (!swap) MessageBox(nullptr, "Model file was corrupted or empty",
+	//		"Model Exception", MB_OK | MB_ICONEXCLAMATION);
+	//}
+	//state = ModelLoadState::Finish;
 }
 

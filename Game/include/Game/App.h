@@ -9,6 +9,9 @@
 #include <Engine/Probes/TestModelProbe.h>
 #include <Engine/Bindable/Light.h>
 #include <Engine/Scene/Text.h>
+#include <Game/Player.h>
+#include <Game/Scene.h>
+#include <Foundation.h>
 
 class App
 {
@@ -25,14 +28,14 @@ private:
 	winrt::fire_and_forget
 		ReloadModelAsync();
 private:
-	Camera cam;
+	//Camera cam;
 	ImGUIManager imgui;
 	Window wnd;
 	Graphics gfx;
 
 	std::optional<RG::DeferredRenderGraph> rg;
 
-	std::unique_ptr<Model> model, swap;
+	//std::unique_ptr<Model> model, swap;
 	VFileOpenDialog opener;
 	float speed = 1.0f;
 
@@ -47,8 +50,14 @@ private:
 	std::atomic<ModelLoadState> state = ModelLoadState::Unloaded;
 	bool bFlightMode = false;
 
-	ver::Text text;
+	//ver::Text text;
 	ver::LightBuffer lights;
 	ver::LightSphere sphere;
+
+	ver::ph::Physics physics;
+	ver::ph::Scene scene;
+	UT::Player player;
+	UT::Level level;
+	Camera& cam;
 };
 

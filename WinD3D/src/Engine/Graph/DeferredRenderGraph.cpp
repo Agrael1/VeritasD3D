@@ -30,6 +30,12 @@ RG::DeferredRenderGraph::DeferredRenderGraph(Graphics& gfx)
 		pass->SetSinkLinkage("depthStencil", "lambertian.depthStencil");
 		AppendPass(std::move(pass));
 	}
+	//{
+	//	auto pass = std::make_unique<TransparentPass>(gfx, "transparent");
+	//	pass->SetSinkLinkage("renderTarget", "light.renderTarget");
+	//	pass->SetSinkLinkage("depthStencil", "light.depthStencil");
+	//	AppendPass(std::move(pass));
+	//}
 	SetSinkTarget("backbuffer", "light.renderTarget");
 	Finalize();
 }

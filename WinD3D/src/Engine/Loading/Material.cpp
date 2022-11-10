@@ -42,7 +42,8 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 				//if (tex->UsesAlpha())
 				//{
 				//	hasAlpha = true;
-				//	shaderCode += "msk";
+				//	//step.SetTargetPass("transparent");
+				//	//shaderCode += "msk.";
 				//}
 				step.AddBindable(std::move(tex));
 			}
@@ -50,7 +51,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 			{
 				pscLayout.Add({ {DC::Type::Float3, "materialColor"} });
 			}
-			step.AddBindable(RasterizerState::Resolve(gfx, hasAlpha));
+			//step.AddBindable(RasterizerState::Resolve(gfx, hasAlpha));
 		}
 		// specular
 		{
@@ -351,7 +352,7 @@ Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std
 	//	techniques.push_back(std::move(outline));
 	//}
 }
-std::vector<unsigned short> Material::ExtractIndices(const aiMesh& mesh) const noexcept
+std::vector<unsigned short> Material::ExtractIndices(const aiMesh& mesh) noexcept
 {
 	std::vector<unsigned short> indices;
 	indices.reserve(mesh.mNumFaces * 3);

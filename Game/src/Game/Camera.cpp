@@ -29,7 +29,7 @@ DirectX::XMMATRIX Camera::GetViewMatrix() const noexcept
 	// generate camera transform (applied to all objects to arrange them relative
 	// to camera position/orientation in world) from cam position and direction
 	// camera "top" always faces towards +Y (cannot do a barrel roll)
-	const auto camPosition = dx::XMLoadFloat3A(&pos);
+	const auto camPosition = dx::XMLoadFloat3(&pos);
 	const auto camTarget = camPosition + lookVector;
 	return XMMatrixLookAtLH(camPosition, camTarget, XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
 }
@@ -67,11 +67,11 @@ void Camera::Orbit(float dx, float dy) noexcept
 	orbit.y = wrap_angle(orbit.y + dx * rotationSpeed);
 	orbit.x = std::clamp(orbit.x + dy * rotationSpeed, 0.995f * -dx::XM_PIDIV2, 0.995f * dx::XM_PIDIV2);
 }
-void Camera::Translate(DirectX::XMFLOAT3A translation) noexcept
+void Camera::Translate(DirectX::XMFLOAT3 translation) noexcept
 {
 	using namespace dx;
-	dx::XMStoreFloat3A(&pos, dx::XMLoadFloat3A(&pos) + dx::XMVector3Transform(
-		dx::XMLoadFloat3A(&translation),
+	dx::XMStoreFloat3(&pos, dx::XMLoadFloat3(&pos) + dx::XMVector3Transform(
+		dx::XMLoadFloat3(&translation),
 		dx::XMMatrixRotationRollPitchYawFromVector(dx::XMLoadFloat2(&rot)) *
 		dx::XMMatrixScaling(travelSpeed, travelSpeed, travelSpeed)
 	));

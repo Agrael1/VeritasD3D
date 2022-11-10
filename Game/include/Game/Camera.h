@@ -1,5 +1,5 @@
 #pragma once
-#include <Engine/Graphics.h>
+#include <DirectXMath.h>
 
 class Camera
 {
@@ -11,9 +11,18 @@ public:
 	void Reset()noexcept;
 	void Rotate(float dx, float dy)noexcept;
 	void Orbit(float dx, float dy)noexcept;
-	void Translate(DirectX::XMFLOAT3A translation)noexcept;
+	void Translate(DirectX::XMFLOAT3 translation)noexcept;
+
+	DirectX::XMFLOAT3 position()
+	{
+		return pos;
+	}
+	void set_position(DirectX::XMFLOAT3 v)
+	{
+		pos = v;
+	}
 private:
-	DirectX::XMFLOAT3A pos;
+	DirectX::XMFLOAT3 pos;
 	DirectX::XMFLOAT2 rot;
 	DirectX::XMFLOAT2 orbit;
 	static constexpr const float travelSpeed = 12.0f;

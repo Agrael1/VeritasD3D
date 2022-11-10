@@ -18,7 +18,7 @@ public:
 	winrt::Windows::Foundation::IAsyncAction
 		MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path)noxnd;
 public:
-	std::vector<unsigned short> ExtractIndices(const aiMesh& mesh) const noexcept;
+	static std::vector<uint16_t> ExtractIndices(const aiMesh& mesh) noexcept;
 	std::shared_ptr<Bindable> MakeVertexBindable(Graphics& gfx, const aiMesh& mesh, float scale = 1.0f) const noxnd;
 	std::shared_ptr<IndexBuffer> MakeIndexBindable(Graphics& gfx, const aiMesh& mesh) const noxnd;
 	std::vector<Technique> GetTechniques() const noexcept;

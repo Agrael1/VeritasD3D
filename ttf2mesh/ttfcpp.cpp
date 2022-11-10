@@ -12,6 +12,6 @@ ttf::ttf_bridge::ttf_bridge(std::filesystem::path p)
 
     str.assign((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 
-    ttf_load_from_mem(reinterpret_cast<const uint8_t*>(str.c_str()), str.length(), &xttf, false);
+    ttf_load_from_mem(reinterpret_cast<const uint8_t*>(str.c_str()), int(str.length()), &xttf, false);
 }
 

@@ -12,8 +12,9 @@ set(include_dir "${CMAKE_CURRENT_SOURCE_DIR}/include")
 set(source_dir "${CMAKE_CURRENT_SOURCE_DIR}/src")
 file(GLOB_RECURSE vhead "${include_dir}/*.h")
 file(GLOB_RECURSE vsrc "${source_dir}/*.cpp")
+set(PHYSICS_HEADERS ${include_dir} PARENT_SCOPE)
 
-add_library(${PROJECT_NAME} STATIC ${vhead} ${vsrc} "include/utils.h")
+add_library(${PROJECT_NAME} STATIC ${vhead} ${vsrc})
 
 if(MSVC)
   target_compile_options(${PROJECT_NAME} PUBLIC "/ZI")
