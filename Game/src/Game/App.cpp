@@ -56,8 +56,9 @@ App::App(uint32_t width, uint32_t height)
 	,cam(player.GetCamera())
 {
 	opener.SetFileTypes(filterSpecs);
-	gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 100.0f));
+	gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 1000.0f));
 	level.AddToScene(scene);
+	ResetTransform();
 }
 App::~App()
 {
@@ -76,14 +77,15 @@ int App::Go()
 	float dt = 1.0f/60.0f;
 	while (true)
 	{
-		const auto a = wnd.ProcessMessages();
-		if (a)
-		{
+		ResetTransform();
+		if (const auto a = wnd.ProcessMessages())
 			return (int)a.value();
-		}
+
 		scene.get_scene().simulate(dt);
 		DoFrame(dt);
 		scene.get_scene().fetchResults(true);
+		player.Update(transform, dt);
+		player.Sync();
 	}
 }
 
@@ -174,27 +176,31 @@ void App::ProcessInput(float dt)
 		}
 		if (wnd.kbd.KeyIsPressed('W'))
 		{
-			cam.Translate({ 0.0f,0.0f,dt });
+			transform.z += dt;
+			//cam.Translate({ 0.0f,0.0f,dt });
 		}
 		if (wnd.kbd.KeyIsPressed('A'))
 		{
-			cam.Translate({ -dt,0.0f,0.0f });
+			transform.x -= dt;
+			//cam.Translate({ -dt,0.0f,0.0f });
 		}
 		if (wnd.kbd.KeyIsPressed('S'))
 		{
-			cam.Translate({ 0.0f,0.0f,-dt });
+			transform.z -= dt;
+			//cam.Translate({ 0.0f,0.0f,-dt });
 		}
 		if (wnd.kbd.KeyIsPressed('D'))
 		{
-			cam.Translate({ dt,0.0f,0.0f });
+			transform.x += dt;
+			//cam.Translate({ dt,0.0f,0.0f });
 		}
 		if (wnd.kbd.KeyIsPressed(VK_SPACE))
 		{
-			cam.Translate({ 0.0f,dt,0.0f });
+			//cam.Translate({ 0.0f,dt,0.0f });
 		}
 		if (wnd.kbd.KeyIsPressed('C'))
 		{
-			cam.Translate({ 0.0f,-dt,0.0f });
+			//cam.Translate({ 0.0f,-dt,0.0f });
 		}
 	}
 
@@ -235,7 +241,7 @@ void App::ProcessInput(float dt)
 		rg.reset();
 		gfx.OnResize(wnd.GetWidth(), wnd.GetHeight());
 		CreateRenderGraph();
-		gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(wnd.GetHeight()) / float(wnd.GetWidth()), 0.5f, 100.0f));
+		gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(wnd.GetHeight()) / float(wnd.GetWidth()), 0.5f, 1000.0f));
 		wnd.ResizeComplete();
 	}
 

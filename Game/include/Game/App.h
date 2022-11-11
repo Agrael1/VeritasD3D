@@ -27,6 +27,11 @@ private:
 	void CreateRenderGraph();
 	winrt::fire_and_forget
 		ReloadModelAsync();
+	void ResetTransform()
+	{
+		transform.x = transform.z = 0.0f;
+		transform.y = -9.81f * 1.f / 60.f;
+	}
 private:
 	//Camera cam;
 	ImGUIManager imgui;
@@ -58,6 +63,7 @@ private:
 	ver::ph::Scene scene;
 	UT::Player player;
 	UT::Level level;
+	DirectX::XMFLOAT3 transform{};
 	Camera& cam;
 };
 

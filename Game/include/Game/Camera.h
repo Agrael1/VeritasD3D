@@ -21,6 +21,17 @@ public:
 	{
 		pos = v;
 	}
+	DirectX::XMFLOAT3 TransformToView(DirectX::XMFLOAT3 pos)const
+	{
+		pos.y = 0.0f;
+		namespace dx = DirectX;
+		dx::XMStoreFloat3(&pos, dx::XMVector3Transform(
+			dx::XMLoadFloat3(&pos),
+			dx::XMMatrixRotationRollPitchYaw(0.0f, rot.y, 0.0f) *
+			dx::XMMatrixScaling(travelSpeed, travelSpeed, travelSpeed)
+		));
+		return pos;
+	}
 private:
 	DirectX::XMFLOAT3 pos;
 	DirectX::XMFLOAT2 rot;

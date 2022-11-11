@@ -9,7 +9,7 @@
 using namespace physx;
 
 UT::Level::Level(ver::ph::Physics& phy, Graphics& gfx, std::filesystem::path map)
-	:world(gfx, map.string(), 10.0f)
+	:world(gfx, map.string(), 40.0f)
 {
 	Assimp::Importer imp;
 	const auto pScene = imp.ReadFile(map.string().data(),
@@ -30,6 +30,6 @@ UT::Level::Level(ver::ph::Physics& phy, Graphics& gfx, std::filesystem::path map
 		auto mesh = pScene->mMeshes[i];
 		auto y = Material::ExtractIndices(*mesh);
 		auto x = phy.MakeTriangleMesh({ (DirectX::XMFLOAT3*)mesh->mVertices, mesh->mNumVertices }, y);
-		actors.emplace_back(phy.MakeActor(std::move(x), *mat, 10.0f));
+		actors.emplace_back(phy.MakeActor(std::move(x), *mat, 40.0f));
 	}
 }
