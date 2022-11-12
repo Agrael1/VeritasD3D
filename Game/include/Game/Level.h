@@ -17,7 +17,7 @@ namespace UT
 		}
 		void AddToScene(ver::ph::Scene& sc)
 		{
-			sc.get_scene().addActors((physx::PxActor* const*)actors.data(), actors.size());
+			sc.get_scene().addActors((physx::PxActor* const*)actors.data(), uint32_t(actors.size()));
 		}
 		template<class Self>
 		auto&& GetWorld(this Self&& s)

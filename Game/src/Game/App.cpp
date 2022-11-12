@@ -20,7 +20,8 @@ App::~App()
 winrt::IAsyncAction App::InitializeAsync()
 {
 	co_await winrt::when_all(lights.InitializeAsync(gfx),
-		sphere.InitializeAsync(lights, gfx), level.InitializeAsync(physics, gfx, uR"(C:\Users\Agrae\source\repos\VeritasD3D\Game\models\face\face.obj)"));
+		sphere.InitializeAsync(lights, gfx), 
+		level.InitializeAsync(physics, gfx, uR"(C:\Users\Agrae\source\repos\VeritasD3D\Game\models\face\face.obj)"));
 	CreateRenderGraph();
 	level.AddToScene(scene);
 	co_return;

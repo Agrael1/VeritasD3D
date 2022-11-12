@@ -17,8 +17,8 @@ namespace RG
 			:RenderQueuePass(std::move(name))
 		{
 			renderTarget = std::make_unique<ShaderInputRenderTarget>(gfx, fullWidth / 2, fullHeight / 2, 0);
-			AddBind(VertexShader::Resolve(gfx, "Solid_VS.cso"));
-			AddBind(PixelShader::Resolve(gfx, "Solid_PS.cso"));
+			AddBind(ver::VertexShader::Resolve(gfx, "Solid_VS.cso"));
+			AddBind(ver::PixelShader::Resolve(gfx, "Solid_PS.cso"));
 			AddBind(Stencil::Resolve(gfx, Stencil::Mode::Mask));
 			AddBind(BlendState::Resolve(gfx, false));
 			RegisterSource(DirectBindableSource<IRenderTarget>::Make("scratchOut", renderTarget));

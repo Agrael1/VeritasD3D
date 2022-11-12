@@ -3,8 +3,9 @@
 #include <Engine/Bindable/Codex.h>
 #include <Engine/Util/DXGIInfoManager.h>
 #include <Engine/Util/GraphicsExceptions.h>
-#include <Engine/Util/Utility.h>
 #include <d3dcompiler.h>
+
+using namespace ver;
 
 PixelShader::PixelShader(Graphics& gfx, std::filesystem::path xpath)
 	:path(std::move(xpath))
@@ -36,10 +37,13 @@ std::shared_ptr<PixelShader> PixelShader::Resolve(Graphics& gfx, std::filesystem
 {
 	return ver::Codex::Resolve<PixelShader>(gfx, std::move(path));
 }
+concurrency::task<std::shared_ptr<PixelShader>> PixelShader::ResolveAsync(Graphics& gfx, std::filesystem::path path)
+{
+	co_return co_await ver::Codex::ResolveAsync<PixelShader>(gfx, std::move(path));
+}
 std::string PixelShader::GenerateUID(const std::filesystem::path& path)
 {
-	using namespace std::string_literals;
-	return typeid(PixelShader).name() + "#"s + path.string();
+	return std::format("{}#{}", typeid(PixelShader).name(), path.string());
 }
 std::string PixelShader::GetUID() const noexcept
 {

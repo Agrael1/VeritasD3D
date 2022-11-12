@@ -38,16 +38,3 @@ private:
 	std::string modelPath;
 	std::string name;
 };
-
-namespace ver
-{
-	class Material
-	{
-	public:
-		Material() = default;
-		Material(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noxnd;
-		winrt::IAsyncAction MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path)noxnd;
-	private:
-		std::vector<Technique> techniques;
-	};
-}

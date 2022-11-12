@@ -6,10 +6,83 @@
 #include <assimp/material.h>
 #include <assimp/mesh.h>
 
+union Desc
+{
+	struct
+	{
+		bool diff;
+		bool spec;
+		bool nrm;
+	};
+	uint32_t value;
+	bool Any()const { return value; }
+};
+
+Desc DescribeMaterial(const aiMaterial& material)
+{
+	return{
+		material.GetTextureCount(aiTextureType::aiTextureType_DIFFUSE) > 0,
+		material.GetTextureCount(aiTextureType::aiTextureType_SPECULAR) > 0,
+		material.GetTextureCount(aiTextureType::aiTextureType_NORMALS) > 0,
+	};
+}
+
+ver::dv::VertexLayout CreateLayout(Desc desc)
+{
+	using enum ver::dv::ElementType;
+	ver::dv::VertexLayout _out;
+	_out.append(Position3D);
+	_out.append(Normal);
+	if (desc.Any())
+		_out.append(Texture3D);
+	if (desc.nrm)
+	{
+		_out.append(Tangent);
+		_out.append(Bitangent);
+	}
+	return _out;
+}
+DC::Buffer CreateConstantBuffer(Desc desc)
+{
+	DC::RawLayout pscLayout;
+	if (!desc.diff)pscLayout.Add({ {DC::Type::Float3, "materialColor"} });
+	if (desc.spec)
+	{
+		pscLayout.Add({
+			{DC::Type::Bool, "useGlossAlpha"},
+			{DC::Type::Bool,"useSpecularMap"} });
+	}
+	pscLayout.Add({
+		{DC::Type::Float3,"specularColor"},
+		{DC::Type::Float,"specularWeight"},
+		{DC::Type::Float,"specularGloss"} });
+	if (desc.nrm)
+	{
+		pscLayout.Add({
+			{DC::Type::Bool,"useNormalMap"},
+			{DC::Type::Float,"normalMapWeight"} });
+	}
+	return { std::move(pscLayout) };
+}
+std::string GetShaderCode(Desc desc)
+{
+	std::string code{ "phong." };
+	if (desc.diff)
+		code += "dif.";
+	if (desc.spec)
+		code += "spc.";
+	if (desc.nrm)
+		code += "nrm.";
+	return code;
+}
+
+
 Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noxnd
 	:modelPath(path.string())
 {
-	using enum ver::dv::ElementType;
+	auto desc = DescribeMaterial(material);
+	vtxLayout = CreateLayout(desc);
+
 	const auto rootPath = path.parent_path().string() + "\\";
 	{
 		aiString tempName;
@@ -20,14 +93,9 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 	{
 		Technique phong{ "Phong" };
 		Step step("lambertian");
-		std::string shaderCode = "phong.";
 		aiString texFileName;
 
 		// common (pre)
-		vtxLayout.append(Position3D);
-		vtxLayout.append(Normal);
-		DC::RawLayout pscLayout;
-		bool hasTexture = false;
 		bool hasGlossAlpha = false;
 
 		// diffuse
@@ -35,9 +103,6 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 			bool hasAlpha = false;
 			if (material.GetTexture(aiTextureType_DIFFUSE, 0, &texFileName) == aiReturn_SUCCESS)
 			{
-				hasTexture = true;
-				shaderCode += "dif.";
-				vtxLayout.append(Texture3D);
 				auto tex = ver::Texture::Resolve(gfx, rootPath + texFileName.C_Str());
 				//if (tex->UsesAlpha())
 				//{
@@ -47,60 +112,38 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 				//}
 				step.AddBindable(std::move(tex));
 			}
-			else
-			{
-				pscLayout.Add({ {DC::Type::Float3, "materialColor"} });
-			}
 			//step.AddBindable(RasterizerState::Resolve(gfx, hasAlpha));
 		}
 		// specular
 		{
 			if (material.GetTexture(aiTextureType_SPECULAR, 0, &texFileName) == aiReturn_SUCCESS)
 			{
-				hasTexture = true;
-				shaderCode += "spc.";
-				vtxLayout.append(Texture3D);
 				auto tex = ver::Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 1);
 				hasGlossAlpha = tex->UsesAlpha();
 				step.AddBindable(std::move(tex));
-				pscLayout.Add({
-					{DC::Type::Bool, "useGlossAlpha"},
-					{DC::Type::Bool,"useSpecularMap"} });
 			}
-			pscLayout.Add({
-				{DC::Type::Float3,"specularColor"},
-				{DC::Type::Float,"specularWeight"},
-				{DC::Type::Float,"specularGloss"} });
 		}
 		// normal
 		{
 			if (material.GetTexture(aiTextureType_NORMALS, 0, &texFileName) == aiReturn_SUCCESS)
 			{
-				hasTexture = true;
-				shaderCode += "nrm.";
-				vtxLayout.append(Texture3D);
-				vtxLayout.append(Tangent);
-				vtxLayout.append(Bitangent);
 				step.AddBindable(ver::Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 2));
-				pscLayout.Add({
-					{DC::Type::Bool,"useNormalMap"},
-					{DC::Type::Float,"normalMapWeight"} });
 			}
 		}
 		// common (post)
 		{
+			auto shaderCode = GetShaderCode(desc);
 			step.AddBindable(std::make_shared<TransformCbuf>(gfx, 0u));
-			auto pvs = VertexShader::Resolve(gfx, shaderCode + "vs.cso");
+			auto pvs = ver::VertexShader::Resolve(gfx, shaderCode + "vs.cso");
 			auto pvsbc = pvs->GetBytecode();
 			step.AddBindable(std::move(pvs));
-			step.AddBindable(PixelShader::Resolve(gfx, shaderCode + "ps.cso"));
+			step.AddBindable(ver::PixelShader::Resolve(gfx, shaderCode + "ps.cso"));
 			step.AddBindable(InputLayout::Resolve(gfx, vtxLayout, pvsbc, true));
-			if (hasTexture)
-			{
+			if (desc.Any())
 				step.AddBindable(Sampler::Resolve(gfx));
-			}
+
 			// PS material params (cbuf)
-			DC::Buffer buf{ std::move(pscLayout) };
+			DC::Buffer buf{ CreateConstantBuffer(desc) };
 			if (auto r = buf["materialColor"]; r.Exists())
 			{
 				aiColor3D color = { 0.45f,0.45f,0.85f };
@@ -129,49 +172,14 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 		phong.AddStep(std::move(step));
 		techniques.push_back(std::move(phong));
 	}
-	// outline technique
-	//{
-	//	Technique outline("Outline", false);
-	//	{
-	//		Step mask("outlineMask");
-
-	//		// TODO: better sub-layout generation tech for future consideration maybe
-	//		mask.AddBindable(InputLayout::Resolve(gfx, vtxLayout, VertexShader::Resolve(gfx, "Solid_VS.cso")->GetBytecode()));
-
-	//		mask.AddBindable(std::make_shared<TransformCbuf>(gfx));
-
-	//		// TODO: might need to specify rasterizer when doubled-sided models start being used
-
-	//		outline.AddStep(std::move(mask));
-	//	}
-	//	{
-	//		Step draw("outlineDraw");
-
-	//		{
-	//			DC::RawLayout lay;
-	//			lay.Add({ {DC::Type::Float3,"materialColor"} });
-	//			auto buf = DC::Buffer(std::move(lay));
-	//			buf["materialColor"] = DirectX::XMFLOAT3{ 1.0f,0.4f,0.4f };
-	//			draw.AddBindable(std::make_shared<CachingPixelConstantBufferEx>(gfx, buf, 1u));
-	//		}
-
-	//		// TODO: better sub-layout generation tech for future consideration maybe
-	//		draw.AddBindable(InputLayout::Resolve(gfx, vtxLayout, VertexShader::Resolve(gfx, "Solid_VS.cso")->GetBytecode()));
-
-	//		draw.AddBindable(std::make_shared<TransformCbuf>(gfx));
-
-	//		// TODO: might need to specify rasterizer when doubled-sided models start being used
-
-	//		outline.AddStep(std::move(draw));
-	//	}
-	//	techniques.push_back(std::move(outline));
-	//}
 }
 
 winrt::Windows::Foundation::IAsyncAction
 Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noxnd
 {
-	using enum ver::dv::ElementType;
+	auto desc = DescribeMaterial(material);
+	vtxLayout = CreateLayout(desc);
+
 	modelPath = path.string();
 	const auto rootPath = path.parent_path().string() + "\\";
 	{
@@ -186,106 +194,38 @@ Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::
 	{
 		Technique phong{ "Phong" };
 		Step step("lambertian");
-		std::string shaderCode = "phong.";
 		aiString texFileName;
 
 		// common (pre)
-		vtxLayout.append(Position3D);
-		vtxLayout.append(Normal);
-		DC::RawLayout pscLayout;
-		bool hasTexture = false;
 		bool hasGlossAlpha = false;
-		bool bHasDiffuse = false;
-		bool bHasSpecular = false;
-		bool bHasNormal = false;
 
 		// diffuse
-		{
-			if (bHasDiffuse = (material.GetTexture(aiTextureType_DIFFUSE, 0, &texFileName) == aiReturn_SUCCESS))
-			{
-				hasTexture = true;
-				shaderCode += "dif.";
-				vtxLayout.append(Texture3D);
-				texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str()));
-			}
-			else
-			{
-				pscLayout.Add({ {DC::Type::Float3, "materialColor"} });
-			}
-		}
+		if (material.GetTexture(aiTextureType_DIFFUSE, 0, &texFileName) == aiReturn_SUCCESS)
+			texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 0));
 		// specular
-		{
-			if (bHasSpecular = (material.GetTexture(aiTextureType_SPECULAR, 0, &texFileName) == aiReturn_SUCCESS))
-			{
-				hasTexture = true;
-				shaderCode += "spc.";
-				vtxLayout.append(Texture3D);
-				texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 1));
-				pscLayout.Add({
-					{DC::Type::Bool, "useGlossAlpha"},
-					{DC::Type::Bool,"useSpecularMap"} });
-			}
-			pscLayout.Add({
-				{DC::Type::Float3,"specularColor"},
-				{DC::Type::Float,"specularWeight"},
-				{DC::Type::Float,"specularGloss"} });
-		}
+		if (material.GetTexture(aiTextureType_SPECULAR, 0, &texFileName) == aiReturn_SUCCESS)
+			texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 1));
 		// normal
-		{
-			if (bHasNormal = (material.GetTexture(aiTextureType_NORMALS, 0, &texFileName) == aiReturn_SUCCESS))
-			{
-				hasTexture = true;
-				shaderCode += "nrm.";
-				vtxLayout.append(Texture3D);
-				vtxLayout.append(Tangent);
-				vtxLayout.append(Bitangent);
-				texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 2));
-				pscLayout.Add({
-					{DC::Type::Bool,"useNormalMap"},
-					{DC::Type::Float,"normalMapWeight"} });
-			}
-		}
+		if (material.GetTexture(aiTextureType_NORMALS, 0, &texFileName) == aiReturn_SUCCESS)
+			texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 2));
 
-		for (auto& x : texes)
-		{
-			co_await x;
-		}
-
-		
-		/*if (bHasDiffuse)
-		{
-			bool hasAlpha = false;
-			if (texes[0].get()->UsesAlpha())
-			{
-				hasAlpha = true;
-				shaderCode.insert( 8, "Msk");
-			}
-			step.AddBindable(RasterizerState::Resolve(gfx, hasAlpha));
-		}*/
-		if (bHasSpecular)
-		{
+		if (desc.spec)
 			hasGlossAlpha = texes[1].get()->UsesAlpha();
-		}
 
 		for (auto& x : texes)
-		{
 			step.AddBindable(std::move(x.get()));
-		}
 
 		// common (post)
 		{
+			auto shaderCode = GetShaderCode(desc);
+			auto vstask = ver::VertexShader::ResolveAsync(gfx, shaderCode + "vs.cso");
+			auto pstask = ver::PixelShader::ResolveAsync(gfx, shaderCode + "ps.cso");
+
 			step.AddBindable(std::make_shared<TransformCbuf>(gfx, 0u));
-			auto pvs = VertexShader::Resolve(gfx, shaderCode + "vs.cso");
-			auto pvsbc = pvs->GetBytecode();
-			step.AddBindable(std::move(pvs));
-			step.AddBindable(PixelShader::Resolve(gfx, shaderCode + "ps.cso"));
-			step.AddBindable(InputLayout::Resolve(gfx, vtxLayout, pvsbc, true));
-			if (hasTexture)
-			{
+			if (desc.Any())
 				step.AddBindable(Sampler::Resolve(gfx));
-			}
 			// PS material params (cbuf)
-			DC::Buffer buf{ std::move(pscLayout) };
+			DC::Buffer buf{ CreateConstantBuffer(desc) };
 			if (auto r = buf["materialColor"]; r.Exists())
 			{
 				aiColor3D color = { 0.45f,0.45f,0.85f };
@@ -310,47 +250,16 @@ Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::
 			buf["useNormalMap"].SetIfExists(true);
 			buf["normalMapWeight"].SetIfExists(1.0f);
 			step.AddBindable(std::make_unique<CachingPixelConstantBufferEx>(gfx, std::move(buf), 1u));
+
+			auto pvs = co_await vstask;
+			auto pvsbc = pvs->GetBytecode();
+			step.AddBindable(std::move(pvs));
+			step.AddBindable(co_await pstask);
+			step.AddBindable(InputLayout::Resolve(gfx, vtxLayout, pvsbc, true));
 		}
 		phong.AddStep(std::move(step));
 		techniques.push_back(std::move(phong));
 	}
-	// outline technique
-	//{
-	//	Technique outline("Outline", false);
-	//	{
-	//		Step mask("outlineMask");
-
-	//		// TODO: better sub-layout generation tech for future consideration maybe
-	//		mask.AddBindable(InputLayout::Resolve(gfx, vtxLayout, VertexShader::Resolve(gfx, "Solid_VS.cso")->GetBytecode()));
-
-	//		mask.AddBindable(std::make_shared<TransformCbuf>(gfx));
-
-	//		// TODO: might need to specify rasterizer when doubled-sided models start being used
-
-	//		outline.AddStep(std::move(mask));
-	//	}
-	//	{
-	//		Step draw("outlineDraw");
-
-	//		{
-	//			DC::RawLayout lay;
-	//			lay.Add({ {DC::Type::Float3,"materialColor"} });
-	//			auto buf = DC::Buffer(std::move(lay));
-	//			buf["materialColor"] = DirectX::XMFLOAT3{ 1.0f,0.4f,0.4f };
-	//			draw.AddBindable(std::make_shared<CachingPixelConstantBufferEx>(gfx, buf, 1u));
-	//		}
-
-	//		// TODO: better sub-layout generation tech for future consideration maybe
-	//		draw.AddBindable(InputLayout::Resolve(gfx, vtxLayout, VertexShader::Resolve(gfx, "Solid_VS.cso")->GetBytecode()));
-
-	//		draw.AddBindable(std::make_shared<TransformCbuf>(gfx));
-
-	//		// TODO: might need to specify rasterizer when doubled-sided models start being used
-
-	//		outline.AddStep(std::move(draw));
-	//	}
-	//	techniques.push_back(std::move(outline));
-	//}
 }
 std::vector<unsigned short> Material::ExtractIndices(const aiMesh& mesh) noexcept
 {
@@ -383,7 +292,7 @@ std::shared_ptr<Bindable> Material::MakeVertexBindable(Graphics& gfx, const aiMe
 {
 	void* a[size_t(ver::dv::ElementType::Count)]{};
 	std::pmr::monotonic_buffer_resource b{ a, sizeof(a) };
-	std::pmr::vector<void*> vb{decltype(vb)::allocator_type{&b}};
+	std::pmr::vector<void*> vb{ decltype(vb)::allocator_type{&b} };
 	vb.reserve(vtxLayout.count());
 	auto x = prescale({ mesh.mVertices, mesh.mNumVertices }, scale);
 	vb.push_back(x.data());

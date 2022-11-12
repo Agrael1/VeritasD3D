@@ -19,8 +19,8 @@ RG::LightingPass::LightingPass(Graphics& gfx, std::string name) noxnd
 
 	AddBind(Sampler::Resolve(gfx));
 	AddBind(std::make_shared<ver::IndexBuffer>(gfx, "$$full", std::array< const uint16_t, 3>{ 0, 1, 2 }));
-	AddBind(std::move(VertexShader::Resolve(gfx, "fullscreen.vs.cso")));
-	AddBind(std::move(PixelShader::Resolve(gfx, "fullscreen.ps.cso")));
+	AddBind(std::move(ver::VertexShader::Resolve(gfx, "fullscreen.vs.cso")));
+	AddBind(std::move(ver::PixelShader::Resolve(gfx, "fullscreen.ps.cso")));
 }
 void RG::LightingPass::Execute(Graphics& gfx) const noxnd
 {
