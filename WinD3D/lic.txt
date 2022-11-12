@@ -1,4 +1,0 @@
-/* SPDX-License-Identifier: GPLv3-or-later
-* Copyright (C) THEDATE Ilya Doroshenko <agrael@live.ru>
-* This file is part of VeritasD3D <https://github.com/Agrael1/VeritasD3D>.
-*/
