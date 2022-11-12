@@ -29,17 +29,20 @@ namespace UT
 		void Sync()
 		{
 			auto& position = physics.get_controller().getPosition();
-			camera.set_position({ float(position.x), float(position.y + height / 3.0f), float(position.z) });
+			camera.SetPosition({ float(position.x), float(position.y + height / 3.0f), float(position.z) });
 		}
-		template<class Self>
-		auto&& GetCamera(this Self&& s)
+		void Rotate(float dx, float dy)
 		{
-			return s.camera;
+			camera.Rotate(dx, dy);
+		}
+		auto GetViewMatrix()const 
+		{
+			return camera.GetViewMatrix();
 		}
 	private:
 		void OnPositionChanged()
 		{
-			camera.set_position({ position.x, position.y + height / 3.0f, position.z });
+			camera.SetPosition({ position.x, position.y + height / 3.0f, position.z });
 			physx::PxSceneWriteLock scopedLock(*physics.get_controller().getScene());
 			physics.get_controller().setPosition(physx::PxExtendedVec3(position.x, position.y, position.z));
 		}

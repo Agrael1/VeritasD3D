@@ -1,59 +1,15 @@
 #include <Game/App.h>
 #include <imgui.h>
 #include <Engine/Util/Utility.h>
-
-constexpr COMDLG_FILTERSPEC filterSpecs[] =
-{
-	{L"Wavefront object file",L"*.obj"},
-	{L"Collada", L"*.dae, *.xml"},
-	{L"Blender", L"*.blend"},
-	{L"Biovision BVH", L"*.bvh"},
-	{L"3D Studio Max 3DS", L"*.3ds"},
-	{L"3D Studio Max ASE", L"*.ase"},
-	{L"Stanford Polygon Library", L"*.ply"},
-	{L"AutoCAD DXF", L"*.dxf"},
-	{L"IFC - STEP", L"*.ifc"},
-	{L"Neutral File Format", L"*.nff"},
-	{L"Sense8 WorldToolkit", L"*.nff"},
-	{L"Valve Model", L"*.smd, *.vta"},
-	{L"Quake I", L"*.mdl"},
-	{L"Quake II", L"*.md2"},
-	{L"Quake III", L"*.md3"},
-	{L"Quake 3 BSP", L"*.pk3"},
-	{L"RtCW", L"*.mdc"},
-	{L"Doom 3 ", L"*.md5mesh, *.md5anim, *.md5camera"},
-	{L"DirectX X", L"*.x"},
-	{L"Quick3D", L"*.q3o, *.q3s"},
-	{L"Raw Triangles", L"*.raw"},
-	{L"AC3D", L"*.ac"},
-	{L"Stereolithography", L"*.stl"},
-	{L"Autodesk DXF", L"*.dxf"},
-	{L"Irrlicht Mesh", L"*.irrmesh, *.xml"},
-	{L"Irrlicht Scene", L"*.irr, *.xml"},
-	{L"Object File Format", L"*.off"},
-	{L"Terragen Terrain", L"*.ter"},
-	{L"3D GameStudio Model", L"*.mdl"},
-	{L"3D GameStudio Terrain", L"*.hmp"},
-	{L"Ogre", L"*.mesh*.xml, *.skeleton*.xml, *.material"},
-	{L"Milkshape 3D", L"*.ms3d"},
-	{L"LightWave Model", L"*.lwo"},
-	{L"LightWave Scene", L"*.lws"},
-	{L"Modo Model", L"*.lxo"},
-	{L"CharacterStudio Motion", L"*.csm"},
-	{L"Stanford Ply", L"*.ply"},
-	{L"TrueSpace", L"*.cob, *.scn"},
-	{L"All Files", L"*.*"}
-};
+#include <Util/Filters.h>
 
 namespace dx = DirectX;
 
 App::App(uint32_t width, uint32_t height)
-	: wnd(width, height, "VTest"), gfx(wnd.GetHandle(), width, height)
+	: wnd(width, height, "Unreal Tournament"), gfx(wnd.GetHandle(), width, height)
 	, player(scene)
 	, scene(physics)
-	,cam(player.GetCamera())
 {
-	opener.SetFileTypes(filterSpecs);
 	gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 1000.0f));
 	ResetTransform();
 }
@@ -64,7 +20,7 @@ App::~App()
 winrt::IAsyncAction App::InitializeAsync()
 {
 	co_await winrt::when_all(lights.InitializeAsync(gfx),
-		sphere.InitializeAsync(lights, gfx), level.InitializeAsync(physics, gfx, uR"(C:\Users\Agrae\Desktop\face\files\face2.obj)"));
+		sphere.InitializeAsync(lights, gfx), level.InitializeAsync(physics, gfx, uR"(C:\Users\Agrae\source\repos\VeritasD3D\Game\models\face\face.obj)"));
 	CreateRenderGraph();
 	level.AddToScene(scene);
 	co_return;
@@ -90,16 +46,12 @@ int App::Go()
 void App::DoFrame(float dt)
 {
 	if (!wnd.IsActive())return;
-	const auto s = dt * speed;
-
-
 
 	gfx.BeginFrame(0.2f, 0.2f, 0.2f);
-	gfx.SetCamera(player.GetCamera().GetViewMatrix());
+	gfx.SetCamera(player.GetViewMatrix());
 	sphere.Bind(gfx);
 	lights.Bind(gfx);
 
-	//if (model)model->Submit();
 	level.Submit();
 	sphere.Submit();
 	rg->Execute(gfx);
@@ -115,11 +67,7 @@ void App::DoFrame(float dt)
 	}
 	ImGui::End();
 
-	//if (model)
-		//modelProbe.SpawnWindow(*model);	// imgui windows
-
 	ProcessInput(dt);
-	//cam.SpawnControlWindow();
 	sphere.SpawnControlWindow();
 
 	// Present
@@ -175,22 +123,18 @@ void App::ProcessInput(float dt)
 		if (wnd.kbd.KeyIsPressed('W'))
 		{
 			transform.z += dt;
-			//cam.Translate({ 0.0f,0.0f,dt });
 		}
 		if (wnd.kbd.KeyIsPressed('A'))
 		{
 			transform.x -= dt;
-			//cam.Translate({ -dt,0.0f,0.0f });
 		}
 		if (wnd.kbd.KeyIsPressed('S'))
 		{
 			transform.z -= dt;
-			//cam.Translate({ 0.0f,0.0f,-dt });
 		}
 		if (wnd.kbd.KeyIsPressed('D'))
 		{
 			transform.x += dt;
-			//cam.Translate({ dt,0.0f,0.0f });
 		}
 		if (wnd.kbd.KeyIsPressed(VK_SPACE))
 		{
@@ -206,33 +150,9 @@ void App::ProcessInput(float dt)
 	{
 		if (!wnd.CursorEnabled())
 		{
-			cam.Rotate((float)delta->x, (float)delta->y);
+			player.Rotate((float)delta->x, (float)delta->y);
 		}
 	}
-
-	//if (wnd.LoadCalled())
-	//{
-	//	switch (state)
-	//	{
-	//		using enum ModelLoadState;
-	//	case Unloaded:
-	//		state = InProgress;
-	//		ReloadModelAsync();
-	//		break;
-	//	case Finish:
-	//	{
-	//		//model.reset(swap.release());
-	//		ver::Codex::Trim();
-	//		//if (model)
-	//		//	model->LinkTechniques(*rg);
-	//		modelProbe.Reset();
-	//		state = Unloaded;
-	//		wnd.LoadingComplete();
-	//		break;
-	//	}
-	//	default:break;
-	//	}
-	//}
 
 	if (wnd.ResizeCalled())
 	{
@@ -253,24 +173,7 @@ void App::ProcessInput(float dt)
 void App::CreateRenderGraph()
 {
 	rg.emplace(gfx);
-
 	sphere.LinkTechniques(*rg);
-	//text.LinkTechniques(*rg);
-	//if (model) model->LinkTechniques(*rg);
 	level.GetWorld().LinkTechniques(*rg);
-}
-
-winrt::fire_and_forget App::ReloadModelAsync()
-{
-	co_await winrt::resume_background();
-	//auto wfilename = opener.GetFilePath();
-
-	//if (!wfilename.empty())
-	//{
-	//	swap = std::make_unique<Model>(gfx, ToNarrow(wfilename));
-	//	if (!swap) MessageBox(nullptr, "Model file was corrupted or empty",
-	//		"Model Exception", MB_OK | MB_ICONEXCLAMATION);
-	//}
-	//state = ModelLoadState::Finish;
 }
 

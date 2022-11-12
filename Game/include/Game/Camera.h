@@ -13,11 +13,11 @@ public:
 	void Orbit(float dx, float dy)noexcept;
 	void Translate(DirectX::XMFLOAT3 translation)noexcept;
 
-	DirectX::XMFLOAT3 position()
+	DirectX::XMFLOAT3 GetPosition()
 	{
 		return pos;
 	}
-	void set_position(DirectX::XMFLOAT3 v)
+	void SetPosition(DirectX::XMFLOAT3 v)
 	{
 		pos = v;
 	}

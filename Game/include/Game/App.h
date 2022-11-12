@@ -25,8 +25,6 @@ private:
 	void DoFrame(float dt);
 	void ProcessInput(float dt);
 	void CreateRenderGraph();
-	winrt::fire_and_forget
-		ReloadModelAsync();
 	void ResetTransform()
 	{
 		transform.x = transform.z = 0.0f;
@@ -37,23 +35,9 @@ private:
 	ImGUIManager imgui;
 	Window wnd;
 	Graphics gfx;
-
 	std::optional<RG::DeferredRenderGraph> rg;
-	VFileOpenDialog opener;
-	float speed = 1.0f;
-
-	MP modelProbe;
-
-	enum class ModelLoadState : uint8_t
-	{
-		Unloaded,
-		InProgress,
-		Finish
-	};
-	std::atomic<ModelLoadState> state = ModelLoadState::Unloaded;
 	bool bFlightMode = false;
 
-	//ver::Text text;
 	ver::LightBuffer lights;
 	ver::LightSphere sphere;
 
@@ -62,6 +46,5 @@ private:
 	UT::Player player;
 	UT::Level level;
 	DirectX::XMFLOAT3 transform{};
-	Camera& cam;
 };
 
