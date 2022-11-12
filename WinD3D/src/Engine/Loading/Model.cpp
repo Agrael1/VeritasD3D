@@ -18,10 +18,11 @@ DirectX::XMMATRIX ScaleTranslation(DirectX::XMMATRIX matrix, float scale)
 }
 
 
-Model::Model(Graphics& gfx, std::string_view pathString, const float scale)
+Model::Model(Graphics& gfx, std::filesystem::path pathString, const float scale)
 {
+	auto path_str = pathString.string();
 	Assimp::Importer imp;
-	const auto pScene = imp.ReadFile(pathString.data(),
+	const auto pScene = imp.ReadFile(path_str.c_str(),
 		aiProcess_Triangulate |
 		aiProcess_JoinIdenticalVertices |
 		aiProcess_ConvertToLeftHanded |
@@ -32,80 +33,43 @@ Model::Model(Graphics& gfx, std::string_view pathString, const float scale)
 	if (pScene == nullptr || !pScene->HasMeshes())
 		throw ver::make_error<ver::ModelException>({ imp.GetErrorString() });
 
-	//parse materials
-	std::vector<Material> materials;
-	materials.reserve(pScene->mNumMaterials);
-
-	for (size_t i = 0; i< pScene->mNumMaterials; i++)
-	{
-		materials.emplace_back(gfx, *pScene->mMaterials[i], pathString);
-	}
-
-	for (size_t i = 0; i < pScene->mNumMeshes; i++)
-	{
-		const auto& mesh = *pScene->mMeshes[i];
-		meshPtrs.push_back(std::make_unique<Mesh>(gfx, materials[mesh.mMaterialIndex], mesh, scale));
-	}
-
-	int nextId = 0;
-	pRoot = ParseNode(nextId, *pScene->mRootNode, scale);
+	Initialize(gfx, *pScene, path_str, scale);
 }
 
-
-winrt::Windows::Foundation::IAsyncAction
-Model::MakeModelAsync(std::unique_ptr<Model>& to, Graphics& gfx, std::string_view pathString, float scale)
+winrt::Windows::Foundation::IAsyncAction Model::InitializeAsync(Graphics& gfx, const aiScene& scene, std::filesystem::path path, float scale)
 {
-	std::unique_ptr<Model> out (new Model());
-
-	Assimp::Importer imp;
-	const auto pScene = imp.ReadFile(pathString.data(),
-		aiProcess_Triangulate |
-		aiProcess_JoinIdenticalVertices |
-		aiProcess_ConvertToLeftHanded |
-		aiProcess_GenNormals |
-		aiProcess_CalcTangentSpace
-	);
-
-	auto v = imp.GetErrorString();
-
-	if (!pScene->mNumMeshes||pScene == nullptr)
-	{
-		to.reset();
-		co_return;
-	}
-
-
-	out->meshPtrs.reserve(pScene->mNumMeshes);
-
-	std::vector<Material> materials;
 	std::vector<winrt::Windows::Foundation::IAsyncAction> tasks;
-	materials.resize(pScene->mNumMaterials);
-	tasks.reserve(pScene->mNumMaterials);
+	tasks.reserve(scene.mNumMeshes);
+	meshPtrs.reserve(scene.mNumMeshes);
 
-	for (size_t i = 0; auto & mat: materials)
-	{
-		tasks.emplace_back(mat.MakeMaterialAsync(gfx, *pScene->mMaterials[i], pathString));
-		i++;
-	}
+	auto exec = [&](size_t i) -> winrt::Windows::Foundation::IAsyncAction {
+		co_await winrt::resume_background();
+		const auto& mesh = *scene.mMeshes[i];
+		Material m;
+		co_await m.InitializeAsync(gfx, *scene.mMaterials[mesh.mMaterialIndex], path);
+		meshPtrs.emplace_back(std::make_unique<Mesh>(gfx, m, mesh, scale));
+	};
+
+	for (size_t i = 0; i < scene.mNumMeshes; i++)
+		tasks.push_back(exec(i));
+
 	co_await ver::when_all(tasks);
 
-	//parse materials
-	for (size_t i = 0; i < pScene->mNumMeshes; i++)
+	int nextId = 0;
+	pRoot = ParseNode(nextId, *scene.mRootNode, scale);
+}
+void Model::Initialize(Graphics& gfx, const aiScene& scene, std::filesystem::path path, float scale)
+{
+	meshPtrs.reserve(scene.mNumMeshes);
+	for (size_t i = 0; i < scene.mNumMeshes; i++)
 	{
-		const auto& mesh = *pScene->mMeshes[i];
-		out->meshPtrs.push_back(std::make_unique<Mesh>(gfx, materials[mesh.mMaterialIndex], mesh, scale));
+		const auto& mesh = *scene.mMeshes[i];
+		Material m{ gfx, *scene.mMaterials[mesh.mMaterialIndex], path };
+		meshPtrs.push_back(std::make_unique<Mesh>(gfx, m, mesh, scale));
 	}
 
 	int nextId = 0;
-	out->pRoot = out->ParseNode(nextId, *pScene->mRootNode, scale);
-	to.reset(out.release());
-}
-
-
-
-winrt::Windows::Foundation::IAsyncAction Model::InitializeAsync(Graphics& gfx, std::string_view pathString, float scale)
-{
-	return winrt::Windows::Foundation::IAsyncAction();
+	pRoot = ParseNode(nextId, *scene.mRootNode, scale);
 }
 
 void Model::Submit() const noxnd
@@ -141,8 +105,6 @@ void Model::UnlinkTechniques()
 
 Model::~Model() noexcept
 {}
-
-
 
 std::unique_ptr<Node> Model::ParseNode(int& nextId, const aiNode& node, float scale) noexcept
 {

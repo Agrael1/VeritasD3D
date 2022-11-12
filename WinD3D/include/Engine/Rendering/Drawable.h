@@ -11,12 +11,14 @@ namespace RG
 {
 	class RenderGraph;
 }
-
-class IndexBuffer;
 class VertexBuffer;
 class Topology;
 class InputLayout;
 
+namespace ver
+{
+	class IndexBuffer;
+}
 
 class Drawable
 {
@@ -35,7 +37,7 @@ public:
 	void LinkTechniques(RG::RenderGraph&);
 	void UnlinkTechniques();
 protected:
-	std::shared_ptr<IndexBuffer> pIndices;
+	std::shared_ptr<ver::IndexBuffer> pIndices;
 	std::shared_ptr<Bindable> pVertices;
 	std::shared_ptr<Topology> pTopology;
 	std::vector<Technique> techniques;

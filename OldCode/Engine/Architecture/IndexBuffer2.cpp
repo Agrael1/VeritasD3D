@@ -38,7 +38,7 @@ void ver::IndexBuffer::Initialize(Graphics& gfx, std::span<const uint16_t> indic
 void IndexBuffer::Bind(Graphics& gfx)noxnd
 {
 	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->IASetIndexBuffer(pIndexBuffer.get(), DXGI_FORMAT::DXGI_FORMAT_R16_UINT, 0u));
+	GFX_THROW_INFO_ONLY(GetContext(gfx)->IASetIndexBuffer(pIndexBuffer.get(), format, 0u));
 }
 uint32_t IndexBuffer::GetCount()const noexcept
 {

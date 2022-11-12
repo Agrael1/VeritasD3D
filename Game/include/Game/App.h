@@ -10,7 +10,7 @@
 #include <Engine/Bindable/Light.h>
 #include <Engine/Scene/Text.h>
 #include <Game/Player.h>
-#include <Game/Scene.h>
+#include <Game/Level.h>
 #include <Foundation.h>
 
 class App
@@ -39,8 +39,6 @@ private:
 	Graphics gfx;
 
 	std::optional<RG::DeferredRenderGraph> rg;
-
-	//std::unique_ptr<Model> model, swap;
 	VFileOpenDialog opener;
 	float speed = 1.0f;
 

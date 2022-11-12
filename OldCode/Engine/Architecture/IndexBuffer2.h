@@ -1,6 +1,5 @@
 #pragma once
-#include "Bindable.h"
-#include "pch.h"
+#include <Engine/Bindable/Bindable.h>
 #include <span>
 
 namespace ver
@@ -33,6 +32,7 @@ namespace ver
 	protected:
 		std::string tag;
 		uint32_t count = 0;
+		DXGI_FORMAT format = DXGI_FORMAT::DXGI_FORMAT_R16_UINT;
 		winrt::com_ptr<ID3D11Buffer> pIndexBuffer;
 	};
 }

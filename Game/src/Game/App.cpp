@@ -48,16 +48,13 @@ constexpr COMDLG_FILTERSPEC filterSpecs[] =
 namespace dx = DirectX;
 
 App::App(uint32_t width, uint32_t height)
-	: wnd(width, height, "VTest"), gfx(wnd.GetHandle(), width, height)//, text(gfx, 1.0)
-	//, model(new Model(gfx, R"(C:\Users\Agrae\Desktop\aaa\resources\models\nyra\scene.gltf)"))
+	: wnd(width, height, "VTest"), gfx(wnd.GetHandle(), width, height)
 	, player(scene)
 	, scene(physics)
-	, level (physics, gfx, uR"(C:\Users\Agrae\Desktop\face\files\face2.obj)")
 	,cam(player.GetCamera())
 {
 	opener.SetFileTypes(filterSpecs);
 	gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 1000.0f));
-	level.AddToScene(scene);
 	ResetTransform();
 }
 App::~App()
@@ -67,8 +64,9 @@ App::~App()
 winrt::IAsyncAction App::InitializeAsync()
 {
 	co_await winrt::when_all(lights.InitializeAsync(gfx),
-		sphere.InitializeAsync(lights, gfx));
+		sphere.InitializeAsync(lights, gfx), level.InitializeAsync(physics, gfx, uR"(C:\Users\Agrae\Desktop\face\files\face2.obj)"));
 	CreateRenderGraph();
+	level.AddToScene(scene);
 	co_return;
 }
 

@@ -1,5 +1,7 @@
 #pragma once
 #include <filesystem>
+#include <Engine/Loading/Mesh.h>
+#include <Engine/Loading/Node.h>
 
 class Graphics;
 class Node;
@@ -8,6 +10,7 @@ class ModelWindow;
 struct aiMesh;
 struct aiMaterial;
 struct aiNode;
+struct aiScene;
 
 namespace RG
 {
@@ -18,18 +21,16 @@ class Model
 {
 public:
 	Model() = default;
-	Model(Graphics& gfx, std::string_view pathString, float scale = 1.0f);
+	Model(Graphics& gfx, std::filesystem::path pathString, float scale = 1.0f);
 	~Model() noexcept;
-	winrt::Windows::Foundation::IAsyncAction InitializeAsync(Graphics& gfx, std::string_view pathString, float scale = 1.0f);
+	winrt::IAsyncAction InitializeAsync(Graphics& gfx, const aiScene& scene, std::filesystem::path path, float scale = 1.0f);
+	void Initialize(Graphics& gfx, const aiScene& scene, std::filesystem::path path, float scale = 1.0f);
 public:
 	void Submit() const noxnd;
 	void SetRootTransform(DirectX::FXMMATRIX tf) noexcept;
 	void Accept(class ModelProbe& probe);
 	void LinkTechniques(RG::RenderGraph&);
 	void UnlinkTechniques();
-
-	static winrt::Windows::Foundation::IAsyncAction
-		MakeModelAsync(std::unique_ptr<Model>& to, Graphics& gfx, std::string_view pathString, float scale = 1.0f);
 private:
 	static std::unique_ptr<Mesh> ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials, const std::filesystem::path& path, float scale);
 	std::unique_ptr<Node> ParseNode(int& nextId, const aiNode& node, float scale) noexcept;

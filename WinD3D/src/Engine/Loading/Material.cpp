@@ -169,7 +169,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 }
 
 winrt::Windows::Foundation::IAsyncAction
-Material::MakeMaterialAsync(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noxnd
+Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noxnd
 {
 	using enum ver::dv::ElementType;
 	modelPath = path.string();
@@ -368,11 +368,15 @@ std::vector<unsigned short> Material::ExtractIndices(const aiMesh& mesh) noexcep
 }
 
 #include <memory_resource>
+#include <Engine/Bindable/IndexBuffer2.h>
 
-void prescale(std::span<aiVector3D> mesh, float scale)
+auto prescale(std::span<aiVector3D> mesh, float scale)
 {
+	std::vector<aiVector3D> copy;
+	copy.reserve(mesh.size());
 	for (auto& i : mesh)
-		i *= scale;
+		copy.push_back(i * scale);
+	return copy;
 }
 
 std::shared_ptr<Bindable> Material::MakeVertexBindable(Graphics& gfx, const aiMesh& mesh, float scale) const noxnd
@@ -381,9 +385,8 @@ std::shared_ptr<Bindable> Material::MakeVertexBindable(Graphics& gfx, const aiMe
 	std::pmr::monotonic_buffer_resource b{ a, sizeof(a) };
 	std::pmr::vector<void*> vb{decltype(vb)::allocator_type{&b}};
 	vb.reserve(vtxLayout.count());
-	prescale({ mesh.mVertices, mesh.mNumVertices }, scale);
-
-	vb.push_back(mesh.mVertices);
+	auto x = prescale({ mesh.mVertices, mesh.mNumVertices }, scale);
+	vb.push_back(x.data());
 	vb.push_back(mesh.mNormals);
 	if (vtxLayout.contains(ver::dv::ElementType::Texture3D))
 		vb.push_back(mesh.mTextureCoords[0]);
@@ -394,9 +397,9 @@ std::shared_ptr<Bindable> Material::MakeVertexBindable(Graphics& gfx, const aiMe
 	}
 	return std::make_shared<VertexMultibuffer>(gfx, vtxLayout, vb, mesh.mNumVertices);
 }
-std::shared_ptr<IndexBuffer> Material::MakeIndexBindable(Graphics& gfx, const aiMesh& mesh) const noxnd
+std::shared_ptr<ver::IndexBuffer> Material::MakeIndexBindable(Graphics& gfx, const aiMesh& mesh) const noxnd
 {
-	return IndexBuffer::Resolve(gfx, MakeMeshTag(mesh), ExtractIndices(mesh));
+	return ver::IndexBuffer::Resolve(gfx, MakeMeshTag(mesh), ExtractIndices(mesh));
 }
 std::string Material::MakeMeshTag(const aiMesh& mesh) const noexcept
 {
