@@ -7,25 +7,32 @@
 #include <Engine/Rendering/SourcesT.h>
 #include <Engine/Graphics.h>
 #include <Engine/Bindable/RenderTarget.h>
+#include <Engine/Bindable/Topology.h>
+#include <Engine/Bindable/Stencil.h>
+#include <Engine/Bindable/ShadowSampler.h>
 
 RG::LightingPass::LightingPass(Graphics& gfx, std::string name) noxnd
 	:BindingPass(std::move(name))
 {
 	AddBindSink<RenderTargetArray>("targets");
 	RegisterSink(DirectBufferSink<IRenderTarget>::Make("renderTarget", renderTarget));
-	RegisterSink(DirectBufferSink<DepthStencil>::Make("depthStencil", depthStencil));
+	RegisterSink(DirectBufferSink<ver::DepthStencil>::Make("depthStencil", depthStencil));
 	RegisterSource(DirectBufferSource<IRenderTarget>::Make("renderTarget", renderTarget));
-	RegisterSource(DirectBufferSource<DepthStencil>::Make("depthStencil", depthStencil));
+	RegisterSource(DirectBufferSource<ver::DepthStencil>::Make("depthStencil", depthStencil));
 
+	AddBindSink<Bindable>("shadow");
+
+	AddBind(std::make_shared<ver::ShadowSampler>(gfx));
+	AddBind(Stencil::Resolve(gfx, Stencil::Mode::DepthFirst));
 	AddBind(Sampler::Resolve(gfx));
-	AddBind(std::make_shared<ver::IndexBuffer>(gfx, "$$full", std::array< const uint16_t, 3>{ 0, 1, 2 }));
-	AddBind(std::move(ver::VertexShader::Resolve(gfx, "fullscreen.vs.cso")));
-	AddBind(std::move(ver::PixelShader::Resolve(gfx, "fullscreen.ps.cso")));
+	AddBind(ver::VertexShader::Resolve(gfx, "fullscreen.vs.cso"));
+	AddBind(ver::PixelShader::Resolve(gfx, "fullscreen.ps.cso"));
+	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 }
 void RG::LightingPass::Execute(Graphics& gfx) const noxnd
 {
 	BindAll(gfx);
-	gfx.DrawIndexed(3u);
-	ID3D11ShaderResourceView* const pSRV[4] = { nullptr };
-	ver::GraphicsResource::GetContext(gfx)->PSSetShaderResources(0, 4, pSRV);
+	gfx.Draw(3u);
+	ID3D11ShaderResourceView* const pSRV[6] = { nullptr };
+	ver::GraphicsResource::GetContext(gfx)->PSSetShaderResources(0, 6, pSRV);
 }

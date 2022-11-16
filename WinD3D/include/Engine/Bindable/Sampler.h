@@ -11,14 +11,15 @@ public:
 		Point,
 	};
 public:
-	Sampler(Graphics& gfx, Type type, bool reflect);
+	Sampler(Graphics& gfx, Type type, bool reflect, uint32_t slot);
 public:
 	void Bind(Graphics& gfx) noxnd override;
-	static std::shared_ptr<Sampler> Resolve(Graphics& gfx, Type type = Type::Anisotropic, bool reflect = false);
-	static std::string GenerateUID(Type type, bool reflect);
+	static std::shared_ptr<Sampler> Resolve(Graphics& gfx, Type type = Type::Anisotropic, bool reflect = false, uint32_t slot = 0u);
+	static std::string GenerateUID(Type type, bool reflect, uint32_t slot);
 	std::string GetUID() const noexcept override;
 protected:
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> pSampler;
 	Type type;
 	bool reflect;
+	uint32_t slot;
 };

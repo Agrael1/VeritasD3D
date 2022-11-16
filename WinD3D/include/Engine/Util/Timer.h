@@ -12,9 +12,9 @@ namespace ver
 		{
 			start_time = clock::now();
 		}
-		auto stop()
+		float stop()
 		{
-			return std::chrono::duration_cast<std::chrono::milliseconds>(clock::now() - start_time);
+			return (clock::now() - start_time).count()/1'000'000'000.0f;
 		}
 	private:
 		std::chrono::time_point<clock> start_time;

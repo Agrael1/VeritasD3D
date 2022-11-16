@@ -1,4 +1,4 @@
-#include "ShaderProcs.hlsli"
+#include "../headers/deferred.hlsli"
 
 cbuffer ObjectCBuf : register(b1)
 {
@@ -9,20 +9,12 @@ cbuffer ObjectCBuf : register(b1)
     float specularGloss;
 };
 
-struct PixelOutDeferred
-{
-    float4 diffuse : SV_Target0;
-    float4 normal : SV_Target1;
-    float4 position : SV_Target2;
-    float4 specular : SV_Target3;
-};
-
 SamplerState splr;
 Texture2D tex : register(t0);
 Texture2D spec : register(t1);
 
 
-PixelOutDeferred main(float3 viewFragPos : Position, float3 viewNormal : Normal, float2 tc : Texcoord)
+PixelOutDeferred main(float3 viewFragPos : Position, float3 viewNormal : Normal, float2 tc : Texcoord, float4 shadowPos : ShadowPosition)
 {
     float4 spec_sample = spec.Sample(splr, tc);
     float3 spec_refl = useSpecularMap ? spec_sample.rgb : specularColor;
@@ -33,5 +25,6 @@ PixelOutDeferred main(float3 viewFragPos : Position, float3 viewNormal : Normal,
     pOut.normal = float4(normalize(viewNormal), 1.0f);
     pOut.position = float4(viewFragPos, 1.0f);
     pOut.specular = float4(spec_refl * specularWeight, spec_pow);
+    pOut.shadow = shadowPos;
     return pOut;
 }

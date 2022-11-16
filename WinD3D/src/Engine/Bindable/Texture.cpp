@@ -3,42 +3,15 @@
 #include <Engine/Bindable/Codex.h>
 #include <Engine/Util/DXGIInfoManager.h>
 #include <Engine/Util/GraphicsExceptions.h>
-#include <DirectXTex.h>
+#include <Engine/Loading/Image.h>
 
 using namespace ver;
 
 constexpr uint32_t DefaultDifTexture = 0xffffffff;
 constexpr uint32_t DefaultNrmTexture = 0xff8080ff;
 constexpr uint32_t DefaultSpcTexture = 0xffffffff;
-inline constexpr DXGI_FORMAT format = DXGI_FORMAT::DXGI_FORMAT_B8G8R8A8_UNORM;
 
-std::optional<DirectX::ScratchImage> LoadWICTexture(std::wstring_view path)
-{
-	DirectX::ScratchImage image;
-	HRESULT hr = (DirectX::LoadFromWICFile(path.data(), DirectX::WIC_FLAGS_NONE, nullptr, image));
-	if (hr < 0) return{};
 
-	if (image.GetImage(0, 0, 0)->format != format)
-	{
-		DirectX::ScratchImage converted;
-		hr = DirectX::Convert(
-			*image.GetImage(0, 0, 0),
-			format,
-			DirectX::TEX_FILTER_DEFAULT,
-			DirectX::TEX_THRESHOLD_DEFAULT,
-			converted
-		);
-
-		if (hr < 0) return{};
-		image = std::move(converted);
-	}
-
-	DirectX::ScratchImage mipped;
-	hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(),
-		image.GetMetadata(), DirectX::TEX_FILTER_DEFAULT, 0, mipped);
-	if (hr < 0) return{};
-	return mipped;
-}
 
 Texture::Texture(Graphics& gfx, std::filesystem::path path, uint32_t slot)
 	:slot(slot), path(std::move(path))

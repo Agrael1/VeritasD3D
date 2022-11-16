@@ -3,6 +3,8 @@
 #include <Engine/Pass/BufferClearPass.h>
 #include <Engine/Pass/GBufferPass.h>
 #include <Engine/Pass/LightingPass.h>
+#include <Engine/Pass/SkyboxPass.h>
+#include <Engine/Pass/ShadowPass.h>
 #include <memory>
 
 RG::DeferredRenderGraph::DeferredRenderGraph(Graphics& gfx)
@@ -19,23 +21,29 @@ RG::DeferredRenderGraph::DeferredRenderGraph(Graphics& gfx)
 		AppendPass(std::move(pass));
 	}
 	{
+		auto pass = std::make_unique<ver::rg::ShadowMappingPass>(gfx, "shadow");
+		AppendPass(std::move(pass));
+	}
+	{
 		auto pass = std::make_unique<GBufferPass>(gfx, "lambertian");
 		pass->SetSinkLinkage("depthStencil", "clearDS.buffer");
 		AppendPass(std::move(pass));
 	}
 	{
 		auto pass = std::make_unique<LightingPass>(gfx, "light");
+		pass->SetSinkLinkage("shadow", "shadow.map");
 		pass->SetSinkLinkage("targets", "lambertian.targets");
 		pass->SetSinkLinkage("renderTarget", "clearRT.buffer");
 		pass->SetSinkLinkage("depthStencil", "lambertian.depthStencil");
 		AppendPass(std::move(pass));
 	}
-	//{
-	//	auto pass = std::make_unique<TransparentPass>(gfx, "transparent");
-	//	pass->SetSinkLinkage("renderTarget", "light.renderTarget");
-	//	pass->SetSinkLinkage("depthStencil", "light.depthStencil");
-	//	AppendPass(std::move(pass));
-	//}
-	SetSinkTarget("backbuffer", "light.renderTarget");
+	{
+		auto pass = std::make_unique<ver::rg::SkyboxPass>(gfx, "sky");
+		pass->SetSinkLinkage("renderTarget", "light.renderTarget");
+		pass->SetSinkLinkage("depthStencil", "light.depthStencil");
+		AppendPass(std::move(pass));
+	}	
+
+	SetSinkTarget("backbuffer", "sky.renderTarget");
 	Finalize();
 }

@@ -9,7 +9,6 @@
 using namespace physx;
 
 UT::Level::Level(ver::ph::Physics& phy, Graphics& gfx, std::filesystem::path map)
-//:world(gfx, map.string(), 40.0f)
 {
 	Assimp::Importer imp;
 	const auto pScene = imp.ReadFile(map.string().data(),

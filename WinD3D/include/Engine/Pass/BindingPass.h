@@ -4,7 +4,11 @@
 
 class Bindable;
 class IRenderTarget;
-class DepthStencil;
+
+namespace ver
+{
+	class DepthStencil;
+}
 
 namespace RG
 {
@@ -25,7 +29,7 @@ namespace RG
 			RegisterSink(std::make_unique<ContainerBindableSink<T>>(std::move(name), binds, index));
 		}
 		std::shared_ptr<IRenderTarget> renderTarget;
-		std::shared_ptr<DepthStencil> depthStencil;
+		std::shared_ptr<ver::DepthStencil> depthStencil;
 	private:
 		void BindBufferResources(Graphics& gfx) const noxnd;
 	private:

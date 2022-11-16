@@ -20,8 +20,8 @@ App::~App()
 winrt::IAsyncAction App::InitializeAsync()
 {
 	co_await winrt::when_all(lights.InitializeAsync(gfx),
-		sphere.InitializeAsync(lights, gfx), 
-		level.InitializeAsync(physics, gfx, uR"(C:\Users\Agrae\source\repos\VeritasD3D\Game\models\face\face.obj)"));
+		sphere.InitializeAsync(lights, gfx),
+		level.InitializeAsync(physics, gfx, u"../models/face/face.obj"));
 	CreateRenderGraph();
 	level.AddToScene(scene);
 	co_return;
@@ -29,7 +29,7 @@ winrt::IAsyncAction App::InitializeAsync()
 
 int App::Go()
 {
-	float dt = 1.0f/60.0f;
+	float dt = 1.0f / 60.0f;
 	while (true)
 	{
 		ResetTransform();
@@ -50,12 +50,14 @@ void App::DoFrame(float dt)
 
 	gfx.BeginFrame(0.2f, 0.2f, 0.2f);
 	gfx.SetCamera(player.GetViewMatrix());
+	gfx.SetShadowCamPos(DirectX::XMLoadFloat4A(&lights.at(0).pos));
 	sphere.Bind(gfx);
 	lights.Bind(gfx);
 
 	level.Submit();
 	sphere.Submit();
 	rg->Execute(gfx);
+
 
 
 	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(),

@@ -5,7 +5,8 @@
 
 class Graphics;
 class RenderTarget;
-class DepthStencil;
+
+namespace ver { class DepthStencil; }
 
 namespace RG
 {
@@ -37,7 +38,7 @@ namespace RG
 		std::vector<std::unique_ptr<Source>> globalSources;
 		std::vector<std::unique_ptr<Sink>> globalSinks;
 		std::shared_ptr<RenderTarget> backBufferTarget;
-		std::shared_ptr<DepthStencil> masterDepth;
+		std::shared_ptr<ver::DepthStencil> masterDepth;
 		bool finalized = false;
 	};
 }

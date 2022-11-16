@@ -9,7 +9,8 @@ public:
 	{
 		Off,
 		Write,
-		Mask
+		Mask,
+		DepthFirst
 	};
 	Stencil(Graphics& gfx, Mode mode);
 public:

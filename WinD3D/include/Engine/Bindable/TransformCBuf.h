@@ -8,6 +8,7 @@ class TransformCbuf : public CloningBindable
 protected:
 	struct Transforms
 	{
+		DirectX::XMMATRIX model;
 		DirectX::XMMATRIX modelView;
 		DirectX::XMMATRIX modelViewProj;
 	};
@@ -23,3 +24,40 @@ private:
 	static std::unique_ptr<VertexConstantBuffer<Transforms>> pVcbuf;
 	const Drawable* pParent = nullptr;
 };
+
+class SkyboxTransformCbuf : public Bindable
+{
+protected:
+	struct Transforms
+	{
+		DirectX::XMMATRIX viewProj;
+		DirectX::XMMATRIX rot;
+	};
+public:
+	SkyboxTransformCbuf(Graphics& gfx, UINT slot = 0u);
+	void Bind(Graphics& gfx) noxnd override;
+protected:
+	void UpdateBindImpl(Graphics& gfx, const Transforms& tf) noxnd;
+	Transforms GetTransforms(Graphics& gfx) noxnd;
+private:
+	std::unique_ptr<VertexConstantBuffer<Transforms>> pVcbuf;
+	float f = 0.0f;
+};
+
+namespace ver
+{
+	class ShadowCameraCBuf : public Bindable
+	{
+	protected:
+		struct Transform
+		{
+			DirectX::XMMATRIX ViewProj;
+		};
+	public:
+		ShadowCameraCBuf(Graphics& gfx, UINT slot = 1u);
+		void Bind(Graphics& gfx) noxnd override;
+		void Update(Graphics& gfx);
+	private:
+		std::unique_ptr<VertexConstantBuffer<Transform>> pVcbuf;
+	};
+}

@@ -260,6 +260,22 @@ Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::
 		phong.AddStep(std::move(step));
 		techniques.push_back(std::move(phong));
 	}
+	{
+		Technique map{ "ShadowMap",true };
+		{
+			Step draw("shadow");
+
+			// TODO: better sub-layout generation tech for future consideration maybe
+			draw.AddBindable(InputLayout::Resolve(gfx, vtxLayout, ver::VertexShader::Resolve(gfx, "solid.vs.cso")->GetBytecode()));
+
+			draw.AddBindable(std::make_shared<TransformCbuf>(gfx));
+
+			// TODO: might need to specify rasterizer when doubled-sided models start being used
+
+			map.AddStep(std::move(draw));
+		}
+		techniques.push_back(std::move(map));
+	}
 }
 std::vector<unsigned short> Material::ExtractIndices(const aiMesh& mesh) noexcept
 {

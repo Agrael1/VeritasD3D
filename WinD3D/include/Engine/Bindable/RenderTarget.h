@@ -3,10 +3,12 @@
 #include <Engine/Bindable/BufferResource.h>
 #include <span>
 
+namespace ver
+{
+	class DepthStencil;
+}
 
-class DepthStencil;
-
-class IRenderTarget: public Bindable, public BufferResource
+class IRenderTarget : public Bindable, public BufferResource
 {
 public:
 	virtual void BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDepthStencilView) noxnd = 0;
@@ -17,7 +19,7 @@ class RenderTarget : public IRenderTarget
 public:
 	void BindAsBuffer(Graphics& gfx) noxnd override;
 	void BindAsBuffer(Graphics& gfx, BufferResource* depthStencil) noxnd override;
-	void BindAsBuffer(Graphics& gfx, DepthStencil* depthStencil) noxnd;
+	void BindAsBuffer(Graphics& gfx, ver::DepthStencil* depthStencil) noxnd;
 	void Clear(Graphics& gfx) noxnd override;
 	void Clear(Graphics& gfx, const std::array<float, 4>& color) noxnd;
 	UINT GetWidth() const noexcept;
@@ -67,7 +69,7 @@ public:
 	winrt::IAsyncAction InitializeAsync(Graphics& gfx, uint32_t xwidth, uint32_t xheight, uint32_t slot);
 	void BindAsBuffer(Graphics& gfx) noxnd override;
 	void BindAsBuffer(Graphics& gfx, BufferResource* depthStencil) noxnd override;
-	void BindAsBuffer(Graphics& gfx, DepthStencil* depthStencil) noxnd;
+	void BindAsBuffer(Graphics& gfx, ver::DepthStencil* depthStencil) noxnd;
 
 	void Clear(Graphics& gfx) noxnd override;
 	void Clear(Graphics& gfx, const std::array<float, 4>& color) noxnd;
@@ -81,6 +83,6 @@ protected:
 	uint32_t slot = 0u;
 	uint32_t width = 0u;
 	uint32_t height = 0u;
-	std::array<winrt::com_ptr<ID3D11RenderTargetView>, 4> targets;
-	std::array<winrt::com_ptr<ID3D11ShaderResourceView>, 4> resource_views;
+	std::array<winrt::com_ptr<ID3D11RenderTargetView>, 5> targets;
+	std::array<winrt::com_ptr<ID3D11ShaderResourceView>, 5> resource_views;
 };

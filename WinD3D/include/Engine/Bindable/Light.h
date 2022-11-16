@@ -31,6 +31,10 @@ namespace ver
 	public:
 		void Bind(Graphics& gfx) noxnd;
 		PointLightConsts& Allocate();
+		const PointLightConsts& at(size_t n)const
+		{
+			return data.lights.at(n);
+		}
 	private:
 		struct alignas(alignof(DirectX::XMFLOAT4X4A)) cbuffer
 		{

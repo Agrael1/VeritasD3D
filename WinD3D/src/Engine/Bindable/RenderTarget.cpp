@@ -6,7 +6,7 @@
 #include <Engine/Util/GraphicsExceptions.h>
 
 namespace wrl = Microsoft::WRL;
-
+using namespace ver;
 
 RenderTarget::RenderTarget(Graphics& gfx, UINT width, UINT height)
 	:
@@ -71,13 +71,13 @@ void RenderTarget::BindAsBuffer(Graphics& gfx) noxnd
 
 void RenderTarget::BindAsBuffer(Graphics& gfx, BufferResource* depthStencil) noxnd
 {
-	assert(dynamic_cast<DepthStencil*>(depthStencil) != nullptr);
-	BindAsBuffer(gfx, static_cast<DepthStencil*>(depthStencil));
+	assert(dynamic_cast<ver::DepthStencil*>(depthStencil) != nullptr);
+	BindAsBuffer(gfx, static_cast<ver::DepthStencil*>(depthStencil));
 }
 
-void RenderTarget::BindAsBuffer(Graphics& gfx, DepthStencil* depthStencil) noxnd
+void RenderTarget::BindAsBuffer(Graphics& gfx, ver::DepthStencil* depthStencil) noxnd
 {
-	BindAsTarget(gfx, depthStencil ? depthStencil->pDepthStencilView.Get() : nullptr);
+	BindAsTarget(gfx, depthStencil ? depthStencil->pDepthStencilView.get() : nullptr);
 }
 
 void RenderTarget::BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDepthStencilView) noxnd
@@ -243,7 +243,7 @@ void RenderTargetArray::BindAsBuffer(Graphics& gfx, BufferResource* depthStencil
 
 void RenderTargetArray::BindAsBuffer(Graphics& gfx, DepthStencil* depthStencil) noxnd
 {
-	BindAsTarget(gfx, depthStencil ? depthStencil->pDepthStencilView.Get() : nullptr);
+	BindAsTarget(gfx, depthStencil ? depthStencil->pDepthStencilView.get() : nullptr);
 }
 
 void RenderTargetArray::Clear(Graphics& gfx) noxnd

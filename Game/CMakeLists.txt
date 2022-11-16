@@ -22,6 +22,12 @@ if(MSVC)
   target_link_options(${PROJECT_NAME} PUBLIC "/INCREMENTAL")
 endif()
 
+add_custom_target(copy_models ALL 
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+	${CMAKE_CURRENT_SOURCE_DIR}/models
+	${CMAKE_BINARY_DIR}/models
+	COMMENT "Copying models to binary directory")
+
 include_directories(BEFORE SYSTEM ${CMAKE_BINARY_DIR}/include)
 target_link_libraries(${PROJECT_NAME} PUBLIC WinD3D)
 target_link_libraries(${PROJECT_NAME} PUBLIC PhysX)
@@ -31,3 +37,4 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${VENGINE_HEADERS})
 target_include_directories(${PROJECT_NAME} PRIVATE ${WIL_HEADERS})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PHYSICS_HEADERS})
 target_precompile_headers(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include/pch.h")
+add_dependencies(${PROJECT_NAME} copy_models)

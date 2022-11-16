@@ -1,3 +1,4 @@
+#include "../headers/deferred.hlsli"
 #include "ShaderProcs.hlsli"
 
 cbuffer ObjectCBuf : register(b1)
@@ -11,21 +12,13 @@ cbuffer ObjectCBuf : register(b1)
     float normalMapWeight;
 };
 
-struct PixelOutDeferred
-{
-    float4 diffuse : SV_Target0;
-    float4 normal : SV_Target1;
-    float4 position : SV_Target2;
-    float4 specular : SV_Target3;
-};
-
 SamplerState splr;
 Texture2D tex : register(t0);
 Texture2D spec : register(t1);
 Texture2D nmap : register(t2);
 
 
-PixelOutDeferred main(float3 viewFragPos : Position, float3 viewNormal : Normal, float3 viewTan : Tangent, float3 viewBitan : Bitangent, float2 tc : Texcoord)
+PixelOutDeferred main(float3 viewFragPos : Position, float3 viewNormal : Normal, float3 viewTan : Tangent, float3 viewBitan : Bitangent, float2 tc : Texcoord, float4 shadowPos : ShadowPosition)
 {
     if (useNormalMap)
     {
@@ -42,5 +35,6 @@ PixelOutDeferred main(float3 viewFragPos : Position, float3 viewNormal : Normal,
     pOut.normal = float4(normalize(viewNormal), 1.0f);
     pOut.position = float4(viewFragPos, 1.0f);
     pOut.specular = float4(spec_refl * specularWeight, spec_pow);
+    pOut.shadow = shadowPos;
     return pOut;
 }

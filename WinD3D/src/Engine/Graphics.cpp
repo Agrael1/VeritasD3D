@@ -96,6 +96,7 @@ bool Graphics::IsImguiEnabled() const noexcept
 
 void Graphics::BeginFrame(float r, float g, float b) noexcept
 {
+	timer.start();
 	if (imguiEnabled)
 	{
 		ImGui_ImplDX11_NewFrame();
@@ -129,10 +130,15 @@ void Graphics::EndFrame()
 			throw GFX_EXCEPT(hr);
 		}
 	}
+	frame_step = timer.stop();
 }
 void Graphics::DrawIndexed(UINT count) noxnd
 {
 	GFX_THROW_INFO_ONLY(pContext->DrawIndexed(count, 0u, 0u));
+}
+void Graphics::Draw(uint32_t vcount) noxnd
+{
+	GFX_THROW_INFO_ONLY(pContext->Draw(vcount, 0u));
 }
 void Graphics::OnResize(unsigned newwidth, unsigned newheight)
 {
