@@ -1,6 +1,7 @@
 #include <Game/Camera.h>
 #include "imgui.h"
 #include <algorithm>
+#include <numbers>
 
 namespace dx = DirectX;
 
@@ -54,7 +55,7 @@ void Camera::SpawnControlWindow() noexcept
 void Camera::Reset() noexcept
 {
 	pos = { 0.4f, 1.9f, -3.7f };
-	rot = { 0, DirectX::XM_PI/6 };
+	rot = { 0, std::numbers::pi/2 };
 	orbit = { 0.0f,0.0f };
 }
 void Camera::Rotate(float dx, float dy) noexcept

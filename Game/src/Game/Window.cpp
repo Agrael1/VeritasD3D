@@ -109,6 +109,29 @@ Window::~Window()
 {
 	ImGui_ImplWin32_Shutdown();
 }
+
+void Window::ChangeToFullScreen()
+{
+	//auto st = GetWindowLong(hWnd.get(), GWL_STYLE);
+	//auto stex = GetWindowLong(hWnd.get(), GWL_EXSTYLE);
+	//SetWindowLong(hWnd.get(), GWL_STYLE,
+	//	st & ~(WS_CAPTION | WS_THICKFRAME));
+	//SetWindowLong(hWnd.get(), GWL_EXSTYLE,
+	//	stex & ~(WS_EX_DLGMODALFRAME |
+	//		WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE));
+
+	//MONITORINFO monitor_info;
+	//monitor_info.cbSize = sizeof(monitor_info);
+	//GetMonitorInfo(MonitorFromWindow(hWnd.get(), MONITOR_DEFAULTTONEAREST),
+	//	&monitor_info);
+
+	//
+	//RECT window_rect(monitor_info.rcMonitor);
+	//SetWindowPos(hWnd.get(), NULL, window_rect.left, window_rect.top,
+	//	window_rect.right - window_rect.left, window_rect.bottom - window_rect.top,
+	//	SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+}
+
 void Window::SetTitle(std::string_view title)
 {
 	if (!SetWindowText(hWnd.get(), title.data()))

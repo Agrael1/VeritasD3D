@@ -54,6 +54,7 @@ public:
 	bool DrawGrid()const noexcept;
 	bool IsActive()const noexcept;
 	void SetTitle(std::string_view title);
+	void ChangeToFullScreen();
 
 	bool RestyleCalled()const noexcept;
 	void RestyleComplete()noexcept;

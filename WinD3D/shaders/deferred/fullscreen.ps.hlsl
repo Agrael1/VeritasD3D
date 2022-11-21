@@ -34,7 +34,7 @@ float4 main(float2 tc : Texcoord) : SV_Target
     float3 final_color = 0.0f;
     float3 final_spec = 0.0f;
     
-    if (shadowLevel != 0.0f)
+    if (shadowLevel != 0.0f) 
         for (uint i = 0; i < count; i++)
         {
             PointLight l = lights[i];
@@ -70,5 +70,5 @@ float4 main(float2 tc : Texcoord) : SV_Target
     final_spec *= shadowLevel;
         
 	// final color = attenuate diffuse & ambient by diffuse texture color and add specular reflected
-    return float4(saturate((final_color + float3(.1, .1, .1)) * diffuse_col.rgb + final_spec), 1.0f);
+    return float4(saturate((final_color + float3(.3, .3, .3)) * diffuse_col.rgb + final_spec), 1.0f);
 }

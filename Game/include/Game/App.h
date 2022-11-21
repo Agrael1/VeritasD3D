@@ -11,6 +11,8 @@
 #include <Engine/Scene/Text.h>
 #include <Game/Player.h>
 #include <Game/Level.h>
+#include <Audio/Audio.h>
+#include <Audio/buffer_stream.h>
 #include <Foundation.h>
 
 class App
@@ -28,13 +30,17 @@ private:
 	void ResetTransform()
 	{
 		transform.x = transform.z = 0.0f;
-		transform.y = -9.81f * 1.f / 60.f;
 	}
+	void GameTick();
 private:
 	//Camera cam;
 	ImGUIManager imgui;
 	Window wnd;
 	Graphics gfx;
+
+	ver::audio::Audio audio;
+	ver::audio::ogg_stream song;
+
 	std::optional<RG::DeferredRenderGraph> rg;
 	bool bFlightMode = false;
 

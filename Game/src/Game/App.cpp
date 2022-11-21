@@ -12,6 +12,7 @@ App::App(uint32_t width, uint32_t height)
 {
 	gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 1000.0f));
 	ResetTransform();
+	wnd.ChangeToFullScreen();
 }
 App::~App()
 {
@@ -21,7 +22,10 @@ winrt::IAsyncAction App::InitializeAsync()
 {
 	co_await winrt::when_all(lights.InitializeAsync(gfx),
 		sphere.InitializeAsync(lights, gfx),
-		level.InitializeAsync(physics, gfx, u"../models/face/face.obj"));
+		level.InitializeAsync(physics, gfx, u"../models/face/face.obj"),
+		audio.InitializeAsync());
+	co_await song.InitializeAsync(audio, u"../music/foregone.ogg");
+
 	CreateRenderGraph();
 	level.AddToScene(scene);
 	co_return;
@@ -30,6 +34,7 @@ winrt::IAsyncAction App::InitializeAsync()
 int App::Go()
 {
 	float dt = 1.0f / 60.0f;
+	song.play();
 	while (true)
 	{
 		ResetTransform();
@@ -41,7 +46,14 @@ int App::Go()
 		scene.get_scene().fetchResults(true);
 		player.Update(transform, dt);
 		player.Sync();
+		GameTick();
 	}
+}
+void App::GameTick()
+{
+	//float y = player.GetPosition().y;
+	//if (y < -300.0f)
+	//	player.Teleport({ 0,0,0 });
 }
 
 void App::DoFrame(float dt)
@@ -78,8 +90,9 @@ void App::DoFrame(float dt)
 	rg->Reset();
 }
 
-void App::ProcessInput(float dt)
+void App::ProcessInput(float)
 {
+	float dt = gfx.GetFrameStep();
 	while (const auto e = wnd.kbd.ReadKey())
 	{
 		if (!e->IsPress())

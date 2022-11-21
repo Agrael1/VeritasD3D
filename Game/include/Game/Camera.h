@@ -13,13 +13,18 @@ public:
 	void Orbit(float dx, float dy)noexcept;
 	void Translate(DirectX::XMFLOAT3 translation)noexcept;
 
-	DirectX::XMFLOAT3 GetPosition()
+	DirectX::XMFLOAT3 GetPosition()const
 	{
 		return pos;
 	}
 	void SetPosition(DirectX::XMFLOAT3 v)
 	{
 		pos = v;
+	}
+	//in radians
+	void SetRotation(DirectX::XMFLOAT2 rotation)
+	{
+		rot = rotation;
 	}
 	DirectX::XMFLOAT3 TransformToView(DirectX::XMFLOAT3 pos)const
 	{
