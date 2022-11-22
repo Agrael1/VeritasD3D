@@ -23,7 +23,8 @@ winrt::IAsyncAction App::InitializeAsync()
 	co_await winrt::when_all(lights.InitializeAsync(gfx),
 		sphere.InitializeAsync(lights, gfx),
 		level.InitializeAsync(physics, gfx, u"../models/face/face.obj"),
-		audio.InitializeAsync());
+		audio.InitializeAsync(),
+		flag.InitializeAsync(gfx));
 	co_await song.InitializeAsync(audio, u"../music/foregone.ogg");
 
 	CreateRenderGraph();
@@ -51,9 +52,9 @@ int App::Go()
 }
 void App::GameTick()
 {
-	//float y = player.GetPosition().y;
-	//if (y < -300.0f)
-	//	player.Teleport({ 0,0,0 });
+	float y = player.GetPosition().y;
+	if (y < -300.0f)
+		player.Teleport({ 0,0,0 });
 }
 
 void App::DoFrame(float dt)
@@ -68,9 +69,8 @@ void App::DoFrame(float dt)
 
 	level.Submit();
 	sphere.Submit();
+	flag->Submit();
 	rg->Execute(gfx);
-
-
 
 	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(),
 		ImGuiDockNodeFlags_PassthruCentralNode |
@@ -190,6 +190,7 @@ void App::CreateRenderGraph()
 {
 	rg.emplace(gfx);
 	sphere.LinkTechniques(*rg);
+	flag->LinkTechniques(*rg);
 	level.GetWorld().LinkTechniques(*rg);
 }
 

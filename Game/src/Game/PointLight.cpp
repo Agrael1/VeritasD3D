@@ -1,4 +1,4 @@
-#include <Engine/Scene/PointLight2.h>
+#include <Game/PointLight.h>
 #include <Engine/Bindable/Light.h>
 #include <imgui.h>
 
@@ -22,9 +22,9 @@ void ver::LightSphere::SpawnControlWindow() noexcept
 	if (ImGui::Begin("Light"))
 	{
 		ImGui::Text("Position");
-		changed |= ImGui::SliderFloat("X", &cbData->pos.x, -60.0f, 60.0f, "%.1f");
-		changed |= ImGui::SliderFloat("Y", &cbData->pos.y, -60.0f, 60.0f, "%.1f");
-		changed |= ImGui::SliderFloat("Z", &cbData->pos.z, -60.0f, 60.0f, "%.1f");
+		changed |= ImGui::SliderFloat("X", &cbData->pos.x, -200.f, 200.f, "%.1f");
+		changed |= ImGui::SliderFloat("Y", &cbData->pos.y, -200.f, 200.f, "%.1f");
+		changed |= ImGui::SliderFloat("Z", &cbData->pos.z, -200.f, 200.f, "%.1f");
 
 		ImGui::Text("Intensity/Color");
 		ImGui::SliderFloat("Intensity", &cbData->diffuseIntensity, 0.01f, 2.0f, "%.2f", ImGuiSliderFlags_Logarithmic);

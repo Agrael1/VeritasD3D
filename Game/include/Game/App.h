@@ -4,13 +4,14 @@
 #include <Game/Camera.h>
 #include <Engine/Util/ImGUIManager.h>
 #include <Engine/Loading/Model.h>
-#include <Engine/Scene/PointLight2.h>
+#include <Game/PointLight.h>
 #include <Engine/Graph/DeferredRenderGraph.h>
 #include <Engine/Probes/TestModelProbe.h>
 #include <Engine/Bindable/Light.h>
 #include <Engine/Scene/Text.h>
 #include <Game/Player.h>
 #include <Game/Level.h>
+#include <Game/Flag.h>
 #include <Audio/Audio.h>
 #include <Audio/buffer_stream.h>
 #include <Foundation.h>
@@ -51,6 +52,7 @@ private:
 	ver::ph::Scene scene;
 	UT::Player player;
 	UT::Level level;
+	UT::Flag flag;
 	DirectX::XMFLOAT3 transform{};
 };
 

@@ -31,6 +31,6 @@ namespace ver
 	private:
 		mutable bool changed = false;
 		PointLightConsts* cbData = nullptr;
-		mutable SolidSphere mesh;
+		mutable ver::SolidSphere mesh;
 	};
 }

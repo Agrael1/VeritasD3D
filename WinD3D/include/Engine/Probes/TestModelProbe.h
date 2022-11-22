@@ -143,9 +143,9 @@ public:
 			const auto dcheck = [&dirty](bool changed) {dirty = dirty || changed; };
 			auto& tf = ResolveTransform();
 			ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Translation");
-			dcheck(ImGui::SliderFloat("X", &tf.x, -60.f, 60.f));
-			dcheck(ImGui::SliderFloat("Y", &tf.y, -60.f, 60.f));
-			dcheck(ImGui::SliderFloat("Z", &tf.z, -60.f, 60.f));
+			dcheck(ImGui::SliderFloat("X", &tf.x, -200.f, 200.f));
+			dcheck(ImGui::SliderFloat("Y", &tf.y, -200.f, 200.f));
+			dcheck(ImGui::SliderFloat("Z", &tf.z, -200.f, 200.f));
 			ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Orientation");
 			dcheck(ImGui::SliderAngle("X-rotation", &tf.xRot, -180.0f, 180.0f));
 			dcheck(ImGui::SliderAngle("Y-rotation", &tf.yRot, -180.0f, 180.0f));
