@@ -19,7 +19,7 @@ winrt::IAsyncAction ver::LightSphere::InitializeAsync(LightBuffer& allocator, Gr
 void ver::LightSphere::SpawnControlWindow() noexcept
 {
 	changed = false;
-	if (ImGui::Begin("Light"))
+	if (ImGui::Begin((std::to_string((size_t)(cbData))+"Light").c_str()))
 	{
 		ImGui::Text("Position");
 		changed |= ImGui::SliderFloat("X", &cbData->pos.x, -200.f, 200.f, "%.1f");
@@ -54,6 +54,21 @@ void ver::LightSphere::Reset() noexcept
 		0.0075f,
 	};
 	changed = true;
+}
+
+void ver::LightSphere::SetPosition(DirectX::XMFLOAT4A pos)
+{
+	mesh.SetPos({ pos.x, pos.y, pos.z });
+	cbData->pos = pos;
+}
+DirectX::XMVECTOR ver::LightSphere::GetPosition()
+{
+	return DirectX::XMLoadFloat4A(&cbData->pos);
+}
+void ver::LightSphere::SetColor(DirectX::XMFLOAT3 color)
+{
+	mesh.SetColor(color);
+	cbData->diffuse = color;
 }
 
 void ver::LightSphere::Submit() const noxnd

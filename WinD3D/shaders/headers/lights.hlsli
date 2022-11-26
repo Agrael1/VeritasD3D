@@ -13,7 +13,6 @@ struct PointLight
 
 cbuffer PointLightCBuf : register(b7)
 {
-    float4x4 view;
     float3 ambient;
     uint count;   
     PointLight lights[MAXLIGHTS];

@@ -5,6 +5,7 @@
 #include <assimp/scene.h>
 #include <Engine/Util/ModelException.h>
 #include <Engine/Loading/Material.h>
+#include <Engine/Graphics.h>
 
 using namespace physx;
 
@@ -61,5 +62,40 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 			actors.emplace_back(phy.MakeActor(std::move(x), *mat, 40.0f));
 		}
 	};
-	co_await winrt::when_all(world.InitializeAsync(gfx, *pScene, std::move(map), 40.0f), phys());
+
+	co_await winrt::when_all(world.InitializeAsync(gfx, *pScene, std::move(map), 40.0f),
+		phys(), light_buf.InitializeAsync(gfx));
+
+	constexpr DirectX::XMFLOAT4A pos[3]{ { -1.7f, 14.8f, 0.0f, 0.0f}, {-152.8f, -28.8f, 0.0f, 0.0f}, {143.3f, -28.8f, 0.0f, 0.0f} };
+	constexpr DirectX::XMFLOAT3 cols[3]{ { 154.f / 255.f, 154.f / 255.f, 154.f / 255.f}
+	, {255.f / 255.f, 111.f / 255.f, 111.f / 255.f}
+	, {134.f / 255.f, 169.f / 255.f, 255.f / 255.f} };
+
+	for (size_t i = 0; i < 3; i++)
+	{
+		auto& l = lights[i];
+		co_await l.InitializeAsync(light_buf, gfx);
+		l.SetPosition(pos[i]);
+		l.SetColor(cols[i]);
+	}	
+}
+
+void UT::Level::Submit(Graphics& gfx)
+{
+	gfx.SetShadowCamPos(lights[0].GetPosition());
+	for (auto& i : lights)
+	{
+		i.Bind(gfx);
+		i.Submit();
+	}
+	light_buf.Bind(gfx);
+	world.Submit();
+}
+
+void UT::Level::SpawnControlWindow()
+{
+	for (size_t i = 0; i < 3u; i++)
+	{
+		lights[i].SpawnControlWindow();
+	}
 }

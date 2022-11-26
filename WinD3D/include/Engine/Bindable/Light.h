@@ -36,13 +36,13 @@ namespace ver
 			return data.lights.at(n);
 		}
 	private:
-		struct alignas(alignof(DirectX::XMFLOAT4X4A)) cbuffer
+		mutable struct alignas(alignof(DirectX::XMFLOAT4X4A)) cbuffer
 		{
-			DirectX::XMFLOAT4X4A view_matrix;
 			DirectX::XMFLOAT3 ambient{ 0.1f,0.1f,0.1f };
 			uint32_t count = 0u;
 			std::array<PointLightConsts, max_lights> lights{};
 		}data;
+		std::array<PointLightConsts, max_lights> light_buffer{};
 		PixelConstantBuffer<cbuffer> cbuf;
 	};
 }

@@ -11,15 +11,21 @@ winrt::IAsyncAction ver::LightBuffer::InitializeAsync(Graphics& gfx)
 	co_await cbuf.InitializeAsync(gfx, binding_slot);
 }
 
-void ver::LightBuffer::Bind(Graphics& gfx)
+void ver::LightBuffer::Bind(Graphics& gfx) noxnd
 {
-	auto view = DirectX::XMMatrixTranspose(gfx.GetCamera());
-	DirectX::XMStoreFloat4x4A(&data.view_matrix, view);
+	auto view = gfx.GetCamera();
+
+	for (size_t i = 0; i < data.count; i++) //copy only valid
+	{
+		data.lights[i] = light_buffer[i];
+		const auto pos = DirectX::XMLoadFloat4A(&data.lights[i].pos);
+		DirectX::XMStoreFloat4A(&data.lights[i].pos, DirectX::XMVector3Transform(pos, view));
+	}
 	cbuf.Update(gfx, data);
 	cbuf.Bind(gfx);
 }
 
 ver::PointLightConsts& ver::LightBuffer::Allocate()
 {
-	return data.lights[data.count++];
+	return light_buffer[data.count++];
 }

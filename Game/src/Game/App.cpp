@@ -20,8 +20,7 @@ App::~App()
 
 winrt::IAsyncAction App::InitializeAsync()
 {
-	co_await winrt::when_all(lights.InitializeAsync(gfx),
-		sphere.InitializeAsync(lights, gfx),
+	co_await winrt::when_all(
 		level.InitializeAsync(physics, gfx, u"../models/face/face.obj"),
 		audio.InitializeAsync(),
 		flag.InitializeAsync(gfx));
@@ -35,7 +34,7 @@ winrt::IAsyncAction App::InitializeAsync()
 int App::Go()
 {
 	float dt = 1.0f / 60.0f;
-	song.play();
+	//song.play();
 	while (true)
 	{
 		ResetTransform();
@@ -63,12 +62,8 @@ void App::DoFrame(float dt)
 
 	gfx.BeginFrame(0.2f, 0.2f, 0.2f);
 	gfx.SetCamera(player.GetViewMatrix());
-	gfx.SetShadowCamPos(DirectX::XMLoadFloat4A(&lights.at(0).pos));
-	sphere.Bind(gfx);
-	lights.Bind(gfx);
 
-	level.Submit();
-	sphere.Submit();
+	level.Submit(gfx);
 	flag->Submit();
 	rg->Execute(gfx);
 
@@ -83,7 +78,8 @@ void App::DoFrame(float dt)
 	ImGui::End();
 
 	ProcessInput(dt);
-	sphere.SpawnControlWindow();
+	//level.SpawnControlWindow();
+	//sphere.SpawnControlWindow();
 
 	// Present
 	gfx.EndFrame();
@@ -189,8 +185,7 @@ void App::ProcessInput(float)
 void App::CreateRenderGraph()
 {
 	rg.emplace(gfx);
-	sphere.LinkTechniques(*rg);
 	flag->LinkTechniques(*rg);
-	level.GetWorld().LinkTechniques(*rg);
+	level.Link(*rg);
 }
 

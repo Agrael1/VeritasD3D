@@ -4,7 +4,6 @@
 #include <Game/Camera.h>
 #include <Engine/Util/ImGUIManager.h>
 #include <Engine/Loading/Model.h>
-#include <Game/PointLight.h>
 #include <Engine/Graph/DeferredRenderGraph.h>
 #include <Engine/Probes/TestModelProbe.h>
 #include <Engine/Bindable/Light.h>
@@ -45,8 +44,6 @@ private:
 	std::optional<RG::DeferredRenderGraph> rg;
 	bool bFlightMode = false;
 
-	ver::LightBuffer lights;
-	ver::LightSphere sphere;
 
 	ver::ph::Physics physics;
 	ver::ph::Scene scene;

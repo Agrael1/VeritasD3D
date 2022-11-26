@@ -64,7 +64,7 @@ DepthCubeTexture::DepthCubeTexture(Graphics& gfx, UINT size, UINT slot)
 	GFX_THROW_INFO(GetDevice(gfx)->CreateTexture2D(
 		&textureDesc, nullptr, pTexture.put()
 	));
-
+	
 	// create the resource view on the texture
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Format = DXGI_FORMAT_R32_FLOAT;
