@@ -13,6 +13,8 @@ App::App(uint32_t width, uint32_t height)
 	gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 1000.0f));
 	ResetTransform();
 	wnd.ChangeToFullScreen();
+	wnd.DisableCursor();
+	wnd.mouse.EnableRaw();
 }
 App::~App()
 {
