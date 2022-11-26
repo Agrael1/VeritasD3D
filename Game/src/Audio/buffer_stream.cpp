@@ -60,7 +60,10 @@ void ver::audio::ogg_stream::pause()
 
 void __stdcall ver::audio::ogg_stream::OnBufferEnd(void*) noexcept
 {
-	if(!loaded && state == state::played)read_chunk();
+	if (!loaded && state == state::played)
+	{
+		read_chunk();
+	}
 }
 void __stdcall ver::audio::ogg_stream::OnStreamEnd() noexcept
 {

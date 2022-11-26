@@ -21,7 +21,7 @@ App::~App()
 winrt::IAsyncAction App::InitializeAsync()
 {
 	co_await winrt::when_all(
-		level.InitializeAsync(physics, gfx, u"../models/face/face.obj"),
+		level.InitializeAsync(physics, gfx, u"../models/face/faceWIP.obj"),
 		audio.InitializeAsync(),
 		flag.InitializeAsync(gfx));
 	co_await song.InitializeAsync(audio, u"../music/foregone.ogg");
@@ -34,7 +34,7 @@ winrt::IAsyncAction App::InitializeAsync()
 int App::Go()
 {
 	float dt = 1.0f / 60.0f;
-	//song.play();
+	song.play();
 	while (true)
 	{
 		ResetTransform();
@@ -78,8 +78,7 @@ void App::DoFrame(float dt)
 	ImGui::End();
 
 	ProcessInput(dt);
-	//level.SpawnControlWindow();
-	//sphere.SpawnControlWindow();
+	level.SpawnControlWindow();
 
 	// Present
 	gfx.EndFrame();

@@ -82,7 +82,7 @@ namespace ver::rg
 		{
 			const_cast<ShadowMappingPass*>(this)->depthStencil = std::move(ds);
 		}
-		static inline constexpr UINT size = 2048;
+		static inline constexpr UINT size = 1024;
 		std::shared_ptr<DepthCubeTexture> pDepthCube;
 		DirectX::XMFLOAT4X4 projection;
 		std::array<DirectX::XMFLOAT3, 6> cameraDirections;

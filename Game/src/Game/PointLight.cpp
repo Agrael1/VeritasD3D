@@ -19,7 +19,7 @@ winrt::IAsyncAction ver::LightSphere::InitializeAsync(LightBuffer& allocator, Gr
 void ver::LightSphere::SpawnControlWindow() noexcept
 {
 	changed = false;
-	if (ImGui::Begin((std::to_string((size_t)(cbData))+"Light").c_str()))
+	if (ImGui::Begin((std::to_string((size_t)(this)) + "Light").c_str()))
 	{
 		ImGui::Text("Position");
 		changed |= ImGui::SliderFloat("X", &cbData->pos.x, -200.f, 200.f, "%.1f");

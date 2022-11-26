@@ -20,16 +20,22 @@ namespace ver
 		void Reset()noexcept;
 		void Submit() const noxnd;
 		void Bind(Graphics& gfx)const noexcept;
+
+
 		void SetPosition(DirectX::XMFLOAT4A pos);
 		DirectX::XMVECTOR GetPosition();
+
 		void SetColor(DirectX::XMFLOAT3 color);
 		void LinkTechniques(RG::RenderGraph& rg)
 		{
 			mesh.LinkTechniques(rg);
 		}
-		void UnlinkTechniques()
+
+		template<class Self>
+		auto& Attributes(this Self&& s)
 		{
-			mesh.UnlinkTechniques();
+			assert(s.cbData);
+			return *s.cbData;
 		}
 	private:
 		mutable bool changed = true;

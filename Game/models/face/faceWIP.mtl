@@ -1,0 +1,87 @@
+# Blender 3.3.1 MTL File: 'untitled.blend'
+# www.blender.org
+
+newmtl Material
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures\sandstone_blocks_05_diff_1k.png
+map_Kn textures\sandstone_blocks_05_nor_dx_1k.png
+map_Ks textures\sandstone_blocks_05_spec_1k.png
+
+newmtl Material.001
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures\worn_rock_natural_01_diff_1k.png
+map_Kn textures\worn_rock_natural_01_nor_dx_1k.png
+
+newmtl Material.002
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures\grey_plaster_diff_1k.png
+map_Kn textures\grey_plaster_nor_dx_1k.png
+map_Ks textures\grey_plaster_spec_1k.png
+
+newmtl Material.003
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures\forest_ground_04_diff_1k.png
+map_Kn textures\forest_ground_04_nor_dx_1k.png
+
+newmtl Material.004
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures\stone_brick_wall_001_diff_1k.png
+map_Kn textures\stone_brick_wall_001_nor_dx_1k.png
+
+newmtl Material.005
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures\marble_01_diff_1k.png
+map_Kn textures\marble_01_nor_dx_1k.png
+
+newmtl ceiling
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures\ceiling_diff.png

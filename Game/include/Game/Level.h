@@ -9,7 +9,6 @@ namespace UT
 	class Level
 	{
 	public:
-		Level(ver::ph::Physics& phy, Graphics& gfx, std::filesystem::path map);
 		Level() = default;
 		winrt::IAsyncAction InitializeAsync(ver::ph::Physics& phy, Graphics& gfx, std::filesystem::path map);
 	public:
