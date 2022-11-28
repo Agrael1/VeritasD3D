@@ -36,7 +36,7 @@ namespace ver
 		void BindToPS(Graphics& gfx);
 	protected:
 		winrt::com_ptr<ID3D11Buffer> pConstantBuffer;
-		uint32_t slot;
+		uint32_t slot = 0;
 	};
 
 	template<typename C>

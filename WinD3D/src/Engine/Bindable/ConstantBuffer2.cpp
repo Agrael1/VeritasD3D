@@ -3,6 +3,12 @@
 #include <Engine/Util/DXGIInfoManager.h>
 #include <Engine/Util/GraphicsExceptions.h>
 
+template<std::integral T>
+inline constexpr uint32_t round_to16(T size)
+{
+	return ((size - 1) | 15) + 1;
+}
+
 void ver::ConstantBuffer::Initialize(Graphics& gfx, std::span<const std::byte> consts, uint32_t slot)
 {
 	this->slot = slot;
@@ -13,7 +19,7 @@ void ver::ConstantBuffer::Initialize(Graphics& gfx, std::span<const std::byte> c
 	cbd.Usage = D3D11_USAGE_DYNAMIC;
 	cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	cbd.MiscFlags = 0u;
-	cbd.ByteWidth = uint32_t(consts.size_bytes());
+	cbd.ByteWidth = round_to16(consts.size_bytes());
 	cbd.StructureByteStride = 0u;
 
 	D3D11_SUBRESOURCE_DATA csd{};
@@ -31,7 +37,7 @@ void ver::ConstantBuffer::Initialize(Graphics& gfx, uint32_t size, uint32_t slot
 	cbd.Usage = D3D11_USAGE_DYNAMIC;
 	cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	cbd.MiscFlags = 0u;
-	cbd.ByteWidth = size;
+	cbd.ByteWidth = round_to16(size);
 	cbd.StructureByteStride = 0u;
 
 	GFX_THROW_INFO(GetDevice(gfx)->CreateBuffer(&cbd, nullptr, pConstantBuffer.put()));

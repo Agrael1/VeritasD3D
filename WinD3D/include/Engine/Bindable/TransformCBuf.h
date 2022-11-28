@@ -60,4 +60,26 @@ namespace ver
 	private:
 		std::unique_ptr<VertexConstantBuffer<Transform>> pVcbuf;
 	};
+
+	class BillboardCbuf : public CloningBindable
+	{
+	protected:
+		struct Transforms
+		{
+			DirectX::XMMATRIX modelView;
+			DirectX::XMMATRIX proj;
+		};
+	public:
+		BillboardCbuf(Graphics& gfx, uint32_t slot = 0u);
+	public:
+		void Bind(Graphics& gfx) noxnd override;
+		void InitializeParentReference(const Drawable& parent) noexcept override;
+		std::unique_ptr<CloningBindable> Clone() const noexcept override;
+	protected:
+		void UpdateBindImpl(Graphics& gfx, const Transforms& tf) noexcept;
+		Transforms GetTransforms(Graphics& gfx) noexcept;
+	private:
+		static std::unique_ptr<VertexConstantBuffer<Transforms>> pVcbuf;
+		const Drawable* pParent = nullptr;
+	};
 }

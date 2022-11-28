@@ -38,9 +38,15 @@ RG::DeferredRenderGraph::DeferredRenderGraph(Graphics& gfx)
 		AppendPass(std::move(pass));
 	}
 	{
-		auto pass = std::make_unique<ver::rg::SkyboxPass>(gfx, "sky");
+		auto pass = std::make_unique<LambertianPass>(gfx, "forward");
 		pass->SetSinkLinkage("renderTarget", "light.renderTarget");
 		pass->SetSinkLinkage("depthStencil", "light.depthStencil");
+		AppendPass(std::move(pass));
+	}
+	{
+		auto pass = std::make_unique<ver::rg::SkyboxPass>(gfx, "sky");
+		pass->SetSinkLinkage("renderTarget", "forward.renderTarget");
+		pass->SetSinkLinkage("depthStencil", "forward.depthStencil");
 		AppendPass(std::move(pass));
 	}	
 

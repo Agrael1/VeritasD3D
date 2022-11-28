@@ -8,6 +8,7 @@
 #include <Engine/Probes/TestModelProbe.h>
 #include <Engine/Bindable/Light.h>
 #include <Engine/Scene/Text.h>
+#include <Engine/Scene/BillboardComponent.h>
 #include <Game/Player.h>
 #include <Game/Level.h>
 #include <Game/Flag.h>
@@ -51,5 +52,7 @@ private:
 	UT::Level level;
 	UT::Flag flag;
 	DirectX::XMFLOAT3 transform{};
+
+	ver::BillboardComponent test;
 };
 

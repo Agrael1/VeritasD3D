@@ -27,7 +27,7 @@ winrt::IAsyncAction App::InitializeAsync()
 		audio.InitializeAsync(),
 		flag.InitializeAsync(gfx));
 	co_await song.InitializeAsync(audio, u"../music/foregone.ogg");
-
+	co_await test.InitializeAsync(gfx, u"../models/red.png", {1,1});
 	CreateRenderGraph();
 	level.AddToScene(scene);
 	co_return;
@@ -36,7 +36,7 @@ winrt::IAsyncAction App::InitializeAsync()
 int App::Go()
 {
 	float dt = 1.0f / 60.0f;
-	song.play();
+	//song.play();
 	while (true)
 	{
 		ResetTransform();
@@ -67,6 +67,8 @@ void App::DoFrame(float dt)
 
 	level.Submit(gfx);
 	flag->Submit();
+	test.Submit();
+
 	rg->Execute(gfx);
 
 	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(),
@@ -186,6 +188,7 @@ void App::ProcessInput(float)
 void App::CreateRenderGraph()
 {
 	rg.emplace(gfx);
+	test.LinkTechniques(*rg);
 	flag->LinkTechniques(*rg);
 	level.Link(*rg);
 }
