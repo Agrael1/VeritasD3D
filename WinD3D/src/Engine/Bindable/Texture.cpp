@@ -28,6 +28,17 @@ winrt::IAsyncAction Texture::InitializeAsync(Graphics& gfx, std::filesystem::pat
 }
 void Texture::Initialize(Graphics& gfx)
 {
+	if (path.extension() == u".dds")
+	{
+		DirectX::ScratchImage image;
+		DirectX::TexMetadata info;
+		DirectX::LoadFromDDSFile(path.native().c_str(), DirectX::DDS_FLAGS_ALLOW_LARGE_FILES, &info, image);
+
+		DirectX::CreateShaderResourceView(GetDevice(gfx),
+			image.GetImages(), count = image.GetImageCount(), info, pTextureView.put());
+		return;
+	}
+
 	auto texture = LoadWICTexture(path.c_str());
 	if (!texture) return ResolveToDefault(gfx);
 

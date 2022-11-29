@@ -66,7 +66,6 @@ void App::DoFrame(float dt)
 
 	level.Submit(gfx);
 	flag->Submit();
-
 	rg->Execute(gfx);
 
 	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(),

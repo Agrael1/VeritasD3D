@@ -30,6 +30,8 @@ namespace UT
 				i.LinkTechniques(rg);
 			for (auto& i : billboards)
 				i.LinkTechniques(rg);
+			for (auto& i : flames)
+				i.LinkTechniques(rg);
 		}
 		void SpawnControlWindow();
 	private:
@@ -40,5 +42,6 @@ namespace UT
 		ver::LightBuffer light_buf;
 		std::array<ver::LightSphere, 3> lights;
 		std::array<ver::BillboardComponent, 4> billboards;
+		std::array<ver::BillboardComponent, 4> flames;
 	};
 }

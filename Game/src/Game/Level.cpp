@@ -41,6 +41,8 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 		phys(), light_buf.InitializeAsync(gfx));
 	for (auto& i : billboards)
 		co_await i.InitializeAsync(gfx, u"../models/white.png", { 5,5 });
+	for (auto& i : flames)
+		co_await i.InitializeAsync(gfx, u"../models/fire.dds", { 10,10 }, false);
 
 	constexpr DirectX::XMFLOAT4A pos[3]{ { -1.7f, 73.8f, 0.0f, 0.0f}, {-147.8f, -28.8f, -12.0f, 0.0f}, {154.3f, -28.8f, 0.0f, 0.0f} };
 	constexpr DirectX::XMFLOAT3 cols[3]{ { 154.f / 255.f, 154.f / 255.f, 154.f / 255.f}
@@ -83,6 +85,15 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 		billboards[i].SetPosition(DirectX::XMLoadFloat3A(&pos2[i]));
 		billboards[i].SetColor(gfx, DirectX::XMLoadFloat3A(&cols2[i]));
 	}
+
+	constexpr DirectX::XMFLOAT3A pos3[4]{ { -154.0f, 103.9f, -20.0f }, {-154.0f, 103.9f, 0.3f}, {153.0f, 96.7f, 11.9f}, {153.0f, 96.7f, -7.9f} };
+	constexpr DirectX::XMFLOAT3A cols3[4]{ { 1,0,0 }, {1,0,0}, {0,0,1} , {0,0,1} };
+
+	for (size_t i = 0; i < flames.size(); i++)
+	{
+		flames[i].SetPosition(DirectX::XMLoadFloat3A(&pos3[i]));
+		flames[i].SetColor(gfx, DirectX::XMLoadFloat3A(&cols3[i]));
+	}
 }
 
 void UT::Level::Submit(Graphics& gfx)
@@ -96,6 +107,12 @@ void UT::Level::Submit(Graphics& gfx)
 		i.Bind(gfx);
 		i.Submit();
 	}
+	for (auto& i : flames)
+	{
+		i.Bind(gfx);
+		i.Submit();
+		i.Update(gfx);
+	}
 
 	DirectX::XMFLOAT4A rpos;
 	DirectX::XMStoreFloat4A(&rpos, DirectX::XMVector3Transform(pos, DirectX::XMMatrixRotationRollPitchYaw(gfx.GetFrameStep()/4.0f, 0, 0)));
@@ -104,6 +121,4 @@ void UT::Level::Submit(Graphics& gfx)
 
 void UT::Level::SpawnControlWindow()
 {
-	/*for (auto& i : billboards)
-		i.SpawnControlWindow();*/
 }

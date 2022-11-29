@@ -21,10 +21,12 @@ namespace ver
 		std::string GetUID() const noexcept override;
 
 		bool UsesAlpha() const noexcept { return hasAlpha; }
+		uint32_t GetCount()const noexcept { return count; }
 	private:
 		void ResolveToDefault(Graphics& gfx);
 	protected:
-		unsigned int slot = 0u;
+		uint32_t slot = 0u;
+		uint32_t count = 1u;
 		bool hasAlpha = false;
 		std::filesystem::path path;
 		winrt::com_ptr<ID3D11ShaderResourceView> pTextureView;
