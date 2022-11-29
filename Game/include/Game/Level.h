@@ -2,6 +2,7 @@
 #include <Game/PointLight.h>
 #include <Engine/Loading/Model.h>
 #include <Engine/Bindable/Light.h>
+#include <Engine/Scene/BillboardComponent.h>
 #include <Scene.h>
 
 namespace UT
@@ -27,6 +28,8 @@ namespace UT
 			world.LinkTechniques(rg);
 			for (auto& i : lights)
 				i.LinkTechniques(rg);
+			for (auto& i : billboards)
+				i.LinkTechniques(rg);
 		}
 		void SpawnControlWindow();
 	private:
@@ -36,5 +39,6 @@ namespace UT
 
 		ver::LightBuffer light_buf;
 		std::array<ver::LightSphere, 3> lights;
+		std::array<ver::BillboardComponent, 4> billboards;
 	};
 }

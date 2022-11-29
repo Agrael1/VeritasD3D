@@ -12,16 +12,26 @@ namespace ver
 		BillboardComponent() = default;
 		winrt::IAsyncAction InitializeAsync(Graphics& gfx, std::filesystem::path tex_path, DirectX::XMFLOAT2 dims);
 	public:
+		void SetColor(Graphics& gfx, DirectX::XMVECTOR color)
+		{
+			DirectX::XMStoreFloat3A(&buffer.color, color);
+			cbuf->Update(gfx, buffer);
+		}
+		void SetPosition(DirectX::XMVECTOR xposition)
+		{
+			DirectX::XMStoreFloat3A(&position, xposition);
+		}
 		virtual DirectX::XMMATRIX GetTransformXM() const noexcept override
 		{
-			return DirectX::XMMatrixIdentity();
+			return DirectX::XMMatrixTranslationFromVector(DirectX::XMLoadFloat3A(&position));
 		}
+		void SpawnControlWindow() noexcept;
 	private:
-		DirectX::XMFLOAT2 dimensions;
+		DirectX::XMFLOAT3A position{0,0,0};
 		struct cbuffer
 		{
-			DirectX::XMFLOAT3 position;
+			DirectX::XMFLOAT3A color{1,1,1};
 		}buffer;
-		std::shared_ptr<VertexConstantBuffer<cbuffer>> cbuf;
+		std::shared_ptr<PixelConstantBuffer<cbuffer>> cbuf;
 	};
 }

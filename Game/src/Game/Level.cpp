@@ -39,6 +39,8 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 
 	co_await winrt::when_all(world.InitializeAsync(gfx, *pScene, std::move(map), 40.0f),
 		phys(), light_buf.InitializeAsync(gfx));
+	for (auto& i : billboards)
+		co_await i.InitializeAsync(gfx, u"../models/white.png", { 5,5 });
 
 	constexpr DirectX::XMFLOAT4A pos[3]{ { -1.7f, 73.8f, 0.0f, 0.0f}, {-147.8f, -28.8f, -12.0f, 0.0f}, {154.3f, -28.8f, 0.0f, 0.0f} };
 	constexpr DirectX::XMFLOAT3 cols[3]{ { 154.f / 255.f, 154.f / 255.f, 154.f / 255.f}
@@ -71,6 +73,16 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 	l3a.diffuseIntensity = 2.f;
 	l3a.attLin = 0.086f;
 	l3a.attQuad = 0.0011574f;
+
+	
+	constexpr DirectX::XMFLOAT3A pos2[4]{ { -115.7f, 19.9f, -0.4f }, {-115.7f, 19.9f, -20.8f}, {121.0f, 18.9f, 12.7f},{121.0f, 18.9f, -7.3f} };
+	constexpr DirectX::XMFLOAT3A cols2[4]{ { 1,0,0 }, {1,0,0}, {0,0,1} , {0,0,1} };
+
+	for (size_t i = 0; i < billboards.size(); i++)
+	{
+		billboards[i].SetPosition(DirectX::XMLoadFloat3A(&pos2[i]));
+		billboards[i].SetColor(gfx, DirectX::XMLoadFloat3A(&cols2[i]));
+	}
 }
 
 void UT::Level::Submit(Graphics& gfx)
@@ -79,6 +91,11 @@ void UT::Level::Submit(Graphics& gfx)
 	gfx.SetShadowCamPos(pos);
 	light_buf.Bind(gfx);
 	world.Submit();
+	for (auto& i : billboards)
+	{
+		i.Bind(gfx);
+		i.Submit();
+	}
 
 	DirectX::XMFLOAT4A rpos;
 	DirectX::XMStoreFloat4A(&rpos, DirectX::XMVector3Transform(pos, DirectX::XMMatrixRotationRollPitchYaw(gfx.GetFrameStep()/4.0f, 0, 0)));
@@ -87,5 +104,6 @@ void UT::Level::Submit(Graphics& gfx)
 
 void UT::Level::SpawnControlWindow()
 {
-
+	/*for (auto& i : billboards)
+		i.SpawnControlWindow();*/
 }
