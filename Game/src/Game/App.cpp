@@ -3,12 +3,14 @@
 #include <Engine/Util/Utility.h>
 #include <Util/Filters.h>
 
+using namespace UT;
+
 namespace dx = DirectX;
 
 App::App(uint32_t width, uint32_t height)
 	: wnd(width, height, "Unreal Tournament"), gfx(wnd.GetHandle(), width, height)
 	, player(scene)
-	, scene(physics)
+	, scene(physics, &interaction)
 {
 	gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 1000.0f));
 	ResetTransform();
@@ -29,6 +31,7 @@ winrt::IAsyncAction App::InitializeAsync()
 	co_await song.InitializeAsync(audio, u"../music/foregone.ogg");
 	CreateRenderGraph();
 	level.AddToScene(scene);
+	player.Teleport({ -183.0f, -36.6f, -34.8f });
 	co_return;
 }
 
@@ -52,6 +55,7 @@ int App::Go()
 }
 void App::GameTick()
 {
+	interaction.Apply();
 	float y = player.GetPosition().y;
 	if (y < -300.0f)
 		player.Teleport({ 0,0,0 });
@@ -99,24 +103,23 @@ void App::ProcessInput(float)
 		switch (e->GetCode())
 		{
 		case 'F':
+			player.ToggleFlight();
+			return;
 		case VK_INSERT:
 			if (wnd.CursorEnabled())
 			{
-				bFlightMode = true;
 				wnd.DisableCursor();
 				wnd.mouse.EnableRaw();
 			}
 			else
 			{
-				bFlightMode = false;
 				wnd.EnableCursor();
 				wnd.mouse.DisableRaw();
 			}
 			break;
 		case VK_ESCAPE:
-			if (bFlightMode)
+			if (wnd.CursorEnabled())
 			{
-				bFlightMode = false;
 				wnd.EnableCursor();
 				wnd.mouse.DisableRaw();
 				break;
@@ -150,10 +153,14 @@ void App::ProcessInput(float)
 		}
 		if (wnd.kbd.KeyIsPressed(VK_SPACE))
 		{
+			if(player.Flight())
+				transform.y += dt;
 			//cam.Translate({ 0.0f,dt,0.0f });
 		}
 		if (wnd.kbd.KeyIsPressed('C'))
 		{
+			if (player.Flight())
+				transform.y -= dt;
 			//cam.Translate({ 0.0f,-dt,0.0f });
 		}
 	}

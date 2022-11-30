@@ -7,7 +7,7 @@ int main()
 	winrt::init_apartment();
 	try
 	{
-		App a{ 1280, 720 };
+		UT::App a{ 1280, 720 };
 		a.InitializeAsync().get();
 		return a.Go();
 	}

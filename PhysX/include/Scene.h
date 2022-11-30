@@ -14,7 +14,7 @@ namespace ver::ph
 	class Scene
 	{
 	public:
-		Scene(Physics& phy);
+		Scene(Physics& phy, physx::PxSimulationEventCallback* callback = nullptr);
 	public:
 		template<class Self>
 		auto&& get_scene(this Self&& s)noexcept

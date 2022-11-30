@@ -13,42 +13,49 @@
 #include <Audio/Audio.h>
 #include <Audio/buffer_stream.h>
 #include <Foundation.h>
+#include <Game/Interaction.h>
 
-class App
+namespace UT
 {
-public:
-	App(uint32_t width, uint32_t height);
-	~App();
-	winrt::IAsyncAction InitializeAsync();
-public:
-	int Go();
-private:
-	void DoFrame(float dt);
-	void ProcessInput(float dt);
-	void CreateRenderGraph();
-	void ResetTransform()
+	class App
 	{
-		transform.x = transform.z = 0.0f;
-	}
-	void GameTick();
-private:
-	//Camera cam;
-	ImGUIManager imgui;
-	Window wnd;
-	Graphics gfx;
+	public:
+		App(uint32_t width, uint32_t height);
+		~App();
+		winrt::IAsyncAction InitializeAsync();
+	public:
+		int Go();
+	private:
+		void DoFrame(float dt);
+		void ProcessInput(float dt);
+		void CreateRenderGraph();
+		void ResetTransform()
+		{
+			transform.x = transform.y = transform.z = 0.0f;
+		}
+		void GameTick();
+	private:
+		Interaction interaction;
 
-	ver::audio::Audio audio;
-	ver::audio::ogg_stream song;
+		ImGUIManager imgui;
+		Window wnd;
+		Graphics gfx;
 
-	std::optional<RG::DeferredRenderGraph> rg;
-	bool bFlightMode = false;
+		ver::audio::Audio audio;
+		ver::audio::ogg_stream song;
+
+		ver::ph::Physics physics;
+		ver::ph::Scene scene;
 
 
-	ver::ph::Physics physics;
-	ver::ph::Scene scene;
-	UT::Player player;
-	UT::Level level;
-	UT::Flag flag;
-	DirectX::XMFLOAT3 transform{};
-};
+		UT::Player player;
+		UT::Level level;
+		UT::Flag flag; //to level
+
+		DirectX::XMFLOAT3 transform{};
+
+		std::optional<RG::DeferredRenderGraph> rg;
+	};
+}
+
 

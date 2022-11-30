@@ -20,7 +20,7 @@ file(GLOB_RECURSE vhead "${include_dir}/*/*.h")
 file(GLOB_RECURSE vsrc "${source_dir}/*.cpp")
 file(GLOB bind "${CMAKE_BINARY_DIR}/imgui/bindings/*.cpp")
 
-add_executable(${PROJECT_NAME} ${vhead} ${vsrc} ${bind} "${CMAKE_CURRENT_SOURCE_DIR}/resources/WinD3D.rc" "src/Audio/buffer_stream.cpp")
+add_executable(${PROJECT_NAME} ${vhead} ${vsrc} ${bind} "${CMAKE_CURRENT_SOURCE_DIR}/resources/WinD3D.rc")
 
 if(MSVC)
   target_compile_options(${PROJECT_NAME} PUBLIC "/ZI")

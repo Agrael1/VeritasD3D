@@ -10,6 +10,17 @@
 
 using namespace physx;
 
+
+winrt::IAsyncAction UT::TwoWayPortal::InitializeAsync(ver::ph::Physics& phy, Graphics& gfx, std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3> positions, DirectX::XMFLOAT3 color)
+{
+	co_await first.InitializeAsync(phy, gfx, positions.first, color);
+	co_await second.InitializeAsync(phy, gfx, positions.second, color);
+	//co_await winrt::when_all(f1, f2);
+	first.SetBound(&second);
+	second.SetBound(&first);
+}
+
+
 winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& gfx, std::filesystem::path map)
 {
 	Assimp::Importer imp;
@@ -37,12 +48,26 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 		}
 	};
 
+
+	constexpr std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3> pos_p[]{
+		{{-145.9f, -38.4f, -10.6},{-152.2f, 79.5f, -10.5f}},
+		{{150.9f, -38.9f, 2.6f},{157.7f, 79.1f, 2.6f}},
+		{{-154.9f, -38.6f, -35.6f},{-129.6f, 23.4f, -10.2f}},
+		{{160.8f, -39.7f, 28.5f},{136.4f,22.5f,1.8f}},
+		{{-139.5f,-37.5f,-36.5f},{-120.8f,2.3f,-10.0f}},
+		{{144.5f,-38.8f, 28.0},{129.5f, 1.4f, 1.9f}}
+	};
+	constexpr DirectX::XMFLOAT3 cols_p[2]{ { 1,0,0 }, {0,0,1} };
+
 	co_await winrt::when_all(world.InitializeAsync(gfx, *pScene, std::move(map), 40.0f),
 		phys(), light_buf.InitializeAsync(gfx));
 	for (auto& i : billboards)
 		co_await i.InitializeAsync(gfx, u"../models/white.png", { 5,5 });
 	for (auto& i : flames)
-		co_await i.InitializeAsync(gfx, u"../models/fire.dds", { 10,10 }, false);
+		co_await i.InitializeAsync(gfx, u"../models/fire.dds", { 8,8 }, false);
+	for (size_t i = 0; i < portals.size(); i++)
+		co_await portals[i].InitializeAsync(phy, gfx, pos_p[i], cols_p[i % 2]);
+
 
 	constexpr DirectX::XMFLOAT4A pos[3]{ { -1.7f, 73.8f, 0.0f, 0.0f}, {-147.8f, -28.8f, -12.0f, 0.0f}, {154.3f, -28.8f, 0.0f, 0.0f} };
 	constexpr DirectX::XMFLOAT3 cols[3]{ { 154.f / 255.f, 154.f / 255.f, 154.f / 255.f}
@@ -58,7 +83,7 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 	}
 
 	DirectX::XMFLOAT4A rpos;
-	DirectX::XMStoreFloat4A(&rpos, DirectX::XMVector3Transform(lights[0].GetPosition(), DirectX::XMMatrixRotationRollPitchYaw(std::numbers::pi/2.f, 0, 0)));
+	DirectX::XMStoreFloat4A(&rpos, DirectX::XMVector3Transform(lights[0].GetPosition(), DirectX::XMMatrixRotationRollPitchYaw(std::numbers::pi / 2.f, 0, 0)));
 	lights[0].SetPosition(rpos);
 
 	auto& l1a = lights[0].Attributes();
@@ -76,7 +101,7 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 	l3a.attLin = 0.086f;
 	l3a.attQuad = 0.0011574f;
 
-	
+
 	constexpr DirectX::XMFLOAT3A pos2[4]{ { -115.7f, 19.9f, -0.4f }, {-115.7f, 19.9f, -20.8f}, {121.0f, 18.9f, 12.7f},{121.0f, 18.9f, -7.3f} };
 	constexpr DirectX::XMFLOAT3A cols2[4]{ { 1,0,0 }, {1,0,0}, {0,0,1} , {0,0,1} };
 
@@ -86,7 +111,7 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 		billboards[i].SetColor(gfx, DirectX::XMLoadFloat3A(&cols2[i]));
 	}
 
-	constexpr DirectX::XMFLOAT3A pos3[4]{ { -154.0f, 103.9f, -20.0f }, {-154.0f, 103.9f, 0.3f}, {153.0f, 96.7f, 11.9f}, {153.0f, 96.7f, -7.9f} };
+	constexpr DirectX::XMFLOAT3A pos3[4]{ { -146.6f, 97.5f, -20.0f }, {-146.6f, 97.5f, 0.3f}, {153.0f, 96.7f, 11.9f}, {153.0f, 96.7f, -7.9f} };
 	constexpr DirectX::XMFLOAT3A cols3[4]{ { 1,0,0 }, {1,0,0}, {0,0,1} , {0,0,1} };
 
 	for (size_t i = 0; i < flames.size(); i++)
@@ -113,12 +138,17 @@ void UT::Level::Submit(Graphics& gfx)
 		i.Submit();
 		i.Update(gfx);
 	}
+	for (auto& i : portals)
+	{
+		i.Submit(gfx);
+	}
 
 	DirectX::XMFLOAT4A rpos;
-	DirectX::XMStoreFloat4A(&rpos, DirectX::XMVector3Transform(pos, DirectX::XMMatrixRotationRollPitchYaw(gfx.GetFrameStep()/4.0f, 0, 0)));
+	DirectX::XMStoreFloat4A(&rpos, DirectX::XMVector3Transform(pos, DirectX::XMMatrixRotationRollPitchYaw(gfx.GetFrameStep() / 4.0f, 0, 0)));
 	lights[0].SetPosition(rpos);
 }
 
 void UT::Level::SpawnControlWindow()
 {
+
 }

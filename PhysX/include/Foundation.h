@@ -61,5 +61,6 @@ namespace ver::ph
 		ver::ph::physx_ptr<physx::PxCooking> cooking;
 		std::unique_ptr<physx::PxCpuDispatcher> dispatcher;
 		std::unordered_map<std::string, ver::ph::physx_ptr<physx::PxMaterial>, string_hash, std::equal_to<>> materials;
+		std::unordered_map<std::string, ver::ph::physx_ptr<physx::PxShape>, string_hash, std::equal_to<>> shapes;
 	};
 }

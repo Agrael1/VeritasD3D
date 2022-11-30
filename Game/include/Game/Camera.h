@@ -28,7 +28,6 @@ public:
 	}
 	DirectX::XMFLOAT3 TransformToView(DirectX::XMFLOAT3 pos)const
 	{
-		pos.y = 0.0f;
 		namespace dx = DirectX;
 		dx::XMStoreFloat3(&pos, dx::XMVector3Transform(
 			dx::XMLoadFloat3(&pos),
