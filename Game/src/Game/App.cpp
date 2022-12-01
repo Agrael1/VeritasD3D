@@ -9,7 +9,6 @@ namespace dx = DirectX;
 
 App::App(uint32_t width, uint32_t height)
 	: wnd(width, height, "Unreal Tournament"), gfx(wnd.GetHandle(), width, height)
-	, player(scene)
 	, scene(physics, &interaction)
 {
 	gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 1000.0f));
@@ -26,19 +25,18 @@ winrt::IAsyncAction App::InitializeAsync()
 {
 	co_await winrt::when_all(
 		level.InitializeAsync(physics, gfx, u"../models/face/faceWIP.obj"),
-		audio.InitializeAsync(),
-		flag.InitializeAsync(gfx));
+		audio.InitializeAsync());
 	co_await song.InitializeAsync(audio, u"../music/foregone.ogg");
 	CreateRenderGraph();
 	level.AddToScene(scene);
-	player.Teleport({ -183.0f, -36.6f, -34.8f });
-	co_return;
+	player.emplace(scene, level.GetLightBuffer(), gfx);
+	player->Teleport({ -183.0f, -36.6f, -34.8f });
 }
 
 int App::Go()
 {
 	float dt = 1.0f / 60.0f;
-	//song.play();
+	song.play();
 	while (true)
 	{
 		ResetTransform();
@@ -48,17 +46,18 @@ int App::Go()
 		scene.get_scene().simulate(dt);
 		DoFrame(dt);
 		scene.get_scene().fetchResults(true);
-		player.Update(transform, dt);
-		player.Sync();
+		player->Update(transform, dt);
+		player->Sync();
 		GameTick();
 	}
 }
 void App::GameTick()
 {
 	interaction.Apply();
-	float y = player.GetPosition().y;
+	if(!block)block = level.PollFinish();
+	float y = player->GetPosition().y;
 	if (y < -300.0f)
-		player.Teleport({ 0,0,0 });
+		player->Respawn({ -183.0f, -36.6f, -34.8f });
 }
 
 void App::DoFrame(float dt)
@@ -66,10 +65,9 @@ void App::DoFrame(float dt)
 	if (!wnd.IsActive())return;
 
 	gfx.BeginFrame(0.2f, 0.2f, 0.2f);
-	gfx.SetCamera(player.GetViewMatrix());
+	gfx.SetCamera(player->GetViewMatrix());
 
 	level.Submit(gfx);
-	flag->Submit();
 	rg->Execute(gfx);
 
 	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(),
@@ -103,7 +101,7 @@ void App::ProcessInput(float)
 		switch (e->GetCode())
 		{
 		case 'F':
-			player.ToggleFlight();
+			player->ToggleFlight();
 			return;
 		case VK_INSERT:
 			if (wnd.CursorEnabled())
@@ -129,7 +127,7 @@ void App::ProcessInput(float)
 		}
 	}
 
-	if (!wnd.CursorEnabled())
+	if (!wnd.CursorEnabled()&&!block)
 	{
 		if (wnd.kbd.KeyIsPressed(VK_SHIFT))
 		{
@@ -153,13 +151,13 @@ void App::ProcessInput(float)
 		}
 		if (wnd.kbd.KeyIsPressed(VK_SPACE))
 		{
-			if(player.Flight())
+			if(player->Flight())
 				transform.y += dt;
 			//cam.Translate({ 0.0f,dt,0.0f });
 		}
 		if (wnd.kbd.KeyIsPressed('C'))
 		{
-			if (player.Flight())
+			if (player->Flight())
 				transform.y -= dt;
 			//cam.Translate({ 0.0f,-dt,0.0f });
 		}
@@ -169,7 +167,7 @@ void App::ProcessInput(float)
 	{
 		if (!wnd.CursorEnabled())
 		{
-			player.Rotate((float)delta->x, (float)delta->y);
+			player->Rotate((float)delta->x, (float)delta->y);
 		}
 	}
 
@@ -192,7 +190,6 @@ void App::ProcessInput(float)
 void App::CreateRenderGraph()
 {
 	rg.emplace(gfx);
-	flag->LinkTechniques(*rg);
 	level.Link(*rg);
 }
 

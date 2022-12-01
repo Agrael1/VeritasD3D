@@ -48,13 +48,14 @@ namespace UT
 		ver::ph::Scene scene;
 
 
-		UT::Player player;
+		std::optional<UT::Player> player;
 		UT::Level level;
 		UT::Flag flag; //to level
 
 		DirectX::XMFLOAT3 transform{};
 
 		std::optional<RG::DeferredRenderGraph> rg;
+		bool block = false;
 	};
 }
 

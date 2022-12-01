@@ -4,7 +4,9 @@
 #include <Engine/Bindable/Light.h>
 #include <Engine/Scene/BillboardComponent.h>
 #include <Game/Portal.h>
+#include <Game/Flag.h>
 #include <Scene.h>
+#include <Engine/Probes/TestModelProbe.h>
 
 namespace UT
 {
@@ -51,6 +53,8 @@ namespace UT
 			sc.get_scene().addActors((physx::PxActor* const*)actors.data(), uint32_t(actors.size()));
 			for (auto& i : portals)
 				i.AddToScene(sc);
+			red.AddToScene(sc);
+			blue.AddToScene(sc);
 		}
 		template<class Self>
 		auto&& GetWorld(this Self&& s)
@@ -68,8 +72,24 @@ namespace UT
 				i.LinkTechniques(rg);
 			for (auto& i : portals)
 				i.Link(rg);
+			red.Link(rg);
+			blue.Link(rg);
 		}
 		void SpawnControlWindow();
+		ver::LightBuffer& GetLightBuffer()
+		{
+			return light_buf;
+		}
+		bool PollFinish()
+		{
+			auto r = red.GetScore();
+			auto b = blue.GetScore();
+
+			bool bl = r == 3 || b == 3;
+			if (r == 3)printf("%s", std::format("{} wins!", red.GetTeamTag()).c_str());
+			if (b == 3)printf("%s", std::format("{} wins!", blue.GetTeamTag()).c_str());
+			return bl;
+		}
 	private:
 		Model world;
 		std::vector<ver::ph::physx_ptr<physx::PxTriangleMesh>> colliders;
@@ -80,5 +100,8 @@ namespace UT
 		std::array<ver::BillboardComponent, 4> billboards;
 		std::array<ver::BillboardComponent, 4> flames;
 		std::array<TwoWayPortal, 6> portals;
+		
+		Flag red;
+		Flag blue;
 	};
 }

@@ -7,7 +7,7 @@ class Graphics;
 
 namespace ver
 {
-	struct alignas(alignof(DirectX::XMVECTOR)) PointLightConsts
+	struct PointLightConsts
 	{
 		DirectX::XMFLOAT4A pos;
 
@@ -17,7 +17,7 @@ namespace ver
 		float attConst;
 		float attLin;
 		float attQuad;
-		float padding;
+		uint32_t active;
 	};
 
 	class LightBuffer

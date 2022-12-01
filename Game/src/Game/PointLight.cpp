@@ -52,6 +52,7 @@ void ver::LightSphere::Reset() noexcept
 		1.0f,
 		0.045f,
 		0.0075f,
+		true
 	};
 	changed = true;
 }
@@ -89,3 +90,15 @@ void ver::LightSphere::Bind(Graphics& gfx) const noexcept
 	}
 }
 
+void ver::LightSphere::TurnOn()
+{
+	cbData->active = true;
+}
+void ver::LightSphere::TurnOff()
+{
+	cbData->active = false;
+}
+void ver::LightSphere::Toggle()
+{
+	cbData->active ^= true;
+}

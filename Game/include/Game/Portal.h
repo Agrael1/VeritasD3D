@@ -6,7 +6,7 @@
 namespace UT
 {
 	class Player;
-	class Portal : IEntity
+	class Portal : public IEntity
 	{
 		static inline ver::ph::physx_ptr<physx::PxShape> shape{};
 		static inline auto ref = 0;

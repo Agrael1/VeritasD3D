@@ -21,11 +21,15 @@ namespace ver
 		void Submit() const noxnd;
 		void Bind(Graphics& gfx)const noexcept;
 
-
 		void SetPosition(DirectX::XMFLOAT4A pos);
 		DirectX::XMVECTOR GetPosition();
 
 		void SetColor(DirectX::XMFLOAT3 color);
+
+		void TurnOn();
+		void TurnOff();
+		void Toggle();
+
 		void LinkTechniques(RG::RenderGraph& rg)
 		{
 			mesh.LinkTechniques(rg);

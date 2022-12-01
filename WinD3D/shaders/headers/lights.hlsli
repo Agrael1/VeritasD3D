@@ -3,12 +3,14 @@
 struct PointLight
 {
     float4 viewLightPos;
+    
     float3 diffuseColor;
     float diffuseIntensity;
+    
     float attConst;
     float attLin;
     float attQuad;
-    float padding;
+    bool active;
 };
 
 cbuffer PointLightCBuf : register(b7)

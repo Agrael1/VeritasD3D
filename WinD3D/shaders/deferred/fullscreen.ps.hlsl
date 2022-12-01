@@ -22,8 +22,13 @@ Sout Shade(in PointLight l,
     in const float3 view_pos,
     in const float4 specular
 )
-{     
+{
     Sout _out;
+    _out.diff = float3(0, 0, 0);
+    _out.spec = float3(0, 0, 0);
+    if (!l.active)
+        return _out;
+    
     const LightVectorData lv = CalculateLightVectorData(l.viewLightPos.xyz, view_pos);
     
 	    // attenuation

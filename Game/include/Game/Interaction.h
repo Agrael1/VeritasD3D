@@ -7,12 +7,24 @@ namespace UT
 {
 	class Player;
 	class Portal;
+	class Flag;
 
-	struct TeleportEvent {
+
+	struct Event {
+		virtual ~Event() = default;
+		virtual void Execute() = 0;
+	};
+	struct TeleportEvent :public Event {
 		TeleportEvent(Player& pl, Portal& po) :pl(pl), po(po) {};
-		void Execute();
+		void Execute()override;
 		Player& pl;
 		Portal& po;
+	};
+	struct FlagTakenEvent :public Event {
+		FlagTakenEvent(Player& pl, Flag& po) :pl(pl), po(po) {};
+		void Execute()override;
+		Player& pl;
+		Flag& po;
 	};
 
 	class Interaction : public physx::PxSimulationEventCallback
@@ -26,16 +38,14 @@ namespace UT
 	public:
 		void Apply()
 		{
-			ignore ^= events.size() > 0;
-			if (!ignore)
-				for (auto& i : events)
-					i.Execute();
+			for (auto& i : events)
+				i->Execute();
 			events.clear();
 		}
 	private:
 		void OnTrigger(std::span<physx::PxTriggerPair> pairs);
 	private:
-		std::vector<TeleportEvent> events;
-		bool ignore = true;
+		std::vector<std::unique_ptr<Event>> events;
+		bool ignore = false;
 	};
 }

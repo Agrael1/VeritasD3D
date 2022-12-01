@@ -4,17 +4,20 @@
 #include <PxSceneLock.h>
 #include <Util/Converter.h>
 #include <Game/Entity.h>
+#include <Game/PointLight.h>
 
 namespace UT
 {
-	class Player : IEntity
+	class Flag;
+	class Player : public IEntity
 	{
 		static inline constexpr const float g = 9.81f;
 	public:
-		Player(ver::ph::Scene& scene, float radius = 0.6f, float height = 3.0f)
-			:physics(scene, radius, height), height(height)
+		Player(ver::ph::Scene& scene, ver::LightBuffer& lights, Graphics& gfx, float radius = 0.9f, float height = 3.0f)
+			:physics(scene, radius, height), height(height), shimmer(lights, gfx)
 		{
 			physics.get_controller().getActor()->userData = (this);
+			shimmer.TurnOff();
 		}
 	public:
 		void Teleport(DirectX::XMFLOAT3 world_pos)
@@ -44,7 +47,28 @@ namespace UT
 		{
 			auto& position = physics.get_controller().getPosition();
 			camera.SetPosition({ float(position.x), float(position.y + height / 3.0f), float(position.z) });
+			if (flag)
+				shimmer.SetPosition({ float(position.x) ,float(position.y + height / 3.0f), float(position.z) , 0.0f });
 		}
+
+		void TakeFlag(DirectX::XMFLOAT3 color, Flag* flg)
+		{
+			shimmer.SetColor(color);
+			shimmer.TurnOn();
+			flag = flg;
+		}
+		void Reset();
+		void Respawn(DirectX::XMFLOAT3 pos)
+		{
+			Reset();
+			Teleport(pos);
+		}
+		Flag* GetFlag()
+		{
+			return flag;
+		}
+
+
 		void Rotate(float dx, float dy)
 		{
 			camera.Rotate(dx, dy);
@@ -72,8 +96,10 @@ namespace UT
 	private:
 		Camera camera;
 		ver::ph::CharacterController physics;
+		ver::LightSphere shimmer;
 		float height = 0.0f;
 		float vertical_velocity = g;
+		Flag* flag = nullptr;
 		bool flight_mode = false;
 	};
 }

@@ -1,6 +1,6 @@
 # Blender 3.3.1
 # www.blender.org
-mtllib flag.mtl
+mtllib redflag.mtl
 o USMC_flag
 v 0.001984 1.132982 0.208248
 v 0.191437 1.120515 0.314891

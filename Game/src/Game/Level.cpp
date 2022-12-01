@@ -119,6 +119,16 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 		flames[i].SetPosition(DirectX::XMLoadFloat3A(&pos3[i]));
 		flames[i].SetColor(gfx, DirectX::XMLoadFloat3A(&cols3[i]));
 	}
+
+	
+	co_await red.InitializeAsync(phy, gfx, "../models/flag/redflag.obj", { -147.0f, -41.0f, 15.3f });
+	red.GetModel()->SetRootTransform(DirectX::XMMatrixRotationY(-std::numbers::pi / 2.0f) * DirectX::XMMatrixTranslation(-147.0f, -41.0f, 15.3f));
+	red.SetColor({ 1.0f, 0, 0 });
+	red.SetTeamTag("Red");
+	co_await blue.InitializeAsync(phy, gfx, "../models/flag/blueflag.obj", { 153.0f, -43.7f, -24.3f });
+	blue.GetModel()->SetRootTransform(DirectX::XMMatrixRotationY(3.0f*std::numbers::pi / 4.0f) * DirectX::XMMatrixTranslation(153.0f, -43.7f, -24.3f));
+	blue.SetColor({ 0, 0, 1 });
+	blue.SetTeamTag("Blue");
 }
 
 void UT::Level::Submit(Graphics& gfx)
@@ -139,9 +149,9 @@ void UT::Level::Submit(Graphics& gfx)
 		i.Update(gfx);
 	}
 	for (auto& i : portals)
-	{
 		i.Submit(gfx);
-	}
+	red.Submit();
+	blue.Submit();
 
 	DirectX::XMFLOAT4A rpos;
 	DirectX::XMStoreFloat4A(&rpos, DirectX::XMVector3Transform(pos, DirectX::XMMatrixRotationRollPitchYaw(gfx.GetFrameStep() / 4.0f, 0, 0)));
@@ -150,5 +160,6 @@ void UT::Level::Submit(Graphics& gfx)
 
 void UT::Level::SpawnControlWindow()
 {
-
+	//probe.SpawnWindow(*red.GetModel());
+	//probe.SpawnWindow(*blue.GetModel());
 }
