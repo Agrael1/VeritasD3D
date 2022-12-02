@@ -64,7 +64,6 @@ class VertexConstantBuffer : public ConstantBuffer<C>
 {
 	using ConstantBuffer<C>::pConstantBuffer;
 	using ConstantBuffer<C>::slot;
-	using ConstantBuffer<C>::GetInfoManager;
 	using Bindable::GetContext;
 public:
 	using ConstantBuffer<C>::ConstantBuffer;
@@ -101,7 +100,6 @@ class PixelConstantBuffer : public ConstantBuffer<C>
 {
 	using ConstantBuffer<C>::pConstantBuffer;
 	using ConstantBuffer<C>::slot;
-	using ConstantBuffer<C>::GetInfoManager;
 	using Bindable::GetContext;
 public:
 	using ConstantBuffer<C>::ConstantBuffer;

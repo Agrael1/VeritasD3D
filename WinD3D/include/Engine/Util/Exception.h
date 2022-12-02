@@ -36,7 +36,7 @@ namespace ver
 	};
 
 
-	template<class E, class ... Args> requires ((bool)DEBUG_MODE)
+	template<class E> requires ((bool)DEBUG_MODE)
 	E make_error(E in)
 	{
 		in.WriteToOutput();

@@ -1,6 +1,6 @@
 #pragma once
+#include <Engine/Util/DXGIInfoManager.h>
 #include <Engine/Util/Exception.h>
-#include <vector>
 
 namespace ver
 {
@@ -8,6 +8,9 @@ namespace ver
 	{
 	public:
 		hr_error(winrt::hresult hr, std::vector<std::string> messages = {}, std::source_location sl = std::source_location::current())noexcept;
+		hr_error(HRESULT hr, std::vector<std::string> messages = {}, std::source_location sl = std::source_location::current())noexcept
+			:hr_error(winrt::hresult(hr), messages, sl)
+		{}
 	public:
 		const char* what()const noexcept override;
 		std::string_view type()const noexcept override
@@ -29,7 +32,7 @@ namespace ver
 		std::string info;
 	};
 
-	class DeviceRemovedException : public hr_error
+	class device_error : public hr_error
 	{
 		using hr_error::hr_error;
 	public:
@@ -40,10 +43,10 @@ namespace ver
 	};
 
 
-	class ContextException : public exception
+	class context_error : public exception
 	{
 	public:
-		ContextException(std::vector<std::string> messages = {}, std::source_location sl = std::source_location::current())noexcept;
+		context_error(std::vector<std::string> messages = {}, std::source_location sl = std::source_location::current())noexcept;
 	public:
 		const char* what()const noexcept override;
 		std::string_view type()const noexcept override
@@ -56,8 +59,24 @@ namespace ver
 	};
 
 
-	inline void check_hresult(winrt::hresult hr)
+	inline void check_hresult(winrt::hresult hr, std::source_location sl = std::source_location::current())
 	{
-		if (hr < 0)throw make_error<hr_error>(hr);
+		if (hr < 0)throw make_error<hr_error>({ hr, {}, sl });
 	}
+
+	template<int=1>requires(bool(DEBUG_MODE))
+	inline void check_graphics(winrt::hresult hr, std::source_location sl = std::source_location::current())
+	{ if (hr < 0)throw make_error<hr_error>({ hr, DXGIInfoManager::GetMessages(), sl }); }
+
+	template<int=1>requires(!bool(DEBUG_MODE))
+	inline void check_graphics(winrt::hresult hr) { check_hresult(hr); }
+
+	template<int = 1>requires(bool(DEBUG_MODE))
+	inline void check_context(std::source_location sl = std::source_location::current()){
+		if (DXGIInfoManager::GetNumMessages())
+			throw make_error<context_error>({ DXGIInfoManager::GetMessages(), sl });
+	}
+	
+	template<int = 1>requires(!bool(DEBUG_MODE))
+	inline void check_context(){}
 }

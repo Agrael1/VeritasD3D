@@ -12,12 +12,3 @@ ID3D11Device* GraphicsResource::GetDevice(const Graphics& gfx) noexcept
 {
 	return gfx.pDevice.get();
 }
-
-DXGIInfoManager* GraphicsResource::GetInfoManager(Graphics& gfx) noexcept
-{
-#ifndef NDEBUG
-	return &gfx.infoManager;
-#else
-	return nullptr;
-#endif
-}

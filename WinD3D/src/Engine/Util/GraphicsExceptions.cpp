@@ -2,6 +2,7 @@
 #include <format>
 #include <DxErr.h>
 
+
 using namespace ver;
 
 hr_error::hr_error(winrt::hresult hr, std::vector<std::string> messages, std::source_location sl) noexcept
@@ -46,7 +47,7 @@ const char* hr_error::what()const noexcept
 
 
 
-ContextException::ContextException(std::vector<std::string> messages, std::source_location sl) noexcept
+context_error::context_error(std::vector<std::string> messages, std::source_location sl) noexcept
 	:exception(sl)
 {
 	// join messages in a single string
@@ -60,11 +61,11 @@ ContextException::ContextException(std::vector<std::string> messages, std::sourc
 		info.pop_back();
 	}
 }
-std::string ContextException::GetErrorInfo() const noexcept
+std::string context_error::GetErrorInfo() const noexcept
 {
 	return info;
 }
-const char* ContextException::what()const noexcept
+const char* context_error::what()const noexcept
 {
 	if (whatBuffer.empty())
 	{

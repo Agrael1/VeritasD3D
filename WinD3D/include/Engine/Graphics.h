@@ -68,7 +68,7 @@ private:
 	DirectX::XMMATRIX camera;
 	DirectX::XMFLOAT3 shadowPos;
 #ifndef NDEBUG
-	DXGIInfoManager infoManager;
+	ver::DXGIInfoManager infoManager;
 #endif
 	bool imguiEnabled = true;
 private:
