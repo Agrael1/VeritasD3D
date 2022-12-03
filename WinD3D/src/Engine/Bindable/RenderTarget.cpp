@@ -265,11 +265,11 @@ winrt::IAsyncAction RenderTargetArray::InitializeAsync(Graphics& gfx, uint32_t w
 	co_await winrt::resume_background();
 	for (auto& i : targets)
 	{
-		i = GetRTV(GetDevice(gfx), width, height);
+		i = ::GetRTV(GetDevice(gfx), width, height);
 	}
 	for (size_t i = 0; i < resource_views.size(); i++)
 	{
-		resource_views[i] = GetSRV(GetDevice(gfx), targets[i].get());
+		resource_views[i] = ::GetSRV(GetDevice(gfx), targets[i].get());
 	}
 	this->slot = slot;
 	this->width = width;

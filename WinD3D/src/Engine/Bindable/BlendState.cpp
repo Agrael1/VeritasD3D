@@ -1,8 +1,7 @@
 #include <Engine/Bindable/BlendState.h>
 #include <Engine/Bindable/Codex.h>
-#include <Engine/Deprecated/GraphicsThrows.h>
-#include <Engine/Util/DXGIInfoManager.h>
 #include <Engine/Util/GraphicsExceptions.h>
+#include <format>
 
 using namespace ver;
 
@@ -10,12 +9,22 @@ BlendState::BlendState(Graphics& gfx, bool blending, std::optional<float> factor
 	:
 	blending(blending)
 {
-	INFOMAN(gfx);
+	Initialize(gfx, blending, factors_in);
+}
 
-	if (factors_in)
+winrt::IAsyncAction ver::BlendState::InitializeAsync(Graphics& gfx, bool blending, std::optional<float> factor)
+{
+	co_await winrt::resume_background();
+	Initialize(gfx, blending, factor);
+}
+
+void ver::BlendState::Initialize(Graphics& gfx, bool blending, std::optional<float> factor)
+{
+	this->blending = blending;
+	if (factor)
 	{
 		factors.emplace();
-		factors->fill(*factors_in);
+		factors->fill(*factor);
 	}
 
 	D3D11_BLEND_DESC blendDesc = CD3D11_BLEND_DESC{ CD3D11_DEFAULT{} };
@@ -24,7 +33,7 @@ BlendState::BlendState(Graphics& gfx, bool blending, std::optional<float> factor
 	{
 		brt.BlendEnable = TRUE;
 
-		if (factors_in)
+		if (factor)
 		{
 			brt.SrcBlend = D3D11_BLEND_BLEND_FACTOR;
 			brt.DestBlend = D3D11_BLEND_INV_BLEND_FACTOR;
@@ -35,14 +44,19 @@ BlendState::BlendState(Graphics& gfx, bool blending, std::optional<float> factor
 			brt.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
 		}
 	}
-	GFX_THROW_INFO(GetDevice(gfx)->CreateBlendState(&blendDesc, &pBlendState));
+	ver::check_graphics(GetDevice(gfx)->CreateBlendState(&blendDesc, pBlendState.put()));
 }
 
 void BlendState::Bind(Graphics& gfx) noxnd
 {
-	INFOMAN_NOHR(gfx);
+	Bind(*GetContext(gfx));
+}
+
+void ver::BlendState::Bind(ID3D11DeviceContext& context) noxnd
+{
 	const float* data = factors ? factors->data() : nullptr;
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->OMSetBlendState(pBlendState.Get(), data, 0xFFFFFFFFu));
+	context.OMSetBlendState(pBlendState.get(), data, 0xFFFFFFFFu);
+	check_context();
 }
 
 void BlendState::SetFactor(float factor) noxnd
@@ -61,10 +75,13 @@ std::shared_ptr<BlendState> BlendState::Resolve(Graphics& gfx, bool blending, st
 {
 	return Codex::Resolve<BlendState>(gfx, blending, factor);
 }
+concurrency::task<std::shared_ptr<BlendState>> ver::BlendState::ResolveAsync(Graphics& gfx, bool blending, std::optional<float> factor)
+{
+	return Codex::ResolveAsync<BlendState>(gfx, blending, factor);
+}
 std::string BlendState::GenerateUID(bool blending, std::optional<float> factor)
 {
-	using namespace std::string_literals;
-	return typeid(BlendState).name() + "#"s + (blending ? "b"s : "n"s) + (factor ? "#f"s + std::to_string(*factor) : "");
+	return std::format("{}#{}{}", typeid(BlendState).name(), blending ? 'b' : 'n', factor ? "#f" + std::to_string(*factor) : "");
 }
 std::string BlendState::GetUID() const noexcept
 {

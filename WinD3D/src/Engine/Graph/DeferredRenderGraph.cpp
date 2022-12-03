@@ -5,6 +5,7 @@
 #include <Engine/Pass/LightingPass.h>
 #include <Engine/Pass/SkyboxPass.h>
 #include <Engine/Pass/ShadowPass.h>
+#include <Engine/Pass/AmbientPass.h>
 #include <memory>
 
 RG::DeferredRenderGraph::DeferredRenderGraph(Graphics& gfx)
@@ -30,11 +31,17 @@ RG::DeferredRenderGraph::DeferredRenderGraph(Graphics& gfx)
 		AppendPass(std::move(pass));
 	}
 	{
+		auto pass = std::make_unique<ver::rg::AmbientPass>(gfx, "ambient");
+		pass->SetSinkLinkage("targets", "lambertian.targets");
+		pass->SetSinkLinkage("depthStencil", "lambertian.depthStencil");
+		AppendPass(std::move(pass));
+	}
+	{
 		auto pass = std::make_unique<LightingPass>(gfx, "light");
 		pass->SetSinkLinkage("shadow", "shadow.map");
-		pass->SetSinkLinkage("targets", "lambertian.targets");
+		pass->SetSinkLinkage("targets", "ambient.targets");
 		pass->SetSinkLinkage("renderTarget", "clearRT.buffer");
-		pass->SetSinkLinkage("depthStencil", "lambertian.depthStencil");
+		pass->SetSinkLinkage("depthStencil", "ambient.depthStencil");
 		AppendPass(std::move(pass));
 	}
 	{

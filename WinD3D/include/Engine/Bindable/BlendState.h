@@ -1,23 +1,33 @@
 #pragma once
 #include <Engine/Bindable/Bindable.h>
+#include <pplawait.h>
 #include <optional>
-#include <array>
 
 struct ID3D11BlendState;
 
-class BlendState : public Bindable
+namespace ver
 {
-public:
-	BlendState(Graphics& gfx, bool blending, std::optional<float> factor = {});
-public:
-	void Bind(Graphics& gfx) noxnd override;
-	void SetFactor(float factor) noxnd;
-	float GetFactor() const noxnd;
-	static std::shared_ptr<BlendState> Resolve(Graphics& gfx, bool blending, std::optional<float> factor = {});
-	static std::string GenerateUID(bool blending, std::optional<float> factor);
-	std::string GetUID() const noexcept override;
-protected:
-	Microsoft::WRL::ComPtr<ID3D11BlendState> pBlendState;
-	bool blending;
-	std::optional<std::array<float, 4>> factors;
-};
+	class BlendState : public Bindable
+	{
+	public:
+		BlendState() = default;
+		BlendState(Graphics& gfx, bool blending, std::optional<float> factor = {});
+		winrt::IAsyncAction InitializeAsync(Graphics& gfx, bool blending, std::optional<float> factor = {});
+		void Initialize(Graphics& gfx, bool blending, std::optional<float> factor = {});
+	public:
+		void Bind(Graphics& gfx) noxnd override;
+		void Bind(ID3D11DeviceContext& context) noxnd;
+
+		void SetFactor(float factor) noxnd;
+		float GetFactor() const noxnd;
+
+		static std::shared_ptr<BlendState> Resolve(Graphics& gfx, bool blending, std::optional<float> factor = {});
+		static concurrency::task<std::shared_ptr<BlendState>> ResolveAsync(Graphics& gfx, bool blending, std::optional<float> factor = {});
+		static std::string GenerateUID(bool blending, std::optional<float> factor);
+		std::string GetUID() const noexcept override;
+	protected:
+		winrt::com_ptr<ID3D11BlendState> pBlendState;
+		std::optional<std::array<float, 4>> factors{};
+		bool blending = false;
+	};
+}

@@ -46,6 +46,19 @@ if(NOT wil_POPULATED)
   FetchContent_Populate(wil)
 endif()
 
+#hbao
+FetchContent_Declare(
+  hbao
+  GIT_REPOSITORY https://github.com/NVIDIAGameWorks/HBAOPlus.git
+  GIT_TAG origin/master
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+)
+FetchContent_GetProperties(hbao)
+if(NOT hbao_POPULATED)
+  FetchContent_Populate(hbao)
+endif()
+
 
 
 find_program(NUGET_EXE NAMES nuget PATHS ${CMAKE_CURRENT_SOURCE_DIR}/NuGet)
@@ -89,6 +102,9 @@ set(DXMISSING_LIB ${DXMISS_DIR}/Lib/native/x64/DxErr.lib PARENT_SCOPE)
 set(DXTEX_HEADERS ${DXTEX_DIR}/include PARENT_SCOPE)
 set(DXTEX_LIB ${DXTEX_DIR}/native/lib/x64/$<IF:$<CONFIG:Debug>,Debug,Release>/DirectXTex.lib PARENT_SCOPE)
 set(WIL_HEADERS "${wil_SOURCE_DIR}/include" PARENT_SCOPE)
+set(HBAO_HEADERS "${hbao_SOURCE_DIR}/include" PARENT_SCOPE)
+set(HBAO_LIB "${hbao_SOURCE_DIR}/lib/GFSDK_SSAO_D3D11.win64.lib" PARENT_SCOPE)
+set(HBAO_DYLIB "${hbao_SOURCE_DIR}/lib/GFSDK_SSAO_D3D11.win64.dll" PARENT_SCOPE)
 set(CPPWINRT ${CPPWINRT_DIR}/bin/cppwinrt.exe)
 
 execute_process(COMMAND

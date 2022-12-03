@@ -12,7 +12,7 @@ namespace RG
 {
 	RenderGraph::RenderGraph(Graphics& gfx)
 		:backBufferTarget(gfx.GetTarget()),
-		masterDepth(std::make_shared<ver::OutputOnlyDepthStencil>(gfx))
+		masterDepth(std::make_shared<ver::ShaderInputDepthStencil>(gfx))
 	{
 		// setup global sinks and sources
 		AddGlobalSource(DirectBufferSource<RenderTarget>::Make("backbuffer", backBufferTarget));

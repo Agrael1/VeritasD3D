@@ -11,7 +11,7 @@ namespace RG
 		FullscreenPass(std::move(name), gfx)
 	{
 		AddBind(ver::PixelShader::Resolve(gfx, "BlurOutline_PS.cso"));
-		AddBind(BlendState::Resolve(gfx, true));
+		AddBind(ver::BlendState::Resolve(gfx, true));
 		AddBind(Stencil::Resolve(gfx, Stencil::Mode::Mask));
 		AddBind(Sampler::Resolve(gfx, Sampler::Type::Bilinear, true));
 

@@ -39,9 +39,10 @@ namespace ver
 	class ShaderInputDepthStencil : public DepthStencil
 	{
 	public:
-		ShaderInputDepthStencil(Graphics& gfx, UINT slot, Usage usage = Usage::DepthStencil);
+		ShaderInputDepthStencil(Graphics& gfx, UINT slot = 0u, Usage usage = Usage::DepthStencil);
 		ShaderInputDepthStencil(Graphics& gfx, UINT width, UINT height, UINT slot, Usage usage = Usage::DepthStencil);
 		void Bind(Graphics& gfx) noxnd override;
+		ID3D11ShaderResourceView* GetSRV()const noexcept { return pShaderResourceView.get(); }
 	private:
 		UINT slot;
 		winrt::com_ptr<ID3D11ShaderResourceView> pShaderResourceView;

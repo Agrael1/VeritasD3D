@@ -9,7 +9,6 @@ namespace ver
 }
 
 class OutputOnlyRenderTarget;
-class OutputOnlyRenderTarget;
 
 class Graphics
 {

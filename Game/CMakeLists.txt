@@ -38,6 +38,11 @@ add_custom_target(copy_music ALL
 	${CMAKE_BINARY_DIR}/music
 	COMMENT "Copying music to binary directory")
 
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${HBAO_DYLIB} $<TARGET_FILE_DIR:${PROJECT_NAME}>
+  COMMAND_EXPAND_LISTS
+  )
+
 include_directories(BEFORE SYSTEM ${CMAKE_BINARY_DIR}/include)
 target_link_libraries(${PROJECT_NAME} PUBLIC WinD3D)
 target_link_libraries(${PROJECT_NAME} PUBLIC PhysX)

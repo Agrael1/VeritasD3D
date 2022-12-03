@@ -11,7 +11,7 @@ namespace RG
 		FullscreenPass(std::move(name), gfx)
 	{
 		AddBind(ver::PixelShader::Resolve(gfx, "BlurOutline_PS.cso"));
-		AddBind(BlendState::Resolve(gfx, false));
+		AddBind(ver::BlendState::Resolve(gfx, false));
 		AddBind(Sampler::Resolve(gfx, Sampler::Type::Point, true));
 
 		AddBindSink<RenderTarget>("scratchIn");

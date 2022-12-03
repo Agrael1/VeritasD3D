@@ -77,6 +77,8 @@ public:
 	uint32_t GetWidth() const noexcept { return width; }
 	uint32_t GetHeight() const noexcept { return height; }
 	void Bind(Graphics& gfx) noxnd override;
+	ID3D11RenderTargetView* GetRTV(size_t at) { return targets.at(at).get(); }
+	ID3D11ShaderResourceView* GetSRV(size_t at) { return resource_views.at(at).get(); }
 private:
 	void BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDepthStencilView) noxnd override;
 protected:
