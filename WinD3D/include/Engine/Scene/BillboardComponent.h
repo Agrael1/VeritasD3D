@@ -15,7 +15,7 @@ namespace ver
 	public:
 		void SetColor(Graphics& gfx, DirectX::XMVECTOR color)
 		{
-			DirectX::XMStoreFloat3(&buffer.color, color);
+			DirectX::XMStoreFloat3(&buffer.color, DirectX::XMColorRGBToHSL(color));
 			cbuf->Update(gfx, buffer);
 		}
 		void SetPosition(DirectX::XMVECTOR xposition)

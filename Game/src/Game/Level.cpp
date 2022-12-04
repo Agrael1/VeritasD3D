@@ -15,7 +15,6 @@ winrt::IAsyncAction UT::TwoWayPortal::InitializeAsync(ver::ph::Physics& phy, Gra
 {
 	co_await first.InitializeAsync(phy, gfx, positions.first, color);
 	co_await second.InitializeAsync(phy, gfx, positions.second, color);
-	//co_await winrt::when_all(f1, f2);
 	first.SetBound(&second);
 	second.SetBound(&first);
 }

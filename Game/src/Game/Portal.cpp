@@ -6,7 +6,7 @@
 
 winrt::IAsyncAction UT::Portal::InitializeAsync(ver::ph::Physics& phy, Graphics& gfx, DirectX::XMFLOAT3 position, DirectX::XMFLOAT3 color)
 {
-	co_await model.InitializeAsync(gfx, u"../models/portal2.dds", { 5,5 });
+	co_await model.InitializeAsync(gfx, u"../models/portal3.dds", { 5,5 });
 	model.SetPosition(DirectX::XMLoadFloat3(&position));
 	model.SetColor(gfx, DirectX::XMLoadFloat3(&color));
 	this->position = position;
