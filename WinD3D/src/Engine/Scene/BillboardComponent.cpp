@@ -8,6 +8,7 @@ namespace ver
 {
 	winrt::IAsyncAction BillboardComponent::InitializeAsync(Graphics& gfx, std::filesystem::path tex_path, DirectX::XMFLOAT2 dims, bool spherical)
 	{
+		co_await winrt::resume_background();
 		Technique tech("Lambertian");
 		{
 			Step only{ "forward" };
@@ -21,9 +22,9 @@ namespace ver
 			auto plane = Plane::Make();
 			plane.Deform(DirectX::XMMatrixScalingFromVector(DirectX::XMLoadFloat2(&dims)));
 
-			pVertices = std::make_shared<VertexBuffer>(gfx, plane.vertices);
-			pIndices = std::make_shared<IndexBuffer>(gfx, plane.indices);
-			pTopology = Codex::Resolve<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			pVertices = VertexBuffer::Resolve(gfx, "billboard", plane.vertices);
+			pIndices = IndexBuffer::Resolve(gfx, "billboard", plane.indices);
+			pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 
 			only.AddBindable(std::make_shared<BillboardCbuf>(gfx));
@@ -31,13 +32,14 @@ namespace ver
 			only.AddBindable(Codex::Resolve<Sampler>(gfx));
 
 			only.AddBindable(cbuf = co_await xcbuf);
-			only.AddBindable(std::move(co_await xvcbuf));
-			only.AddBindable(std::move(co_await vshader));
-			only.AddBindable(std::move(co_await pshader));
+			only.AddBindable(co_await xvcbuf);
+			only.AddBindable(co_await vshader);
+			only.AddBindable(co_await pshader);
 
 			auto tex = co_await texture;
 			frame_count = tex->GetCount();
-			only.AddBindable(std::move(tex));
+			only.AddBindable(tex);
+
 			tech.AddStep(std::move(only));
 		}
 		AddTechnique(std::move(tech));
@@ -58,5 +60,12 @@ namespace ver
 			ImGui::SliderFloat("Z", &position.z, -200.f, 200.f, "%.1f");
 		}
 		ImGui::End();
+	}
+
+	winrt::IAsyncAction BillboardBuilder::MakeAsync(Graphics& gfx, BillboardComponent& component)
+	{
+		component.position = position;
+		component.buffer.color = color;
+		return component.InitializeAsync(gfx, tex_path, dims, spherical);
 	}
 }

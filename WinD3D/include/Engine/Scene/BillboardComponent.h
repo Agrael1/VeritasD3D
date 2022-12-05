@@ -8,6 +8,7 @@ namespace ver
 {
 	class BillboardComponent : public Drawable
 	{
+		friend class BillboardBuilder;
 		static inline constexpr auto aa = 4;
 	public:
 		BillboardComponent() = default;
@@ -38,5 +39,27 @@ namespace ver
 			uint32_t frame = 0u;
 		}buffer;
 		std::shared_ptr<PixelConstantBuffer<cbuffer>> cbuf;
+	};
+
+	class BillboardBuilder final
+	{
+	public:
+		BillboardBuilder() = default;
+	public:
+		BillboardBuilder& At(DirectX::XMFLOAT3A position) { this->position = position; return*this; }
+		BillboardBuilder& Dimensions(DirectX::XMFLOAT2 dims) { this->dims = dims; return*this; }
+		BillboardBuilder& Color(DirectX::XMFLOAT3 color) { this->color = color; return*this;}
+		BillboardBuilder& Cylindrical() { this->spherical = false; return*this;}
+		BillboardBuilder& Spherical() { this->spherical = true; return*this;}
+		BillboardBuilder& Texture(std::filesystem::path p) { this->tex_path = std::move(p); return*this;}
+
+		BillboardComponent Make(Graphics& gfx);
+		winrt::IAsyncAction MakeAsync(Graphics& gfx, BillboardComponent& component);
+	private:
+		DirectX::XMFLOAT3A position{ 0,0,0 };
+		DirectX::XMFLOAT3 color{ 1,1,1 };
+		DirectX::XMFLOAT2 dims{0,0};
+		std::filesystem::path tex_path;
+		bool spherical = true;
 	};
 }

@@ -18,14 +18,15 @@ winrt::IAsyncAction ver::audio::ogg_stream::InitializeAsync(Audio& au, std::file
 	state = state::initialized;
 }
 
-void ver::audio::ogg_stream::play(bool looped)
+winrt::IAsyncAction ver::audio::ogg_stream::play(bool looped)
 {
+	co_await winrt::resume_background();
 	this->looped = looped;
 	switch (state)
 	{
 	case ver::audio::ogg_stream::state::initialized:
 		if (loaded)
-			return send_whole();
+			co_return send_whole();
 		read_chunk();
 		[[fallthrough]];
 	case ver::audio::ogg_stream::state::paused:

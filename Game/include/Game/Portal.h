@@ -9,7 +9,7 @@ namespace UT
 	class Portal : public IEntity
 	{
 		static inline ver::ph::physx_ptr<physx::PxShape> shape{};
-		static inline auto ref = 0;
+		static inline std::atomic_uint32_t ref = 0;
 	public:
 		Portal() = default;
 		~Portal()

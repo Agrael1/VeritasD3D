@@ -13,8 +13,7 @@ using namespace physx;
 
 winrt::IAsyncAction UT::TwoWayPortal::InitializeAsync(ver::ph::Physics& phy, Graphics& gfx, std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3> positions, DirectX::XMFLOAT3 color)
 {
-	co_await first.InitializeAsync(phy, gfx, positions.first, color);
-	co_await second.InitializeAsync(phy, gfx, positions.second, color);
+	co_await winrt::when_all(first.InitializeAsync(phy, gfx, positions.first, color), second.InitializeAsync(phy, gfx, positions.second, color));
 	first.SetBound(&second);
 	second.SetBound(&first);
 }
@@ -33,6 +32,7 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 	if (pScene == nullptr || !pScene->HasMeshes())
 		throw ver::make_error<ver::ModelException>({ imp.GetErrorString() });
 
+	auto wrld = world.InitializeAsync(gfx, *pScene, std::move(map), 40.0f);
 	auto phys = [&]() ->winrt::IAsyncAction {
 		co_await winrt::resume_background();
 		auto* mat = phy.GetMaterial("world");
@@ -45,7 +45,8 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 			auto x = phy.MakeTriangleMesh({ (DirectX::XMFLOAT3*)mesh->mVertices, mesh->mNumVertices }, y);
 			actors.emplace_back(phy.MakeActor(std::move(x), *mat, 40.0f));
 		}
-	};
+	}();
+	auto lb = light_buf.InitializeAsync(gfx);
 
 
 	constexpr std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3> pos_p[]{
@@ -58,14 +59,20 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 	};
 	constexpr DirectX::XMFLOAT3 cols_p[2]{ { 1,0,0 }, {0,0,1} };
 
-	co_await winrt::when_all(world.InitializeAsync(gfx, *pScene, std::move(map), 40.0f),
-		phys(), light_buf.InitializeAsync(gfx));
+
+	std::vector<winrt::IAsyncAction> acts;
+	acts.reserve(portals.size());
+
 	for (auto& i : billboards)
 		co_await i.InitializeAsync(gfx, u"../models/white.png", { 5,5 });
 	for (auto& i : flames)
 		co_await i.InitializeAsync(gfx, u"../models/fire.dds", { 8,8 }, false);
+
 	for (size_t i = 0; i < portals.size(); i++)
-		co_await portals[i].InitializeAsync(phy, gfx, pos_p[i], cols_p[i % 2]);
+		acts.push_back(portals[i].InitializeAsync(phy, gfx, pos_p[i], cols_p[i % 2]));
+
+	co_await winrt::when_all(wrld, phys, lb, ver::when_all(acts));
+
 
 
 	constexpr DirectX::XMFLOAT4A pos[3]{ { -1.7f, 73.8f, 0.0f, 0.0f}, {-147.8f, -28.8f, -12.0f, 0.0f}, {154.3f, -28.8f, 0.0f, 0.0f} };
@@ -119,13 +126,13 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 		flames[i].SetColor(gfx, DirectX::XMLoadFloat3A(&cols3[i]));
 	}
 
-	
+
 	co_await red.InitializeAsync(phy, gfx, "../models/flag/redflag.obj", { -147.0f, -41.0f, 15.3f });
 	red.GetModel()->SetRootTransform(DirectX::XMMatrixRotationY(-std::numbers::pi / 2.0f) * DirectX::XMMatrixTranslation(-147.0f, -41.0f, 15.3f));
 	red.SetColor({ 1.0f, 0, 0 });
 	red.SetTeamTag("Red");
 	co_await blue.InitializeAsync(phy, gfx, "../models/flag/blueflag.obj", { 153.0f, -43.7f, -24.3f });
-	blue.GetModel()->SetRootTransform(DirectX::XMMatrixRotationY(3.0f*std::numbers::pi / 4.0f) * DirectX::XMMatrixTranslation(153.0f, -43.7f, -24.3f));
+	blue.GetModel()->SetRootTransform(DirectX::XMMatrixRotationY(3.0f * std::numbers::pi / 4.0f) * DirectX::XMMatrixTranslation(153.0f, -43.7f, -24.3f));
 	blue.SetColor({ 0, 0, 1 });
 	blue.SetTeamTag("Blue");
 }
