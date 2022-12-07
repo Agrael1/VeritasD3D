@@ -11,9 +11,10 @@ namespace ver
 		co_await winrt::resume_background();
 		Technique tech("Lambertian");
 		{
+			auto tag = std::format("bb{}{}", dims.x, dims.y);
 			Step only{ "forward" };
 
-			auto texture = Codex::ResolveAsync<Texture>(gfx, tex_path, 0);
+			auto texture = Texture::ResolveAsync(gfx, tex_path, 0);
 			auto pshader = PixelShader::ResolveAsync(gfx, "billboard.ps.cso");
 			auto vshader = VertexShader::ResolveAsync(gfx, "billboard.vs.cso");
 			auto xcbuf = ver::make_shared_async<decltype(cbuf)::element_type>(gfx, buffer, 0);
@@ -22,8 +23,8 @@ namespace ver
 			auto plane = Plane::Make();
 			plane.Deform(DirectX::XMMatrixScalingFromVector(DirectX::XMLoadFloat2(&dims)));
 
-			pVertices = VertexBuffer::Resolve(gfx, "billboard", plane.vertices);
-			pIndices = IndexBuffer::Resolve(gfx, "billboard", plane.indices);
+			pVertices = VertexBuffer::Resolve(gfx, tag, plane.vertices);
+			pIndices = IndexBuffer::Resolve(gfx, tag, plane.indices);
 			pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 
