@@ -48,33 +48,6 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 	}();
 	co_await light_buf.InitializeAsync(gfx);
 
-
-	constexpr std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3> pos_p[]{
-		{{-145.9f, -38.4f, -10.6},{-152.2f, 79.5f, -10.5f}},
-		{{150.9f, -38.9f, 2.6f},{157.7f, 79.1f, 2.6f}},
-		{{-154.9f, -38.6f, -35.6f},{-129.6f, 23.4f, -10.2f}},
-		{{160.8f, -39.7f, 28.5f},{136.4f,22.5f,1.8f}},
-		{{-139.5f,-37.5f,-36.5f},{-120.8f,2.3f,-10.0f}},
-		{{144.5f,-38.8f, 28.0},{129.5f, 1.4f, 1.9f}}
-	};
-	constexpr DirectX::XMFLOAT3 cols_p[2]{ { 1,0,0 }, {0,0,1} };
-
-
-	std::vector<winrt::IAsyncAction> acts;
-	acts.reserve(portals.size() + billboards.size() + flames.size());
-
-	for (auto& i : billboards)
-		acts.push_back(i.InitializeAsync(gfx, u"../models/white.png", { 5,5 }));
-	for (auto& i : flames)
-		acts.push_back(i.InitializeAsync(gfx, u"../models/fire.dds", { 8,8 }, false));
-
-	for (size_t i = 0; i < portals.size(); i++)
-		acts.push_back(portals[i].InitializeAsync(light_buf, phy, gfx, pos_p[i], cols_p[i % 2]));
-
-	co_await winrt::when_all(wrld, phys, ver::when_all(acts));
-
-
-
 	constexpr DirectX::XMFLOAT4A pos[3]{ { -1.7f, 73.8f, 0.0f, 0.0f}, {-147.8f, -28.8f, -12.0f, 0.0f}, {154.3f, -28.8f, 0.0f, 0.0f} };
 	constexpr DirectX::XMFLOAT3 cols[3]{ { 154.f / 255.f, 154.f / 255.f, 154.f / 255.f}
 	, {255.f / 255.f, 111.f / 255.f, 111.f / 255.f}
@@ -108,6 +81,30 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 	l3a.attQuad = 0.0011574f;
 
 
+	constexpr std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3> pos_p[]{
+	{{-145.9f, -38.4f, -10.6},{-152.2f, 79.5f, -10.5f}},
+	{{150.9f, -38.9f, 2.6f},{157.7f, 79.1f, 2.6f}},
+	{{-154.9f, -38.6f, -35.6f},{-129.6f, 23.4f, -10.2f}},
+	{{160.8f, -39.7f, 28.5f},{136.4f,22.5f,1.8f}},
+	{{-139.5f,-37.5f,-36.5f},{-120.8f,2.3f,-10.0f}},
+	{{144.5f,-38.8f, 28.0},{129.5f, 1.4f, 1.9f}}
+	};
+	constexpr DirectX::XMFLOAT3 cols_p[2]{ { 1,0,0 }, {0,0,1} };
+
+
+	std::vector<winrt::IAsyncAction> acts;
+	acts.reserve(portals.size() + billboards.size() + flames.size());
+
+	for (auto& i : billboards)
+		acts.push_back(i.InitializeAsync(gfx, u"../models/white.png", { 5,5 }));
+	for (auto& i : flames)
+		acts.push_back(i.InitializeAsync(gfx, u"../models/fire.dds", { 8,8 }, false));
+
+	for (size_t i = 0; i < portals.size(); i++)
+		acts.push_back(portals[i].InitializeAsync(light_buf, phy, gfx, pos_p[i], cols_p[i % 2]));
+
+	co_await winrt::when_all(wrld, phys, ver::when_all(acts));
+
 	constexpr DirectX::XMFLOAT3A pos2[4]{ { -115.7f, 19.9f, -0.4f }, {-115.7f, 19.9f, -20.8f}, {121.0f, 18.9f, 12.7f},{121.0f, 18.9f, -7.3f} };
 	constexpr DirectX::XMFLOAT3A cols2[4]{ { 1,0,0 }, {1,0,0}, {0,0,1} , {0,0,1} };
 
@@ -125,6 +122,8 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 		flames[i].SetPosition(DirectX::XMLoadFloat3A(&pos3[i]));
 		flames[i].SetColor(gfx, DirectX::XMLoadFloat3A(&cols3[i]));
 	}
+
+
 
 
 	co_await red.InitializeAsync(phy, gfx, "../models/flag/redflag.obj", { -147.0f, -41.0f, 15.3f });
@@ -166,6 +165,7 @@ void UT::Level::Submit(Graphics& gfx)
 
 void UT::Level::SpawnControlWindow()
 {
+	portals[0].SpawnControlWindow();
 	//probe.SpawnWindow(*red.GetModel());
 	//probe.SpawnWindow(*blue.GetModel());
 }

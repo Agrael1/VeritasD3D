@@ -46,5 +46,6 @@ void UT::Portal::Teleport(UT::Player& pl)
 
 void UT::Portal::SpawnControlWindow()
 {
-	model.SpawnControlWindow();
+	//model.SpawnControlWindow();
+	//light.SpawnControlWindow();
 }

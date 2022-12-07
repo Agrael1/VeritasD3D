@@ -39,7 +39,7 @@ namespace ver
 		mutable struct alignas(alignof(DirectX::XMFLOAT4X4A)) cbuffer
 		{
 			DirectX::XMFLOAT3 ambient{ 0.1f,0.1f,0.1f };
-			uint32_t count = 0u;
+			std::atomic_uint32_t count = 0u;
 			std::array<PointLightConsts, max_lights> lights{};
 		}data;
 		std::array<PointLightConsts, max_lights> light_buffer{};
