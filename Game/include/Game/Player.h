@@ -27,6 +27,11 @@ namespace UT
 			world_pos.y += height / 3.0f;
 			camera.SetPosition(world_pos);
 		}
+		void Jump()
+		{
+			if(!midair)
+				vertical_velocity = -1.2*g;
+		}
 		void Update(DirectX::XMFLOAT3 accumulated_displacement, float dt)
 		{
 			auto&& c = physics.get_controller();
@@ -34,13 +39,13 @@ namespace UT
 
 			if (!flight_mode)
 			{
-				vertical_velocity += g * dt * 2;
 				t.y = -vertical_velocity * dt;
+				vertical_velocity += g * dt;
 			}
 
 			physx::PxSceneReadLock scopedLock(*c.getScene());
-			const auto flags = c.move(convert<physx::PxVec3>(t), 0.1f, dt, {}); //for jump
-			if (flags.isSet(physx::PxControllerCollisionFlag::eCOLLISION_DOWN))
+			const auto flags = c.move(convert<physx::PxVec3>(t), 0.001f, dt, {}); //for jump
+			if(!(midair = !flags.isSet(physx::PxControllerCollisionFlag::eCOLLISION_DOWN)))
 				vertical_velocity = g;
 		}
 		void Sync()
@@ -93,6 +98,7 @@ namespace UT
 		{
 			flight_mode ^= true;
 		}
+		bool IsMidair()const noexcept { return midair; }
 	private:
 		Camera camera;
 		ver::ph::CharacterController physics;
@@ -101,5 +107,6 @@ namespace UT
 		float vertical_velocity = g;
 		Flag* flag = nullptr;
 		bool flight_mode = false;
+		bool midair = false;
 	};
 }

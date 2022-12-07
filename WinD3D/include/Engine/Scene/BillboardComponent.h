@@ -48,7 +48,11 @@ namespace ver
 	public:
 		BillboardBuilder& At(DirectX::XMFLOAT3A position) { this->position = position; return*this; }
 		BillboardBuilder& Dimensions(DirectX::XMFLOAT2 dims) { this->dims = dims; return*this; }
-		BillboardBuilder& Color(DirectX::XMFLOAT3 color) { this->color = color; return*this;}
+		BillboardBuilder& Color(DirectX::XMFLOAT3 color) 
+		{ 
+			DirectX::XMStoreFloat3(&this->color, DirectX::XMColorRGBToHSL(DirectX::XMLoadFloat3(&color)));
+			return*this;
+		}
 		BillboardBuilder& Cylindrical() { this->spherical = false; return*this;}
 		BillboardBuilder& Spherical() { this->spherical = true; return*this;}
 		BillboardBuilder& Texture(std::filesystem::path p) { this->tex_path = std::move(p); return*this;}

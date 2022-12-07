@@ -2,6 +2,7 @@
 #include <filesystem>
 #include <Engine/Loading/Mesh.h>
 #include <Engine/Loading/Node.h>
+#include <concurrent_vector.h>
 
 class Graphics;
 class Node;

@@ -40,14 +40,14 @@ winrt::Windows::Foundation::IAsyncAction Model::InitializeAsync(Graphics& gfx, c
 {
 	std::vector<winrt::Windows::Foundation::IAsyncAction> tasks;
 	tasks.reserve(scene.mNumMeshes);
-	meshPtrs.reserve(scene.mNumMeshes);
+	meshPtrs.resize(scene.mNumMeshes);
 
 	auto exec = [&](size_t i) -> winrt::Windows::Foundation::IAsyncAction {
 		co_await winrt::resume_background();
 		const auto& mesh = *scene.mMeshes[i];
 		Material m;
 		co_await m.InitializeAsync(gfx, *scene.mMaterials[mesh.mMaterialIndex], path);
-		meshPtrs.emplace_back(std::make_unique<Mesh>(gfx, m, mesh, scale));
+		meshPtrs[i] = std::make_unique<Mesh>(gfx, m, mesh, scale);
 	};
 
 	for (size_t i = 0; i < scene.mNumMeshes; i++)

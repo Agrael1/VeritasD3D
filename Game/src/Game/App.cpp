@@ -74,7 +74,7 @@ void App::DoFrame(float dt)
 		ImGuiDockNodeFlags_PassthruCentralNode |
 		ImGuiDockNodeFlags_NoDockingInCentralNode);
 
-	if (ImGui::Begin("Simulation speed"))
+	if (ImGui::Begin("Simulation speed", nullptr, ImGuiWindowFlags_NoDecoration| ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground))
 	{
 		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	}
@@ -129,9 +129,11 @@ void App::ProcessInput(float)
 
 	if (!wnd.CursorEnabled()&&!block)
 	{
+		if (player->Flight())dt *= 3;
 		if (wnd.kbd.KeyIsPressed(VK_SHIFT))
 		{
-			dt *= 2;
+			if(!player->IsMidair()&&!player->Flight())
+				dt *= 2;
 		}
 		if (wnd.kbd.KeyIsPressed('W'))
 		{
@@ -151,15 +153,15 @@ void App::ProcessInput(float)
 		}
 		if (wnd.kbd.KeyIsPressed(VK_SPACE))
 		{
-			if(player->Flight())
+			if (player->Flight())
 				transform.y += dt;
-			//cam.Translate({ 0.0f,dt,0.0f });
+			else
+				player->Jump();
 		}
 		if (wnd.kbd.KeyIsPressed('C'))
 		{
 			if (player->Flight())
 				transform.y -= dt;
-			//cam.Translate({ 0.0f,-dt,0.0f });
 		}
 	}
 

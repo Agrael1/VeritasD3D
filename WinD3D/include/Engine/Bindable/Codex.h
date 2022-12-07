@@ -4,10 +4,21 @@
 #include <concurrent_unordered_map.h>
 #include <pplawait.h>
 #include <memory>
+#include <semaphore>
 
 
 namespace ver
 {
+	class scoped_semaphore
+	{
+	public:
+		scoped_semaphore(std::binary_semaphore& a) :a(a) { a.acquire(); }
+		~scoped_semaphore() { a.release(); }
+	private:
+		std::binary_semaphore& a;
+	};
+
+
 	class Codex
 	{
 	public:
@@ -31,21 +42,40 @@ namespace ver
 		{
 			const auto key = T::GenerateUID(std::forward<Params>(p)...);
 
-			if (binds.find(key) == binds.end()) {
-				binds.insert({ key, std::make_shared<T>(gfx, std::forward<Params>(p)...) });
-			}
+			if (auto it = binds.find(key); it != binds.end())
+				return std::static_pointer_cast<T>(it->second);
+
+			binds.insert({ key, std::make_shared<T>(gfx, std::forward<Params>(p)...) });
 			return std::static_pointer_cast<T>(binds.at(key));
 		}
 		template<class T, typename ...Params>
-		concurrency::task<std::shared_ptr<T>> _ResolveAsync(Graphics& gfx, Params&& ...p)noxnd
+		concurrency::task<std::shared_ptr<T>> _ResolveAsync(Graphics& gfx, Params ...p)noxnd
 		{
+			co_await winrt::resume_background();
 			const auto key = T::GenerateUID(std::forward<Params>(p)...);
 
-			if (binds.find(key) == binds.end()) {
-				binds.insert({ key, co_await ver::make_shared_async<T>(gfx, std::forward<Params>(p)...) });
+			if (auto it = binds.find(key); it != binds.end())
+				co_return std::static_pointer_cast<T>(it->second);
+
+			if (auto it = tasks.find(key); it != tasks.end())
+				co_return std::static_pointer_cast<T>(co_await it->second);//enforced
+
+			{
+				scoped_semaphore sem(se);
+				if (auto it = tasks.find(key); it != tasks.end())
+					co_return std::static_pointer_cast<T>(co_await it->second);//enforced
+				tasks.emplace(key, MakeAsync<T>(gfx, std::forward<Params>(p)...));
 			}
+			binds.insert({ key, co_await tasks.at(key) });
 			co_return std::static_pointer_cast<T>(binds.at(key));
 		}
+
+		template<class T, typename ...Params>
+		concurrency::task<std::shared_ptr<Bindable>> MakeAsync(Graphics& gfx, Params&& ...p)
+		{
+			co_return co_await ver::make_shared_async<T>(gfx, std::forward<Params>(p)...);
+		}
+
 		void _Trim()noxnd
 		{
 			std::vector<const std::string*> todelete;
@@ -65,5 +95,7 @@ namespace ver
 		}
 	private:
 		concurrency::concurrent_unordered_map<std::string, std::shared_ptr<Bindable>> binds;
+		std::unordered_map<std::string, concurrency::task<std::shared_ptr<Bindable>>> tasks;
+		std::binary_semaphore se{ 1 };
 	};
 }

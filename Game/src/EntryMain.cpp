@@ -5,6 +5,7 @@
 int main()
 {
 	winrt::init_apartment();
+
 	try
 	{
 		UT::App a{ 1280, 720 };
@@ -15,13 +16,13 @@ int main()
 	{
 		MessageBox(nullptr, e.what(), e.type().data(), MB_OK | MB_ICONEXCLAMATION);
 	}
-	catch(const std::exception& e)
+	catch (const std::exception& e)
 	{
 		MessageBox(nullptr, e.what(), "Standart Exception", MB_OK | MB_ICONEXCLAMATION);
 	}
 	catch (...)
 	{
-		MessageBox(nullptr,"No Details on this one", "Unknown Exception", MB_OK | MB_ICONEXCLAMATION);
+		MessageBox(nullptr, "No Details on this one", "Unknown Exception", MB_OK | MB_ICONEXCLAMATION);
 	}
 	return -1;
 }

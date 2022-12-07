@@ -61,12 +61,12 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 
 
 	std::vector<winrt::IAsyncAction> acts;
-	acts.reserve(portals.size());
+	acts.reserve(portals.size() + billboards.size() + flames.size());
 
 	for (auto& i : billboards)
-		co_await i.InitializeAsync(gfx, u"../models/white.png", { 5,5 });
+		acts.push_back(i.InitializeAsync(gfx, u"../models/white.png", { 5,5 }));
 	for (auto& i : flames)
-		co_await i.InitializeAsync(gfx, u"../models/fire.dds", { 8,8 }, false);
+		acts.push_back(i.InitializeAsync(gfx, u"../models/fire.dds", { 8,8 }, false));
 
 	for (size_t i = 0; i < portals.size(); i++)
 		acts.push_back(portals[i].InitializeAsync(phy, gfx, pos_p[i], cols_p[i % 2]));

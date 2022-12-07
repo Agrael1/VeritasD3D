@@ -15,7 +15,7 @@ VertexShader::VertexShader(Graphics& gfx, std::filesystem::path xpath)
 winrt::IAsyncAction ver::VertexShader::InitializeAsync(Graphics& gfx, std::filesystem::path xpath)
 {
 	co_await winrt::resume_background();
-	path = (std::move(xpath));
+	path = std::move(xpath);
 	Initialize(gfx);
 }
 void ver::VertexShader::Initialize(Graphics& gfx)

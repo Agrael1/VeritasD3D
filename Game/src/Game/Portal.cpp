@@ -16,12 +16,15 @@ winrt::IAsyncAction UT::Portal::InitializeAsync(ver::ph::Physics& phy, Graphics&
 	//create box actor phy
 	physics.reset(p.createRigidStatic(physx::PxTransform{ convert<physx::PxVec3>(position) }));
 
-	if (!ref++)
+	if (!shape)
 	{
-		shape.reset(p.createShape(physx::PxBoxGeometry(2,2,2), 
-			*phy.RegisterMaterial("none", 0,0,0),false, 
-			physx::PxShapeFlag::eSCENE_QUERY_SHAPE | physx::PxShapeFlag::eTRIGGER_SHAPE));
+		std::scoped_lock lock(shape_lock);
+		if (!shape)
+			shape.reset(p.createShape(physx::PxBoxGeometry(2, 2, 2),
+				*phy.RegisterMaterial("none", 0, 0, 0), false,
+				physx::PxShapeFlag::eSCENE_QUERY_SHAPE | physx::PxShapeFlag::eTRIGGER_SHAPE));
 	}
+	ref++;
 	physics->attachShape(*shape);
 	physics->userData = this;
 
