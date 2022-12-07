@@ -61,10 +61,14 @@ namespace ver
 				co_return std::static_pointer_cast<T>(co_await it->second);//enforced
 
 			{
-				scoped_semaphore sem(se);
+				se.acquire();
 				if (auto it = tasks.find(key); it != tasks.end())
+				{
+					se.release();
 					co_return std::static_pointer_cast<T>(co_await it->second);//enforced
+				}
 				tasks.emplace(key, MakeAsync<T>(gfx, std::forward<Params>(p)...));
+				se.release();
 			}
 			binds.insert({ key, co_await tasks.at(key) });
 			co_return std::static_pointer_cast<T>(binds.at(key));

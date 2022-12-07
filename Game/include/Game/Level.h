@@ -14,7 +14,7 @@ namespace UT
 	{
 	public:
 		TwoWayPortal() = default;
-		winrt::IAsyncAction InitializeAsync(ver::ph::Physics& phy, Graphics& gfx, std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3> positions, DirectX::XMFLOAT3 color);
+		winrt::IAsyncAction InitializeAsync(ver::LightBuffer& lb, ver::ph::Physics& phy, Graphics& gfx, std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3> positions, DirectX::XMFLOAT3 color);
 	public:
 		void AddToScene(ver::ph::Scene& sc)
 		{

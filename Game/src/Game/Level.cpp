@@ -11,9 +11,9 @@
 using namespace physx;
 
 
-winrt::IAsyncAction UT::TwoWayPortal::InitializeAsync(ver::ph::Physics& phy, Graphics& gfx, std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3> positions, DirectX::XMFLOAT3 color)
+winrt::IAsyncAction UT::TwoWayPortal::InitializeAsync(ver::LightBuffer& lb, ver::ph::Physics& phy, Graphics& gfx, std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3> positions, DirectX::XMFLOAT3 color)
 {
-	co_await winrt::when_all(first.InitializeAsync(phy, gfx, positions.first, color), second.InitializeAsync(phy, gfx, positions.second, color));
+	co_await winrt::when_all(first.InitializeAsync(lb, phy, gfx, positions.first, color), second.InitializeAsync(lb, phy, gfx, positions.second, color));
 	first.SetBound(&second);
 	second.SetBound(&first);
 }
@@ -46,7 +46,7 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 			actors.emplace_back(phy.MakeActor(std::move(x), *mat, 40.0f));
 		}
 	}();
-	auto lb = light_buf.InitializeAsync(gfx);
+	co_await light_buf.InitializeAsync(gfx);
 
 
 	constexpr std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3> pos_p[]{
@@ -69,9 +69,9 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 		acts.push_back(i.InitializeAsync(gfx, u"../models/fire.dds", { 8,8 }, false));
 
 	for (size_t i = 0; i < portals.size(); i++)
-		acts.push_back(portals[i].InitializeAsync(phy, gfx, pos_p[i], cols_p[i % 2]));
+		acts.push_back(portals[i].InitializeAsync(light_buf, phy, gfx, pos_p[i], cols_p[i % 2]));
 
-	co_await winrt::when_all(wrld, phys, lb, ver::when_all(acts));
+	co_await winrt::when_all(wrld, phys, ver::when_all(acts));
 
 
 
