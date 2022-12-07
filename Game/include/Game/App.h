@@ -56,6 +56,7 @@ namespace UT
 
 		std::optional<RG::DeferredRenderGraph> rg;
 		bool block = false;
+		bool paused = false;
 	};
 }
 

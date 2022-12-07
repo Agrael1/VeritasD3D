@@ -1,7 +1,10 @@
 #include <Game/App.h>
+#include <Game/Loading.h>
 #include <imgui.h>
 #include <Engine/Util/Utility.h>
 #include <Util/Filters.h>
+#include <Engine/Pass/FullscreenPass.h>
+#include <Engine/Bindable/Texture.h>
 
 using namespace UT;
 
@@ -23,6 +26,8 @@ App::~App()
 
 winrt::IAsyncAction App::InitializeAsync()
 {
+	co_await UT::Loading::Execute(gfx);
+
 	co_await winrt::when_all(
 		level.InitializeAsync(physics, gfx, u"../models/face/faceWIP.obj"),
 		audio.InitializeAsync());
@@ -100,6 +105,12 @@ void App::ProcessInput(float)
 
 		switch (e->GetCode())
 		{
+		case 'M':
+			if (paused^=true)
+				song.pause();
+			else 
+				song.play();
+			break;
 		case 'F':
 			player->ToggleFlight();
 			return;

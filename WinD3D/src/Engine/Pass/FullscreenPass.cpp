@@ -22,7 +22,7 @@ namespace RG
 		std::vector<unsigned short> indices = { 0,1,2,1,3,2 };
 		AddBind(ver::IndexBuffer::Resolve(gfx, "$Full", std::move(indices)));
 		// setup other common fullscreen bindables
-		auto vs = ver::VertexShader::Resolve(gfx, "Fullscreen_VS.cso");
+		auto vs = ver::VertexShader::Resolve(gfx, "fullscreen.vs.cso");
 		AddBind(InputLayout::Resolve(gfx, bufFull.layout(), vs->GetBytecode()));
 		AddBind(std::move(vs));
 		AddBind(Topology::Resolve(gfx));
