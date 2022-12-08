@@ -98,7 +98,7 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 	for (auto& i : billboards)
 		acts.push_back(i.InitializeAsync(gfx, u"../models/white.png", { 5,5 }));
 	for (auto& i : flames)
-		acts.push_back(i.InitializeAsync(gfx, u"../models/fire.dds", { 8,8 }, false));
+		acts.push_back(i.InitializeAsync(gfx, u"../models/fire.dds", { 6,8 }, false));
 
 	for (size_t i = 0; i < portals.size(); i++)
 		acts.push_back(portals[i].InitializeAsync(light_buf, phy, gfx, pos_p[i], cols_p[i % 2]));
@@ -114,7 +114,7 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 		billboards[i].SetColor(gfx, DirectX::XMLoadFloat3A(&cols2[i]));
 	}
 
-	constexpr DirectX::XMFLOAT3A pos3[4]{ { -146.6f, 97.5f, -20.0f }, {-146.6f, 97.5f, 0.3f}, {153.0f, 96.7f, 11.9f}, {153.0f, 96.7f, -7.9f} };
+	constexpr DirectX::XMFLOAT3A pos3[4]{ { -146.6f, 99.5f, -20.0f }, {-146.6f, 99.5f, 0.3f}, {153.0f, 98.7f, 11.9f}, {153.0f, 98.7f, -7.9f} };
 	constexpr DirectX::XMFLOAT3A cols3[4]{ { 1,0,0 }, {1,0,0}, {0,0,1} , {0,0,1} };
 
 	for (size_t i = 0; i < flames.size(); i++)
