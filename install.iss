@@ -21,7 +21,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=C:\Users\Agrae\source\repos\VeritasD3D\LICENSE
+LicenseFile=LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
@@ -42,7 +42,13 @@ Name: "ukrainian"; MessagesFile: "compiler:Languages\Ukrainian.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\Agrae\Desktop\OpenUT\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "out\build\x64-Debug\assets\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "out\build\x64-Debug\Game\*.ini"; DestDir: "{app}";
+Source: "out\build\x64-Debug\Game\*.exe"; DestDir: "{app}";
+Source: "out\build\x64-Debug\Game\*.dll"; DestDir: "{app}";
+Source: "out\build\x64-Debug\Models\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "out\build\x64-Debug\Music\*"; DestDir: "{app}";  Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "out\build\x64-Debug\WinD3D\shaders\*.cso"; DestDir: "{app}";
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
