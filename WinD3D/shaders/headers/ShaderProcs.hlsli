@@ -1,19 +1,28 @@
 float3 MapNormal(
-    const in float3 tan,
-    const in float3 bitan,
-    const in float3 normal,
+    const in float3x3 tanToTarget,
     const in float2 tc,
     uniform Texture2D nmap,
     uniform SamplerState splr)
 {
-    // build the tranform (rotation) into same space as tan/bitan/normal (target space)
-    const float3x3 tanToTarget = float3x3(tan, bitan, normal);
     // sample and unpack the normal from texture into target space   
     const float3 normalSample = nmap.Sample(splr, tc).xyz;
     const float3 tanNormal = normalSample * 2.0f - 1.0f;
     // bring normal from tanspace into target space
     return normalize(mul(tanNormal, tanToTarget));
 }
+
+float3 MapNormal(
+    const in float3 tan,
+    const in float3 bitan,
+    const in float3 normal,
+    const in float2 tc,
+    uniform Texture2D nmap,
+    uniform SamplerState splr)
+{ 
+    return MapNormal(float3x3(tan, bitan, normal), tc, nmap, splr);
+}
+
+
 
 float Attenuate(uniform float attConst, uniform float attLin, uniform float attQuad, const in float distFragToL)
 {

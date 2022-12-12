@@ -1,5 +1,5 @@
 #include "../headers/deferred.hlsli"
-#include "ShaderProcs.hlsli"
+#include "../headers/ShaderProcs.hlsli"
 
 cbuffer ObjectCBuf : register(b1)
 {

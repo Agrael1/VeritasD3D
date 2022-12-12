@@ -40,7 +40,7 @@ Sout Shade(in PointLight l,
     [flatten]
     if (dot1 > 0.0f)
     {
-        const float3 diffuse = dc * att * max(0.0f, dot1);
+        const float3 diffuse = dc * att * dot1;
         
         // calculate reflected light vector
         const float3 r = normalize(view_normal * dot1 * 2.0f - lv.dirToL);
