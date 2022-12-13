@@ -24,4 +24,5 @@ namespace ver
 		winrt::com_ptr<ID3DBlob> pBytecodeBlob;
 		winrt::com_ptr<ID3D11VertexShader> pVertexShader;
 	};
+
 }

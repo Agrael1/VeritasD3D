@@ -34,6 +34,8 @@ namespace ver
 		void Update(Graphics& gfx, std::span<const std::byte> consts);
 		void BindToVS(Graphics& gfx);
 		void BindToPS(Graphics& gfx);
+		void BindToHS(Graphics& gfx);
+		void BindToDS(Graphics& gfx);
 	protected:
 		winrt::com_ptr<ID3D11Buffer> pConstantBuffer;
 		uint32_t slot = 0;
@@ -141,5 +143,8 @@ namespace ver
 			return GenerateUID(slot);
 		}
 	};
+
+
+	
 
 }

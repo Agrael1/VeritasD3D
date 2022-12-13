@@ -50,6 +50,8 @@ d 1.000000
 illum 2
 map_Kd textures\rocky_trail_diff_8k.dds
 map_Kn textures\rocky_trail_nor_dx_1k.png
+map_Ks null
+disp textures\rocky_trail_disp_1k.png
 
 newmtl Material.004
 Ns 360.000000

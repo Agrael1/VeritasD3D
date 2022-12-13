@@ -15,7 +15,7 @@ RG::LightingPass::LightingPass(Graphics& gfx, std::string name) noxnd
 	:BindingPass(std::move(name))
 {
 	AddBindSink<RenderTargetArray>("targets");
-	RegisterSink(DirectBufferSink<IRenderTarget>::Make("renderTarget", renderTarget));
+	renderTarget = std::make_shared<ShaderInputRenderTarget>(gfx, gfx.GetWidth(), gfx.GetHeight(), 0); //pre filter rt
 	RegisterSink(DirectBufferSink<ver::DepthStencil>::Make("depthStencil", depthStencil));
 	RegisterSource(DirectBufferSource<IRenderTarget>::Make("renderTarget", renderTarget));
 	RegisterSource(DirectBufferSource<ver::DepthStencil>::Make("depthStencil", depthStencil));

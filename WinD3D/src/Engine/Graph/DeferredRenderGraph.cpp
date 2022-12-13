@@ -7,6 +7,7 @@
 #include <Engine/Pass/ShadowPass.h>
 #include <Engine/Pass/AmbientPass.h>
 #include <memory>
+#include <Engine/Pass/FilteringPass.h>
 
 RG::DeferredRenderGraph::DeferredRenderGraph(Graphics& gfx)
 	:RenderGraph(gfx)
@@ -40,7 +41,6 @@ RG::DeferredRenderGraph::DeferredRenderGraph(Graphics& gfx)
 		auto pass = std::make_unique<LightingPass>(gfx, "light");
 		pass->SetSinkLinkage("shadow", "shadow.map");
 		pass->SetSinkLinkage("targets", "ambient.targets");
-		pass->SetSinkLinkage("renderTarget", "clearRT.buffer");
 		pass->SetSinkLinkage("depthStencil", "ambient.depthStencil");
 		AppendPass(std::move(pass));
 	}
@@ -56,7 +56,13 @@ RG::DeferredRenderGraph::DeferredRenderGraph(Graphics& gfx)
 		pass->SetSinkLinkage("depthStencil", "sky.depthStencil");
 		AppendPass(std::move(pass));
 	}
+	{
+		auto pass = std::make_unique<ver::rg::FilteringPass>(gfx, "filter");
+		pass->SetSinkLinkage("preFilterTarget", "forward.renderTarget");
+		pass->SetSinkLinkage("renderTarget", "clearRT.buffer");
+		AppendPass(std::move(pass));
+	}
 
-	SetSinkTarget("backbuffer", "forward.renderTarget");
+	SetSinkTarget("backbuffer", "filter.renderTarget");
 	Finalize();
 }

@@ -37,6 +37,11 @@ void Drawable::Bind(Graphics& gfx) const noxnd
 	pVertices->Bind(gfx);
 }
 
+void Drawable::Draw(Graphics& gfx) const noxnd
+{
+	gfx.DrawIndexed(pIndices->GetCount());
+}
+
 void Drawable::Accept(TechniqueProbe& probe)
 {
 	for (auto& t : techniques)

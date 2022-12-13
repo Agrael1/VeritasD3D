@@ -17,7 +17,7 @@ namespace RG
 		{
 			RegisterSink(DirectBufferSink<IRenderTarget>::Make("renderTarget", renderTarget));
 			RegisterSink(DirectBufferSink<ver::DepthStencil>::Make("depthStencil", depthStencil));
-			RegisterSource(DirectBufferSource<IRenderTarget>::Make("renderTarget", renderTarget));
+			RegisterSource(DirectBindableSource<IRenderTarget>::Make("renderTarget", renderTarget));
 			RegisterSource(DirectBufferSource<ver::DepthStencil>::Make("depthStencil", depthStencil));
 			AddBind(Stencil::Resolve(gfx, Stencil::Mode::Off));
 		}

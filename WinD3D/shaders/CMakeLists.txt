@@ -4,11 +4,15 @@ add_custom_target (${PROJECT_NAME})
 
 file(GLOB_RECURSE vs "${CMAKE_CURRENT_SOURCE_DIR}/*/*.vs.hlsl")
 file(GLOB_RECURSE ps "${CMAKE_CURRENT_SOURCE_DIR}/*/*.ps.hlsl")
+file(GLOB_RECURSE hs "${CMAKE_CURRENT_SOURCE_DIR}/*/*.hs.hlsl")
+file(GLOB_RECURSE ds "${CMAKE_CURRENT_SOURCE_DIR}/*/*.ds.hlsl")
 
 set_source_files_properties(${vs} PROPERTIES ShaderType "vs")
 set_source_files_properties(${ps} PROPERTIES ShaderType "ps")
+set_source_files_properties(${ds} PROPERTIES ShaderType "ds")
+set_source_files_properties(${hs} PROPERTIES ShaderType "hs")
     
-foreach(FILE ${vs} ${ps})
+foreach(FILE ${vs} ${ps} ${ds} ${hs})
     get_filename_component(FILE_WE ${FILE} NAME_WLE)
     get_source_file_property(shadertype ${FILE} ShaderType)
     add_custom_command(TARGET shaders

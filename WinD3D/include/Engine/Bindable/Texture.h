@@ -9,15 +9,15 @@ namespace ver
 	{
 	public:
 		Texture() = default;
-		Texture(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0);
-		winrt::IAsyncAction InitializeAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0);
+		Texture(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0, bool test = false);
+		winrt::IAsyncAction InitializeAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0, bool test = false);
 		void Initialize(Graphics& gfx);
 	public:
 		void Bind(Graphics& gfx) noxnd override;
-		static std::shared_ptr<Texture> Resolve(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0);
-		static concurrency::task<std::shared_ptr<Texture>> ResolveAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0);
+		static std::shared_ptr<Texture> Resolve(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0, bool test = false);
+		static concurrency::task<std::shared_ptr<Texture>> ResolveAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0, bool test = false);
 
-		static std::string GenerateUID(const std::filesystem::path& path, uint32_t slot = 0);
+		static std::string GenerateUID(const std::filesystem::path& path, uint32_t slot = 0, bool test = false);
 		std::string GetUID() const noexcept override;
 
 		bool UsesAlpha() const noexcept { return hasAlpha; }
@@ -28,6 +28,7 @@ namespace ver
 		uint32_t slot = 0u;
 		uint32_t count = 1u;
 		bool hasAlpha = false;
+		bool test = false;
 		std::filesystem::path path;
 		winrt::com_ptr<ID3D11ShaderResourceView> pTextureView;
 	};

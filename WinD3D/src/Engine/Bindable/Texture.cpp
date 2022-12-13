@@ -13,15 +13,16 @@ constexpr uint32_t DefaultSpcTexture = 0xffffffff;
 
 
 
-Texture::Texture(Graphics& gfx, std::filesystem::path path, uint32_t slot)
-	:slot(slot), path(std::move(path))
+Texture::Texture(Graphics& gfx, std::filesystem::path path, uint32_t slot, bool test)
+	:slot(slot), path(std::move(path)), test(test)
 {
 	Initialize(gfx);
 }
 
-winrt::IAsyncAction Texture::InitializeAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot)
+winrt::IAsyncAction Texture::InitializeAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot, bool test)
 {
 	co_await winrt::resume_background();
+	this->test = test;
 	this->path = std::move(path);
 	this->slot = slot;
 	Initialize(gfx);
@@ -53,26 +54,35 @@ void Texture::Initialize(Graphics& gfx)
 void Texture::Bind(Graphics& gfx)noxnd
 {
 	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(slot, 1u, array_view(pTextureView)));
+
+	if (!test)
+	{
+		GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(slot, 1u, array_view(pTextureView)));
+	}
+	else
+	{
+		GFX_THROW_INFO_ONLY(GetContext(gfx)->DSSetShaderResources(slot, 1u, array_view(pTextureView)));
+	}
+
 }
-std::shared_ptr<Texture> Texture::Resolve(Graphics& gfx, std::filesystem::path path, uint32_t slot)
+std::shared_ptr<Texture> Texture::Resolve(Graphics& gfx, std::filesystem::path path, uint32_t slot, bool test)
 {
-	return ver::Codex::Resolve<Texture>(gfx, std::move(path), slot);
+	return ver::Codex::Resolve<Texture>(gfx, std::move(path), slot, test);
 }
 concurrency::task<std::shared_ptr<Texture>>
-Texture::ResolveAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot)
+Texture::ResolveAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot, bool test)
 {
-	return ver::Codex::ResolveAsync<Texture>(gfx, std::move(path), slot);
+	return ver::Codex::ResolveAsync<Texture>(gfx, std::move(path), slot, test);
 }
 
 
-std::string Texture::GenerateUID(const std::filesystem::path& path, uint32_t slot)
+std::string Texture::GenerateUID(const std::filesystem::path& path, uint32_t slot, bool test)
 {
-	return std::format("{}#{}#{}",typeid(Texture).name(),path.string(),std::to_string(slot));
+	return std::format("{}#{}#{}", typeid(Texture).name(), path.string(), std::to_string(slot));
 }
 std::string Texture::GetUID() const noexcept
 {
-	return GenerateUID(path, slot);
+	return GenerateUID(path, slot, test);
 }
 
 void Texture::ResolveToDefault(Graphics& gfx)

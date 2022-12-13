@@ -140,4 +140,44 @@ namespace ver
 	std::unique_ptr<VertexConstantBuffer<BillboardCbuf::Transforms>> BillboardCbuf::pVcbuf;
 
 
+
+
+	DomainTransformCbuf::DomainTransformCbuf(Graphics& gfx, UINT slot)
+	{
+		if (!pVcbuf)
+		{
+			pVcbuf = std::make_unique<DomainConstantBuffer<Transforms>>(gfx, slot);
+		}
+	}
+
+	void DomainTransformCbuf::Bind(Graphics& gfx) noxnd
+	{
+		INFOMAN_NOHR(gfx);
+		GFX_THROW_INFO_ONLY(UpdateBindImpl(gfx, GetTransforms(gfx)));
+	}
+	void DomainTransformCbuf::InitializeParentReference(const Drawable& parent) noexcept
+	{
+		pParent = &parent;
+	}
+	std::unique_ptr<CloningBindable> DomainTransformCbuf::Clone() const noexcept
+	{
+		return std::make_unique<DomainTransformCbuf>(*this);
+	}
+	void DomainTransformCbuf::UpdateBindImpl(Graphics& gfx, const Transforms& tf) noexcept
+	{
+		assert(pParent != nullptr);
+		pVcbuf->Update(gfx, tf);
+		pVcbuf->Bind(gfx);
+	}
+	DomainTransformCbuf::Transforms DomainTransformCbuf::GetTransforms(Graphics& gfx) noexcept
+	{
+		assert(pParent != nullptr);
+		return {
+			DirectX::XMMatrixTranspose(pParent->GetTransformXM()),
+			DirectX::XMMatrixTranspose(gfx.GetCamera()),
+			DirectX::XMMatrixTranspose(gfx.GetProjection())
+		};
+	}
+
+	std::unique_ptr<DomainConstantBuffer<DomainTransformCbuf::Transforms>> DomainTransformCbuf::pVcbuf;
 }

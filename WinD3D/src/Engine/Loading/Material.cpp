@@ -1,5 +1,7 @@
 #include <Engine/Loading/Material.h>
 #include <Engine/Bindable/BindableCommons.h>
+#include <Engine/Bindable/HullShader.h>
+#include <Engine/Bindable/DomainShader.h>
 #include <Engine/Bindable/ConstantBuffersEx.h>
 #include <Engine/Dynamic/DynamicConstant.h>
 #include <assimp/types.h>
@@ -13,6 +15,7 @@ union Desc
 		bool diff;
 		bool spec;
 		bool nrm;
+		bool height;
 	};
 	uint32_t value;
 	bool Any()const { return value; }
@@ -24,6 +27,7 @@ Desc DescribeMaterial(const aiMaterial& material)
 		material.GetTextureCount(aiTextureType::aiTextureType_DIFFUSE) > 0,
 		material.GetTextureCount(aiTextureType::aiTextureType_SPECULAR) > 0,
 		material.GetTextureCount(aiTextureType::aiTextureType_NORMALS) > 0,
+		material.GetTextureCount(aiTextureType::aiTextureType_DISPLACEMENT) > 0,
 	};
 }
 
@@ -73,6 +77,8 @@ std::string GetShaderCode(Desc desc)
 		code += "spc.";
 	if (desc.nrm)
 		code += "nrm.";
+	if (desc.height)
+		code += "ht.";
 	return code;
 }
 
@@ -208,6 +214,9 @@ Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::
 		// normal
 		if (material.GetTexture(aiTextureType_NORMALS, 0, &texFileName) == aiReturn_SUCCESS)
 			texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 2));
+		
+		if (material.GetTexture(aiTextureType_DISPLACEMENT, 0, &texFileName) == aiReturn_SUCCESS)
+			texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 3));
 
 		if (desc.spec)
 			hasGlossAlpha = texes[1].get()->UsesAlpha();
@@ -256,6 +265,28 @@ Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::
 			step.AddBindable(std::move(pvs));
 			step.AddBindable(co_await pstask);
 			step.AddBindable(InputLayout::Resolve(gfx, vtxLayout, pvsbc, true));
+
+
+			if (desc.height)
+			{
+				struct Tessellation
+				{
+					float max_distance;
+					float min_distance;
+					float max_factor;
+					float min_factor;
+				}buffer{100, 0.5, 10, 1};
+				//step.AddBindable(std::make_unique<VertexConstantBuffer<decltype(buffer)>>(gfx, buffer, 2u)); //1 slot is reserved for shadow
+				//auto hstask = ver::DomainShader::ResolveAsync(gfx, "test.ds.cso");
+				//auto dstask = ver::HullShader::ResolveAsync(gfx, "test.hs.cso");
+
+				//step.AddBindable(std::make_shared<ver::DomainTransformCbuf>(gfx, 0u));
+				//step.AddBindable(DomainSampler::Resolve(gfx, Sampler::Type::Bilinear));
+				//step.AddBindable(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST));
+
+				//step.AddBindable(co_await hstask);
+				//step.AddBindable(co_await dstask);
+			}
 		}
 		phong.AddStep(std::move(step));
 		techniques.push_back(std::move(phong));

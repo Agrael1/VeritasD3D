@@ -47,3 +47,9 @@ std::string Sampler::GetUID() const noexcept
 {
 	return GenerateUID(type, reflect, slot);
 }
+
+void DomainSampler::Bind(Graphics& gfx) noxnd
+{
+	INFOMAN_NOHR(gfx);
+	GFX_THROW_INFO_ONLY(GetContext(gfx)->DSSetSamplers(slot, 1, pSampler.GetAddressOf()));
+}

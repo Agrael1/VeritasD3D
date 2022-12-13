@@ -68,3 +68,9 @@ void ver::ConstantBuffer::BindToPS(Graphics& gfx)
 	INFOMAN_NOHR(gfx);
 	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetConstantBuffers(slot, 1u, (ID3D11Buffer**)&pConstantBuffer));
 }
+
+void ver::ConstantBuffer::BindToDS(Graphics& gfx)
+{
+	INFOMAN_NOHR(gfx);
+	GFX_THROW_INFO_ONLY(GetContext(gfx)->DSSetConstantBuffers(slot, 1u, (ID3D11Buffer**)&pConstantBuffer));
+}

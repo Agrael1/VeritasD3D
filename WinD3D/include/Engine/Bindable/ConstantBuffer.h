@@ -130,3 +130,40 @@ public:
 		return GenerateUID(slot);
 	}
 };
+
+
+template<typename C>
+class DomainConstantBuffer : public ConstantBuffer<C>
+{
+	using ConstantBuffer<C>::slot;
+	using ConstantBuffer<C>::pConstantBuffer;
+	using Bindable::GetContext;
+public:
+	using ConstantBuffer<C>::ConstantBuffer;
+	void Bind(Graphics& gfx)noxnd override
+	{
+		INFOMAN_NOHR(gfx);
+		GFX_THROW_INFO_ONLY(GetContext(gfx)->DSSetConstantBuffers(slot, 1u, pConstantBuffer.GetAddressOf()));
+	}
+	static std::shared_ptr<DomainConstantBuffer> Resolve(Graphics& gfx, const C& consts, uint32_t slot = 0)
+	{
+		return ver::Codex::Resolve<DomainConstantBuffer>(gfx, consts, slot);
+	}
+	static std::shared_ptr<DomainConstantBuffer> Resolve(Graphics& gfx, uint32_t slot = 0)
+	{
+		return ver::Codex::Resolve<DomainConstantBuffer>(gfx, slot);
+	}
+	static std::string GenerateUID(const C&, uint32_t slot)
+	{
+		return GenerateUID(slot);
+	}
+	static std::string GenerateUID(uint32_t slot = 0)
+	{
+		using namespace std::string_literals;
+		return typeid(DomainConstantBuffer).name() + "#"s + std::to_string(slot);
+	}
+	std::string GetUID() const noexcept override
+	{
+		return GenerateUID(slot);
+	}
+};

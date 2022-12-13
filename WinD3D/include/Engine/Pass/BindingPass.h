@@ -32,7 +32,7 @@ namespace RG
 		std::shared_ptr<ver::DepthStencil> depthStencil;
 	private:
 		void BindBufferResources(Graphics& gfx) const noxnd;
-	private:
+	protected:
 		std::vector<std::shared_ptr<Bindable>> binds;
 	};
 }

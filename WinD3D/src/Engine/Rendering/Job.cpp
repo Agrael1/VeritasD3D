@@ -16,6 +16,6 @@ namespace RG
 	{
 		pDrawable->Bind(gfx);
 		pStep->Bind(gfx);
-		gfx.DrawIndexed(pDrawable->GetIndexCount());
+		pDrawable->Draw(gfx);
 	}
 }

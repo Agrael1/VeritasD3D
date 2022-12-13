@@ -23,3 +23,9 @@ protected:
 	bool reflect;
 	uint32_t slot;
 };
+
+class DomainSampler : public Sampler
+{
+public:
+	void Bind(Graphics& gfx) noxnd override;
+};

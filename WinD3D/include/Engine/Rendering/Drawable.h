@@ -32,6 +32,7 @@ public:
 	virtual DirectX::XMMATRIX GetTransformXM() const noexcept = 0;
 	void Submit() const noexcept;
 	void Bind(Graphics& gfx) const noxnd;
+	virtual void Draw(Graphics& gfx) const noxnd;
 	void Accept(TechniqueProbe& probe);
 	UINT GetIndexCount() const noxnd;
 	void LinkTechniques(RG::RenderGraph&);
