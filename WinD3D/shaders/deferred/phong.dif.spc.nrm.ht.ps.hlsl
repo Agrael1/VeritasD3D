@@ -72,8 +72,8 @@ float2 CalculatePOMUVOffset(float2 parallaxOffset, float2 uv, int numSteps)
 }
 int GetPOMRayStepsCount(float3 pos, float3 normal)
 {
-    int minLayers = 0;
-    int maxLayers = 24;
+    const int minLayers = 0;
+    const int maxLayers = 24;
     
     float angle = dot(normalize(pos), normal);
     int numLayers = (int) lerp(maxLayers, minLayers, angle);
@@ -86,7 +86,7 @@ PixelOutDeferred main(float3 viewFragPos : Position, float3 viewNormal : Normal,
     float3x3 TBN = float3x3(normalize(viewTan), normalize(viewBitan), viewNormal);
     float3 TangentViewDir = normalize(mul(TBN, viewFragPos));
 
-    float2 vParallaxOffset = TangentViewDir.xy * 0.02f / TangentViewDir.z;
+    float2 vParallaxOffset = -TangentViewDir.xy * 0.03;
     
     int steps = GetPOMRayStepsCount(viewFragPos, viewNormal);
     
