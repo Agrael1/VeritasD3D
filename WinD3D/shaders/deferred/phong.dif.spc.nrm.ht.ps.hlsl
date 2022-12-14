@@ -83,15 +83,13 @@ int GetPOMRayStepsCount(float3 pos, float3 normal)
 PixelOutDeferred main(float3 viewFragPos : Position, float3 viewNormal : Normal, float3 viewTan : Tangent, float3 viewBitan : Bitangent, float2 tc : Texcoord, float4 shadowPos : ShadowPosition)
 {
     viewNormal = normalize(viewNormal);
+    
     float3x3 TBN = float3x3(normalize(viewTan), normalize(viewBitan), viewNormal);
     float3 TangentViewDir = normalize(mul(TBN, viewFragPos));
-
     float2 vParallaxOffset = -TangentViewDir.xy * 0.03;
     
     int steps = GetPOMRayStepsCount(viewFragPos, viewNormal);
-    
-    if (steps)
-        tc = CalculatePOMUVOffset(vParallaxOffset, tc, steps);
+    tc = CalculatePOMUVOffset(vParallaxOffset, tc, steps);
     
     if (useNormalMap)
     {
