@@ -18,7 +18,6 @@ struct VSOut
     float2 tc : Texcoord;
     float4 shadowPos : ShadowPosition;
     float4 pos : SV_Position;
-    float TessFactor : TESS;
 };
 
 VSOut main(float3 pos : Position, float3 n : Normal, float3 tc : Texcoord, float3 tan : Tangent, float3 bitan : Bitangent)
@@ -31,10 +30,6 @@ VSOut main(float3 pos : Position, float3 n : Normal, float3 tc : Texcoord, float
     vso.pos = mul(float4(pos, 1.0f), modelViewProj);
     vso.shadowPos = ToShadowHomoSpace(pos, model);
     vso.tc = tc.xy;
-    
-    float distToCamera = -vso.viewPos.z;
-    float tess = saturate((gMinTessDistance - distToCamera) / (gMinTessDistance - gMaxTessDistance));
-    vso.TessFactor = gMinTessFactor + tess * (gMaxTessFactor - gMinTessFactor);
     
     return vso;
 }
