@@ -25,7 +25,7 @@ void ver::rg::FilteringPass::Execute(Graphics& gfx) const noxnd
 {
 	pxc->Update(gfx, DirectX::XMFLOAT2{ float(gfx.GetWidth()), float(gfx.GetHeight()) });
 	renderTarget->BindAsBuffer(gfx);
-	LightTopology::Bind(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	Topology::Bind(gfx);
 	for (auto& bind : binds)
 	{
 		bind->Bind(gfx);

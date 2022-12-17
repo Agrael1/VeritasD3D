@@ -16,7 +16,7 @@ namespace UT
 			auto vx = ver::VertexShader::ResolveAsync(gfx, "fullscreen.vs.cso");
 			auto ss = ver::Sampler::Resolve(gfx);
 			gfx.GetTarget()->BindAsBuffer(gfx);
-			ver::LightTopology::Bind(gfx);
+			ver::Topology::Bind(gfx);
 			(ss)->Bind(gfx);
 			(co_await px)->Bind(gfx);
 			(co_await vx)->Bind(gfx);

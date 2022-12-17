@@ -30,7 +30,7 @@ RG::LightingPass::LightingPass(Graphics& gfx, std::string name) noxnd
 }
 void RG::LightingPass::Execute(Graphics& gfx) const noxnd
 {
-	ver::LightTopology::Bind(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	ver::Topology::Bind(gfx);
 	BindAll(gfx);
 	gfx.Draw(3u);
 	ID3D11ShaderResourceView* const pSRV[6] = { nullptr };

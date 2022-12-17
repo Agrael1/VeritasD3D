@@ -31,7 +31,7 @@ void Drawable::AddTechnique(Technique tech_in) noexcept
 
 void Drawable::Bind(Graphics& gfx) const noxnd
 {
-	ver::LightTopology::Bind(gfx, topology);
+	ver::Topology::Bind(gfx, topology);
 	pIndices->Bind(gfx);
 	if(pVertices)pVertices->Bind(gfx);
 }
