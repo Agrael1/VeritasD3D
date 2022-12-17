@@ -10,7 +10,7 @@ namespace ver
 	{
 	public:
 		CubeTexture() = default;
-		CubeTexture(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0);
+		[[deprecated]] CubeTexture(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0);
 		winrt::IAsyncAction InitializeAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0);
 		void Initialize(Graphics& gfx);
 	public:

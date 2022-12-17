@@ -1,31 +1,50 @@
 #pragma once
-#include "Bindable.h"
+#include <Engine/Bindable/Bindable.h>
 
-class Sampler : public Bindable
+struct ID3D11SamplerState;
+
+namespace ver
 {
-public:
-	enum class Type
+	class Sampler : public Bindable
 	{
-		Anisotropic,
-		Bilinear,
-		Point,
+	public:
+		enum class Type
+		{
+			Anisotropic,
+			Bilinear,
+			Point,
+		};
+	public:
+		Sampler(Graphics& gfx, Type type = Type::Anisotropic, bool reflect = false, uint32_t slot = 0u);
+	public:
+		void Bind(Graphics& gfx) noxnd override;
+		void Bind(ID3D11DeviceContext& context) noxnd;
+		static std::shared_ptr<Sampler> Resolve(Graphics& gfx, Type type = Type::Anisotropic, bool reflect = false, uint32_t slot = 0u);
+		static std::string GenerateUID(Type type = Type::Anisotropic, bool reflect = false, uint32_t slot = 0u);
+		std::string GetUID() const noexcept override;
+	protected:
+		winrt::com_ptr<ID3D11SamplerState> pSampler;
+		uint32_t slot;
+		Type type;
+		bool reflect;
 	};
-public:
-	Sampler(Graphics& gfx, Type type = Type::Anisotropic, bool reflect = false, uint32_t slot = 0u);
-public:
-	void Bind(Graphics& gfx) noxnd override;
-	static std::shared_ptr<Sampler> Resolve(Graphics& gfx, Type type = Type::Anisotropic, bool reflect = false, uint32_t slot = 0u);
-	static std::string GenerateUID(Type type = Type::Anisotropic, bool reflect = false, uint32_t slot = 0u);
-	std::string GetUID() const noexcept override;
-protected:
-	Microsoft::WRL::ComPtr<ID3D11SamplerState> pSampler;
-	Type type;
-	bool reflect;
-	uint32_t slot;
-};
 
-class DomainSampler : public Sampler
-{
-public:
-	void Bind(Graphics& gfx) noxnd override;
-};
+	class VertexSampler : public Sampler
+	{
+	public:
+		void Bind(Graphics& gfx) noxnd override;
+		void Bind(ID3D11DeviceContext& context) noxnd;
+	};
+	class HullSampler : public Sampler
+	{
+	public:
+		void Bind(Graphics& gfx) noxnd override;
+		void Bind(ID3D11DeviceContext& context) noxnd;
+	};
+	class DomainSampler : public Sampler
+	{
+	public:
+		void Bind(Graphics& gfx) noxnd override;
+		void Bind(ID3D11DeviceContext& context) noxnd;
+	};
+}

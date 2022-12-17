@@ -146,7 +146,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 			step.AddBindable(ver::PixelShader::Resolve(gfx, shaderCode + "ps.cso"));
 			step.AddBindable(InputLayout::Resolve(gfx, vtxLayout, pvsbc, true));
 			if (desc.Any())
-				step.AddBindable(Sampler::Resolve(gfx));
+				step.AddBindable(ver::Sampler::Resolve(gfx));
 
 			// PS material params (cbuf)
 			DC::Buffer buf{ CreateConstantBuffer(desc) };
@@ -232,7 +232,7 @@ Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::
 
 			step.AddBindable(std::make_shared<TransformCbuf>(gfx, 0u));
 			if (desc.Any())
-				step.AddBindable(Sampler::Resolve(gfx));
+				step.AddBindable(ver::Sampler::Resolve(gfx));
 			// PS material params (cbuf)
 			DC::Buffer buf{ CreateConstantBuffer(desc) };
 			if (auto r = buf["materialColor"]; r.Exists())
@@ -265,28 +265,6 @@ Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::
 			step.AddBindable(std::move(pvs));
 			step.AddBindable(co_await pstask);
 			step.AddBindable(InputLayout::Resolve(gfx, vtxLayout, pvsbc, true));
-
-
-			if (desc.height)
-			{
-				struct Tessellation
-				{
-					float max_distance;
-					float min_distance;
-					float max_factor;
-					float min_factor;
-				}buffer{100, 0.5, 10, 1};
-				//step.AddBindable(std::make_unique<VertexConstantBuffer<decltype(buffer)>>(gfx, buffer, 2u)); //1 slot is reserved for shadow
-				//auto hstask = ver::DomainShader::ResolveAsync(gfx, "test.ds.cso");
-				//auto dstask = ver::HullShader::ResolveAsync(gfx, "test.hs.cso");
-
-				//step.AddBindable(std::make_shared<ver::DomainTransformCbuf>(gfx, 0u));
-				//step.AddBindable(DomainSampler::Resolve(gfx, Sampler::Type::Bilinear));
-				//step.AddBindable(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST));
-
-				//step.AddBindable(co_await hstask);
-				//step.AddBindable(co_await dstask);
-			}
 		}
 		phong.AddStep(std::move(step));
 		techniques.push_back(std::move(phong));

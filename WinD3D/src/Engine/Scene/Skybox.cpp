@@ -17,7 +17,7 @@ winrt::IAsyncAction ver::Skybox::InitializeAsync(Graphics& gfx, std::filesystem:
 
 		only.AddBindable(Stencil::Resolve(gfx, Stencil::Mode::DepthFirst));
 		pIndices = IndexBuffer::Resolve(gfx, "$GlobCube", a);
-		pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+		topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
 		only.AddBindable(std::make_shared<SkyboxTransformCbuf>(gfx));
 
 		only.AddBindable(co_await vs);

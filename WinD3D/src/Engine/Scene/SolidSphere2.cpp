@@ -16,7 +16,6 @@ ver::SolidSphere::SolidSphere(Graphics& gfx, float radius)
 	model.Deform(dx::XMMatrixScalingFromVector(dx::XMVectorReplicate(radius)));
 	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
 	pIndices = ver::IndexBuffer::Resolve(gfx, geometryTag, model.indices);
-	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	{
 		Technique solid;
@@ -48,7 +47,6 @@ winrt::IAsyncAction ver::SolidSphere::InitializeAsync(Graphics& gfx, float radiu
 	model.Deform(dx::XMMatrixScalingFromVector(dx::XMVectorReplicate(radius)));
 	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
 	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
-	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	{
 		Technique solid;

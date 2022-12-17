@@ -16,7 +16,6 @@ Drawable::Drawable(Graphics& gfx, const Material& mat, const aiMesh& mesh, float
 {
 	pVertices = mat.MakeVertexBindable(gfx, mesh, scale);
 	pIndices = mat.MakeIndexBindable(gfx, mesh);
-	pTopology = Topology::Resolve(gfx);
 
 	for (auto& t : mat.GetTechniques())
 	{
@@ -32,7 +31,7 @@ void Drawable::AddTechnique(Technique tech_in) noexcept
 
 void Drawable::Bind(Graphics& gfx) const noxnd
 {
-	pTopology->Bind(gfx);
+	ver::LightTopology::Bind(gfx, topology);
 	pIndices->Bind(gfx);
 	if(pVertices)pVertices->Bind(gfx);
 }

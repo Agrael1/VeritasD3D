@@ -20,13 +20,12 @@ ver::rg::FilteringPass::FilteringPass(Graphics& gfx, std::string name) noxnd
 	AddBind(ver::VertexShader::Resolve(gfx, "fullscreen.vs.cso"));
 	AddBind(ver::PixelShader::Resolve(gfx, "filter.ps.cso"));
 	AddBind(pxc);
-
-	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 }
 void ver::rg::FilteringPass::Execute(Graphics& gfx) const noxnd
 {
 	pxc->Update(gfx, DirectX::XMFLOAT2{ float(gfx.GetWidth()), float(gfx.GetHeight()) });
 	renderTarget->BindAsBuffer(gfx);
+	LightTopology::Bind(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	for (auto& bind : binds)
 	{
 		bind->Bind(gfx);

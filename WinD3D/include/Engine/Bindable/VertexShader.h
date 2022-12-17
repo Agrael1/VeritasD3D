@@ -7,6 +7,7 @@ namespace ver
 {
 	class VertexShader : public Bindable
 	{
+		static inline constexpr auto shader_folder = L"..\\WinD3D\\shaders\\";
 	public:
 		VertexShader() = default;
 		VertexShader(Graphics& gfx, std::filesystem::path path);
@@ -14,6 +15,7 @@ namespace ver
 		void Initialize(Graphics& gfx);
 	public:
 		void Bind(Graphics& gfx) noxnd override;
+		void Bind(ID3D11DeviceContext& context) noxnd override;
 		ID3DBlob* GetBytecode() const noexcept;
 		static std::shared_ptr<VertexShader> Resolve(Graphics& gfx, std::filesystem::path path);
 		static concurrency::task<std::shared_ptr<VertexShader>> ResolveAsync(Graphics& gfx, std::filesystem::path path);

@@ -23,14 +23,14 @@ RG::LightingPass::LightingPass(Graphics& gfx, std::string name) noxnd
 	AddBindSink<Bindable>("shadow");
 
 	AddBind(std::make_shared<ver::ShadowSampler>(gfx));
-	AddBind(Stencil::Resolve(gfx, Stencil::Mode::DepthFirst));
-	AddBind(Sampler::Resolve(gfx));
+	AddBind(ver::Stencil::Resolve(gfx, ver::Stencil::Mode::DepthFirst));
+	AddBind(ver::Sampler::Resolve(gfx));
 	AddBind(ver::VertexShader::Resolve(gfx, "fullscreen.vs.cso"));
 	AddBind(ver::PixelShader::Resolve(gfx, "fullscreen.ps.cso"));
-	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 }
 void RG::LightingPass::Execute(Graphics& gfx) const noxnd
 {
+	ver::LightTopology::Bind(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	BindAll(gfx);
 	gfx.Draw(3u);
 	ID3D11ShaderResourceView* const pSRV[6] = { nullptr };

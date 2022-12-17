@@ -1,7 +1,5 @@
 #include <Engine/Bindable/VertexShader.h>
-#include <Engine/Deprecated/GraphicsThrows.h>
 #include <Engine/Bindable/Codex.h>
-#include <Engine/Util/DXGIInfoManager.h>
 #include <Engine/Util/GraphicsExceptions.h>
 #include <d3dcompiler.h>
 
@@ -20,9 +18,8 @@ winrt::IAsyncAction ver::VertexShader::InitializeAsync(Graphics& gfx, std::files
 }
 void ver::VertexShader::Initialize(Graphics& gfx)
 {
-	INFOMAN(gfx);
-	GFX_THROW_INFO(D3DReadFileToBlob((L"..\\WinD3D\\shaders\\" + path.native()).c_str(), pBytecodeBlob.put()));
-	GFX_THROW_INFO(GetDevice(gfx)->CreateVertexShader(
+	ver::check_graphics(D3DReadFileToBlob((shader_folder + path.native()).c_str(), pBytecodeBlob.put()));
+	ver::check_graphics(GetDevice(gfx)->CreateVertexShader(
 		pBytecodeBlob->GetBufferPointer(),
 		pBytecodeBlob->GetBufferSize(),
 		nullptr,
@@ -31,8 +28,12 @@ void ver::VertexShader::Initialize(Graphics& gfx)
 }
 void VertexShader::Bind(Graphics& gfx) noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->VSSetShader(pVertexShader.get(), nullptr, 0u));
+	Bind(*GetContext(gfx));
+}
+void ver::VertexShader::Bind(ID3D11DeviceContext& context) noxnd
+{
+	context.VSSetShader(pVertexShader.get(), nullptr, 0u);
+	ver::check_context();
 }
 
 ID3DBlob* VertexShader::GetBytecode() const noexcept

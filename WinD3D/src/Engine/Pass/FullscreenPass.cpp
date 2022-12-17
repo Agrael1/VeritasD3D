@@ -25,7 +25,6 @@ namespace RG
 		auto vs = ver::VertexShader::Resolve(gfx, "fullscreen.vs.cso");
 		AddBind(InputLayout::Resolve(gfx, bufFull.layout(), vs->GetBytecode()));
 		AddBind(std::move(vs));
-		AddBind(Topology::Resolve(gfx));
 		AddBind(RasterizerState::Resolve(gfx, false));
 	}
 

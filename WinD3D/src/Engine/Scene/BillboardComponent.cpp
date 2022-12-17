@@ -26,7 +26,7 @@ namespace ver
 
 			pVertices = VertexBuffer::Resolve(gfx, tag, plane.vertices);
 			pIndices = IndexBuffer::Resolve(gfx, tag, plane.indices);
-			pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 
 			only.AddBindable(std::make_shared<BillboardCbuf>(gfx));

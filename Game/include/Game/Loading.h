@@ -14,11 +14,9 @@ namespace UT
 			auto tx = ver::Texture::ResolveAsync(gfx , u"../models/utload.dds");
 			auto px = ver::PixelShader::ResolveAsync(gfx, "loading.ps.cso");
 			auto vx = ver::VertexShader::ResolveAsync(gfx, "fullscreen.vs.cso");
-			auto ss = Sampler::Resolve(gfx);
-			auto pt = Topology::Resolve(gfx);
+			auto ss = ver::Sampler::Resolve(gfx);
 			gfx.GetTarget()->BindAsBuffer(gfx);
-
-			pt->Bind(gfx);
+			ver::LightTopology::Bind(gfx);
 			(ss)->Bind(gfx);
 			(co_await px)->Bind(gfx);
 			(co_await vx)->Bind(gfx);

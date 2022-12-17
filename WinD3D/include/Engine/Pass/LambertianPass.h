@@ -19,7 +19,7 @@ namespace RG
 			RegisterSink(DirectBufferSink<ver::DepthStencil>::Make("depthStencil", depthStencil));
 			RegisterSource(DirectBindableSource<IRenderTarget>::Make("renderTarget", renderTarget));
 			RegisterSource(DirectBufferSource<ver::DepthStencil>::Make("depthStencil", depthStencil));
-			AddBind(Stencil::Resolve(gfx, Stencil::Mode::Off));
+			AddBind(ver::Stencil::Resolve(gfx, ver::Stencil::Mode::Off));
 		}
 	};
 }

@@ -40,6 +40,6 @@ public:
 protected:
 	std::shared_ptr<ver::IndexBuffer> pIndices;
 	std::shared_ptr<Bindable> pVertices;
-	std::shared_ptr<Topology> pTopology;
+	D3D_PRIMITIVE_TOPOLOGY topology = D3D_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	std::vector<Technique> techniques;
 };

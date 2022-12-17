@@ -1,6 +1,5 @@
 #pragma once
 #include <Engine/Bindable/Bindable.h>
-#include <d3d11_4.h>
 
 namespace ver
 {
@@ -22,7 +21,11 @@ namespace ver
 		}
 		void Bind(Graphics& gfx) noxnd override
 		{
-			GetContext(gfx)->RSSetViewports(1u, &vp);
+			Bind(*GetContext(gfx));
+		}
+		void Bind(ID3D11DeviceContext& context) noxnd override
+		{
+			context.RSSetViewports(1u, &vp);
 		}
 	private:
 		D3D11_VIEWPORT vp{};

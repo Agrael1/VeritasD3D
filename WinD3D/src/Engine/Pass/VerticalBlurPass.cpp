@@ -12,8 +12,8 @@ namespace RG
 	{
 		AddBind(ver::PixelShader::Resolve(gfx, "BlurOutline_PS.cso"));
 		AddBind(ver::BlendState::Resolve(gfx, true));
-		AddBind(Stencil::Resolve(gfx, Stencil::Mode::Mask));
-		AddBind(Sampler::Resolve(gfx, Sampler::Type::Bilinear, true));
+		AddBind(ver::Stencil::Resolve(gfx, ver::Stencil::Mode::Mask));
+		AddBind(ver::Sampler::Resolve(gfx, ver::Sampler::Type::Bilinear, true));
 
 		AddBindSink<RenderTarget>("scratchIn");
 		AddBindSink<CachingPixelConstantBufferEx>("kernel");

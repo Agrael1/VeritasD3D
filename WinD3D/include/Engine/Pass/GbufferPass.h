@@ -22,7 +22,7 @@ namespace RG
 			auto rts = std::make_shared<RenderTargetArray>();
 			rts->InitializeAsync(gfx, gfx.GetWidth(), gfx.GetHeight(), 0).get();
 			renderTarget = rts;
-			AddBind(Stencil::Resolve(gfx, Stencil::Mode::Off));
+			AddBind(ver::Stencil::Resolve(gfx, ver::Stencil::Mode::Off));
 			RegisterSink(DirectBufferSink<ver::DepthStencil>::Make("depthStencil", depthStencil));
 			RegisterSource(DirectBindableSource<RenderTargetArray>::Make("targets", (std::shared_ptr<RenderTargetArray>&)(renderTarget)));
 			RegisterSource(DirectBufferSource<ver::DepthStencil>::Make("depthStencil", depthStencil));

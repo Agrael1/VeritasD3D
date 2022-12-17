@@ -32,7 +32,6 @@ class VertexMultibuffer : public Bindable
 public:
 	VertexMultibuffer(Graphics& gfx, ver::dv::LayoutSpan vbuf, std::span<void*> data, size_t num_verts);
 public:
-	//dv::LayoutSpan GetLayout() const noexcept { return ver::dv::LayoutSpan(layout); }
 	void Bind(Graphics& gfx) noxnd override;
 protected:
 	std::vector<uint32_t> strides;

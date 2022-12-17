@@ -1,17 +1,14 @@
 #include <Engine/Bindable/Sampler.h>
 #include <Engine/Bindable/Codex.h>
-#include <Engine/Deprecated/GraphicsThrows.h>
-#include <Engine/Util/DXGIInfoManager.h>
 #include <Engine/Util/GraphicsExceptions.h>
+#include <format>
 
-Sampler::Sampler(Graphics& gfx, Type type, bool reflect, uint32_t slot)
+ver::Sampler::Sampler(Graphics& gfx, Type type, bool reflect, uint32_t slot)
 	:
 	type(type),
 	reflect(reflect),
 	slot(slot)
 {
-	INFOMAN(gfx);
-
 	D3D11_SAMPLER_DESC samplerDesc = CD3D11_SAMPLER_DESC{ CD3D11_DEFAULT{} };
 	samplerDesc.Filter = [type]() {
 		switch (type)
@@ -26,30 +23,50 @@ Sampler::Sampler(Graphics& gfx, Type type, bool reflect, uint32_t slot)
 	samplerDesc.AddressV = reflect ? D3D11_TEXTURE_ADDRESS_MIRROR : D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerDesc.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
 
-	GFX_THROW_INFO(GetDevice(gfx)->CreateSamplerState(&samplerDesc, &pSampler));
+	ver::check_graphics(GetDevice(gfx)->CreateSamplerState(&samplerDesc, pSampler.put()));
 }
 
-void Sampler::Bind(Graphics& gfx) noxnd
-{
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetSamplers(slot, 1, pSampler.GetAddressOf()));
+void ver::Sampler::Bind(Graphics& gfx) noxnd{
+	Bind(*GetContext(gfx));
 }
-std::shared_ptr<Sampler> Sampler::Resolve(Graphics& gfx, Type type, bool reflect, uint32_t slot)
+void ver::Sampler::Bind(ID3D11DeviceContext& context) noxnd {
+	context.PSSetSamplers(slot, 1, array_view(pSampler));
+	ver::check_context();
+}
+
+std::shared_ptr<ver::Sampler> ver::Sampler::Resolve(Graphics& gfx, Type type, bool reflect, uint32_t slot)
 {
 	return ver::Codex::Resolve<Sampler>(gfx, type, reflect, slot);
 }
-std::string Sampler::GenerateUID(Type type, bool reflect, uint32_t slot)
+std::string ver::Sampler::GenerateUID(Type type, bool reflect, uint32_t slot)
 {
-	using namespace std::string_literals;
-	return typeid(Sampler).name() + "#"s + std::to_string((int)type) + (reflect ? "R"s : "W"s) + std::to_string(slot);
+	return std::format("Sampler#{}{}{}", (int)type, reflect ? 'R' : 'W', slot);
 }
-std::string Sampler::GetUID() const noexcept
+std::string ver::Sampler::GetUID() const noexcept
 {
 	return GenerateUID(type, reflect, slot);
 }
 
-void DomainSampler::Bind(Graphics& gfx) noxnd
+void ver::DomainSampler::Bind(Graphics& gfx) noxnd {
+	Bind(*GetContext(gfx));
+}void ver::VertexSampler::Bind(Graphics& gfx) noxnd {
+	Bind(*GetContext(gfx));
+}void ver::HullSampler::Bind(Graphics& gfx) noxnd {
+	Bind(*GetContext(gfx));
+}
+
+void ver::DomainSampler::Bind(ID3D11DeviceContext& context) noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->DSSetSamplers(slot, 1, pSampler.GetAddressOf()));
+	context.DSSetSamplers(slot, 1, array_view(pSampler));
+	ver::check_context();
+}
+void ver::VertexSampler::Bind(ID3D11DeviceContext& context) noxnd
+{
+	context.VSSetSamplers(slot, 1, array_view(pSampler));
+	ver::check_context();
+}
+void ver::HullSampler::Bind(ID3D11DeviceContext& context) noxnd
+{
+	context.HSSetSamplers(slot, 1, array_view(pSampler));
+	ver::check_context();
 }

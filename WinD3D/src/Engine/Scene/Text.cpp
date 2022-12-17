@@ -98,7 +98,6 @@ Text::Text(Graphics& gfx, float radius)
 	//model.Deform(dx::XMMatrixScalingFromVector(dx::XMVectorReplicate(radius)));
 	pVertices = std::make_shared<VertexMultibuffer>(gfx, lay, data, xmodel.vertices.size());
 	pIndices = IndexBuffer::Resolve(gfx, geometryTag, a);
-	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	{
 		Technique solid;

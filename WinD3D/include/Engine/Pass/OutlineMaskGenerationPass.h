@@ -20,7 +20,7 @@ namespace RG
 			RegisterSource(DirectBufferSource<ver::DepthStencil>::Make("depthStencil", depthStencil));
 			AddBind(ver::VertexShader::Resolve(gfx, "Solid_VS.cso"));
 			AddBind(NullPixelShader::Resolve(gfx));
-			AddBind(Stencil::Resolve(gfx, Stencil::Mode::Write));
+			AddBind(ver::Stencil::Resolve(gfx, ver::Stencil::Mode::Write));
 			AddBind(RasterizerState::Resolve(gfx, false));
 		}
 	};

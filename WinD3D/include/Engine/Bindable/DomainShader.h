@@ -1,3 +1,4 @@
+#pragma once
 #include <Engine/Bindable/Bindable.h>
 #include <filesystem>
 #include <pplawait.h>
