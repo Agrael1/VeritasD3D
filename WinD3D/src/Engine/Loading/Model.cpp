@@ -38,6 +38,7 @@ Model::Model(Graphics& gfx, std::filesystem::path pathString, const float scale)
 
 winrt::Windows::Foundation::IAsyncAction Model::InitializeAsync(Graphics& gfx, const aiScene& scene, std::filesystem::path path, float scale)
 {
+	co_await winrt::resume_background();
 	std::vector<winrt::Windows::Foundation::IAsyncAction> tasks;
 	tasks.reserve(scene.mNumMeshes);
 	meshPtrs.resize(scene.mNumMeshes);
@@ -57,6 +58,7 @@ winrt::Windows::Foundation::IAsyncAction Model::InitializeAsync(Graphics& gfx, c
 
 	int nextId = 0;
 	pRoot = ParseNode(nextId, *scene.mRootNode, scale);
+	//SetRootTransform(DirectX::XMMatrixScaling(scale,scale, scale));
 }
 void Model::Initialize(Graphics& gfx, const aiScene& scene, std::filesystem::path path, float scale)
 {

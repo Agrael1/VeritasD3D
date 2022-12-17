@@ -24,12 +24,6 @@ file(GLOB_RECURSE vsrc "${source_dir}/*.cpp")
 
 
 add_library (${PROJECT_NAME} STATIC ${vhead} ${vsrc} cpp.hint)
-add_custom_target(copy_assets ALL 
-	COMMAND ${CMAKE_COMMAND} -E copy_directory
-	${CMAKE_CURRENT_SOURCE_DIR}/assets
-	${CMAKE_BINARY_DIR}/assets
-	COMMENT "Copying assets to binary directory")
-
 
 if(MSVC)
   target_compile_options(${PROJECT_NAME} PUBLIC "/ZI")
@@ -54,7 +48,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC ${HBAO_LIB})
 target_link_libraries(${PROJECT_NAME} PUBLIC ${DXMISSING_LIB}) 
 target_link_libraries(${PROJECT_NAME} PUBLIC assimp::assimp) 
 target_link_libraries(${PROJECT_NAME} PUBLIC imgui::imgui) 
-target_link_libraries(${PROJECT_NAME} PUBLIC ttf2mesh) 
-add_dependencies(${PROJECT_NAME} shaders copy_assets)
+target_link_libraries(${PROJECT_NAME} PUBLIC ttf2mesh)
 
 

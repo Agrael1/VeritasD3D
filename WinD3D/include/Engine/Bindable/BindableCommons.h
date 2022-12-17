@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Engine/Bindable/IndexBuffer2.h>
+#include <Engine/Bindable/IndexBuffer.h>
 #include <Engine/Bindable/InputLayout.h>
 #include <Engine/Bindable/PixelShader.h>
 #include <Engine/Bindable/Topology.h>

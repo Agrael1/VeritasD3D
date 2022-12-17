@@ -1,55 +1,68 @@
 #include <Engine/Bindable/IndexBuffer.h>
 #include <Engine/Bindable/Codex.h>
-#include <Engine/Deprecated/GraphicsThrows.h>
-#include <Engine/Util/DXGIInfoManager.h>
 #include <Engine/Util/GraphicsExceptions.h>
+#include <format>
 
-IndexBuffer::IndexBuffer(Graphics& gfx, const std::vector<unsigned short>& indices)
-	:
-	IndexBuffer(gfx, "?", indices)
-{}
-IndexBuffer::IndexBuffer(Graphics& gfx, std::string tag, const std::vector<unsigned short>& indices)
-	:
-	tag(tag),
-	count((UINT)indices.size())
+using namespace ver;
+
+
+void ver::IndexBuffer::Initialize(Graphics& gfx, std::span<const uint16_t> indices)
 {
-	INFOMAN(gfx);
+	format = DXGI_FORMAT::DXGI_FORMAT_R16_UINT;
 
 	D3D11_BUFFER_DESC ibd = {};
 	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	ibd.Usage = D3D11_USAGE_DEFAULT;
 	ibd.CPUAccessFlags = 0u;
 	ibd.MiscFlags = 0u;
-	ibd.ByteWidth = UINT(count * sizeof(unsigned short));
-	ibd.StructureByteStride = sizeof(unsigned short);
+	ibd.ByteWidth = uint32_t(indices.size_bytes());
+	ibd.StructureByteStride = sizeof(decltype(indices)::element_type);
 	D3D11_SUBRESOURCE_DATA isd = {};
 	isd.pSysMem = indices.data();
-	GFX_THROW_INFO(GetDevice(gfx)->CreateBuffer(&ibd, &isd, &pIndexBuffer));
+	ver::check_graphics(GetDevice(gfx)->CreateBuffer(&ibd, &isd, pIndexBuffer.put()));
+}
+void ver::IndexBuffer::Initialize(Graphics& gfx, std::span<const uint32_t> indices)
+{
+	format = DXGI_FORMAT::DXGI_FORMAT_R32_UINT;
+
+	D3D11_BUFFER_DESC ibd = {};
+	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	ibd.Usage = D3D11_USAGE_DEFAULT;
+	ibd.CPUAccessFlags = 0u;
+	ibd.MiscFlags = 0u;
+	ibd.ByteWidth = uint32_t(indices.size_bytes());
+	ibd.StructureByteStride = sizeof(decltype(indices)::element_type);
+	D3D11_SUBRESOURCE_DATA isd = {};
+	isd.pSysMem = indices.data();
+	ver::check_graphics(GetDevice(gfx)->CreateBuffer(&ibd, &isd, pIndexBuffer.put()));
 }
 
 void IndexBuffer::Bind(Graphics& gfx)noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT::DXGI_FORMAT_R16_UINT, 0u));
+	Bind(*GetContext(gfx));
 }
-UINT IndexBuffer::GetCount()const noexcept
+void IndexBuffer::Bind(ID3D11DeviceContext& context)noxnd
 {
-	return count;
+	context.IASetIndexBuffer(pIndexBuffer.get(), format, 0u);
+	ver::check_context();
 }
 
-std::shared_ptr<IndexBuffer> IndexBuffer::Resolve(Graphics& gfx, const std::string& tag,
-	const std::vector<unsigned short>& indices)
+
+std::shared_ptr<IndexBuffer> IndexBuffer::Resolve(Graphics& gfx, std::string tag,
+	std::span<const uint16_t> indices)
 {
 	assert(tag != "?");
-	return ver::Codex::Resolve<IndexBuffer>(gfx, tag, indices);
+	return Codex::Resolve<IndexBuffer>(gfx, std::move(tag), indices);
 }
-std::string IndexBuffer::GenerateUID_(const std::string& tag)
+std::shared_ptr<IndexBuffer> IndexBuffer::Resolve(Graphics& gfx, std::string tag,
+	std::span<const uint32_t> indices)
 {
-	using namespace std::string_literals;
-	return typeid(IndexBuffer).name() + "#"s + tag;
+	assert(tag != "?");
+	return Codex::Resolve<IndexBuffer>(gfx, std::move(tag), indices);
 }
-std::string IndexBuffer::GetUID() const noexcept
+std::string IndexBuffer::GenerateUID_(std::string_view tag)
 {
-	return GenerateUID_(tag);
+	return std::format("IndexBuffer#{}", tag);
 }
+
 

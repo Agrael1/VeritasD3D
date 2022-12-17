@@ -21,6 +21,9 @@ winrt::IAsyncAction UT::TwoWayPortal::InitializeAsync(ver::LightBuffer& lb, ver:
 
 winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& gfx, std::filesystem::path map)
 {
+	co_await winrt::resume_background();
+	ver::scoped_timer t;
+
 	Assimp::Importer imp;
 	const auto pScene = imp.ReadFile(map.string().data(),
 		aiProcess_Triangulate |
@@ -33,7 +36,7 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 		throw ver::make_error<ver::ModelException>({ imp.GetErrorString() });
 
 	auto wrld = world.InitializeAsync(gfx, *pScene, std::move(map), 40.0f);
-	auto sk = sky.InitializeAsync(gfx, L"../assets/face.dds");
+	auto sk = sky.InitializeAsync(gfx, L"../models/face.dds");
 	auto phys = [&]() ->winrt::IAsyncAction {
 		co_await winrt::resume_background();
 		auto* mat = phy.GetMaterial("world");
@@ -47,6 +50,9 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 			actors.emplace_back(phy.MakeActor(std::move(x), *mat, 40.0f));
 		}
 	}();
+	auto rd_flg = red.InitializeAsync(phy, gfx, "../models/flag/redflag.obj", { -147.0f, -41.0f, 15.3f });
+	auto bl_flg = blue.InitializeAsync(phy, gfx, "../models/flag/blueflag.obj", { 153.0f, -43.7f, -24.3f });
+
 
 	constexpr DirectX::XMFLOAT4A pos[3]{ { -1.7f, 73.8f, 0.0f, 0.0f}, {-147.8f, -28.8f, -12.0f, 0.0f}, {154.3f, -28.8f, 0.0f, 0.0f} };
 	constexpr DirectX::XMFLOAT3 cols[3]{ { 154.f / 255.f, 154.f / 255.f, 154.f / 255.f}
@@ -101,11 +107,10 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 		acts.push_back(i.InitializeAsync(gfx, u"../models/white.png", { 5,5 }));
 	for (auto& i : flames)
 		acts.push_back(i.InitializeAsync(gfx, u"../models/fire.dds", { 6,8 }, false));
-
 	for (size_t i = 0; i < portals.size(); i++)
 		acts.push_back(portals[i].InitializeAsync(*light_buf, phy, gfx, pos_p[i], cols_p[i % 2]));
 
-	co_await winrt::when_all(wrld, phys, ver::when_all(acts));
+	co_await ver::when_all(acts);
 
 	constexpr DirectX::XMFLOAT3A pos2[4]{ { -115.7f, 19.9f, -0.4f }, {-115.7f, 19.9f, -20.8f}, {121.0f, 18.9f, 12.7f},{121.0f, 18.9f, -7.3f} };
 	constexpr DirectX::XMFLOAT3A cols2[4]{ { 1,0,0 }, {1,0,0}, {0,0,1} , {0,0,1} };
@@ -125,19 +130,17 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 		flames[i].SetColor(gfx, DirectX::XMLoadFloat3A(&cols3[i]));
 	}
 
+	co_await rd_flg;
+	co_await bl_flg;
 
-
-
-	co_await red.InitializeAsync(phy, gfx, "../models/flag/redflag.obj", { -147.0f, -41.0f, 15.3f });
 	red.GetModel()->SetRootTransform(DirectX::XMMatrixRotationY(-float(std::numbers::pi) / 2.0f) * DirectX::XMMatrixTranslation(-147.0f, -41.0f, 15.3f));
 	red.SetColor({ 1.0f, 0, 0 });
 	red.SetTeamTag("Red");
-	co_await blue.InitializeAsync(phy, gfx, "../models/flag/blueflag.obj", { 153.0f, -43.7f, -24.3f });
 	blue.GetModel()->SetRootTransform(DirectX::XMMatrixRotationY(3.0f * float(std::numbers::pi) / 4.0f) * DirectX::XMMatrixTranslation(153.0f, -43.7f, -24.3f));
 	blue.SetColor({ 0, 0, 1 });
 	blue.SetTeamTag("Blue");
 
-	co_await sk;
+	co_await winrt::when_all(wrld, phys, sk);
 }
 
 void UT::Level::Submit(Graphics& gfx)

@@ -302,7 +302,7 @@ std::vector<unsigned short> Material::ExtractIndices(const aiMesh& mesh) noexcep
 }
 
 #include <memory_resource>
-#include <Engine/Bindable/IndexBuffer2.h>
+#include <Engine/Bindable/IndexBuffer.h>
 
 auto prescale(std::span<aiVector3D> mesh, float scale)
 {

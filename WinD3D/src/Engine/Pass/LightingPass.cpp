@@ -3,7 +3,7 @@
 #include <Engine/Bindable/VertexShader.h>
 #include <Engine/Bindable/PixelShader.h>
 #include <Engine/Bindable/Sampler.h>
-#include <Engine/Bindable/IndexBuffer2.h>
+#include <Engine/Bindable/IndexBuffer.h>
 #include <Engine/Rendering/SourcesT.h>
 #include <Engine/Graphics.h>
 #include <Engine/Bindable/RenderTarget.h>

@@ -1,29 +1,74 @@
 #pragma once
 #include <Engine/Bindable/Bindable.h>
-#include <memory>
+#include <span>
 
-class IndexBuffer : public Bindable
+struct ID3D11Buffer;
+
+namespace ver
 {
-public:
-	IndexBuffer(Graphics& gfx, const std::vector<unsigned short>& indices);
-	IndexBuffer(Graphics& gfx, std::string tag, const std::vector<unsigned short>& indices);
-public:
-	void Bind(Graphics& gfx) noxnd override;
-	UINT GetCount() const noexcept;
-
-	static std::shared_ptr<IndexBuffer> Resolve(Graphics& gfx, const std::string& tag,
-		const std::vector<unsigned short>& indices);
-
-	template<typename...Ignore>
-	static std::string GenerateUID(const std::string& tag, Ignore&&...ignore)
+	class IndexBuffer : public Bindable
 	{
-		return GenerateUID_(tag);
-	}
-	std::string GetUID() const noexcept override;
-private:
-	static std::string GenerateUID_(const std::string& tag);
-protected:
-	std::string tag;
-	UINT count;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> pIndexBuffer;
-};
+	public:
+		IndexBuffer() = default;
+		IndexBuffer(Graphics& gfx, std::span<const uint16_t> indices)
+			:IndexBuffer(gfx, "?", indices){}
+		IndexBuffer(Graphics& gfx, std::span<const uint32_t> indices)
+			:IndexBuffer(gfx, "?", indices){}
+		IndexBuffer(Graphics& gfx, std::string tag, std::span<const uint16_t> indices)
+			:tag(std::move(tag)),
+			count(uint32_t(indices.size()))
+		{
+			Initialize(gfx, indices);
+		}
+		IndexBuffer(Graphics& gfx, std::string tag, std::span<const uint32_t> indices)
+			:tag(std::move(tag)),
+			count(uint32_t(indices.size()))
+		{
+			Initialize(gfx, indices);
+		}
+
+		winrt::IAsyncAction InitializeAsync(Graphics& gfx, std::string tag, std::span<const uint16_t> indices)
+		{
+			co_await winrt::resume_background();
+			tag = std::move(tag);
+			count = uint32_t(indices.size());
+			Initialize(gfx, indices);
+		}
+		winrt::IAsyncAction InitializeAsync(Graphics& gfx, std::string tag, std::span<const uint32_t> indices)
+		{
+			co_await winrt::resume_background();
+			tag = std::move(tag);
+			count = uint32_t(indices.size());
+			Initialize(gfx, indices);
+		}
+	private:
+		void Initialize(Graphics& gfx, std::span<const uint16_t> indices);
+		void Initialize(Graphics& gfx, std::span<const uint32_t> indices);
+	public:
+		void Bind(Graphics& gfx) noxnd override;
+		void Bind(ID3D11DeviceContext& context) noxnd override;
+		uint32_t GetCount() const noexcept { return count; }
+
+		static std::shared_ptr<IndexBuffer> Resolve(Graphics& gfx, std::string tag,
+			std::span<const uint16_t> indices);
+		static std::shared_ptr<IndexBuffer> Resolve(Graphics& gfx, std::string tag,
+			std::span<const uint32_t> indices);
+
+		template<typename...Ignore>
+		static std::string GenerateUID(std::string_view tag, Ignore&&...ignore)
+		{
+			return GenerateUID_(tag);
+		}
+		std::string GetUID() const noexcept
+		{
+			return GenerateUID_(tag);
+		}
+	private:
+		static std::string GenerateUID_(std::string_view tag);
+	protected:
+		std::string tag;
+		uint32_t count = 0;
+		DXGI_FORMAT format = DXGI_FORMAT::DXGI_FORMAT_R16_UINT;
+		winrt::com_ptr<ID3D11Buffer> pIndexBuffer;
+	};
+}
