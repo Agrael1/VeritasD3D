@@ -3,6 +3,7 @@
 #include <Scene.h>
 #include <Game/Entity.h>
 #include <Game/PointLight.h>
+#include <semaphore>
 
 namespace UT
 {

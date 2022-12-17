@@ -1,6 +1,5 @@
 #pragma once
 #include <Engine/Bindable/Bindable.h>
-#include <pplawait.h>
 #include <optional>
 
 struct ID3D11BlendState;
@@ -12,8 +11,6 @@ namespace ver
 	public:
 		BlendState() = default;
 		BlendState(Graphics& gfx, bool blending, std::optional<float> factor = {});
-		winrt::IAsyncAction InitializeAsync(Graphics& gfx, bool blending, std::optional<float> factor = {});
-		void Initialize(Graphics& gfx, bool blending, std::optional<float> factor = {});
 	public:
 		void Bind(Graphics& gfx) noxnd override;
 		void Bind(ID3D11DeviceContext& context) noxnd;
@@ -22,7 +19,6 @@ namespace ver
 		float GetFactor() const noxnd;
 
 		static std::shared_ptr<BlendState> Resolve(Graphics& gfx, bool blending, std::optional<float> factor = {});
-		static concurrency::task<std::shared_ptr<BlendState>> ResolveAsync(Graphics& gfx, bool blending, std::optional<float> factor = {});
 		static std::string GenerateUID(bool blending, std::optional<float> factor);
 		std::string GetUID() const noexcept override;
 	protected:

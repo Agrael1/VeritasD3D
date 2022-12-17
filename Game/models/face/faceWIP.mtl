@@ -87,4 +87,6 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd textures\ceiling_diff.png
+map_Kd textures\ceiling_diff.dds
+map_Kn textures\ceiling_diff_nrm.png
+map_Ks textures\ceiling_diff_spc.png

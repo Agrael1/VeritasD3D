@@ -1,6 +1,6 @@
 #pragma once
 #include <Engine/Pass/BindingPass.h>
-#include <Engine/Bindable/ConstantBuffer2.h>
+#include <Engine/Bindable/ConstantBuffer.h>
 
 
 namespace ver::rg

@@ -78,7 +78,7 @@ namespace UT
 		void SpawnControlWindow();
 		ver::LightBuffer& GetLightBuffer()
 		{
-			return light_buf;
+			return *light_buf;
 		}
 		bool PollFinish()
 		{
@@ -95,7 +95,7 @@ namespace UT
 		std::vector<ver::ph::physx_ptr<physx::PxTriangleMesh>> colliders;
 		std::vector<ver::ph::physx_ptr<physx::PxRigidActor>> actors;
 
-		ver::LightBuffer light_buf;
+		std::optional<ver::LightBuffer> light_buf;
 		std::array<ver::LightSphere, 3> lights;
 		std::array<ver::BillboardComponent, 4> billboards;
 		std::array<ver::BillboardComponent, 4> flames;

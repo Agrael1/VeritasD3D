@@ -46,17 +46,18 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 			actors.emplace_back(phy.MakeActor(std::move(x), *mat, 40.0f));
 		}
 	}();
-	co_await light_buf.InitializeAsync(gfx);
 
 	constexpr DirectX::XMFLOAT4A pos[3]{ { -1.7f, 73.8f, 0.0f, 0.0f}, {-147.8f, -28.8f, -12.0f, 0.0f}, {154.3f, -28.8f, 0.0f, 0.0f} };
 	constexpr DirectX::XMFLOAT3 cols[3]{ { 154.f / 255.f, 154.f / 255.f, 154.f / 255.f}
 	, {255.f / 255.f, 111.f / 255.f, 111.f / 255.f}
 	, {134.f / 255.f, 169.f / 255.f, 255.f / 255.f} };
 
+	light_buf.emplace(gfx);
+
 	for (size_t i = 0; i < 3; i++)
 	{
 		auto& l = lights[i];
-		co_await l.InitializeAsync(light_buf, gfx);
+		co_await l.InitializeAsync(*light_buf, gfx);
 		l.SetPosition(pos[i]);
 		l.SetColor(cols[i]);
 	}
@@ -101,7 +102,7 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 		acts.push_back(i.InitializeAsync(gfx, u"../models/fire.dds", { 6,8 }, false));
 
 	for (size_t i = 0; i < portals.size(); i++)
-		acts.push_back(portals[i].InitializeAsync(light_buf, phy, gfx, pos_p[i], cols_p[i % 2]));
+		acts.push_back(portals[i].InitializeAsync(*light_buf, phy, gfx, pos_p[i], cols_p[i % 2]));
 
 	co_await winrt::when_all(wrld, phys, ver::when_all(acts));
 
@@ -127,11 +128,11 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 
 
 	co_await red.InitializeAsync(phy, gfx, "../models/flag/redflag.obj", { -147.0f, -41.0f, 15.3f });
-	red.GetModel()->SetRootTransform(DirectX::XMMatrixRotationY(-std::numbers::pi / 2.0f) * DirectX::XMMatrixTranslation(-147.0f, -41.0f, 15.3f));
+	red.GetModel()->SetRootTransform(DirectX::XMMatrixRotationY(-float(std::numbers::pi) / 2.0f) * DirectX::XMMatrixTranslation(-147.0f, -41.0f, 15.3f));
 	red.SetColor({ 1.0f, 0, 0 });
 	red.SetTeamTag("Red");
 	co_await blue.InitializeAsync(phy, gfx, "../models/flag/blueflag.obj", { 153.0f, -43.7f, -24.3f });
-	blue.GetModel()->SetRootTransform(DirectX::XMMatrixRotationY(3.0f * std::numbers::pi / 4.0f) * DirectX::XMMatrixTranslation(153.0f, -43.7f, -24.3f));
+	blue.GetModel()->SetRootTransform(DirectX::XMMatrixRotationY(3.0f * float(std::numbers::pi) / 4.0f) * DirectX::XMMatrixTranslation(153.0f, -43.7f, -24.3f));
 	blue.SetColor({ 0, 0, 1 });
 	blue.SetTeamTag("Blue");
 }
@@ -140,7 +141,7 @@ void UT::Level::Submit(Graphics& gfx)
 {
 	auto pos = lights[0].GetPosition();
 	gfx.SetShadowCamPos(pos);
-	light_buf.Bind(gfx);
+	light_buf->Bind(gfx);
 	world.Submit();
 	for (auto& i : billboards)
 	{

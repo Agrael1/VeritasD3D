@@ -1,7 +1,7 @@
 #pragma once
 #include <DirectXMath.h>
 #include <array>
-#include "ConstantBuffer2.h"
+#include "ConstantBuffer.h"
 
 class Graphics;
 
@@ -27,7 +27,6 @@ namespace ver
 	public:
 		LightBuffer() = default;
 		LightBuffer(Graphics& gfx);
-		winrt::IAsyncAction InitializeAsync(Graphics& gfx);
 	public:
 		void Bind(Graphics& gfx) noxnd;
 		PointLightConsts& Allocate();

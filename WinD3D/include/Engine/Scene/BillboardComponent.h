@@ -1,7 +1,7 @@
 #pragma once
 #include <DirectXMath.h>
 #include <filesystem>
-#include <Engine/Bindable/ConstantBuffer2.h>
+#include <Engine/Bindable/ConstantBuffer.h>
 #include <Engine/Rendering/Drawable.h>
 
 namespace ver

@@ -30,7 +30,7 @@ namespace UT
 		void Jump()
 		{
 			if(!midair)
-				vertical_velocity = -1.2*g;
+				vertical_velocity = -1.2f * g;
 		}
 		void Update(DirectX::XMFLOAT3 accumulated_displacement, float dt)
 		{

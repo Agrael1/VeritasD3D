@@ -1,7 +1,7 @@
 #include <Engine/Scene/SolidSphere2.h>
 #include <Engine/Scene/Sphere.h>
 #include <Engine/Bindable/BindableCommons.h>
-#include <Engine/Bindable/ConstantBuffer2.h>
+#include <Engine/Bindable/ConstantBuffer.h>
 #include <Engine/Bindable/AsyncResource.h>
 
 
@@ -40,7 +40,8 @@ ver::SolidSphere::SolidSphere(Graphics& gfx, float radius)
 
 winrt::IAsyncAction ver::SolidSphere::InitializeAsync(Graphics& gfx, float radius)
 {
-	colorBuffer = co_await ver::make_shared_async<ver::PixelConstantBuffer<PSColorConstant>>(gfx, colorConst, 1u);
+	co_await winrt::resume_background();
+	colorBuffer = std::make_shared<ver::PixelConstantBuffer<PSColorConstant>>(gfx, colorConst, 1u);
 	namespace dx = DirectX;
 	const auto geometryTag = "$ssphere." + std::to_string(radius);
 	auto model = Sphere::Make();

@@ -1,5 +1,6 @@
 #include <Engine/Scene/BillboardComponent.h>
 #include <Engine/Bindable/BindableCommons.h>
+#include <Engine/Bindable/Codex.h>
 #include <Engine/Scene/Plane.h>
 #include <Engine/Graphics.h>
 #include <imgui.h>
@@ -17,8 +18,8 @@ namespace ver
 			auto texture = Texture::ResolveAsync(gfx, tex_path, 0);
 			auto pshader = PixelShader::ResolveAsync(gfx, "billboard.ps.cso");
 			auto vshader = VertexShader::ResolveAsync(gfx, "billboard.vs.cso");
-			auto xcbuf = ver::make_shared_async<decltype(cbuf)::element_type>(gfx, buffer, 0);
-			auto xvcbuf = ver::make_shared_async<VertexConstantBuffer<uint32_t>>(gfx, spherical, 1);
+			only.AddBindable(cbuf = std::make_shared<decltype(cbuf)::element_type>(gfx, buffer, 0));
+			only.AddBindable(std::make_shared<VertexConstantBuffer<uint32_t>>(gfx, spherical, 1));
 
 			auto plane = Plane::Make();
 			plane.Deform(DirectX::XMMatrixScalingFromVector(DirectX::XMLoadFloat2(&dims)));
@@ -32,8 +33,6 @@ namespace ver
 			only.AddBindable(Codex::Resolve<BlendState>(gfx, true, std::nullopt));
 			only.AddBindable(Codex::Resolve<Sampler>(gfx));
 
-			only.AddBindable(cbuf = co_await xcbuf);
-			only.AddBindable(co_await xvcbuf);
 			only.AddBindable(co_await vshader);
 			only.AddBindable(co_await pshader);
 

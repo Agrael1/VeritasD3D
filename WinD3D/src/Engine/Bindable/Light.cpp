@@ -6,11 +6,6 @@ ver::LightBuffer::LightBuffer(Graphics& gfx)
 {
 }
 
-winrt::IAsyncAction ver::LightBuffer::InitializeAsync(Graphics& gfx)
-{
-	co_await cbuf.InitializeAsync(gfx, binding_slot);
-}
-
 void ver::LightBuffer::Bind(Graphics& gfx) noxnd
 {
 	auto view = gfx.GetCamera();

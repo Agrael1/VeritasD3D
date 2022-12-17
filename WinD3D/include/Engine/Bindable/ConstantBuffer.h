@@ -1,169 +1,87 @@
 #pragma once
-#include <Engine/Bindable/Codex.h>
-#include <Engine/Deprecated/GraphicsThrows.h>
-#include <Engine/Util/DXGIInfoManager.h>
-#include <Engine/Util/GraphicsExceptions.h>
+#include <Engine/Bindable/Bindable.h>
+#include <span>
 
-template<typename C>
-class ConstantBuffer : public Bindable
+struct ID3D11Buffer;
+
+namespace ver
 {
-public:
-	ConstantBuffer(Graphics& gfx, const C& consts, UINT slot = 0u)
-		:slot(slot)
+	class ConstantBuffer : public Bindable
 	{
-		INFOMAN(gfx);
+	public:
+		ConstantBuffer() = default;
+		ConstantBuffer(Graphics& gfx, std::span<const std::byte> consts, uint32_t slot);
+		ConstantBuffer(Graphics& gfx, uint32_t size, uint32_t slot);
+	public:
+		void Update(Graphics& gfx, std::span<const std::byte> consts);
+		void BindToVS(Graphics& gfx);
+		void BindToPS(Graphics& gfx);
+		void BindToHS(Graphics& gfx);
+		void BindToDS(Graphics& gfx);
+	protected:
+		winrt::com_ptr<ID3D11Buffer> pConstantBuffer;
+		uint32_t slot = 0;
+	};
 
-		D3D11_BUFFER_DESC cbd = {};
-		cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		cbd.Usage = D3D11_USAGE_DYNAMIC;
-		cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		cbd.MiscFlags = 0u;
-		cbd.ByteWidth = sizeof(consts);
-		cbd.StructureByteStride = 0u;
+	template<typename C>
+	class ConstantBufferT : public ConstantBuffer
+	{
+	public:
+		ConstantBufferT() = default;
+		ConstantBufferT(Graphics& gfx, const C& consts, uint32_t slot)
+			:ConstantBuffer(gfx, { reinterpret_cast<const std::byte*>(&consts), sizeof(C)}, slot)
+		{}
+		ConstantBufferT(Graphics& gfx, uint32_t slot)
+			:ConstantBuffer(gfx, sizeof(C), slot)
+		{}
+	public:
+		void Update(Graphics& gfx, const C& consts)
+		{
+			ConstantBuffer::Update(gfx, { reinterpret_cast<const std::byte*>(&consts), sizeof(C) });
+		}
+	};
 
-		D3D11_SUBRESOURCE_DATA csd = {};
-		csd.pSysMem = &consts;
-		GFX_THROW_INFO(GetDevice(gfx)->CreateBuffer(&cbd, &csd, &pConstantBuffer));
-	}
-	ConstantBuffer(Graphics& gfx, UINT slot = 0u)
-		:slot(slot)
+	template<typename C>
+	class VertexConstantBuffer : public ConstantBufferT<C>
 	{
-		INFOMAN(gfx);
+	public:
+		using ConstantBufferT<C>::ConstantBufferT;
+		void Bind(Graphics& gfx)noxnd override
+		{
+			ConstantBuffer::BindToVS(gfx);
+		}
+	};
 
-		D3D11_BUFFER_DESC cbd = {};
-		cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		cbd.Usage = D3D11_USAGE_DYNAMIC;
-		cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		cbd.MiscFlags = 0u;
-		cbd.ByteWidth = sizeof(C);
-		cbd.StructureByteStride = 0u;
+	template<typename C>
+	class PixelConstantBuffer : public ConstantBufferT<C>
+	{
+	public:
+		using ConstantBufferT<C>::ConstantBufferT;
+		void Bind(Graphics& gfx)noxnd override
+		{
+			ConstantBuffer::BindToPS(gfx);
+		}
+	};
 
-		GFX_THROW_INFO(GetDevice(gfx)->CreateBuffer(&cbd, nullptr, &pConstantBuffer));
-	}
-public:
-	void Update(Graphics& gfx, const C& consts)
+	template<typename C>
+	class HullConstantBuffer : public ConstantBufferT<C>
 	{
-		INFOMAN(gfx);
+	public:
+		using ConstantBufferT<C>::ConstantBufferT;
+		void Bind(Graphics& gfx)noxnd override
+		{
+			ConstantBuffer::BindToHS(gfx);
+		}
+	};
 
-		D3D11_MAPPED_SUBRESOURCE msr = {};
-		GFX_THROW_INFO(GetContext(gfx)->Map(
-			pConstantBuffer.Get(), 0u,
-			D3D11_MAP_WRITE_DISCARD, 0u,
-			&msr
-		));
-		memcpy(msr.pData, &consts, sizeof(consts));
-		GetContext(gfx)->Unmap(pConstantBuffer.Get(), 0u);
-	}
-protected:
-	Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer;
-	UINT slot;
-};
-
-template<typename C>
-class VertexConstantBuffer : public ConstantBuffer<C>
-{
-	using ConstantBuffer<C>::pConstantBuffer;
-	using ConstantBuffer<C>::slot;
-	using Bindable::GetContext;
-public:
-	using ConstantBuffer<C>::ConstantBuffer;
-	void Bind(Graphics& gfx)noxnd override
+	template<typename C>
+	class DomainConstantBuffer : public ConstantBufferT<C>
 	{
-		INFOMAN_NOHR(gfx);
-		GFX_THROW_INFO_ONLY(GetContext(gfx)->VSSetConstantBuffers(slot, 1u, pConstantBuffer.GetAddressOf()));
-	}
-	static std::shared_ptr<VertexConstantBuffer> Resolve(Graphics& gfx, const C& consts, UINT slot = 0)
-	{
-		return ver::Codex::Resolve<VertexConstantBuffer>(gfx, consts, slot);
-	}
-	static std::shared_ptr<VertexConstantBuffer> Resolve(Graphics& gfx, UINT slot = 0)
-	{
-		return ver::Codex::Codex::Resolve<VertexConstantBuffer>(gfx, slot);
-	}
-	static std::string GenerateUID(const C&, UINT slot)
-	{
-		return GenerateUID(slot);
-	}
-	static std::string GenerateUID(UINT slot = 0)
-	{
-		using namespace std::string_literals;
-		return typeid(VertexConstantBuffer).name() + "#"s + std::to_string(slot);
-	}
-	std::string GetUID() const noexcept override
-	{
-		return GenerateUID(slot);
-	}
-};
-
-template<typename C>
-class PixelConstantBuffer : public ConstantBuffer<C>
-{
-	using ConstantBuffer<C>::pConstantBuffer;
-	using ConstantBuffer<C>::slot;
-	using Bindable::GetContext;
-public:
-	using ConstantBuffer<C>::ConstantBuffer;
-	void Bind(Graphics& gfx)noxnd override
-	{
-		INFOMAN_NOHR(gfx);
-		GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetConstantBuffers(slot, 1u, pConstantBuffer.GetAddressOf()));
-	}
-	static std::shared_ptr<PixelConstantBuffer> Resolve(Graphics& gfx, const C& consts, UINT slot = 0)
-	{
-		return ver::Codex::Codex::Resolve<PixelConstantBuffer>(gfx, consts, slot);
-	}
-	static std::shared_ptr<PixelConstantBuffer> Resolve(Graphics& gfx, UINT slot = 0)
-	{
-		return ver::Codex::Codex::Resolve<PixelConstantBuffer>(gfx, slot);
-	}
-	static std::string GenerateUID(const C&, UINT slot)
-	{
-		return GenerateUID(slot);
-	}
-	static std::string GenerateUID(UINT slot = 0)
-	{
-		using namespace std::string_literals;
-		return typeid(PixelConstantBuffer).name() + "#"s + std::to_string(slot);
-	}
-	std::string GetUID() const noexcept override
-	{
-		return GenerateUID(slot);
-	}
-};
-
-
-template<typename C>
-class DomainConstantBuffer : public ConstantBuffer<C>
-{
-	using ConstantBuffer<C>::slot;
-	using ConstantBuffer<C>::pConstantBuffer;
-	using Bindable::GetContext;
-public:
-	using ConstantBuffer<C>::ConstantBuffer;
-	void Bind(Graphics& gfx)noxnd override
-	{
-		INFOMAN_NOHR(gfx);
-		GFX_THROW_INFO_ONLY(GetContext(gfx)->DSSetConstantBuffers(slot, 1u, pConstantBuffer.GetAddressOf()));
-	}
-	static std::shared_ptr<DomainConstantBuffer> Resolve(Graphics& gfx, const C& consts, uint32_t slot = 0)
-	{
-		return ver::Codex::Resolve<DomainConstantBuffer>(gfx, consts, slot);
-	}
-	static std::shared_ptr<DomainConstantBuffer> Resolve(Graphics& gfx, uint32_t slot = 0)
-	{
-		return ver::Codex::Resolve<DomainConstantBuffer>(gfx, slot);
-	}
-	static std::string GenerateUID(const C&, uint32_t slot)
-	{
-		return GenerateUID(slot);
-	}
-	static std::string GenerateUID(uint32_t slot = 0)
-	{
-		using namespace std::string_literals;
-		return typeid(DomainConstantBuffer).name() + "#"s + std::to_string(slot);
-	}
-	std::string GetUID() const noexcept override
-	{
-		return GenerateUID(slot);
-	}
-};
+	public:
+		using ConstantBufferT<C>::ConstantBufferT;
+		void Bind(Graphics& gfx)noxnd override
+		{
+			ConstantBuffer::BindToDS(gfx);
+		}
+	};
+}

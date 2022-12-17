@@ -9,22 +9,10 @@ BlendState::BlendState(Graphics& gfx, bool blending, std::optional<float> factor
 	:
 	blending(blending)
 {
-	Initialize(gfx, blending, factors_in);
-}
-
-winrt::IAsyncAction ver::BlendState::InitializeAsync(Graphics& gfx, bool blending, std::optional<float> factor)
-{
-	co_await winrt::resume_background();
-	Initialize(gfx, blending, factor);
-}
-
-void ver::BlendState::Initialize(Graphics& gfx, bool blending, std::optional<float> factor)
-{
-	this->blending = blending;
-	if (factor)
+	if (factors_in)
 	{
 		factors.emplace();
-		factors->fill(*factor);
+		factors->fill(*factors_in);
 	}
 
 	D3D11_BLEND_DESC blendDesc = CD3D11_BLEND_DESC{ CD3D11_DEFAULT{} };
@@ -33,7 +21,7 @@ void ver::BlendState::Initialize(Graphics& gfx, bool blending, std::optional<flo
 	{
 		brt.BlendEnable = TRUE;
 
-		if (factor)
+		if (factors_in)
 		{
 			brt.SrcBlend = D3D11_BLEND_BLEND_FACTOR;
 			brt.DestBlend = D3D11_BLEND_INV_BLEND_FACTOR;
@@ -74,10 +62,6 @@ float BlendState::GetFactor() const noxnd
 std::shared_ptr<BlendState> BlendState::Resolve(Graphics& gfx, bool blending, std::optional<float> factor)
 {
 	return Codex::Resolve<BlendState>(gfx, blending, factor);
-}
-concurrency::task<std::shared_ptr<BlendState>> ver::BlendState::ResolveAsync(Graphics& gfx, bool blending, std::optional<float> factor)
-{
-	return Codex::ResolveAsync<BlendState>(gfx, blending, factor);
 }
 std::string BlendState::GenerateUID(bool blending, std::optional<float> factor)
 {

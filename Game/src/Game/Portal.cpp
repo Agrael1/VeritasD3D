@@ -4,6 +4,7 @@
 #include <Util/Converter.h>
 #include <Engine/Bindable/Light.h>
 #include <imgui.h>
+#include <Engine/Util/scoped_semaphore.h>
 
 winrt::IAsyncAction UT::Portal::InitializeAsync(ver::LightBuffer& lb, ver::ph::Physics& phy, Graphics& gfx, DirectX::XMFLOAT3 position, DirectX::XMFLOAT3 color)
 {
