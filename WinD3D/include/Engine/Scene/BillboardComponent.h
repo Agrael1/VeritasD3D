@@ -29,10 +29,6 @@ namespace ver
 		}
 		void Update(Graphics& gfx);
 		void SpawnControlWindow() noexcept;
-		void Draw()const noxnd
-		{
-
-		}
 	private:
 		DirectX::XMFLOAT3A position{0,0,0};
 		uint32_t frame_count = 1;

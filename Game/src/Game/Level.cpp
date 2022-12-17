@@ -33,6 +33,7 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 		throw ver::make_error<ver::ModelException>({ imp.GetErrorString() });
 
 	auto wrld = world.InitializeAsync(gfx, *pScene, std::move(map), 40.0f);
+	auto sk = sky.InitializeAsync(gfx, L"../assets/face.dds");
 	auto phys = [&]() ->winrt::IAsyncAction {
 		co_await winrt::resume_background();
 		auto* mat = phy.GetMaterial("world");
@@ -135,6 +136,8 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 	blue.GetModel()->SetRootTransform(DirectX::XMMatrixRotationY(3.0f * float(std::numbers::pi) / 4.0f) * DirectX::XMMatrixTranslation(153.0f, -43.7f, -24.3f));
 	blue.SetColor({ 0, 0, 1 });
 	blue.SetTeamTag("Blue");
+
+	co_await sk;
 }
 
 void UT::Level::Submit(Graphics& gfx)
@@ -158,6 +161,7 @@ void UT::Level::Submit(Graphics& gfx)
 		i.Submit(gfx);
 	red.Submit();
 	blue.Submit();
+	sky.Submit();
 
 	DirectX::XMFLOAT4A rpos;
 	DirectX::XMStoreFloat4A(&rpos, DirectX::XMVector3Transform(pos, DirectX::XMMatrixRotationRollPitchYaw(gfx.GetFrameStep() / 4.0f, 0, 0)));

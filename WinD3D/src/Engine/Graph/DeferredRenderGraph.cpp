@@ -3,7 +3,6 @@
 #include <Engine/Pass/BufferClearPass.h>
 #include <Engine/Pass/GBufferPass.h>
 #include <Engine/Pass/LightingPass.h>
-#include <Engine/Pass/SkyboxPass.h>
 #include <Engine/Pass/ShadowPass.h>
 #include <Engine/Pass/AmbientPass.h>
 #include <memory>
@@ -45,15 +44,9 @@ RG::DeferredRenderGraph::DeferredRenderGraph(Graphics& gfx)
 		AppendPass(std::move(pass));
 	}
 	{
-		auto pass = std::make_unique<ver::rg::SkyboxPass>(gfx, "sky");
+		auto pass = std::make_unique<LambertianPass>(gfx, "forward");
 		pass->SetSinkLinkage("renderTarget", "light.renderTarget");
 		pass->SetSinkLinkage("depthStencil", "light.depthStencil");
-		AppendPass(std::move(pass));
-	}	
-	{
-		auto pass = std::make_unique<LambertianPass>(gfx, "forward");
-		pass->SetSinkLinkage("renderTarget", "sky.renderTarget");
-		pass->SetSinkLinkage("depthStencil", "sky.depthStencil");
 		AppendPass(std::move(pass));
 	}
 	{

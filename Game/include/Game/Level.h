@@ -7,6 +7,7 @@
 #include <Game/Flag.h>
 #include <Scene.h>
 #include <Engine/Probes/TestModelProbe.h>
+#include <Engine/Scene/Skybox.h>
 
 namespace UT
 {
@@ -74,6 +75,7 @@ namespace UT
 				i.Link(rg);
 			red.Link(rg);
 			blue.Link(rg);
+			sky.LinkTechniques(rg);
 		}
 		void SpawnControlWindow();
 		ver::LightBuffer& GetLightBuffer()
@@ -92,6 +94,7 @@ namespace UT
 		}
 	private:
 		Model world;
+		ver::Skybox sky;
 		std::vector<ver::ph::physx_ptr<physx::PxTriangleMesh>> colliders;
 		std::vector<ver::ph::physx_ptr<physx::PxRigidActor>> actors;
 

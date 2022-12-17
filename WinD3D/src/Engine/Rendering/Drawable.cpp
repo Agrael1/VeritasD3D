@@ -34,7 +34,7 @@ void Drawable::Bind(Graphics& gfx) const noxnd
 {
 	pTopology->Bind(gfx);
 	pIndices->Bind(gfx);
-	pVertices->Bind(gfx);
+	if(pVertices)pVertices->Bind(gfx);
 }
 
 void Drawable::Draw(Graphics& gfx) const noxnd
