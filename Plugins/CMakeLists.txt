@@ -15,7 +15,7 @@ endif()
 include(${CMAKE_BINARY_DIR}/conan.cmake)
 
 #Assimp
-conan_cmake_configure(REQUIRES vorbis/1.3.7 assimp/5.2.2 imgui/cci.20220621+1.88.docking physx/4.1.1
+conan_cmake_configure(REQUIRES vorbis/1.3.7 assimp/5.2.2 imgui/cci.20220621+1.88.docking physx/4.1.1 spdlog/1.11.0
                       GENERATORS cmake_find_package
                       IMPORTS 
                       "./res/bindings, imgui_impl_dx11.cpp -> ../imgui/bindings"  

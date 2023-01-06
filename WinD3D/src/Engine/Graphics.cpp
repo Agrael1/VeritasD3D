@@ -104,10 +104,7 @@ void Graphics::EndFrame()
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	}
 
-	winrt::hresult hr = pSwap->Present(1u, 0u);
-	if(hr == DXGI_ERROR_DEVICE_REMOVED)
-		throw ver::make_error<ver::device_error>({ pDevice->GetDeviceRemovedReason(), infoManager.GetMessages() });
-	ver::check_graphics(hr);
+	ver::check_device_remove(pSwap->Present(1u, 0u), pDevice.get());
 	frame_step = timer.stop();
 }
 void Graphics::DrawIndexed(UINT count) noxnd

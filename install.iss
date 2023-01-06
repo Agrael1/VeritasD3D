@@ -42,13 +42,12 @@ Name: "ukrainian"; MessagesFile: "compiler:Languages\Ukrainian.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "out\build\x64-Debug\assets\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "out\build\x64-Debug\Game\*.ini"; DestDir: "{app}";
-Source: "out\build\x64-Debug\Game\*.exe"; DestDir: "{app}";
-Source: "out\build\x64-Debug\Game\*.dll"; DestDir: "{app}";
-Source: "out\build\x64-Debug\Models\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "out\build\x64-Debug\Music\*"; DestDir: "{app}";  Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "out\build\x64-Debug\WinD3D\shaders\*.cso"; DestDir: "{app}";
+Source: "out\build\x64-Release\Game\*.ini"; DestDir: "{app}\Game";
+Source: "out\build\x64-Release\Game\*.exe"; DestDir: "{app}\Game";
+Source: "out\build\x64-Release\Game\*.dll"; DestDir: "{app}\Game";
+Source: "out\build\x64-Release\Models\*"; DestDir: "{app}\Models"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "out\build\x64-Release\Music\*"; DestDir: "{app}\Music";  Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "out\build\x64-Release\WinD3D\shaders\*.cso"; DestDir: "{app}\WinD3D\shaders";
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

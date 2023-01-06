@@ -1,10 +1,8 @@
 #pragma once
-#include <Engine/Util/WindowExceptions.h>
-
 #include "Keyboard.h"
 #include "Mouse.h"
-#include <Engine/Graphics.h>
 #include <optional>
+#include <wil/resource.h>
 
 namespace ver
 {

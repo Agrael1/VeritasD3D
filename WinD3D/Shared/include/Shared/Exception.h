@@ -37,13 +37,13 @@ namespace ver
 
 
 	template<class E> requires ((bool)DEBUG_MODE)
-	E make_error(E in)
+		E make_error(E in)
 	{
 		in.WriteToOutput();
 		return in;
 	}
 	template<class E>requires (!(bool)DEBUG_MODE)
-	E make_error(E in)
+		E make_error(E in)
 	{
 		return in;
 	}

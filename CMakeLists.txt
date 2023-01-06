@@ -9,7 +9,8 @@ include(FetchContent)
 
 # Include sub-projects.
 add_subdirectory ("Plugins")
-add_subdirectory ("PhysX")
-add_subdirectory ("ttf2mesh")
+#add_subdirectory ("PhysX")
+#add_subdirectory ("ttf2mesh")
 add_subdirectory ("WinD3D")
-add_subdirectory ("Game")
+#add_subdirectory ("Game")
+add_subdirectory ("Game2")

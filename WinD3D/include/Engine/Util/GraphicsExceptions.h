@@ -64,19 +64,32 @@ namespace ver
 		if (hr < 0)throw make_error<hr_error>({ hr, {}, sl });
 	}
 
-	template<int=1>requires(bool(DEBUG_MODE))
-	inline void check_graphics(winrt::hresult hr, std::source_location sl = std::source_location::current())
-	{ if (hr < 0)throw make_error<hr_error>({ hr, DXGIInfoManager::GetMessages(), sl }); }
+	template<int = 1>requires(bool(DEBUG_MODE))
+		inline void check_graphics(winrt::hresult hr, std::source_location sl = std::source_location::current())
+	{
+		if (hr < 0)throw make_error<hr_error>({ hr, DXGIInfoManager::GetMessages(), sl });
+	}
 
-	template<int=1>requires(!bool(DEBUG_MODE))
-	inline void check_graphics(winrt::hresult hr) { check_hresult(hr); }
+	template<int = 1>requires(!bool(DEBUG_MODE))
+		inline void check_graphics(winrt::hresult hr, std::source_location sl = std::source_location::current()) { ver::check_hresult(hr, sl); }
 
 	template<int = 1>requires(bool(DEBUG_MODE))
-	inline void check_context(std::source_location sl = std::source_location::current()){
+		inline void check_device_remove(winrt::hresult hr, ID3D11Device* pDevice, std::source_location sl = std::source_location::current())
+	{
+		if (hr == DXGI_ERROR_DEVICE_REMOVED)
+			throw ver::make_error<ver::device_error>({ pDevice->GetDeviceRemovedReason(), DXGIInfoManager::GetMessages() });
+		ver::check_graphics(hr);
+	}
+
+	template<int = 1>requires(!bool(DEBUG_MODE))
+		inline void check_device_remove(winrt::hresult hr, ID3D11Device* pDevice, std::source_location sl = std::source_location::current()) { ver::check_hresult(hr, sl); }
+
+	template<int = 1>requires(bool(DEBUG_MODE))
+		inline void check_context(std::source_location sl = std::source_location::current()) {
 		if (DXGIInfoManager::GetNumMessages())
 			throw make_error<context_error>({ DXGIInfoManager::GetMessages(), sl });
 	}
-	
+
 	template<int = 1>requires(!bool(DEBUG_MODE))
-	inline void check_context(){}
+		inline void check_context() {}
 }
