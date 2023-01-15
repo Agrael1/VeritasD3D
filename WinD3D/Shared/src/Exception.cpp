@@ -1,6 +1,6 @@
 #include <Shared/Exception.h>
-#include <Shared/Log.h>
 #include <format>
+#include <Shared/Log.h>
 
 using namespace ver;
 

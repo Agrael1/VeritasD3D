@@ -1,11 +1,14 @@
 #pragma once
+#ifndef MODULE
 #include <Shared/Severity.h>
 #include <vector>
 #include <string>
+#include <winrt/base.h>
+#endif
 
 struct IDXGIInfoQueue;
 
-namespace ver
+SHARED_EXPORT namespace ver
 {
 	struct DXGIMessage
 	{
@@ -26,7 +29,4 @@ namespace ver
 	private:
 		static winrt::com_ptr<IDXGIInfoQueue> info_queue;
 	};
-
-
-
 }

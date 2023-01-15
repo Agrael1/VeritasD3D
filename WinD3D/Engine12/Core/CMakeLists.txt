@@ -15,21 +15,25 @@ set(CORE_HEADERS ${include_dir} GLOBAL_SCOPE)
 file(GLOB_RECURSE vhead "${include_dir}/*.h")
 file(GLOB_RECURSE vsrc "${source_dir}/*.cpp")
 
+#include(CMakeFindDependencyMacro)
+#find_dependency(spdlog)
+#include(${CMAKE_BINARY_DIR}/WinD3D/Shared/SharedTargets.cmake)
+#
 add_library (${PROJECT_NAME} STATIC ${vhead} ${vsrc})
-
-if(MSVC)
-  target_compile_options(${PROJECT_NAME} PUBLIC "/ZI")
-  target_link_options(${PROJECT_NAME} PUBLIC "/INCREMENTAL")
-endif()
-
-include_directories(BEFORE SYSTEM ${CMAKE_BINARY_DIR}/include)
-target_compile_options(${PROJECT_NAME} PUBLIC /bigobj)
-target_compile_definitions(${PROJECT_NAME} PUBLIC DEBUG_MODE=$<IF:$<CONFIG:Debug>,1,0>)
-target_precompile_headers(${PROJECT_NAME} PUBLIC ${include_dir}/pch.h)
-target_include_directories(${PROJECT_NAME} PUBLIC ${include_dir})
-target_include_directories(${PROJECT_NAME} PUBLIC ${WIL_HEADERS} ${SHARED_HEADERS})
-
-target_link_libraries(${PROJECT_NAME} PUBLIC d3d12 DXGI dxguid) 
-target_link_libraries(${PROJECT_NAME} PUBLIC "${PROJECT_REF}.Shared") 
+#
+#if(MSVC)
+#  target_compile_options(${PROJECT_NAME} PUBLIC "/ZI")
+#  target_link_options(${PROJECT_NAME} PUBLIC "/INCREMENTAL")
+#endif()
+#
+#include_directories(BEFORE SYSTEM ${CMAKE_BINARY_DIR}/include)
+#target_compile_options(${PROJECT_NAME} PUBLIC /bigobj)
+#target_compile_definitions(${PROJECT_NAME} PUBLIC DEBUG_MODE=$<IF:$<CONFIG:Debug>,1,0>)
+##target_precompile_headers(${PROJECT_NAME} PRIVATE ${include_dir}/pch.h)
+#target_include_directories(${PROJECT_NAME} PUBLIC ${include_dir})
+#target_include_directories(${PROJECT_NAME} PUBLIC ${WIL_HEADERS} ${SHARED_HEADERS})
+#
+#target_link_libraries(${PROJECT_NAME} PUBLIC d3d12 DXGI dxguid WinD3D::Shared) 
+#target_link_libraries(${PROJECT_NAME} PUBLIC "${PROJECT_REF}.Shared") 
 
 

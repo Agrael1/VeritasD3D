@@ -1,6 +1,9 @@
 #pragma once
+#ifndef MODULE
+#include <Shared/Defines.h>
+#endif
 
-namespace ver
+SHARED_EXPORT namespace ver
 {
 	enum class Severity
 	{
