@@ -11,14 +11,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(include_dir "${CMAKE_CURRENT_SOURCE_DIR}/include")
 set(source_dir "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
-file(GLOB_RECURSE vhead "${include_dir}/*.h")
-file(GLOB_RECURSE vsrc "${source_dir}/*.cpp")
-
-add_executable(${PROJECT_NAME} ${vhead} ${vsrc})
-
-include_directories(BEFORE SYSTEM ${CMAKE_BINARY_DIR}/include)
+add_executable(${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${include_dir})
-target_include_directories(${PROJECT_NAME} PRIVATE ${CORE_HEADERS})
+target_link_libraries(${PROJECT_NAME} PRIVATE Core)
+target_precompile_headers(${PROJECT_NAME} PRIVATE ${include_dir}/pch.h)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC Shared)
+target_sources(${PROJECT_NAME}
+	PRIVATE
+		${source_dir}/Game/App.cpp
+		${source_dir}/EntryMain.cpp
+)

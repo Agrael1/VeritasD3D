@@ -1,7 +1,7 @@
 ﻿# CMakeList.txt : Top-level CMake project file, do global configuration
 # and include sub-projects here.
 #
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.22)
 
 project ("Unreal")
 
@@ -13,14 +13,8 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>")
 endif()
 
-####
-# Ack use of experimental features
-set(CMAKE_EXPERIMENTAL_CXX_MODULE_CMAKE_API "3c375311-a3c9-4396-a187-3227ef642046")
-
-# Experimental Module support
-set(CMAKE_EXPERIMENTAL_CXX_MODULE_DYNDEP 1)
-####
-
+#set(CMAKE_EXPERIMENTAL_CXX_MODULE_CMAKE_API "3c375311-a3c9-4396-a187-3227ef642046")
+set(CMAKE_EXPERIMENTAL_CXX_MODULE_DYNDEP 0)
 
 # Include sub-projects.
 add_subdirectory ("Plugins")

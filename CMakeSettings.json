@@ -8,7 +8,8 @@
       "buildRoot": "${projectDir}\\out\\build\\${name}",
       "installRoot": "${projectDir}\\out\\install\\${name}",
       "buildCommandArgs": "",
-      "ctestCommandArgs": ""
+      "ctestCommandArgs": "",
+      "cmakeExecutable": "C:/Program Files/CMake/bin/cmake.exe"
     },
     {
       "name": "x64-Debug-2",

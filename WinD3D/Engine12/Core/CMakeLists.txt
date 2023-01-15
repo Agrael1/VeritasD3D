@@ -1,39 +1,57 @@
 ﻿# CMakeList.txt : CMake project for Unreal, include source and define
 # project specific logic here.
 #
-cmake_minimum_required (VERSION 3.22)
+cmake_minimum_required (VERSION 3.25)
 
-project("${PROJECT}.Core" CXX)
+project("Core" CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 set(include_dir "${CMAKE_CURRENT_SOURCE_DIR}/include")
 set(source_dir "${CMAKE_CURRENT_SOURCE_DIR}/src")
-set(CORE_HEADERS ${include_dir} GLOBAL_SCOPE)
 
-file(GLOB_RECURSE vhead "${include_dir}/*.h")
-file(GLOB_RECURSE vsrc "${source_dir}/*.cpp")
+add_library (${PROJECT_NAME} STATIC)
 
-#include(CMakeFindDependencyMacro)
-#find_dependency(spdlog)
-#include(${CMAKE_BINARY_DIR}/WinD3D/Shared/SharedTargets.cmake)
-#
-add_library (${PROJECT_NAME} STATIC ${vhead} ${vsrc})
-#
-#if(MSVC)
-#  target_compile_options(${PROJECT_NAME} PUBLIC "/ZI")
-#  target_link_options(${PROJECT_NAME} PUBLIC "/INCREMENTAL")
-#endif()
-#
-#include_directories(BEFORE SYSTEM ${CMAKE_BINARY_DIR}/include)
-#target_compile_options(${PROJECT_NAME} PUBLIC /bigobj)
-#target_compile_definitions(${PROJECT_NAME} PUBLIC DEBUG_MODE=$<IF:$<CONFIG:Debug>,1,0>)
-##target_precompile_headers(${PROJECT_NAME} PRIVATE ${include_dir}/pch.h)
-#target_include_directories(${PROJECT_NAME} PUBLIC ${include_dir})
-#target_include_directories(${PROJECT_NAME} PUBLIC ${WIL_HEADERS} ${SHARED_HEADERS})
-#
-#target_link_libraries(${PROJECT_NAME} PUBLIC d3d12 DXGI dxguid WinD3D::Shared) 
-#target_link_libraries(${PROJECT_NAME} PUBLIC "${PROJECT_REF}.Shared") 
+target_include_directories(${PROJECT_NAME} 
+    PUBLIC
+        $<BUILD_INTERFACE:${include_dir}>
+        $<INSTALL_INTERFACE:include>
+)
+target_precompile_headers(${PROJECT_NAME} PRIVATE ${include_dir}/pch.h)
 
+target_link_libraries(${PROJECT_NAME} 
+	PUBLIC 
+		Shared 
+		d3d12 
+) 
 
+target_sources(${PROJECT_NAME}
+	PRIVATE 
+		${source_dir}/Graphics.cpp
+        ${include_dir}/pch.h
+	PUBLIC FILE_SET HEADERS 
+        BASE_DIRS ${include_dir}
+        FILES 
+		    ${include_dir}/Core/Graphics.h
+)
+
+install(TARGETS "${PROJECT_NAME}" EXPORT CoreTargets
+    FILE_SET CXX_MODULES DESTINATION modules
+    FILE_SET HEADERS DESTINATION include
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    INCLUDES DESTINATION include
+)
+
+install(EXPORT CoreTargets
+     FILE "CoreTargets.cmake"
+     NAMESPACE WinD3D::
+     DESTINATION "lib/cmake/${PROJECT_NAME}"
+)
+
+export(EXPORT CoreTargets
+       FILE "CoreTargets.cmake"
+       NAMESPACE WinD3D::
+)

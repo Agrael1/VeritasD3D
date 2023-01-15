@@ -1,12 +1,9 @@
 #pragma once
-#ifndef MODULE
-#include <Shared/Defines.h>
 #include <exception>
 #include <string>
 #include <source_location>
-#endif
 
-SHARED_EXPORT namespace ver
+namespace ver
 {
 	class exception :std::exception
 	{

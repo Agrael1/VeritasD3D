@@ -105,7 +105,7 @@ endif()
 #set(HBAO_LIB "${hbao_SOURCE_DIR}/lib/GFSDK_SSAO_D3D11.win64.lib" PARENT_SCOPE)
 #set(HBAO_DYLIB "${hbao_SOURCE_DIR}/lib/GFSDK_SSAO_D3D11.win64.dll" PARENT_SCOPE)
 set(CPPWINRT ${CPPWINRT_DIR}/bin/cppwinrt.exe)
-set(CPPWINRT_HEADERS ${CMAKE_BINARY_DIR}/winrt)
+set(CPPWINRT_HEADERS ${CMAKE_CURRENT_BINARY_DIR}/winrt)
 
 execute_process(COMMAND
 	${CPPWINRT} -input sdk -output ${CPPWINRT_HEADERS}

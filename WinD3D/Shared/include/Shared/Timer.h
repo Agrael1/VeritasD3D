@@ -1,11 +1,8 @@
 #pragma once
-#ifndef MODULE
-#include <Shared/Defines.h>
 #include <chrono>
 #include <format>
-#endif
 
-SHARED_EXPORT namespace ver
+namespace ver
 {
 	class timer
 	{

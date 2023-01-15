@@ -9,28 +9,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 get_winrt(CPPWINRT_HEADERS)
 
 #set properties
-add_library(${PROJECT_NAME} STATIC)
+add_library(${PROJECT_NAME} INTERFACE)
 
 set_target_properties(
 	${PROJECT_NAME} PROPERTIES
 	PLUGINS_DIR ${CMAKE_CURRENT_BINARY_DIR}
+	WINRT_HEADERS ${CPPWINRT_HEADERS}
 )
-target_compile_options(${PROJECT_NAME} PRIVATE "/bigobj")
+target_include_directories(${PROJECT_NAME} SYSTEM BEFORE 
+    INTERFACE         
+        $<BUILD_INTERFACE:${CPPWINRT_HEADERS}>
+        $<INSTALL_INTERFACE:include>
+)
 
-target_sources(${PROJECT_NAME}
-	PUBLIC FILE_SET CXX_MODULES
-	BASE_DIRS ${CPPWINRT_HEADERS}
-	FILES "${CPPWINRT_HEADERS}/winrt/winrt.ixx"
-)
-
-install(TARGETS "${PROJECT_NAME}" EXPORT PluginsTargets
-    FILE_SET CXX_MODULES DESTINATION modules
-    FILE_SET HEADERS DESTINATION include
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    INCLUDES DESTINATION include
-)
+install(TARGETS "${PROJECT_NAME}" EXPORT PluginsTargets DESTINATION include)
 
 install(EXPORT PluginsTargets
      FILE "PluginsTargets.cmake"

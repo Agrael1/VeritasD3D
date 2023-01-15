@@ -1,10 +1,8 @@
 #pragma once
-#ifndef MODULE
 #include <spdlog/spdlog.h>
 #include <Shared/Severity.h>
-#endif
 
-SHARED_EXPORT namespace ver
+namespace ver
 {
 	class Log
 	{

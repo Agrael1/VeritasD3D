@@ -1,11 +1,8 @@
 #pragma once
-#ifndef MODULE
-#include <winrt/base.h>
-#include <Shared/Defines.h>
 #include <source_location>
-#endif
+#include <winrt/base.h>
 
-SHARED_EXPORT namespace ver
+namespace ver
 {
 	void check_static(bool throw_error = true, std::source_location sl = std::source_location::current());
 	inline void check_hresult(winrt::hresult hr, std::source_location sl = std::source_location::current())
