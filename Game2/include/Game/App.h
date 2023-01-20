@@ -1,8 +1,8 @@
 #pragma once
-//#include "../../Game/include/Game/Window.h"
+#include <Game/Window.h>
 #include <Core/Graphics.h>
 
-namespace T
+namespace UT
 {
 	class App
 	{
@@ -12,12 +12,12 @@ namespace T
 		//~App();
 		ver::IAsyncAction InitializeAsync(uint32_t width, uint32_t height);
 	public:
-		int Go() { return 0; }
+		int Go();
 	private:
 		//void DoFrame(float dt);
 		//void ProcessInput(float dt);
 	private:
-		//Window wnd;
+		ver::Window wnd;
 		Core::Graphics gfx;
 	};
 }

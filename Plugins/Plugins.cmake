@@ -37,13 +37,17 @@ conan_cmake_install(PATH_OR_REFERENCE .
 #  wil
 #  GIT_REPOSITORY https://github.com/microsoft/wil.git
 #  GIT_TAG origin/master
-#  CONFIGURE_COMMAND ""
-#  BUILD_COMMAND ""
 #)
 #FetchContent_GetProperties(wil)
+#
 #if(NOT wil_POPULATED)
+#  set(WIL_BUILD_PACKAGING OFF)
+#  set(WIL_BUILD_TESTS OFF)
 #  FetchContent_Populate(wil)
 #endif()
+#FetchContent_MakeAvailable(wil)
+
+
 #
 ##hbao
 #FetchContent_Declare(
@@ -100,7 +104,7 @@ endif()
 #set(DXMISSING_LIB ${DXMISS_DIR}/Lib/native/x64/DxErr.lib PARENT_SCOPE)
 #set(DXTEX_HEADERS ${DXTEX_DIR}/include PARENT_SCOPE)
 #set(DXTEX_LIB ${DXTEX_DIR}/native/lib/x64/$<IF:$<CONFIG:Debug>,Debug,Release>/DirectXTex.lib PARENT_SCOPE)
-#set(WIL_HEADERS "${wil_SOURCE_DIR}/include" PARENT_SCOPE)
+set(WIL_HEADERS "${wil_SOURCE_DIR}/include" PARENT_SCOPE)
 #set(HBAO_HEADERS "${hbao_SOURCE_DIR}/include" PARENT_SCOPE)
 #set(HBAO_LIB "${hbao_SOURCE_DIR}/lib/GFSDK_SSAO_D3D11.win64.lib" PARENT_SCOPE)
 #set(HBAO_DYLIB "${hbao_SOURCE_DIR}/lib/GFSDK_SSAO_D3D11.win64.dll" PARENT_SCOPE)

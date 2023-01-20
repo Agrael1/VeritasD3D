@@ -18,20 +18,16 @@ set(include_dir "${CMAKE_CURRENT_SOURCE_DIR}/include")
 set(source_dir "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(module_dir "${CMAKE_CURRENT_SOURCE_DIR}/modules")
 
-get_target_property(WINRT_HEADERS Plugins WINRT_HEADERS)
-target_include_directories(${PROJECT_NAME} SYSTEM BEFORE PUBLIC $<BUILD_INTERFACE:${WINRT_HEADERS}> $<INSTALL_INTERFACE:include>)
+#get_target_property(WINRT_HEADERS Plugins WINRT_HEADERS)
+#target_include_directories(${PROJECT_NAME} SYSTEM BEFORE PUBLIC $<BUILD_INTERFACE:${WINRT_HEADERS}> $<INSTALL_INTERFACE:include>)
 target_include_directories(${PROJECT_NAME}
-    PRIVATE 
-        ${include_dir}
-    INTERFACE 
-        ${spdlog_INCLUDES}
     PUBLIC 
         $<BUILD_INTERFACE:${include_dir}>
         $<INSTALL_INTERFACE:include>
 )
 target_compile_definitions(${PROJECT_NAME} PUBLIC DEBUG_MODE=$<IF:$<CONFIG:Debug>,1,0>)
 target_link_libraries(${PROJECT_NAME} PUBLIC spdlog::spdlog Plugins dxguid DXGI)
-target_precompile_headers(${PROJECT_NAME} PRIVATE ${include_dir}/pch.h)
+#target_precompile_headers(${PROJECT_NAME} PRIVATE ${include_dir}/pch.h)
 
 target_sources(
     ${PROJECT_NAME}
