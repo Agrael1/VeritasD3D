@@ -8,6 +8,7 @@ ver::IAsyncAction UT::App::InitializeAsync(uint32_t width, uint32_t height)
 
 	auto gf = gfx.InitializeAsync(width, height, false);
 	wnd.Initialize(width, height, "VTest");
+	//wnd.ChangeToFullScreen();
 
 	co_await gf;
 }

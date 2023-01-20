@@ -47,4 +47,4 @@ target_sources(${PROJECT_NAME}
 		${source_dir}/Game/App.cpp
 		${source_dir}/Game/Window.cpp
 		${source_dir}/EntryMain.cpp
-)
+ "include/Game/Keyboard.h" "include/Game/Mouse.h")
