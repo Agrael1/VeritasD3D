@@ -38,6 +38,34 @@ namespace ver
 			gfx.Draw(3u);
 		}
 	};
+
+
+
+	class CopyPass : public RG::BindingPass, public ver::GraphicsResource
+	{
+	public:
+		CopyPass(Graphics& gfx, std::string name) noxnd
+			: BindingPass(std::move(name))
+		{
+			AddBindSink<IRenderTarget>("preFilterTarget");
+			RegisterSink(RG::DirectBufferSink<IRenderTarget>::Make("renderTarget", renderTarget));
+			RegisterSource(RG::DirectBufferSource<IRenderTarget>::Make("renderTarget", renderTarget));
+
+			AddBind(Sampler::Resolve(gfx));
+			AddBind(ver::VertexShader::Resolve(gfx, "fullscreen.vs.cso"));
+			AddBind(ver::PixelShader::Resolve(gfx, "loading.ps.cso"));
+		}
+		void Execute(Graphics& gfx) const noxnd override
+		{
+			renderTarget->BindAsBuffer(gfx);
+			Topology::Bind(gfx);
+			for (auto& bind : binds)
+			{
+				bind->Bind(gfx);
+			}
+			gfx.Draw(3u);
+		}
+	};
 }
 
 namespace ver::rg
@@ -130,9 +158,27 @@ namespace ver::rg
 			else
 			{
 				rightBuffer = gfx.GetRightTarget();
-				AddGlobalSink(DirectBufferSink<RenderTarget>::Make("rightbuffer", rightBuffer));
-				SetSinkTarget("backbuffer", "forward.renderTarget");
-				SetSinkTarget("rightbuffer", "forward.renderTarget2");
+				AddGlobalSource(DirectBufferSource<RenderTarget>::Make("rightbuffer", rightBuffer));
+
+				{
+					auto pass = std::make_unique<BufferClearPass>("clearRT2");
+					pass->SetSinkLinkage("buffer", "$.rightbuffer");
+					AppendPass(std::move(pass));
+				}
+				{
+					auto pass = std::make_unique<ver::CopyPass>(gfx, "filter");
+					pass->SetSinkLinkage("preFilterTarget", "forward.renderTarget");
+					pass->SetSinkLinkage("renderTarget", "clearRT.buffer");
+					AppendPass(std::move(pass));
+				}
+				{
+					auto pass = std::make_unique<ver::CopyPass>(gfx, "filter2");
+					pass->SetSinkLinkage("preFilterTarget", "forward.renderTarget2");
+					pass->SetSinkLinkage("renderTarget", "clearRT2.buffer");
+					AppendPass(std::move(pass));
+				}
+
+				SetSinkTarget("backbuffer", "filter.renderTarget");
 			}
 
 			Finalize();

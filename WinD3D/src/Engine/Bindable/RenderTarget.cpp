@@ -161,18 +161,16 @@ void OutputOnlyRenderTarget::Reset(Graphics& gfx, ID3D11Texture2D* pTexture)
 	width = textureDesc.Width;
 	height = textureDesc.Height;
 
-	// create the target view on the texture
-	D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
-	rtvDesc.Format = textureDesc.Format;
-	rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-	rtvDesc.Texture2D = D3D11_TEX2D_RTV{ 0 };
+
+	CD3D11_RENDER_TARGET_VIEW_DESC rtvDesc(D3D11_RTV_DIMENSION_TEXTURE2DARRAY,
+		textureDesc.Format, 0, array_slice);
 	GFX_THROW_INFO(GetDevice(gfx)->CreateRenderTargetView(
 		pTexture, &rtvDesc, &pTargetView
 	));
 }
 
 OutputOnlyRenderTarget::OutputOnlyRenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture, uint32_t array_slice)
-	:RenderTarget(gfx, pTexture, array_slice)
+	:RenderTarget(gfx, pTexture, array_slice), array_slice(array_slice)
 {}
 
 

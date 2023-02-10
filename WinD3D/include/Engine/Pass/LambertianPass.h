@@ -38,8 +38,16 @@ namespace ver::rg
 			RegisterSink(RG::DirectBufferSink<ver::DepthStencil>::Make("depthStencil", depthStencil));
 			RegisterSink(RG::DirectBufferSink<ver::DepthStencil>::Make("depthStencil2", depthStencil2));
 
-			RegisterSource(RG::DirectBindableSource<IRenderTarget>::Make("renderTarget", renderTarget));
-			RegisterSource(RG::DirectBindableSource<IRenderTarget>::Make("renderTarget2", renderTarget2));
+			if (gfx.StereoEnabled())
+			{
+				RegisterSource(RG::DirectBufferSource<IRenderTarget>::Make("renderTarget", renderTarget));
+				RegisterSource(RG::DirectBufferSource<IRenderTarget>::Make("renderTarget2", renderTarget2));
+			}
+			else
+			{
+				RegisterSource(RG::DirectBindableSource<IRenderTarget>::Make("renderTarget", renderTarget));
+				RegisterSource(RG::DirectBindableSource<IRenderTarget>::Make("renderTarget2", renderTarget2));
+			}
 			RegisterSource(RG::DirectBufferSource<ver::DepthStencil>::Make("depthStencil", depthStencil));
 			RegisterSource(RG::DirectBufferSource<ver::DepthStencil>::Make("depthStencil2", depthStencil2));
 			AddBind(ver::Stencil::Resolve(gfx, ver::Stencil::Mode::Off));

@@ -1,5 +1,6 @@
 #include <Engine/Util/exception.h>
 #include <format>
+#include <iostream>
 
 using namespace ver;
 
@@ -20,5 +21,6 @@ const char* exception::what() const noexcept
 
 void ver::exception::WriteToOutput()const noexcept
 {
+	std::cout << what();
 	OutputDebugString(what());
 }

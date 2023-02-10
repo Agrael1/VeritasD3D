@@ -60,6 +60,8 @@ public:
 	void Reset(Graphics& gfx, ID3D11Texture2D* pTexture);
 private:
 	OutputOnlyRenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture, uint32_t array_slice);
+private:
+	uint32_t array_slice = 0;
 };
 
 class RenderTargetArray : public IRenderTarget

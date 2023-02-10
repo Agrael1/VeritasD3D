@@ -136,7 +136,7 @@ winrt::IAsyncAction Graphics::CreateSwapChain(HWND wnd)
 	winrt::com_ptr<ID3D11Texture2D> pBackBuffer;
 	ver::check_graphics(pSwap->GetBuffer(0, __uuidof(ID3D11Texture2D), pBackBuffer.put_void()));
 	pLeftTarget = OutputOnlyRenderTarget::create(*this, pBackBuffer.get());
-	pRightTarget = stereoEnabled ? OutputOnlyRenderTarget::create(*this, pBackBuffer.get()) : nullptr;
+	pRightTarget = stereoEnabled ? OutputOnlyRenderTarget::create(*this, pBackBuffer.get(), 1) : nullptr;
 
 	// viewport always fullscreen (for now)
 	D3D11_VIEWPORT vp{};
