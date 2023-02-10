@@ -1,58 +1,38 @@
 #include <Core/Graphics.h>
 #include <Shared/Checks.h>
-#include <Shared/Log.h>
+#include <Shared/Exception.h>
+#include <Shared/Profile.h>
 
-Core::Graphics::Graphics(uint32_t width, uint32_t height, bool software)
-{
-	Initialize(width, height, software);
-}
 
-void Core::Graphics::Initialize(uint32_t xwidth, uint32_t xheight, bool software)
-{
-	width = xwidth; height = xheight;
-	EnableDebugLayer();
-
-	if (!factory)
-		ver::check_hresult(CreateDXGIFactory1(__uuidof(IDXGIFactory4), factory.put_void()));
-
-	software ?
-		GetSoftwareAdapter() :
-		GetHardwareAdapter();
-
-	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
-	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
-
-	ver::check_hresult(device->CreateCommandQueue(&queueDesc, __uuidof(*command), command.put_void()));
-
-	// Describe and create a render target view (RTV) descriptor heap.
-	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-	rtvHeapDesc.NumDescriptors = num_frames;
-	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	ver::check_hresult(device->CreateDescriptorHeap(&rtvHeapDesc, __uuidof(*rtv_heap), rtv_heap.put_void()));
-	heap_size = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-
-	ver::check_hresult(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, __uuidof(*command_allocator), command_allocator.put_void()));
-}
 ver::IAsyncAction Core::Graphics::InitializeAsync(uint32_t xwidth, uint32_t xheight, bool software)
 {
+	ver::scoped_profiler p{ "Graphics" };
 	co_await winrt::resume_background();
+
+	VerifySIMDSupport(); //Throws
 	width = xwidth; height = xheight;
 	EnableDebugLayer();
 
 	if (!factory)
-		ver::check_hresult(CreateDXGIFactory1(__uuidof(IDXGIFactory4), factory.put_void()));
+		ver::check_hresult(
+			CreateDXGIFactory2(
+				ver::debug_mode & DXGI_CREATE_FACTORY_DEBUG,
+				__uuidof(IDXGIFactory4), factory.put_void()
+			)
+		);
 
 	software ?
 		GetSoftwareAdapter() :
 		GetHardwareAdapter();
 
 	auto c_alloc = [&]()->ver::IAsyncAction {
+		ver::scoped_profiler p{ "Command Allocator" };
 		co_await winrt::resume_background();
-		ver::check_hresult(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, __uuidof(*command_allocator), command_allocator.put_void()));
+		for (auto& command_allocator : command_allocators)
+			ver::check_hresult(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, __uuidof(*command_allocator), command_allocator.put_void()));
 	}();
 	auto cq = [&]()->ver::IAsyncAction {
+		ver::scoped_profiler p{ "Command Queue" };
 		co_await winrt::resume_background();
 		D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 		queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
@@ -60,7 +40,8 @@ ver::IAsyncAction Core::Graphics::InitializeAsync(uint32_t xwidth, uint32_t xhei
 
 		ver::check_hresult(device->CreateCommandQueue(&queueDesc, __uuidof(*command), command.put_void()));
 	}();
-	auto heap = [&]()->ver::IAsyncAction {
+	auto rtvheap = [&]()->ver::IAsyncAction {
+		ver::scoped_profiler p{ "RTV Heap" };
 		co_await winrt::resume_background();
 		// Describe and create a render target view (RTV) descriptor heap.
 		D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
@@ -68,10 +49,22 @@ ver::IAsyncAction Core::Graphics::InitializeAsync(uint32_t xwidth, uint32_t xhei
 		rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 		rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 		ver::check_hresult(device->CreateDescriptorHeap(&rtvHeapDesc, __uuidof(*rtv_heap), rtv_heap.put_void()));
-		heap_size = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+		rtv_heap_size = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+		rtv_heap->SetName(rtv_heap_name);
+	}();
+	auto dsvheap = [&]()->ver::IAsyncAction {
+		ver::scoped_profiler p{ "DSV Heap" };
+		co_await winrt::resume_background();
+		// Describe and create a render target view (RTV) descriptor heap.
+		D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
+		rtvHeapDesc.NumDescriptors = 1;
+		rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+		rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+		ver::check_hresult(device->CreateDescriptorHeap(&rtvHeapDesc, __uuidof(*dsv_heap), dsv_heap.put_void()));
+		dsv_heap->SetName(dsv_heap_name);
 	}();
 
-	co_await winrt::when_all(cq, heap, c_alloc);
+	co_await winrt::when_all(cq, rtvheap, dsvheap, c_alloc);
 }
 
 ver::IAsyncAction Core::Graphics::CreateSwapChain(void* wnd)
@@ -98,7 +91,14 @@ ver::IAsyncAction Core::Graphics::CreateSwapChain(void* wnd)
 	ver::check_hresult(swapChain.as(__uuidof(IDXGISwapChain3), swap.put_void()));
 }
 
-
+void Core::Graphics::VerifySIMDSupport()
+{
+	if (!DirectX::XMVerifyCPUSupport())
+	{
+		ver::std_critical("SIMD Intrinsics are not supported");
+		throw ver::exception{};
+	}
+}
 void Core::Graphics::EnableDebugLayer()
 {
 	if constexpr (ver::debug_mode)

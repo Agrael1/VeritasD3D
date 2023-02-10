@@ -22,8 +22,8 @@ namespace ver
 		DXGIInfoManager(const DXGIInfoManager&) = delete;
 		DXGIInfoManager& operator=(const DXGIInfoManager&) = delete;
 	public:
-		static uint64_t GetNumMessages();
-		static std::vector<DXGIMessage> GetMessages();
+		[[nodiscard]] static uint64_t GetNumMessages();
+		[[nodiscard]] static std::vector<DXGIMessage> GetMessages();
 	private:
 		static winrt::com_ptr<IDXGIInfoQueue> info_queue;
 	};

@@ -46,7 +46,7 @@ target_sources(
             "include/Shared/Definitions.h"            
             "include/Shared/Timer.h"            
             include/Shared/Log.h
-)
+ "include/Shared/Profile.h" )
 
 get_target_property(dirs ${PROJECT_NAME} INCLUDE_DIRECTORIES)
 foreach(dir ${dirs})

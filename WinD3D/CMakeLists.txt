@@ -16,6 +16,7 @@ set(PROJECT_REF "WinD3D")
 
 #add_subdirectory ("shaders")
 add_subdirectory ("Engine12")
+#add_subdirectory ("Engine11")
 add_subdirectory ("Shared")
 
 #set(include_dir "${CMAKE_CURRENT_SOURCE_DIR}/include")

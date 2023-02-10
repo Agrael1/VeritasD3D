@@ -2,12 +2,13 @@
 #include <memory>
 #include <dxgidebug.h>
 #include <dxgi1_3.h>
+#include <d3d12sdklayers.h>
 
 using namespace ver;
 
 winrt::com_ptr<IDXGIInfoQueue> DXGIInfoManager::info_queue{};
 
-Severity Convert(DXGI_INFO_QUEUE_MESSAGE_SEVERITY sev)
+constexpr Severity Convert(DXGI_INFO_QUEUE_MESSAGE_SEVERITY sev)noexcept
 {
 	using enum Severity;
 	switch (sev)
@@ -33,6 +34,13 @@ DXGIInfoManager::DXGIInfoManager()
 
 	info_queue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_ERROR, true);
 	info_queue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_CORRUPTION, true);
+
+	auto d3dinfoqueue = info_queue.try_as<ID3D12InfoQueue>();
+	if (d3dinfoqueue)
+	{
+		d3dinfoqueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
+		d3dinfoqueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
+	}
 }
 DXGIInfoManager::~DXGIInfoManager()
 {
