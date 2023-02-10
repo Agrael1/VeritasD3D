@@ -28,8 +28,8 @@ namespace RG
 			binds.emplace_back();
 			RegisterSink(std::make_unique<ContainerBindableSink<T>>(std::move(name), binds, index));
 		}
-		std::shared_ptr<IRenderTarget> renderTarget;
-		std::shared_ptr<ver::DepthStencil> depthStencil;
+		mutable std::shared_ptr<IRenderTarget> renderTarget;
+		mutable std::shared_ptr<ver::DepthStencil> depthStencil;
 	private:
 		void BindBufferResources(Graphics& gfx) const noxnd;
 	protected:

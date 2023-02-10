@@ -11,7 +11,7 @@ using namespace UT;
 namespace dx = DirectX;
 
 App::App(uint32_t width, uint32_t height)
-	: wnd(width, height, "Unreal Tournament"), gfx(wnd.GetHandle(), width, height)
+	: wnd(width, height, "Unreal Tournament"), gfx(width, height)
 	, scene(physics, &interaction)
 {
 	gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 1000.0f));
@@ -26,12 +26,13 @@ App::~App()
 
 winrt::IAsyncAction App::InitializeAsync()
 {
+	co_await winrt::when_all(audio.InitializeAsync(), gfx.CreateSwapChain(wnd.GetHandle()));
 	co_await UT::Loading::Execute(gfx);
-
+	
 	co_await winrt::when_all(
-		level.InitializeAsync(physics, gfx, u"../models/face/faceWIP.obj"),
-		audio.InitializeAsync());
-	co_await song.InitializeAsync(audio, u"../music/foregone.ogg");
+		level.InitializeAsync(physics, gfx, u"../models/face/faceWIP.obj"), 
+		song.InitializeAsync(audio, u"../music/foregone.ogg"));
+
 	CreateRenderGraph();
 	level.AddToScene(scene);
 	player.emplace(scene, level.GetLightBuffer(), gfx);
@@ -70,7 +71,9 @@ void App::DoFrame(float dt)
 	if (!wnd.IsActive())return;
 
 	gfx.BeginFrame(0.2f, 0.2f, 0.2f);
-	gfx.SetCamera(player->GetViewMatrix());
+	gfx.SetLeftCamera(player->GetLeftViewMatrix());
+	gfx.SetRightCamera(player->GetRightViewMatrix());
+	gfx.SetCamera(true);
 
 	level.Submit(gfx);
 	rg->Execute(gfx);
@@ -87,6 +90,7 @@ void App::DoFrame(float dt)
 
 	ProcessInput(dt);
 	level.SpawnControlWindow();
+	player->SpawnControlWindow();
 
 	// Present
 	gfx.EndFrame();

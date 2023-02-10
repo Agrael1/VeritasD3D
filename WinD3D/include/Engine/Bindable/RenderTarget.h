@@ -27,7 +27,7 @@ public:
 private:
 	void BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDepthStencilView) noxnd override;
 protected:
-	RenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture);
+	RenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture, uint32_t array_slice);
 	RenderTarget(Graphics& gfx, UINT width, UINT height);
 protected:
 	UINT width;
@@ -50,16 +50,16 @@ class OutputOnlyRenderTarget : public RenderTarget
 {
 	friend Graphics;
 protected:
-	static std::shared_ptr<OutputOnlyRenderTarget> create(Graphics& gfx, ID3D11Texture2D* pTexture)
+	static std::shared_ptr<OutputOnlyRenderTarget> create(Graphics& gfx, ID3D11Texture2D* pTexture, uint32_t array_slice = 0)
 	{
-		return std::shared_ptr<OutputOnlyRenderTarget>{ new OutputOnlyRenderTarget(gfx, pTexture) };
+		return std::shared_ptr<OutputOnlyRenderTarget>{ new OutputOnlyRenderTarget(gfx, pTexture, array_slice) };
 	}
 public:
 	void Bind(Graphics& gfx) noxnd override;
 	void ReleaseBuffer();
 	void Reset(Graphics& gfx, ID3D11Texture2D* pTexture);
 private:
-	OutputOnlyRenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture);
+	OutputOnlyRenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture, uint32_t array_slice);
 };
 
 class RenderTargetArray : public IRenderTarget

@@ -5,6 +5,7 @@
 #include <Engine/Util/ImGUIManager.h>
 #include <Engine/Loading/Model.h>
 #include <Engine/Graph/DeferredRenderGraph.h>
+#include <Engine/Graph/StereoGraph.h>
 #include <Engine/Probes/TestModelProbe.h>
 #include <Engine/Scene/Text.h>
 #include <Game/Player.h>
@@ -54,7 +55,7 @@ namespace UT
 
 		DirectX::XMFLOAT3 transform{};
 
-		std::optional<RG::DeferredRenderGraph> rg;
+		std::optional<ver::rg::StereoGraph> rg;
 		bool block = false;
 		bool paused = false;
 	};

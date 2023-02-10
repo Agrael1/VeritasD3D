@@ -42,6 +42,7 @@ protected:
 private:
 	std::unique_ptr<ver::VertexConstantBuffer<Transforms>> pVcbuf;
 	float f = 0.0f;
+	uint32_t c = 0;
 };
 
 namespace ver

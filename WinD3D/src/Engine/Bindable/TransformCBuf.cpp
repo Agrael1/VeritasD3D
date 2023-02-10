@@ -67,8 +67,12 @@ void SkyboxTransformCbuf::UpdateBindImpl(Graphics& gfx, const Transforms& tf) no
 
 SkyboxTransformCbuf::Transforms SkyboxTransformCbuf::GetTransforms(Graphics& gfx) noxnd
 {
-	if (f >= DirectX::XM_2PI)f -= DirectX::XM_2PI;
-	f += gfx.GetFrameStep() / 4.0f;
+	if (c++ == 2)
+	{
+		c = 1;
+		if (f >= DirectX::XM_2PI)f -= DirectX::XM_2PI;
+		f += gfx.GetFrameStep() / 4.0f;
+	}
 	return {
 		DirectX::XMMatrixTranspose(gfx.GetCamera() * gfx.GetProjection()),
 		DirectX::XMMatrixTranspose(DirectX::XMMatrixRotationRollPitchYaw(f,0,0))

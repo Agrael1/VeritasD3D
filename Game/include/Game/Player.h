@@ -78,9 +78,13 @@ namespace UT
 		{
 			camera.Rotate(dx, dy);
 		}
-		auto GetViewMatrix()const
+		auto GetLeftViewMatrix()const
 		{
-			return camera.GetViewMatrix();
+			return camera.GetLeftViewMatrix();
+		}
+		auto GetRightViewMatrix()const
+		{
+			return camera.GetRightViewMatrix();
 		}
 		auto GetPosition()const noexcept
 		{
@@ -98,9 +102,13 @@ namespace UT
 		{
 			flight_mode ^= true;
 		}
+		void SpawnControlWindow()
+		{
+			camera.SpawnControlWindow();
+		}
 		bool IsMidair()const noexcept { return midair; }
 	private:
-		Camera camera;
+		StereoCamera camera;
 		ver::ph::CharacterController physics;
 		ver::LightSphere shimmer;
 		float height = 0.0f;
