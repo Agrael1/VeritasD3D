@@ -22,7 +22,7 @@ ver::Window::WindowClass::WindowClass() noexcept
 	wcWindow.lpszClassName = GetName();
 	RegisterClassExA(&wcWindow);
 }
-void ver::Window::Initialize(uint32_t width, uint32_t height, std::string_view name)
+void ver::Window::Initialize(int32_t width, int32_t height, std::string_view name)
 {
 	RECT rWindow;
 	rWindow.left = 100;

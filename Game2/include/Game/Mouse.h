@@ -231,7 +231,7 @@ namespace ver
 		}
 	private:
 		static constexpr unsigned int bufferSize = 16u;
-		static constexpr unsigned int wheelDelta = 120u;
+		static constexpr int wheelDelta = 120u;
 		int x;
 		int y;
 		bool leftIsPressed = false;

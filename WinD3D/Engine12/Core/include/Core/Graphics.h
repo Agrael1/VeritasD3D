@@ -29,12 +29,20 @@ namespace Core
 
 		winrt::com_ptr<ID3D12Device> device;
 		winrt::com_ptr<ID3D12CommandQueue> command;
+		winrt::com_ptr<ID3D12GraphicsCommandList> command_list;
 		winrt::com_ptr<IDXGISwapChain3> swap;
+		winrt::com_ptr<ID3D12Fence> fence;
 		winrt::com_ptr<ID3D12DescriptorHeap> rtv_heap;
 		winrt::com_ptr<ID3D12DescriptorHeap> dsv_heap;
+
+
 		std::array<winrt::com_ptr<ID3D12CommandAllocator>, num_frames> command_allocators;
+		std::array<uint64_t, num_frames> fence_values;
 		uint32_t width = 0, height = 0;
 		uint32_t rtv_heap_size = 0;
 		uint32_t dsv_heap_size = 0;
+		uint32_t backbuffer_index = 0;
+
+		wil::unique_event_failfast fence_event;
 	};
 }

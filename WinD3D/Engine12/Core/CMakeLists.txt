@@ -8,6 +8,23 @@ project("Core" CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
+
+set(DIRECTX_ARM FALSE)
+if(DEFINED VCPKG_TARGET_ARCHITECTURE)
+    set(DIRECTX_ARCH ${VCPKG_TARGET_ARCHITECTURE})
+elseif(CMAKE_GENERATOR_PLATFORM MATCHES "^[Ww][Ii][Nn]32$")
+    set(DIRECTX_ARCH x86)
+elseif(CMAKE_GENERATOR_PLATFORM MATCHES "^[Xx]64$")
+    set(DIRECTX_ARCH x64)
+elseif(CMAKE_GENERATOR_PLATFORM MATCHES "^[Aa][Rr][Mm]$")
+    set(DIRECTX_ARCH arm)
+    set(DIRECTX_ARM TRUE)
+elseif(CMAKE_GENERATOR_PLATFORM MATCHES "^[Aa][Rr][Mm]64$")
+    set(DIRECTX_ARCH arm64)
+    set(DIRECTX_ARM TRUE)
+endif()
+
+
 set(include_dir "${CMAKE_CURRENT_SOURCE_DIR}/include")
 set(source_dir "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
@@ -19,6 +36,11 @@ target_include_directories(${PROJECT_NAME}
         $<INSTALL_INTERFACE:include>
 )
 target_precompile_headers(${PROJECT_NAME} PRIVATE ${include_dir}/pch.h)
+
+#Floating point architecture
+if(NOT ${DIRECTX_ARM})
+    target_compile_options(${PROJECT_NAME} PUBLIC /arch:AVX2)
+endif()
 
 target_link_libraries(${PROJECT_NAME} 
 	PUBLIC 

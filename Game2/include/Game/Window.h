@@ -37,7 +37,7 @@ namespace ver
 		Window(const Window&) = delete;
 		Window& operator=(const Window&) = delete;
 	public:
-		void Initialize(uint32_t width, uint32_t height, std::string_view name);
+		void Initialize(int32_t width, int32_t height, std::string_view name);
 		uint32_t GetWidth() const noexcept
 		{
 			return width;
@@ -136,8 +136,8 @@ namespace ver
 		bool cursor_enabled = true;
 		bool resized = false;
 		bool active = true;
-		uint32_t width = 640;
-		uint32_t height = 480;
+		int32_t width = 640;
+		int32_t height = 480;
 		wil::unique_hwnd hWnd;
 		std::vector<BYTE> rawBuffer;
 	};

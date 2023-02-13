@@ -6,9 +6,8 @@
 
 ver::IAsyncAction Core::Graphics::InitializeAsync(uint32_t xwidth, uint32_t xheight, bool software)
 {
-	ver::scoped_profiler p{ "Graphics" };
 	co_await winrt::resume_background();
-
+	
 	VerifySIMDSupport(); //Throws
 	width = xwidth; height = xheight;
 	EnableDebugLayer();
@@ -25,12 +24,6 @@ ver::IAsyncAction Core::Graphics::InitializeAsync(uint32_t xwidth, uint32_t xhei
 		GetSoftwareAdapter() :
 		GetHardwareAdapter();
 
-	auto c_alloc = [&]()->ver::IAsyncAction {
-		ver::scoped_profiler p{ "Command Allocator" };
-		co_await winrt::resume_background();
-		for (auto& command_allocator : command_allocators)
-			ver::check_hresult(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, __uuidof(*command_allocator), command_allocator.put_void()));
-	}();
 	auto cq = [&]()->ver::IAsyncAction {
 		ver::scoped_profiler p{ "Command Queue" };
 		co_await winrt::resume_background();
@@ -40,9 +33,17 @@ ver::IAsyncAction Core::Graphics::InitializeAsync(uint32_t xwidth, uint32_t xhei
 
 		ver::check_hresult(device->CreateCommandQueue(&queueDesc, __uuidof(*command), command.put_void()));
 	}();
-	auto rtvheap = [&]()->ver::IAsyncAction {
-		ver::scoped_profiler p{ "RTV Heap" };
+	auto resources = [&]()->ver::IAsyncAction {
+		ver::scoped_profiler p{ "Device Resources" };
 		co_await winrt::resume_background();
+		// Describe and create a depth stencil view (DSV) descriptor heap.
+		D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc = {};
+		dsvHeapDesc.NumDescriptors = 1;
+		dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+		dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+		ver::check_hresult(device->CreateDescriptorHeap(&dsvHeapDesc, __uuidof(*dsv_heap), dsv_heap.put_void()));
+		dsv_heap->SetName(dsv_heap_name);
+
 		// Describe and create a render target view (RTV) descriptor heap.
 		D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
 		rtvHeapDesc.NumDescriptors = num_frames;
@@ -51,20 +52,33 @@ ver::IAsyncAction Core::Graphics::InitializeAsync(uint32_t xwidth, uint32_t xhei
 		ver::check_hresult(device->CreateDescriptorHeap(&rtvHeapDesc, __uuidof(*rtv_heap), rtv_heap.put_void()));
 		rtv_heap_size = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 		rtv_heap->SetName(rtv_heap_name);
-	}();
-	auto dsvheap = [&]()->ver::IAsyncAction {
-		ver::scoped_profiler p{ "DSV Heap" };
-		co_await winrt::resume_background();
-		// Describe and create a render target view (RTV) descriptor heap.
-		D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-		rtvHeapDesc.NumDescriptors = 1;
-		rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
-		rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-		ver::check_hresult(device->CreateDescriptorHeap(&rtvHeapDesc, __uuidof(*dsv_heap), dsv_heap.put_void()));
-		dsv_heap->SetName(dsv_heap_name);
+
+		// Create a command allocator for each back buffer that will be rendered to
+		for (size_t i = 0; auto& command_allocator : command_allocators)
+		{
+			ver::check_hresult(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, __uuidof(*command_allocator), command_allocator.put_void()));
+			command_allocator->SetName(std::format(L"Command Allocator {}", i++).c_str());
+		}
+
+		// Create Command List
+		ver::check_hresult(
+			device->CreateCommandList(0, 
+				D3D12_COMMAND_LIST_TYPE_DIRECT, 
+				command_allocators[0].get(), 
+				nullptr, __uuidof(*command_list), 
+				command_list.put_void()
+			)
+		);
+		command_list->SetName(L"Command List");
+		ver::check_hresult(command_list->Close());
+
+		// Create Fence
+		ver::check_hresult(device->CreateFence(fence_values[backbuffer_index], D3D12_FENCE_FLAG_NONE, __uuidof(fence), fence.put_void()));
+		fence_values[backbuffer_index]++;
+		fence->SetName(L"Main Fence");
 	}();
 
-	co_await winrt::when_all(cq, rtvheap, dsvheap, c_alloc);
+	co_await winrt::when_all(resources, cq);
 }
 
 ver::IAsyncAction Core::Graphics::CreateSwapChain(void* wnd)
