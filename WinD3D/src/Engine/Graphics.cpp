@@ -213,7 +213,7 @@ void Graphics::OnResize(unsigned newwidth, unsigned newheight)
 	winrt::com_ptr<ID3D11Texture2D> pBackBuffer;
 	ver::check_graphics(pSwap->GetBuffer(0, __uuidof(ID3D11Texture2D), pBackBuffer.put_void()));
 	pLeftTarget->Reset(*this, pBackBuffer.get());
-	if (pRightTarget)pRightTarget->Reset(*this, pBackBuffer.get());//TBD
+	if (pRightTarget)pRightTarget->Reset(*this, pBackBuffer.get());
 
 	// viewport always fullscreen (for now)
 	D3D11_VIEWPORT vp{};

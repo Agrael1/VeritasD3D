@@ -180,7 +180,6 @@ namespace ver::rg
 
 				SetSinkTarget("backbuffer", "filter.renderTarget");
 			}
-
 			Finalize();
 		}
 	private:
