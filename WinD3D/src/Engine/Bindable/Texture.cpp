@@ -51,6 +51,7 @@ void Texture::Initialize(Graphics& gfx)
 	));
 }
 
+
 void Texture::Bind(Graphics& gfx)noxnd
 {
 	INFOMAN_NOHR(gfx);
@@ -64,6 +65,11 @@ void Texture::Bind(Graphics& gfx)noxnd
 		GFX_THROW_INFO_ONLY(GetContext(gfx)->DSSetShaderResources(slot, 1u, array_view(pTextureView)));
 	}
 
+}
+void Texture::BindTo(Graphics& gfx, uint32_t xslot) noxnd
+{
+	INFOMAN_NOHR(gfx);
+	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(xslot, 1u, array_view(pTextureView)));	
 }
 std::shared_ptr<Texture> Texture::Resolve(Graphics& gfx, std::filesystem::path path, uint32_t slot, bool test)
 {

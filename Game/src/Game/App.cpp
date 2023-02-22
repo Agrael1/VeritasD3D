@@ -33,6 +33,17 @@ winrt::IAsyncAction App::InitializeAsync()
 		level.InitializeAsync(physics, gfx, u"../models/face/faceWIP.obj"), 
 		song.InitializeAsync(audio, u"../music/foregone.ogg"));
 
+	pic.emplace(gfx);
+	pic->InitializeAsync(gfx);
+	co_await winrt::when_all(
+		pic->LoadFileAsync(gfx, u"../models/a1.dds")
+	);
+
+	while (true)
+	{
+		pic->Execute(gfx, 0);
+	}
+
 	CreateRenderGraph();
 	level.AddToScene(scene);
 	player.emplace(scene, level.GetLightBuffer(), gfx);

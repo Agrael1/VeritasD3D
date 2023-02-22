@@ -14,8 +14,10 @@ namespace ver
 		void Initialize(Graphics& gfx);
 	public:
 		void Bind(Graphics& gfx) noxnd override;
+		void BindTo(Graphics& gfx, uint32_t slot) noxnd;
 		static std::shared_ptr<Texture> Resolve(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0, bool test = false);
 		static concurrency::task<std::shared_ptr<Texture>> ResolveAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0, bool test = false);
+		
 
 		static std::string GenerateUID(const std::filesystem::path& path, uint32_t slot = 0, bool test = false);
 		std::string GetUID() const noexcept override;
@@ -32,4 +34,5 @@ namespace ver
 		std::filesystem::path path;
 		winrt::com_ptr<ID3D11ShaderResourceView> pTextureView;
 	};
+
 }

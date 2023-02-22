@@ -141,7 +141,11 @@ void ShaderInputRenderTarget::Bind(Graphics& gfx) noxnd
 	INFOMAN_NOHR(gfx);
 	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(slot, 1, pShaderResourceView.GetAddressOf()));
 }
-
+void ShaderInputRenderTarget::BindTo(Graphics& gfx, uint32_t xslot) noxnd
+{
+	INFOMAN_NOHR(gfx);
+	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(xslot, 1, pShaderResourceView.GetAddressOf()));
+}
 
 void OutputOnlyRenderTarget::Bind(Graphics& gfx) noxnd
 {

@@ -15,13 +15,15 @@ namespace UT
 			auto px = ver::PixelShader::ResolveAsync(gfx, "loading.ps.cso");
 			auto vx = ver::VertexShader::ResolveAsync(gfx, "fullscreen.vs.cso");
 			auto ss = ver::Sampler::Resolve(gfx);
-			gfx.GetTarget()->BindAsBuffer(gfx);
+			gfx.GetLeftTarget()->BindAsBuffer(gfx);
 			ver::Topology::Bind(gfx);
 			(ss)->Bind(gfx);
 			(co_await px)->Bind(gfx);
 			(co_await vx)->Bind(gfx);
 			(co_await tx)->Bind(gfx);
 
+			gfx.Draw(3u);
+			gfx.GetRightTarget()->BindAsBuffer(gfx);
 			gfx.Draw(3u);
 			gfx.EndFrame();
 		}

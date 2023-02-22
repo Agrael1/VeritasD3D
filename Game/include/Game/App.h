@@ -15,6 +15,7 @@
 #include <Audio/buffer_stream.h>
 #include <Foundation.h>
 #include <Game/Interaction.h>
+#include <Game/Pictures.h>
 
 namespace UT
 {
@@ -47,7 +48,7 @@ namespace UT
 
 		ver::ph::Physics physics;
 		ver::ph::Scene scene;
-
+		std::optional<ver::Picture> pic;
 
 		std::optional<UT::Player> player;
 		UT::Level level;

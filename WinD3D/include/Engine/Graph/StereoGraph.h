@@ -8,6 +8,7 @@
 #include <Engine/Pass/AmbientPass.h>
 #include <memory>
 #include <Engine/Pass/FilteringPass.h>
+#include <Engine/Bindable/RenderTarget.h>
 
 namespace ver
 {
@@ -61,7 +62,11 @@ namespace ver
 			Topology::Bind(gfx);
 			for (auto& bind : binds)
 			{
-				bind->Bind(gfx);
+				//atrocities commited
+				if (auto a = std::dynamic_pointer_cast<ShaderInputRenderTarget>(bind))
+					a->BindTo(gfx, 0);
+				else
+					bind->Bind(gfx);
 			}
 			gfx.Draw(3u);
 		}
@@ -145,7 +150,7 @@ namespace ver::rg
 				AppendPass(std::move(pass));
 			}
 
-			if(!gfx.StereoEnabled())
+			if (!gfx.StereoEnabled())
 			{
 				auto pass = std::make_unique<ver::AnaglyphPass>(gfx, "filter");
 				pass->SetSinkLinkage("preFilterTarget", "forward.renderTarget");

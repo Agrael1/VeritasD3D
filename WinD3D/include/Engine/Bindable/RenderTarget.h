@@ -40,6 +40,7 @@ class ShaderInputRenderTarget : public RenderTarget
 public:
 	ShaderInputRenderTarget(Graphics& gfx, UINT width, UINT height, UINT slot);
 	void Bind(Graphics& gfx) noxnd override;
+	void BindTo(Graphics& gfx, uint32_t slot) noxnd;
 private:
 	UINT slot;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pShaderResourceView;
@@ -66,6 +67,7 @@ private:
 
 class RenderTargetArray : public IRenderTarget
 {
+
 public:
 	RenderTargetArray() = default;
 	winrt::IAsyncAction InitializeAsync(Graphics& gfx, uint32_t xwidth, uint32_t xheight, uint32_t slot);

@@ -84,7 +84,7 @@ void Graphics::GetHardwareAdapter()
 			nullptr,
 			pContext.put()
 		));
-
+		break;
 	}
 	if (!pDevice) {
 		std::cout << "Getting hardware adapter failed, fallback to WARP";
@@ -184,9 +184,9 @@ void Graphics::EndFrame()
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	}
 
-	winrt::hresult hr = pSwap->Present(1u, 0u);
-	if (hr == DXGI_ERROR_DEVICE_REMOVED)
-		throw ver::make_error<ver::device_error>({ pDevice->GetDeviceRemovedReason(), infoManager.GetMessages() });
+	winrt::hresult hr = pSwap->Present(0u, 0u);
+	//if (hr == DXGI_ERROR_DEVICE_REMOVED)
+		//throw ver::make_error<ver::device_error>({ pDevice->GetDeviceRemovedReason(), infoManager.GetMessages() });
 	ver::check_graphics(hr);
 	frame_step = timer.stop();
 }
