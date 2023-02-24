@@ -46,7 +46,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 include_directories(BEFORE SYSTEM ${CMAKE_BINARY_DIR}/include)
 target_link_libraries(${PROJECT_NAME} PUBLIC WinD3D)
 target_link_libraries(${PROJECT_NAME} PUBLIC PhysX)
-target_link_libraries(${PROJECT_NAME} PUBLIC Vorbis::Vorbis)
+target_link_libraries(${PROJECT_NAME} PUBLIC Vorbis::Vorbis Mfplat)
 target_include_directories(${PROJECT_NAME} PUBLIC ${vorbis_INCLUDES})
 target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_BINARY_DIR}/imgui")
 target_include_directories(${PROJECT_NAME} PRIVATE ${include_dir})

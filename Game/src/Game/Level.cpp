@@ -21,6 +21,8 @@ winrt::IAsyncAction UT::TwoWayPortal::InitializeAsync(ver::LightBuffer& lb, ver:
 
 winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& gfx, std::filesystem::path map)
 {
+	static constexpr auto scale = 1.0f;
+
 	co_await winrt::resume_background();
 	ver::scoped_timer t;
 
@@ -35,7 +37,7 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 	if (pScene == nullptr || !pScene->HasMeshes())
 		throw ver::make_error<ver::ModelException>({ imp.GetErrorString() });
 
-	auto wrld = world.InitializeAsync(gfx, *pScene, std::move(map), 40.0f);
+	auto wrld = world.InitializeAsync(gfx, *pScene, std::move(map), scale);
 	auto sk = sky.InitializeAsync(gfx, L"../models/face.dds");
 	auto phys = [&]() ->winrt::IAsyncAction {
 		co_await winrt::resume_background();
@@ -47,7 +49,7 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 			auto mesh = pScene->mMeshes[i];
 			auto y = Material::ExtractIndices(*mesh);
 			auto x = phy.MakeTriangleMesh({ (DirectX::XMFLOAT3*)mesh->mVertices, mesh->mNumVertices }, y);
-			actors.emplace_back(phy.MakeActor(std::move(x), *mat, 40.0f));
+			actors.emplace_back(phy.MakeActor(std::move(x), *mat, scale));
 		}
 	}();
 	auto rd_flg = red.InitializeAsync(phy, gfx, "../models/flag/redflag.obj", { -147.0f, -41.0f, 15.3f });
@@ -173,7 +175,7 @@ void UT::Level::Submit(Graphics& gfx)
 
 void UT::Level::SpawnControlWindow()
 {
-	portals[0].SpawnControlWindow();
+	//portals[0].SpawnControlWindow();
 	//probe.SpawnWindow(*red.GetModel());
 	//probe.SpawnWindow(*blue.GetModel());
 }

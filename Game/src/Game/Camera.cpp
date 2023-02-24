@@ -111,9 +111,9 @@ void Camera::Translate(DirectX::XMFLOAT3 translation) noexcept
 
 /////////////////////////////////////////////////////////////////////////////////
 
-constexpr float ShearCoefficient(float focus_dist, float eye_dist)
+constexpr float ShearCoefficient(float focus_dist, float eye_dist, int conv)
 {
-	return eye_dist / focus_dist;
+	return ((int)conv) * eye_dist / focus_dist;
 }
 
 StereoCamera::StereoCamera() noexcept
@@ -150,7 +150,7 @@ DirectX::XMMATRIX StereoCamera::GetLeftViewMatrix() const noexcept
 	M.r[2] = XMVectorSelect(D2, Forward, g_XMSelect1110.v);
 	M.r[3] = g_XMIdentityR3.v;
 
-	M = XMMatrixTranspose(M) * ShearZ(ShearCoefficient(focus_distance, -eye_dist), 0);
+	M = XMMatrixTranspose(M) * ShearZ(ShearCoefficient(focus_distance, -eye_dist, conv), 0);
 
 	return M;
 
@@ -185,7 +185,7 @@ DirectX::XMMATRIX StereoCamera::GetRightViewMatrix() const noexcept
 	M.r[2] = XMVectorSelect(D2, Forward, g_XMSelect1110.v);
 	M.r[3] = g_XMIdentityR3.v;
 
-	M = XMMatrixTranspose(M) * ShearZ(ShearCoefficient(focus_distance, eye_dist), 0);
+	M = XMMatrixTranspose(M) * ShearZ(ShearCoefficient(focus_distance, eye_dist, conv), 0);
 
 	return M;
 
@@ -200,6 +200,7 @@ void StereoCamera::SpawnControlWindow() noexcept
 		ImGui::Text("Stereo Parameters");
 		ImGui::SliderFloat("Eye distance", &eye_dist, -1.f, 1.f, "%.3f");
 		ImGui::SliderFloat("Focus distance", &focus_distance, -100.f, 100.f, "%.3f");
+		ImGui::SliderInt("Enable", &conv, 0, 1);
 		ImGui::Text("Position");
 		ImGui::SliderFloat("X", &pos.x, -80.0f, 80.0f, "%.1f");
 		ImGui::SliderFloat("Y", &pos.y, -80.0f, 80.0f, "%.1f");

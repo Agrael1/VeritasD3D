@@ -181,12 +181,18 @@ void Graphics::EndFrame()
 	if (imguiEnabled)
 	{
 		ImGui::Render();
+		pLeftTarget->BindAsBuffer(*this);
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+		if (stereoEnabled)
+		{
+			pRightTarget->BindAsBuffer(*this);
+			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+		}
 	}
 
 	winrt::hresult hr = pSwap->Present(0u, 0u);
-	//if (hr == DXGI_ERROR_DEVICE_REMOVED)
-		//throw ver::make_error<ver::device_error>({ pDevice->GetDeviceRemovedReason(), infoManager.GetMessages() });
+	if (hr == DXGI_ERROR_DEVICE_REMOVED)
+		throw ver::make_error<ver::device_error>({ pDevice->GetDeviceRemovedReason(), infoManager.GetMessages() });
 	ver::check_graphics(hr);
 	frame_step = timer.stop();
 }

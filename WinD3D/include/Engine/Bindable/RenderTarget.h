@@ -41,9 +41,11 @@ public:
 	ShaderInputRenderTarget(Graphics& gfx, UINT width, UINT height, UINT slot);
 	void Bind(Graphics& gfx) noxnd override;
 	void BindTo(Graphics& gfx, uint32_t slot) noxnd;
+
+	auto SRV() { return pShaderResourceView; }
 private:
 	UINT slot;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pShaderResourceView;
+	winrt::com_ptr<ID3D11ShaderResourceView> pShaderResourceView;
 };
 
 // RT for Graphics to create RenderTarget for the back buffer

@@ -39,10 +39,16 @@ winrt::IAsyncAction App::InitializeAsync()
 		pic->LoadFileAsync(gfx, u"../models/a1.dds")
 	);
 
-	while (true)
-	{
-		pic->Execute(gfx, 0);
-	}
+	mp.Initialize(gfx.RawDevice(), gfx.RawContext());
+	mp.SetStereo(gfx.StereoEnabled());
+	mp.SetSource(L"C:\\Users\\SDIG\\source\\repos\\VeritasD3D\\Game\\models/st2.wmv");
+
+	vid.emplace(gfx);
+
+	auto [w, h] = mp.GetNativeVideoSize();
+	co_await vid->InitializeAsync(gfx, h, w);
+
+	cur.emplace(gfx);
 
 	CreateRenderGraph();
 	level.AddToScene(scene);
@@ -53,19 +59,47 @@ winrt::IAsyncAction App::InitializeAsync()
 int App::Go()
 {
 	float dt = 1.0f / 60.0f;
-	song.play();
+	//song.play();
 	while (true)
 	{
 		ResetTransform();
 		if (const auto a = wnd.ProcessMessages())
 			return (int)a.value();
 
-		scene.get_scene().simulate(dt);
-		DoFrame(dt);
-		scene.get_scene().fetchResults(true);
-		player->Update(transform, dt);
-		player->Sync();
-		GameTick();
+		switch (state)
+		{
+		case UT::App::State::Picture:
+			mp.Stop();
+			pic->Execute(gfx, 0);
+			ProcessInput(dt);
+			break;
+		case UT::App::State::Game:
+			mp.Stop();
+			scene.get_scene().simulate(dt);
+			DoFrame(dt);
+			scene.get_scene().fetchResults(true);
+			player->Update(transform, dt);
+			player->Sync();
+			GameTick();
+			break;
+		case UT::App::State::Video:
+		{
+			//song.pause();
+
+			if(!mp.IsPlaying())
+				mp.Play();
+
+			mp.TransferDirect(vid->SRV());;
+			
+			vid->Execute(gfx);
+			ProcessInput(dt);
+			break;
+		}
+		default:
+			break;
+		}
+
+
 	}
 }
 void App::GameTick()
@@ -120,6 +154,18 @@ void App::ProcessInput(float)
 
 		switch (e->GetCode())
 		{
+		case 'P':
+			song.pause();
+			state = State::Picture;
+			break;
+		case 'G':
+			song.play();
+			state = State::Game;
+			break;
+		case 'V':
+			song.pause();
+			state = State::Video;
+			break;
 		case 'M':
 			if (paused^=true)
 				song.pause();
@@ -218,6 +264,7 @@ void App::ProcessInput(float)
 void App::CreateRenderGraph()
 {
 	rg.emplace(gfx);
+	cur->LinkTechniques(*rg);
 	level.Link(*rg);
 }
 

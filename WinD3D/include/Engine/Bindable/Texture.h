@@ -13,6 +13,10 @@ namespace ver
 		winrt::IAsyncAction InitializeAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0, bool test = false);
 		void Initialize(Graphics& gfx);
 	public:
+		std::pair<float, float> Dimensions()const noexcept
+		{
+			return { width, height };
+		}
 		void Bind(Graphics& gfx) noxnd override;
 		void BindTo(Graphics& gfx, uint32_t slot) noxnd;
 		static std::shared_ptr<Texture> Resolve(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0, bool test = false);
@@ -29,6 +33,9 @@ namespace ver
 	protected:
 		uint32_t slot = 0u;
 		uint32_t count = 1u;
+		float width = 0.0f;
+		float height = 0.0f;
+
 		bool hasAlpha = false;
 		bool test = false;
 		std::filesystem::path path;

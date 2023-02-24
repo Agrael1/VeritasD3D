@@ -16,11 +16,20 @@
 #include <Foundation.h>
 #include <Game/Interaction.h>
 #include <Game/Pictures.h>
+#include <Game/MediaEngine.h>
+#include <Game/Video.h>
+#include <Game/Cursor.h>
 
 namespace UT
 {
 	class App
 	{
+		enum class State
+		{
+			Picture,
+			Game,
+			Video
+		};
 	public:
 		App(uint32_t width, uint32_t height);
 		~App();
@@ -28,6 +37,9 @@ namespace UT
 	public:
 		int Go();
 	private:
+		void InitializeVideo();
+		void ShutVideo();
+
 		void DoFrame(float dt);
 		void ProcessInput(float dt);
 		void CreateRenderGraph();
@@ -42,9 +54,13 @@ namespace UT
 		ImGUIManager imgui;
 		Window wnd;
 		Graphics gfx;
+		std::optional <ver::Cursor> cur;
 
 		ver::audio::Audio audio;
 		ver::audio::ogg_stream song;
+
+		MediaEnginePlayer mp;
+		std::optional <ver::Video> vid;
 
 		ver::ph::Physics physics;
 		ver::ph::Scene scene;
@@ -59,6 +75,7 @@ namespace UT
 		std::optional<ver::rg::StereoGraph> rg;
 		bool block = false;
 		bool paused = false;
+		State state = State::Game;
 	};
 }
 

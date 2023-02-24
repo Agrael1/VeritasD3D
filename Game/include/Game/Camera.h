@@ -86,7 +86,8 @@ private:
 	DirectX::XMFLOAT2 rot;
 
 	float eye_dist = 0.65f;
-	float focus_distance = 10.0f;
+	float focus_distance = 100.0f;
+	int conv = 0;
 
 	static constexpr const float travelSpeed = 12.0f;
 	static constexpr const float rotationSpeed = 0.004f;

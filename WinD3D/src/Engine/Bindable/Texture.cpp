@@ -12,7 +12,6 @@ constexpr uint32_t DefaultNrmTexture = 0xff8080ff;
 constexpr uint32_t DefaultSpcTexture = 0xffffffff;
 
 
-
 Texture::Texture(Graphics& gfx, std::filesystem::path path, uint32_t slot, bool test)
 	:slot(slot), path(std::move(path)), test(test)
 {
@@ -37,6 +36,9 @@ void Texture::Initialize(Graphics& gfx)
 
 		DirectX::CreateShaderResourceView(GetDevice(gfx),
 			image.GetImages(), count = image.GetImageCount(), info, pTextureView.put());
+
+		width = info.width;
+		height = info.height;
 		return;
 	}
 

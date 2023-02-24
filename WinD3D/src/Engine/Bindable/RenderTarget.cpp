@@ -27,7 +27,7 @@ RenderTarget::RenderTarget(Graphics& gfx, UINT width, UINT height)
 	textureDesc.Usage = D3D11_USAGE_DEFAULT;
 	textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE; // never do we not want to bind offscreen RTs as inputs
 	textureDesc.CPUAccessFlags = 0;
-	textureDesc.MiscFlags = 0;
+	textureDesc.MiscFlags = D3D11_RESOURCE_MISC_SHARED;
 	wrl::ComPtr<ID3D11Texture2D> pTexture;
 	GFX_THROW_INFO(GetDevice(gfx)->CreateTexture2D(
 		&textureDesc, nullptr, &pTexture
@@ -132,19 +132,19 @@ ShaderInputRenderTarget::ShaderInputRenderTarget(Graphics& gfx, UINT width, UINT
 	srvDesc.Texture2D.MostDetailedMip = 0;
 	srvDesc.Texture2D.MipLevels = 1;
 	GFX_THROW_INFO(GetDevice(gfx)->CreateShaderResourceView(
-		pRes.Get(), &srvDesc, &pShaderResourceView
+		pRes.Get(), &srvDesc, pShaderResourceView.put()
 	));
 }
 
 void ShaderInputRenderTarget::Bind(Graphics& gfx) noxnd
 {
 	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(slot, 1, pShaderResourceView.GetAddressOf()));
+	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(slot, 1, array_view(pShaderResourceView)));
 }
 void ShaderInputRenderTarget::BindTo(Graphics& gfx, uint32_t xslot) noxnd
 {
 	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(xslot, 1, pShaderResourceView.GetAddressOf()));
+	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(xslot, 1, array_view(pShaderResourceView)));
 }
 
 void OutputOnlyRenderTarget::Bind(Graphics& gfx) noxnd

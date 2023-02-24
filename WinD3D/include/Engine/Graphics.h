@@ -82,6 +82,9 @@ public:
 	std::shared_ptr<OutputOnlyRenderTarget> GetTarget() { return pLeftTarget; } 
 	std::shared_ptr<OutputOnlyRenderTarget> GetLeftTarget() { return GetTarget(); }
 	std::shared_ptr<OutputOnlyRenderTarget> GetRightTarget() { return pRightTarget; }
+	auto RawDevice()const noexcept { return pDevice; }
+	auto RawContext()const noexcept { return pContext; }
+
 	void OnResize(unsigned newwidth, unsigned newheight);
 	void DrawIndexed(uint32_t count)noxnd;
 	void Draw(uint32_t vcount)noxnd;
