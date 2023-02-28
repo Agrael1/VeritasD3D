@@ -14,7 +14,7 @@ namespace ver
 	public:
 		LightSphere() = default;
 		LightSphere(LightBuffer& allocator, Graphics& gfx, float radius = 0.5f);
-		winrt::IAsyncAction InitializeAsync(LightBuffer& allocator, Graphics& gfx, float radius = 0.5f);
+		ver::IAsyncAction InitializeAsync(LightBuffer& allocator, Graphics& gfx, float radius = 0.5f);
 	public:
 		void SpawnControlWindow()noexcept;
 		void Reset()noexcept;

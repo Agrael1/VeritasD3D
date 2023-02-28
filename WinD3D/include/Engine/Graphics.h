@@ -1,7 +1,9 @@
 #pragma once
-#include <Engine/Util/DXGIInfoManager.h>
+#include <Shared/DXGIInfoManager.h>
+#include <Shared/Timer.h>
 #include <DirectXMath.h>
 #include <memory>
+#include <d3d11_4.h>
 
 namespace ver
 {
@@ -21,11 +23,20 @@ public:
 	Graphics& operator=(const Graphics&) = delete;
 	~Graphics();
 public:
-	winrt::IAsyncAction CreateSwapChain(HWND wnd);
+	ver::IAsyncAction CreateSwapChain(HWND wnd);
 
-	void EnableImgui()noexcept;
-	void DisableImgui()noexcept;
-	bool IsImguiEnabled()const noexcept;
+	void EnableImgui()noexcept
+	{
+		imguiEnabled = true;
+	}
+	void DisableImgui()noexcept
+	{
+		imguiEnabled = false;
+	}
+	bool IsImguiEnabled()const noexcept
+	{
+		return imguiEnabled;
+	}
 	bool StereoEnabled()const noexcept
 	{
 		return stereoEnabled;
@@ -81,7 +92,7 @@ public:
 
 	std::shared_ptr<OutputOnlyRenderTarget> GetTarget() { return pLeftTarget; } 
 	std::shared_ptr<OutputOnlyRenderTarget> GetLeftTarget() { return GetTarget(); }
-	std::shared_ptr<OutputOnlyRenderTarget> GetRightTarget() { return pRightTarget; }
+	std::shared_ptr<OutputOnlyRenderTarget> GetRightTarget() { return stereoEnabled?pRightTarget: pLeftTarget; }
 	auto RawDevice()const noexcept { return pDevice; }
 	auto RawContext()const noexcept { return pContext; }
 
@@ -93,14 +104,14 @@ private:
 	void GetHardwareAdapter();
 	void GetSoftwareAdapter();
 private:
+	ver::DXGIInfoManager infoManager;
+
 	DirectX::XMMATRIX projection;
 	DirectX::XMMATRIX camera;
 	DirectX::XMMATRIX lcamera;
 	DirectX::XMMATRIX rcamera;
 	DirectX::XMFLOAT3 shadowPos;
-#ifndef NDEBUG
-	ver::DXGIInfoManager infoManager;
-#endif
+
 	bool imguiEnabled = true;
 	bool stereoEnabled = false;
 private:

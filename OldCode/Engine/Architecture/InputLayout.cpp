@@ -5,11 +5,11 @@
 InputLayout::InputLayout(Graphics & gfx, DV::VertexLayout layout_in, ID3DBlob * pVertexShaderBytecode)
 	:layout(std::move(layout_in))
 {
-	INFOMAN(gfx);
+	
 
 	const auto d3dlayout = layout.GetD3DLayout();
 
-	GFX_THROW_INFO(GetDevice(gfx)->CreateInputLayout(
+	ver::check_hresult(GetDevice(gfx)->CreateInputLayout(
 		d3dlayout.data(), (UINT)d3dlayout.size(),
 		pVertexShaderBytecode->GetBufferPointer(),
 		pVertexShaderBytecode->GetBufferSize(),
@@ -19,8 +19,8 @@ InputLayout::InputLayout(Graphics & gfx, DV::VertexLayout layout_in, ID3DBlob * 
 
 void InputLayout::Bind(Graphics& gfx) noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->IASetInputLayout(pInputLayout.Get()));
+	
+	ver::check_hresult_ONLY(GetContext(gfx)->IASetInputLayout(pInputLayout.Get()));
 }
 std::string InputLayout::GetUID() const noexcept
 {

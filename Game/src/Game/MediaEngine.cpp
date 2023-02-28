@@ -1,7 +1,7 @@
 #include <Game/MediaEngine.h>
 #include <wil/com.h>
 #include <filesystem>
-#include <Engine/Util/GraphicsExceptions.h>
+#include <Shared/Checks.h>
 
 class MediaEngineNotify : public winrt::implements< MediaEngineNotify, IMFMediaEngineNotify >
 {
@@ -201,7 +201,7 @@ void MediaEnginePlayer::SetSource(std::wstring_view sourceUri)
 	texDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 	texDesc.MiscFlags = D3D11_RESOURCE_MISC_SHARED;
 
-	ver::check_graphics(m_device->CreateTexture2D(
+	ver::check_hresult(m_device->CreateTexture2D(
 		&texDesc,
 		nullptr,
 		m_texture.put()));
@@ -227,7 +227,7 @@ void MediaEnginePlayer::SetSource(std::wstring_view sourceUri)
 	//	Show.put());
 	//CD3D11_SHADER_RESOURCE_VIEW_DESC rtvDesc(D3D11_SRV_DIMENSION_TEXTURE2D,
 	//	texDesc.Format);
-	//ver::check_graphics(m_device->CreateShaderResourceView(Show.get(), &rtvDesc, srv.put()));
+	//ver::check_hresult(m_device->CreateShaderResourceView(Show.get(), &rtvDesc, srv.put()));
 }
 
 bool MediaEnginePlayer::TransferFrame(RECT rcTarget)

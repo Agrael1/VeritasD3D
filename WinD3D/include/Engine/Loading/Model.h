@@ -24,7 +24,7 @@ public:
 	Model() = default;
 	Model(Graphics& gfx, std::filesystem::path pathString, float scale = 1.0f);
 	~Model() noexcept;
-	winrt::IAsyncAction InitializeAsync(Graphics& gfx, const aiScene& scene, std::filesystem::path path, float scale = 1.0f);
+	ver::IAsyncAction InitializeAsync(Graphics& gfx, const aiScene& scene, std::filesystem::path path, float scale = 1.0f);
 	void Initialize(Graphics& gfx, const aiScene& scene, std::filesystem::path path, float scale = 1.0f);
 public:
 	void Submit() const noxnd;

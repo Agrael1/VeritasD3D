@@ -7,13 +7,12 @@
 #include <Engine/Graph/DeferredRenderGraph.h>
 #include <Engine/Graph/StereoGraph.h>
 #include <Engine/Probes/TestModelProbe.h>
-#include <Engine/Scene/Text.h>
 #include <Game/Player.h>
 #include <Game/Level.h>
 #include <Game/Flag.h>
 #include <Audio/Audio.h>
 #include <Audio/buffer_stream.h>
-#include <Foundation.h>
+#include <PhysX/Foundation.h>
 #include <Game/Interaction.h>
 #include <Game/Pictures.h>
 #include <Game/MediaEngine.h>
@@ -33,7 +32,7 @@ namespace UT
 	public:
 		App(uint32_t width, uint32_t height);
 		~App();
-		winrt::IAsyncAction InitializeAsync();
+		ver::IAsyncAction InitializeAsync();
 	public:
 		int Go();
 	private:

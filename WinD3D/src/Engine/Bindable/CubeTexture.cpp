@@ -1,9 +1,7 @@
 #include <Engine/Bindable/CubeTexture.h>
 #include <Engine/Loading/Image.h>
-#include <Engine/Deprecated/GraphicsThrows.h>
-#include <Engine/Util/DXGIInfoManager.h>
-#include <Engine/Util/GraphicsExceptions.h>
 #include <Engine/Bindable/DepthStencil.h>
+#include <Shared/Checks.h>
 
 constexpr uint32_t DefaultDifTexture = 0x0;
 
@@ -15,7 +13,7 @@ ver::CubeTexture::CubeTexture(Graphics& gfx, std::filesystem::path path, uint32_
 	Initialize(gfx);
 }
 
-winrt::IAsyncAction ver::CubeTexture::InitializeAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot)
+ver::IAsyncAction ver::CubeTexture::InitializeAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot)
 {
 	co_await winrt::resume_background();
 	this->path = std::move(path);
@@ -33,10 +31,10 @@ void ver::CubeTexture::Initialize(Graphics& gfx)
 		image.GetImages(), image.GetImageCount(), info, pCubeTextureView.put());
 }
 
-void ver::CubeTexture::Bind(Graphics& gfx) noexcept(!DEBUG_MODE)
+void ver::CubeTexture::Bind(Graphics& gfx) noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(slot, 1u, array_view(pCubeTextureView)));
+	(GetContext(gfx)->PSSetShaderResources(slot, 1u, array_view(pCubeTextureView)));
+	ver::check_context();
 }
 
 
@@ -44,8 +42,6 @@ DepthCubeTexture::DepthCubeTexture(Graphics& gfx, UINT size, UINT slot)
 	:
 	slot(slot)
 {
-	INFOMAN(gfx);
-
 	// texture descriptor
 	D3D11_TEXTURE2D_DESC textureDesc = {};
 	textureDesc.Width = size;
@@ -61,7 +57,7 @@ DepthCubeTexture::DepthCubeTexture(Graphics& gfx, UINT size, UINT slot)
 	textureDesc.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
 	// create the texture resource
 	winrt::com_ptr<ID3D11Texture2D> pTexture;
-	GFX_THROW_INFO(GetDevice(gfx)->CreateTexture2D(
+	ver::check_hresult(GetDevice(gfx)->CreateTexture2D(
 		&textureDesc, nullptr, pTexture.put()
 	));
 	
@@ -71,7 +67,7 @@ DepthCubeTexture::DepthCubeTexture(Graphics& gfx, UINT size, UINT slot)
 	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
 	srvDesc.Texture2D.MostDetailedMip = 0;
 	srvDesc.Texture2D.MipLevels = 1;
-	GFX_THROW_INFO(GetDevice(gfx)->CreateShaderResourceView(
+	ver::check_hresult(GetDevice(gfx)->CreateShaderResourceView(
 		pTexture.get(), &srvDesc, pTextureView.put()
 	));
 
@@ -89,6 +85,6 @@ std::shared_ptr<OutputOnlyDepthStencil> ver::DepthCubeTexture::GetDepthBuffer(si
 
 void DepthCubeTexture::Bind(Graphics& gfx) noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(slot, 1u, array_view(pTextureView)));
+	GetContext(gfx)->PSSetShaderResources(slot, 1u, array_view(pTextureView));
+	ver::check_context();
 }

@@ -1,7 +1,7 @@
 #include <Engine/Bindable/VertexShader.h>
 #include <Engine/Bindable/Codex.h>
-#include <Engine/Util/GraphicsExceptions.h>
 #include <d3dcompiler.h>
+#include <Shared/Checks.h>
 
 using namespace ver;
 
@@ -10,7 +10,7 @@ VertexShader::VertexShader(Graphics& gfx, std::filesystem::path xpath)
 {
 	Initialize(gfx);
 }
-winrt::IAsyncAction ver::VertexShader::InitializeAsync(Graphics& gfx, std::filesystem::path xpath)
+ver::IAsyncAction ver::VertexShader::InitializeAsync(Graphics& gfx, std::filesystem::path xpath)
 {
 	co_await winrt::resume_background();
 	path = std::move(xpath);
@@ -18,8 +18,8 @@ winrt::IAsyncAction ver::VertexShader::InitializeAsync(Graphics& gfx, std::files
 }
 void ver::VertexShader::Initialize(Graphics& gfx)
 {
-	ver::check_graphics(D3DReadFileToBlob((shader_folder + path.native()).c_str(), pBytecodeBlob.put()));
-	ver::check_graphics(GetDevice(gfx)->CreateVertexShader(
+	ver::check_hresult(D3DReadFileToBlob((shader_folder + path.native()).c_str(), pBytecodeBlob.put()));
+	ver::check_hresult(GetDevice(gfx)->CreateVertexShader(
 		pBytecodeBlob->GetBufferPointer(),
 		pBytecodeBlob->GetBufferSize(),
 		nullptr,

@@ -37,7 +37,7 @@ ver::SolidSphere::SolidSphere(Graphics& gfx, float radius)
 	}
 }
 
-winrt::IAsyncAction ver::SolidSphere::InitializeAsync(Graphics& gfx, float radius)
+ver::IAsyncAction ver::SolidSphere::InitializeAsync(Graphics& gfx, float radius)
 {
 	co_await winrt::resume_background();
 	colorBuffer = std::make_shared<ver::PixelConstantBuffer<PSColorConstant>>(gfx, colorConst, 1u);

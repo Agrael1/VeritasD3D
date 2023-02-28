@@ -10,7 +10,7 @@ namespace ver
 	public:
 		Video(Graphics& gfx) :cbuf1(gfx, 0, 0), cbuf2(gfx, 1, 0) {}
 	public:
-		winrt::IAsyncAction InitializeAsync(Graphics& gfx, uint32_t height, uint32_t width)
+		ver::IAsyncAction InitializeAsync(Graphics& gfx, uint32_t height, uint32_t width)
 		{
 			co_await winrt::resume_background();
 			//surface = xsurface;

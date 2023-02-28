@@ -1,6 +1,7 @@
 #pragma once
 #include <Engine/Bindable/Bindable.h>
 #include <Engine/Bindable/BufferResource.h>
+#include <d3d11.h>
 #include <span>
 
 namespace ver
@@ -72,7 +73,7 @@ class RenderTargetArray : public IRenderTarget
 
 public:
 	RenderTargetArray() = default;
-	winrt::IAsyncAction InitializeAsync(Graphics& gfx, uint32_t xwidth, uint32_t xheight, uint32_t slot);
+	ver::IAsyncAction InitializeAsync(Graphics& gfx, uint32_t xwidth, uint32_t xheight, uint32_t slot);
 	void BindAsBuffer(Graphics& gfx) noxnd override;
 	void BindAsBuffer(Graphics& gfx, BufferResource* depthStencil) noxnd override;
 	void BindAsBuffer(Graphics& gfx, ver::DepthStencil* depthStencil) noxnd;

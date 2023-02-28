@@ -1,6 +1,6 @@
 #pragma once
 #include <Game/Camera.h>
-#include <Character.h>
+#include <PhysX/Character.h>
 #include <PxSceneLock.h>
 #include <Util/Converter.h>
 #include <Game/Entity.h>

@@ -24,7 +24,7 @@ App::~App()
 {
 }
 
-winrt::IAsyncAction App::InitializeAsync()
+ver::IAsyncAction App::InitializeAsync()
 {
 	co_await winrt::when_all(audio.InitializeAsync(), gfx.CreateSwapChain(wnd.GetHandle()));
 	co_await UT::Loading::Execute(gfx);
@@ -46,7 +46,7 @@ winrt::IAsyncAction App::InitializeAsync()
 	vid.emplace(gfx);
 
 	auto [w, h] = mp.GetNativeVideoSize();
-	co_await vid->InitializeAsync(gfx, h, w);
+	//co_await vid->InitializeAsync(gfx, h, w);
 
 	cur.emplace(gfx);
 

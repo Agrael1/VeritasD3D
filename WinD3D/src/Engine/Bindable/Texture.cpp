@@ -1,9 +1,7 @@
 #include <Engine/Bindable/Texture.h>
-#include <Engine/Deprecated/GraphicsThrows.h>
 #include <Engine/Bindable/Codex.h>
-#include <Engine/Util/DXGIInfoManager.h>
-#include <Engine/Util/GraphicsExceptions.h>
 #include <Engine/Loading/Image.h>
+#include <Shared/Checks.h>
 
 using namespace ver;
 
@@ -18,7 +16,7 @@ Texture::Texture(Graphics& gfx, std::filesystem::path path, uint32_t slot, bool 
 	Initialize(gfx);
 }
 
-winrt::IAsyncAction Texture::InitializeAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot, bool test)
+ver::IAsyncAction Texture::InitializeAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot, bool test)
 {
 	co_await winrt::resume_background();
 	this->test = test;
@@ -56,22 +54,22 @@ void Texture::Initialize(Graphics& gfx)
 
 void Texture::Bind(Graphics& gfx)noxnd
 {
-	INFOMAN_NOHR(gfx);
+	
 
 	if (!test)
 	{
-		GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(slot, 1u, array_view(pTextureView)));
+		(GetContext(gfx)->PSSetShaderResources(slot, 1u, array_view(pTextureView)));
 	}
 	else
 	{
-		GFX_THROW_INFO_ONLY(GetContext(gfx)->DSSetShaderResources(slot, 1u, array_view(pTextureView)));
+		(GetContext(gfx)->DSSetShaderResources(slot, 1u, array_view(pTextureView)));
 	}
-
+	ver::check_context();
 }
 void Texture::BindTo(Graphics& gfx, uint32_t xslot) noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(xslot, 1u, array_view(pTextureView)));	
+	(GetContext(gfx)->PSSetShaderResources(xslot, 1u, array_view(pTextureView)));	
+	ver::check_context();
 }
 std::shared_ptr<Texture> Texture::Resolve(Graphics& gfx, std::filesystem::path path, uint32_t slot, bool test)
 {
@@ -95,7 +93,7 @@ std::string Texture::GetUID() const noexcept
 
 void Texture::ResolveToDefault(Graphics& gfx)
 {
-	INFOMAN(gfx);
+	
 	hasAlpha = false;
 
 	//create texture resource
@@ -130,7 +128,7 @@ void Texture::ResolveToDefault(Graphics& gfx)
 	sd.pSysMem = pmap;
 	sd.SysMemPitch = 4;
 
-	GFX_THROW_INFO(GetDevice(gfx)->CreateTexture2D(
+	ver::check_hresult(GetDevice(gfx)->CreateTexture2D(
 		&texDesc,
 		&sd,
 		pTexture.put()));
@@ -142,7 +140,7 @@ void Texture::ResolveToDefault(Graphics& gfx)
 	srvDesc.Texture2D.MostDetailedMip = 0;
 	srvDesc.Texture2D.MipLevels = 1;
 
-	GFX_THROW_INFO(GetDevice(gfx)->CreateShaderResourceView
+	ver::check_hresult(GetDevice(gfx)->CreateShaderResourceView
 	(
 		pTexture.get(), &srvDesc, pTextureView.put()
 	));

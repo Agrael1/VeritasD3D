@@ -1,7 +1,5 @@
 #include <Engine/Bindable/ShadowSampler.h>
-#include <Engine/Deprecated/GraphicsThrows.h>
-#include <Engine/Util/DXGIInfoManager.h>
-#include <Engine/Util/GraphicsExceptions.h>
+#include <Shared/Checks.h>
 
 using namespace ver;
 
@@ -48,8 +46,6 @@ size_t ShadowSampler::ShadowSamplerIndex(bool bilin, bool hwPcf)
 
 winrt::com_ptr<ID3D11SamplerState> ShadowSampler::MakeSampler(Graphics& gfx, bool bilin, bool hwPcf)
 {
-	INFOMAN(gfx);
-
 	D3D11_SAMPLER_DESC samplerDesc = CD3D11_SAMPLER_DESC{ CD3D11_DEFAULT{} };
 
 	samplerDesc.BorderColor[0] = 1.0f;
@@ -67,12 +63,12 @@ winrt::com_ptr<ID3D11SamplerState> ShadowSampler::MakeSampler(Graphics& gfx, boo
 	}
 
 	winrt::com_ptr<ID3D11SamplerState> pSampler;
-	GFX_THROW_INFO(GetDevice(gfx)->CreateSamplerState(&samplerDesc, pSampler.put()));
+	ver::check_hresult(GetDevice(gfx)->CreateSamplerState(&samplerDesc, pSampler.put()));
 	return std::move(pSampler);
 }
 
 void ShadowSampler::Bind(Graphics& gfx) noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetSamplers(GetCurrentSlot(), 1, array_view(samplers[curSampler])));
+	(GetContext(gfx)->PSSetSamplers(GetCurrentSlot(), 1, array_view(samplers[curSampler])));
+	ver::check_context();
 }

@@ -10,7 +10,7 @@ namespace ver
 	public:
 		Texture() = default;
 		Texture(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0, bool test = false);
-		winrt::IAsyncAction InitializeAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0, bool test = false);
+		ver::IAsyncAction InitializeAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0, bool test = false);
 		void Initialize(Graphics& gfx);
 	public:
 		std::pair<float, float> Dimensions()const noexcept

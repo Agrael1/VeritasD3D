@@ -5,7 +5,7 @@
 #include <Engine/Scene/BillboardComponent.h>
 #include <Game/Portal.h>
 #include <Game/Flag.h>
-#include <Scene.h>
+#include <PhysX/Scene.h>
 #include <Engine/Probes/TestModelProbe.h>
 #include <Engine/Scene/Skybox.h>
 
@@ -15,7 +15,7 @@ namespace UT
 	{
 	public:
 		TwoWayPortal() = default;
-		winrt::IAsyncAction InitializeAsync(ver::LightBuffer& lb, ver::ph::Physics& phy, Graphics& gfx, std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3> positions, DirectX::XMFLOAT3 color);
+		ver::IAsyncAction InitializeAsync(ver::LightBuffer& lb, ver::ph::Physics& phy, Graphics& gfx, std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3> positions, DirectX::XMFLOAT3 color);
 	public:
 		void AddToScene(ver::ph::Scene& sc)
 		{
@@ -46,7 +46,7 @@ namespace UT
 	{
 	public:
 		Level() = default;
-		winrt::IAsyncAction InitializeAsync(ver::ph::Physics& phy, Graphics& gfx, std::filesystem::path map);
+		ver::IAsyncAction InitializeAsync(ver::ph::Physics& phy, Graphics& gfx, std::filesystem::path map);
 	public:
 		void Submit(Graphics& gfx);
 		void AddToScene(ver::ph::Scene& sc)

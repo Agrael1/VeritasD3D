@@ -1,6 +1,6 @@
 #pragma once
 #include <foundation/PxVec3.h>
-#include <utils.h>
+#include <PhysX/utils.h>
 
 namespace physx
 {

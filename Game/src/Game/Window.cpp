@@ -2,6 +2,7 @@
 #include <sstream>
 #include <resource.h>
 #include <bindings/imgui_impl_win32.h>
+#include <Shared/Checks.h>
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -77,7 +78,7 @@ Window::Window(unsigned int width, unsigned int height, const char* name) :width
 	rWindow.top = 100;
 	rWindow.bottom = height + rWindow.top;
 	// Automatic calculation of window height and width to client region
-	WND_CALL_INFO(AdjustWindowRect(&rWindow, WS_OVERLAPPEDWINDOW, TRUE));
+	ver::check_windows(AdjustWindowRect(&rWindow, WS_OVERLAPPEDWINDOW, TRUE));
 
 	hWnd.reset(CreateWindowA(
 		WindowClass::GetName(), name,
@@ -90,20 +91,20 @@ Window::Window(unsigned int width, unsigned int height, const char* name) :width
 	));
 
 	// Error checks
-	if (!hWnd) throw WND_LAST_EXCEPT();
+	ver::check_windows(!!hWnd);
 	ShowWindow(hWnd.get(), SW_SHOWDEFAULT);
 
 	Accelerator.reset(LoadAccelerators(WindowClass::GetInstance(), MAKEINTRESOURCE(IDR_ACCELERATOR1)));
 
 	// Init GUI (only one window supported)
-	WND_CALL_INFO(ImGui_ImplWin32_Init(hWnd.get()));
+	ver::check_windows(ImGui_ImplWin32_Init(hWnd.get()));
 
 	RAWINPUTDEVICE rid;
 	rid.usUsagePage = 0x01; // mouse page
 	rid.usUsage = 0x02; // mouse usage
 	rid.dwFlags = 0;
 	rid.hwndTarget = nullptr;
-	WND_CALL_INFO(RegisterRawInputDevices(&rid, 1, sizeof(rid)));
+	ver::check_windows(RegisterRawInputDevices(&rid, 1, sizeof(rid)));
 }
 Window::~Window()
 {
@@ -135,10 +136,7 @@ void Window::ChangeToFullScreen()
 
 void Window::SetTitle(std::string_view title)
 {
-	if (!SetWindowText(hWnd.get(), title.data()))
-	{
-		throw WND_LAST_EXCEPT();
-	}
+	ver::check_windows(SetWindowText(hWnd.get(), title.data()));
 }
 
 bool Window::RestyleCalled() const noexcept

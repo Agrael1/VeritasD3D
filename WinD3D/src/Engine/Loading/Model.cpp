@@ -1,6 +1,5 @@
 #include <Engine/Loading/Model.h>
 #include <Engine/Loading/Node.h>
-#include <Engine/Util/ModelException.h>
 #include <Engine/Loading/Mesh.h>
 #include <Engine/Loading/Material.h>
 #include <assimp/Importer.hpp>
@@ -30,8 +29,8 @@ Model::Model(Graphics& gfx, std::filesystem::path pathString, const float scale)
 		aiProcess_CalcTangentSpace
 	);
 
-	if (pScene == nullptr || !pScene->HasMeshes())
-		throw ver::make_error<ver::ModelException>({ imp.GetErrorString() });
+	//if (pScene == nullptr || !pScene->HasMeshes())
+		//throw ver::make_error<ver::ModelException>({ imp.GetErrorString() });
 
 	Initialize(gfx, *pScene, path_str, scale);
 }

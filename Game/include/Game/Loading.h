@@ -8,7 +8,7 @@ namespace UT
 	class Loading
 	{
 	public:
-		static winrt::IAsyncAction Execute(Graphics& gfx)
+		static ver::IAsyncAction Execute(Graphics& gfx)
 		{
 			gfx.BeginFrame(0, 0, 0);
 			auto tx = ver::Texture::ResolveAsync(gfx , u"../models/utload.dds");

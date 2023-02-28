@@ -1,6 +1,6 @@
 #include <Engine/Bindable/Sampler.h>
 #include <Engine/Bindable/Codex.h>
-#include <Engine/Util/GraphicsExceptions.h>
+#include <Shared/Checks.h>
 #include <format>
 
 ver::Sampler::Sampler(Graphics& gfx, Type type, bool reflect, uint32_t slot)
@@ -23,7 +23,7 @@ ver::Sampler::Sampler(Graphics& gfx, Type type, bool reflect, uint32_t slot)
 	samplerDesc.AddressV = reflect ? D3D11_TEXTURE_ADDRESS_MIRROR : D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerDesc.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
 
-	ver::check_graphics(GetDevice(gfx)->CreateSamplerState(&samplerDesc, pSampler.put()));
+	ver::check_hresult(GetDevice(gfx)->CreateSamplerState(&samplerDesc, pSampler.put()));
 }
 
 void ver::Sampler::Bind(Graphics& gfx) noxnd{

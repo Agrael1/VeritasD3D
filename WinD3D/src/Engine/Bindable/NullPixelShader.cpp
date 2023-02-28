@@ -1,16 +1,16 @@
 #include <Engine/Bindable/NullPixelShader.h>
 #include <Engine/Bindable/Codex.h>
-#include <Engine/Deprecated/GraphicsThrows.h>
-#include <Engine/Util/DXGIInfoManager.h>
-#include <Engine/Util/GraphicsExceptions.h>
+#include <Shared/Checks.h>
+#include <d3d11.h>
+
 
 NullPixelShader::NullPixelShader(Graphics& gfx)
 {
 }
 void NullPixelShader::Bind(Graphics& gfx) noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShader(nullptr, nullptr, 0u));
+	GetContext(gfx)->PSSetShader(nullptr, nullptr, 0u);
+	ver::check_context();
 }
 std::shared_ptr<NullPixelShader> NullPixelShader::Resolve(Graphics& gfx)
 {

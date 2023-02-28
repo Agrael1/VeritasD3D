@@ -14,7 +14,7 @@ namespace ver
 		}
 		float stop()
 		{
-			return (clock::now() - start_time).count()/1'000'000'000.0f;
+			return (clock::now() - start_time).count() / 1'000'000'000.0f;
 		}
 	private:
 		std::chrono::time_point<clock> start_time;

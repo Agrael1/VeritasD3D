@@ -1,8 +1,6 @@
 #include <Engine/Bindable/TransformCBuf.h>
-#include <Engine/Util/DXGIInfoManager.h>
-#include <Engine/Util/GraphicsExceptions.h>
 #include <Engine/Graphics.h>
-#include <Engine/Deprecated/GraphicsThrows.h>
+#include <Shared/Checks.h>
 
 TransformCbuf::TransformCbuf(Graphics& gfx, UINT slot)
 {
@@ -14,8 +12,8 @@ TransformCbuf::TransformCbuf(Graphics& gfx, UINT slot)
 
 void TransformCbuf::Bind(Graphics& gfx) noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(UpdateBindImpl(gfx, GetTransforms(gfx)));
+	UpdateBindImpl(gfx, GetTransforms(gfx));
+	ver::check_context();
 }
 void TransformCbuf::InitializeParentReference(const Drawable& parent) noexcept
 {
@@ -55,8 +53,8 @@ SkyboxTransformCbuf::SkyboxTransformCbuf(Graphics& gfx, UINT slot)
 
 void SkyboxTransformCbuf::Bind(Graphics& gfx) noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(UpdateBindImpl(gfx, GetTransforms(gfx)));
+	UpdateBindImpl(gfx, GetTransforms(gfx));
+	ver::check_context();
 }
 
 void SkyboxTransformCbuf::UpdateBindImpl(Graphics& gfx, const Transforms& tf) noxnd
@@ -114,8 +112,8 @@ namespace ver
 
 	void BillboardCbuf::Bind(Graphics& gfx) noxnd
 	{
-		INFOMAN_NOHR(gfx);
-		GFX_THROW_INFO_ONLY(UpdateBindImpl(gfx, GetTransforms(gfx)));
+		(UpdateBindImpl(gfx, GetTransforms(gfx)));
+		ver::check_context();
 	}
 	void BillboardCbuf::InitializeParentReference(const Drawable& parent) noexcept
 	{

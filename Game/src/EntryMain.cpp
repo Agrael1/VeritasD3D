@@ -2,9 +2,21 @@
 #include <winrt/base.h>
 
 
+struct apartment_guard
+{
+	apartment_guard()
+	{
+		winrt::init_apartment();
+	}
+	~apartment_guard()
+	{
+		winrt::uninit_apartment();
+	}
+};
+
 int main()
 {
-	winrt::init_apartment();
+	apartment_guard guard;
 
 	try
 	{

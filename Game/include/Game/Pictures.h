@@ -11,7 +11,7 @@ namespace ver
 	public:
 		Picture(Graphics& gfx) :cbuf1(gfx, 0, 0), cbuf2(gfx, 1, 0) {}
 	public:
-		winrt::IAsyncAction InitializeAsync(Graphics& gfx)
+		ver::IAsyncAction InitializeAsync(Graphics& gfx)
 		{
 			co_await winrt::resume_background();
 			auto px = ver::PixelShader::ResolveAsync(gfx, "stereo.ps.cso");
@@ -21,7 +21,7 @@ namespace ver
 			vs = co_await vx;
 			ps = co_await px;
 		}
-		winrt::IAsyncAction LoadFileAsync(Graphics& gfx, std::filesystem::path p)
+		ver::IAsyncAction LoadFileAsync(Graphics& gfx, std::filesystem::path p)
 		{
 			textures.push_back(co_await ver::Texture::ResolveAsync(gfx, p));
 		}

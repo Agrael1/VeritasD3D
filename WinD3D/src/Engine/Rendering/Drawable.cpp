@@ -1,7 +1,6 @@
 #include <Engine/Bindable/BindableCommons.h>
 #include <Engine/Bindable/IndexBuffer.h>
 #include <Engine/Rendering/Drawable.h>
-#include <Engine/Deprecated/GraphicsThrows.h>
 #include <Engine/Loading/Material.h>
 
 void Drawable::Submit() const noexcept

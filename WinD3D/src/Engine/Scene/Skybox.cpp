@@ -3,7 +3,7 @@
 #include <Engine/Bindable/AsyncResource.h>
 #include <Engine/Bindable/BindableCommons.h>
 
-winrt::IAsyncAction ver::Skybox::InitializeAsync(Graphics& gfx, std::filesystem::path tex_path)
+ver::IAsyncAction ver::Skybox::InitializeAsync(Graphics& gfx, std::filesystem::path tex_path)
 {
 	co_await winrt::resume_background();
 	constexpr uint16_t a[]{ 3, 2, 6, 7, 4, 2, 0, 3, 1, 6, 5, 4, 1, 0 };

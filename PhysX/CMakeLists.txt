@@ -2,26 +2,54 @@ cmake_minimum_required (VERSION 3.22)
 
 project(PhysX CXX)
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
-
 list(APPEND CMAKE_MODULE_PATH ${PLUGINS_DIR})
 find_package(PhysX REQUIRED)
 
-set(include_dir "${CMAKE_CURRENT_SOURCE_DIR}/include")
-set(source_dir "${CMAKE_CURRENT_SOURCE_DIR}/src")
-file(GLOB_RECURSE vhead "${include_dir}/*.h")
-file(GLOB_RECURSE vsrc "${source_dir}/*.cpp")
-set(PHYSICS_HEADERS ${include_dir} PARENT_SCOPE)
 
-add_library(${PROJECT_NAME} STATIC ${vhead} ${vsrc})
+add_library(${PROJECT_NAME} STATIC)
+target_sources(${PROJECT_NAME}
+	PRIVATE 
+        "src/Character.cpp"
+        "src/Foundation.cpp"
+        "src/PhysX.cpp"
+        "src/Scene.cpp"
+	PUBLIC FILE_SET HEADERS 
+        BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include
+        FILES 
+            "include/PhysX/Character.h"
+            "include/PhysX/Foundation.h"
+            "include/PhysX/Scene.h"
+            "include/PhysX/utils.h"
+)
 
-if(MSVC)
-  target_compile_options(${PROJECT_NAME} PUBLIC "/ZI")
-  target_link_options(${PROJECT_NAME} PUBLIC "/INCREMENTAL")
-endif()
-
-target_include_directories(${PROJECT_NAME} PUBLIC ${physx_INCLUDES})
-target_include_directories(${PROJECT_NAME} PUBLIC ${include_dir})
-target_precompile_headers(${PROJECT_NAME} PUBLIC ${include_dir}/pch.h)
 target_link_libraries(${PROJECT_NAME} PUBLIC PhysX::PhysX) 
+target_include_directories(${PROJECT_NAME} PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+target_precompile_headers(${PROJECT_NAME} PUBLIC "include/pch.h")
+set_target_properties(${PROJECT_NAME} 
+    PROPERTIES
+        CXX_STANDARD 23
+)
+
+
+
+install(TARGETS "${PROJECT_NAME}" EXPORT PhysXTargets
+    FILE_SET HEADERS DESTINATION include
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    INCLUDES DESTINATION include
+)
+
+install(EXPORT PhysXTargets
+     FILE "PhysXTargets.cmake"
+     NAMESPACE WinD3D::
+     DESTINATION "lib/cmake/${PROJECT_NAME}"
+)
+
+export(EXPORT PhysXTargets
+       FILE "PhysXTargets.cmake"
+       NAMESPACE WinD3D::
+)

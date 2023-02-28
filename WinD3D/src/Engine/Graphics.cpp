@@ -2,8 +2,8 @@
 #include <sstream>
 #include <bindings/imgui_impl_dx11.h>
 #include <bindings/imgui_impl_win32.h>
-#include <Engine/Util/GraphicsExceptions.h>
-#include <Engine/Bindable/DepthStencil.h>
+#include <Shared/Checks.h>
+#include <Shared/Exception.h>
 #include <Engine/Bindable/RenderTarget.h>
 #include <dxgi1_6.h>
 #include <iostream>
@@ -72,13 +72,13 @@ void Graphics::GetHardwareAdapter()
 
 		// Don't select the Basic Render Driver adapter.
 		if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)continue;
-		ver::check_graphics(D3D11CreateDevice(
+		ver::check_hresult(D3D11CreateDevice(
 			adapter.get(),
 			D3D_DRIVER_TYPE_UNKNOWN,
 			0,
 			DEBUG_MODE ? D3D11_CREATE_DEVICE_DEBUG : 0,
 			featureLevels.data(),
-			featureLevels.size(),
+			uint32_t(featureLevels.size()),
 			D3D11_SDK_VERSION,
 			pDevice.put(),
 			nullptr,
@@ -94,21 +94,21 @@ void Graphics::GetHardwareAdapter()
 void Graphics::GetSoftwareAdapter()
 {
 	winrt::com_ptr<IDXGIAdapter> adapter;
-	ver::check_graphics(factory->EnumWarpAdapter(__uuidof(adapter), adapter.put_void()));
-	ver::check_graphics(D3D11CreateDevice(
+	ver::check_hresult(factory->EnumWarpAdapter(__uuidof(adapter), adapter.put_void()));
+	ver::check_hresult(D3D11CreateDevice(
 		adapter.get(),
 		D3D_DRIVER_TYPE_UNKNOWN,
 		0,
 		DEBUG_MODE ? D3D11_CREATE_DEVICE_DEBUG : 0,
 		featureLevels.data(),
-		featureLevels.size(),
+		uint32_t(featureLevels.size()),
 		D3D11_SDK_VERSION,
 		pDevice.put(),
 		nullptr,
 		pContext.put()
 	));
 }
-winrt::IAsyncAction Graphics::CreateSwapChain(HWND wnd)
+ver::IAsyncAction Graphics::CreateSwapChain(HWND wnd)
 {
 	co_await winrt::resume_background();
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
@@ -134,7 +134,7 @@ winrt::IAsyncAction Graphics::CreateSwapChain(HWND wnd)
 
 	// gain access to texture subresource in swap chain (back buffer)
 	winrt::com_ptr<ID3D11Texture2D> pBackBuffer;
-	ver::check_graphics(pSwap->GetBuffer(0, __uuidof(ID3D11Texture2D), pBackBuffer.put_void()));
+	ver::check_hresult(pSwap->GetBuffer(0, __uuidof(ID3D11Texture2D), pBackBuffer.put_void()));
 	pLeftTarget = OutputOnlyRenderTarget::create(*this, pBackBuffer.get());
 	pRightTarget = stereoEnabled ? OutputOnlyRenderTarget::create(*this, pBackBuffer.get(), 1) : nullptr;
 
@@ -149,19 +149,6 @@ winrt::IAsyncAction Graphics::CreateSwapChain(HWND wnd)
 	pContext->RSSetViewports(1u, &vp);
 }
 
-
-void Graphics::EnableImgui() noexcept
-{
-	imguiEnabled = true;
-}
-void Graphics::DisableImgui() noexcept
-{
-	imguiEnabled = false;
-}
-bool Graphics::IsImguiEnabled() const noexcept
-{
-	return imguiEnabled;
-}
 
 void Graphics::BeginFrame(float r, float g, float b) noexcept
 {
@@ -192,8 +179,8 @@ void Graphics::EndFrame()
 
 	winrt::hresult hr = pSwap->Present(0u, 0u);
 	if (hr == DXGI_ERROR_DEVICE_REMOVED)
-		throw ver::make_error<ver::device_error>({ pDevice->GetDeviceRemovedReason(), infoManager.GetMessages() });
-	ver::check_graphics(hr);
+		throw ver::hr_exception{ pDevice->GetDeviceRemovedReason()};
+	ver::check_hresult(hr);
 	frame_step = timer.stop();
 }
 void Graphics::DrawIndexed(UINT count) noxnd
@@ -211,13 +198,13 @@ void Graphics::OnResize(unsigned newwidth, unsigned newheight)
 	if (pRightTarget)
 		pRightTarget->ReleaseBuffer();
 	pLeftTarget->ReleaseBuffer();
-	ver::check_graphics(pSwap->ResizeBuffers(0, newwidth, newheight, DXGI_FORMAT_UNKNOWN, 0));
+	ver::check_hresult(pSwap->ResizeBuffers(0, newwidth, newheight, DXGI_FORMAT_UNKNOWN, 0));
 	width = newwidth;
 	height = newheight;
 
 	// gain access to texture subresource in swap chain (back buffer)
 	winrt::com_ptr<ID3D11Texture2D> pBackBuffer;
-	ver::check_graphics(pSwap->GetBuffer(0, __uuidof(ID3D11Texture2D), pBackBuffer.put_void()));
+	ver::check_hresult(pSwap->GetBuffer(0, __uuidof(ID3D11Texture2D), pBackBuffer.put_void()));
 	pLeftTarget->Reset(*this, pBackBuffer.get());
 	if (pRightTarget)pRightTarget->Reset(*this, pBackBuffer.get());
 

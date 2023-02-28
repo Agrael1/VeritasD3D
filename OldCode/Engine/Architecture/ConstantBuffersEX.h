@@ -11,10 +11,10 @@ public:
 	void Update(Graphics& gfx, const DC::Buffer& buf)
 	{
 		assert(&buf.GetRootLayoutElement() == &GetRootLayoutElement());
-		INFOMAN(gfx);
+		
 
 		D3D11_MAPPED_SUBRESOURCE msr;
-		GFX_THROW_INFO(GetContext(gfx)->Map(
+		ver::check_hresult(GetContext(gfx)->Map(
 			pConstantBuffer.Get(), 0u,
 			D3D11_MAP_WRITE_DISCARD, 0u,
 			&msr
@@ -30,7 +30,7 @@ protected:
 		:
 		slot(slot)
 	{
-		INFOMAN(gfx);
+		
 
 		D3D11_BUFFER_DESC cbd;
 		cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -44,11 +44,11 @@ protected:
 		{
 			D3D11_SUBRESOURCE_DATA csd = {};
 			csd.pSysMem = pBuf->GetData();
-			GFX_THROW_INFO(GetDevice(gfx)->CreateBuffer(&cbd, &csd, &pConstantBuffer));
+			ver::check_hresult(GetDevice(gfx)->CreateBuffer(&cbd, &csd, &pConstantBuffer));
 		}
 		else
 		{
-			GFX_THROW_INFO(GetDevice(gfx)->CreateBuffer(&cbd, nullptr, &pConstantBuffer));
+			ver::check_hresult(GetDevice(gfx)->CreateBuffer(&cbd, nullptr, &pConstantBuffer));
 		}
 	}
 protected:
@@ -62,8 +62,8 @@ public:
 	using ConstantBufferEx::ConstantBufferEx;
 	void Bind(Graphics& gfx) noxnd override
 	{
-		INFOMAN_NOHR(gfx);
-		GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetConstantBuffers(slot, 1u, pConstantBuffer.GetAddressOf()));
+		
+		ver::check_hresult_ONLY(GetContext(gfx)->PSSetConstantBuffers(slot, 1u, pConstantBuffer.GetAddressOf()));
 	}
 };
 
@@ -73,8 +73,8 @@ public:
 	using ConstantBufferEx::ConstantBufferEx;
 	void Bind(Graphics& gfx) noxnd override
 	{
-		INFOMAN_NOHR(gfx);
-		GFX_THROW_INFO_ONLY(GetContext(gfx)->VSSetConstantBuffers(slot, 1u, pConstantBuffer.GetAddressOf()));
+		
+		ver::check_hresult_ONLY(GetContext(gfx)->VSSetConstantBuffers(slot, 1u, pConstantBuffer.GetAddressOf()));
 	}
 };
 

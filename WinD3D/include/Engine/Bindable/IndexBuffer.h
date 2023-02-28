@@ -1,6 +1,7 @@
 #pragma once
 #include <Engine/Bindable/Bindable.h>
 #include <span>
+#include <dxgiformat.h>
 
 struct ID3D11Buffer;
 
@@ -27,14 +28,14 @@ namespace ver
 			Initialize(gfx, indices);
 		}
 
-		winrt::IAsyncAction InitializeAsync(Graphics& gfx, std::string tag, std::span<const uint16_t> indices)
+		ver::IAsyncAction InitializeAsync(Graphics& gfx, std::string tag, std::span<const uint16_t> indices)
 		{
 			co_await winrt::resume_background();
 			tag = std::move(tag);
 			count = uint32_t(indices.size());
 			Initialize(gfx, indices);
 		}
-		winrt::IAsyncAction InitializeAsync(Graphics& gfx, std::string tag, std::span<const uint32_t> indices)
+		ver::IAsyncAction InitializeAsync(Graphics& gfx, std::string tag, std::span<const uint32_t> indices)
 		{
 			co_await winrt::resume_background();
 			tag = std::move(tag);

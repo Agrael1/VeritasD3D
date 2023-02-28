@@ -20,7 +20,7 @@ class Material
 public:
 	Material() = default;
 	Material(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noxnd;
-	winrt::IAsyncAction	InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path)noxnd;
+	ver::IAsyncAction	InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path)noxnd;
 public:
 	static std::vector<uint16_t> ExtractIndices(const aiMesh& mesh) noexcept;
 	std::shared_ptr<Bindable> MakeVertexBindable(Graphics& gfx, const aiMesh& mesh, float scale = 1.0f) const noxnd;

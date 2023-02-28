@@ -1,9 +1,8 @@
 #include <Game/Level.h>
-#include <Foundation.h>
+#include <PhysX/Foundation.h>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
-#include <Engine/Util/ModelException.h>
 #include <Engine/Loading/Material.h>
 #include <Engine/Graphics.h>
 #include <numbers>
@@ -11,7 +10,7 @@
 using namespace physx;
 
 
-winrt::IAsyncAction UT::TwoWayPortal::InitializeAsync(ver::LightBuffer& lb, ver::ph::Physics& phy, Graphics& gfx, std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3> positions, DirectX::XMFLOAT3 color)
+ver::IAsyncAction UT::TwoWayPortal::InitializeAsync(ver::LightBuffer& lb, ver::ph::Physics& phy, Graphics& gfx, std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3> positions, DirectX::XMFLOAT3 color)
 {
 	co_await winrt::when_all(first.InitializeAsync(lb, phy, gfx, positions.first, color), second.InitializeAsync(lb, phy, gfx, positions.second, color));
 	first.SetBound(&second);
@@ -19,7 +18,7 @@ winrt::IAsyncAction UT::TwoWayPortal::InitializeAsync(ver::LightBuffer& lb, ver:
 }
 
 
-winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& gfx, std::filesystem::path map)
+ver::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& gfx, std::filesystem::path map)
 {
 	static constexpr auto scale = 1.0f;
 
@@ -34,12 +33,12 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 		aiProcess_GenNormals |
 		aiProcess_CalcTangentSpace
 	);
-	if (pScene == nullptr || !pScene->HasMeshes())
-		throw ver::make_error<ver::ModelException>({ imp.GetErrorString() });
+	//if (pScene == nullptr || !pScene->HasMeshes())
+		//throw ver::make_error<ver::ModelException>({ imp.GetErrorString() });
 
 	auto wrld = world.InitializeAsync(gfx, *pScene, std::move(map), scale);
 	auto sk = sky.InitializeAsync(gfx, L"../models/face.dds");
-	auto phys = [&]() ->winrt::IAsyncAction {
+	auto phys = [&]() ->ver::IAsyncAction {
 		co_await winrt::resume_background();
 		auto* mat = phy.GetMaterial("world");
 		assert(mat);
@@ -102,7 +101,7 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 	constexpr DirectX::XMFLOAT3 cols_p[2]{ { 1,0,0 }, {0,0,1} };
 
 
-	std::vector<winrt::IAsyncAction> acts;
+	std::vector<ver::IAsyncAction> acts;
 	acts.reserve(portals.size() + billboards.size() + flames.size());
 
 	for (auto& i : billboards)

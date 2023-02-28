@@ -11,7 +11,7 @@ namespace ver
 	public:
 		SolidSphere() = default;
 		SolidSphere(Graphics& gfx, float radius);
-		winrt::IAsyncAction InitializeAsync(Graphics& gfx, float radius);
+		ver::IAsyncAction InitializeAsync(Graphics& gfx, float radius);
 	public:
 		void SetPos(DirectX::XMFLOAT3 pos)noexcept;
 		void SetColor(DirectX::XMFLOAT3 color)noexcept;

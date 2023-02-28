@@ -5,27 +5,59 @@ cmake_minimum_required (VERSION 3.8)
 
 project (UnrealTournament CXX RC)
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
-
 list(APPEND CMAKE_MODULE_PATH ${PLUGINS_DIR})
 find_package(vorbis REQUIRED)
 
 
+add_executable(${PROJECT_NAME})
+target_sources(${PROJECT_NAME}
+	PRIVATE
+		"resources/WinD3D.rc"
 
-set(include_dir "${CMAKE_CURRENT_SOURCE_DIR}/include")
-set(source_dir "${CMAKE_CURRENT_SOURCE_DIR}/src")
+		"src/EntryMain.cpp"
+		"src/Audio/Audio.cpp"
+		"src/Audio/buffer_stream.cpp"
+		"src/Game/App.cpp"
+		"src/Game/Camera.cpp"
+		"src/Game/Cursor.cpp"
+		"src/Game/Flag.cpp"
+		"src/Game/Interaction.cpp"
+		"src/Game/Keyboard.cpp"
+		"src/Game/Level.cpp"
+		"src/Game/MediaEngine.cpp"
+		"src/Game/Mouse.cpp"
+		"src/Game/Player.cpp"
+		"src/Game/PointLight.cpp"
+		"src/Game/Portal.cpp"
+		"src/Game/Window.cpp"
+	PUBLIC 
+		"include/Audio/Audio.h"
+		"include/Audio/audio_ptr.h"
+		"include/Audio/buffer_stream.h"
+		"include/Audio/vorbis_file.h"
 
-file(GLOB_RECURSE vhead "${include_dir}/*/*.h")
-file(GLOB_RECURSE vsrc "${source_dir}/*.cpp")
-file(GLOB bind "${CMAKE_BINARY_DIR}/imgui/bindings/*.cpp")
+		"include/Game/App.h"
+		"include/Game/Camera.h"
+		"include/Game/Cursor.h"
+		"include/Game/Entity.h"
+		"include/Game/Flag.h"
+		"include/Game/Interaction.h"
+		"include/Game/Keyboard.h"
+		"include/Game/Level.h"
+		"include/Game/Loading.h"
+		"include/Game/MediaEngine.h"
+		"include/Game/Mouse.h"
+		"include/Game/Pictures.h"
+		"include/Game/Player.h"
+		"include/Game/PointLight.h"
+		"include/Game/Portal.h"
+		"include/Game/Video.h"
+		"include/Game/Window.h"
 
-add_executable(${PROJECT_NAME} ${vhead} ${vsrc} ${bind} "${CMAKE_CURRENT_SOURCE_DIR}/resources/WinD3D.rc")
+		"include/Util/Converter.h"
+		"include/Util/Filters.h"
+)
 
-if(MSVC)
-  target_compile_options(${PROJECT_NAME} PUBLIC "/ZI")
-  target_link_options(${PROJECT_NAME} PUBLIC "/INCREMENTAL")
-endif()
 
 add_custom_target(copy_models ALL 
 	COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -36,22 +68,31 @@ add_custom_target(copy_music ALL
 	COMMAND ${CMAKE_COMMAND} -E copy_directory
 	${CMAKE_CURRENT_SOURCE_DIR}/music
 	${CMAKE_BINARY_DIR}/music
-	COMMENT "Copying music to binary directory")
+	COMMENT "Copying music to binary directory"
+)
 
+#add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${HBAO_DYLIB} $<TARGET_FILE_DIR:${PROJECT_NAME}>
+#  COMMAND_EXPAND_LISTS
+#  )
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${HBAO_DYLIB} $<TARGET_FILE_DIR:${PROJECT_NAME}>
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:${PROJECT_NAME}> $<TARGET_FILE_DIR:${PROJECT_NAME}>
   COMMAND_EXPAND_LISTS
-  )
+  COMMENT "Copying Dependencies..."
+)
 
-include_directories(BEFORE SYSTEM ${CMAKE_BINARY_DIR}/include)
-target_link_libraries(${PROJECT_NAME} PUBLIC WinD3D)
-target_link_libraries(${PROJECT_NAME} PUBLIC PhysX)
-target_link_libraries(${PROJECT_NAME} PUBLIC Vorbis::Vorbis Mfplat)
-target_include_directories(${PROJECT_NAME} PUBLIC ${vorbis_INCLUDES})
-target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_BINARY_DIR}/imgui")
-target_include_directories(${PROJECT_NAME} PRIVATE ${include_dir})
-target_include_directories(${PROJECT_NAME} PRIVATE ${VENGINE_HEADERS})
-target_include_directories(${PROJECT_NAME} PRIVATE ${WIL_HEADERS})
-target_include_directories(${PROJECT_NAME} PRIVATE ${PHYSICS_HEADERS})
-target_precompile_headers(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include/pch.h")
+target_link_libraries(${PROJECT_NAME} 
+	PUBLIC 
+		WinD3D 
+		PhysX 
+		Vorbis::Vorbis 
+		Mfplat
+)
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_precompile_headers(${PROJECT_NAME} PRIVATE "include/pch.h")
+set_target_properties(${PROJECT_NAME} 
+    PROPERTIES
+        CXX_STANDARD 23
+)
 add_dependencies(${PROJECT_NAME} copy_models copy_music)

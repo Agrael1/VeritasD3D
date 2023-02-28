@@ -1,5 +1,6 @@
 #include <Engine/Bindable/ConstantBuffer.h>
-#include <Engine/Util/GraphicsExceptions.h>
+#include <Shared/Checks.h>
+#include <d3d11_4.h>
 
 template<std::integral T>
 inline constexpr uint32_t round_to16(T size)
@@ -20,7 +21,7 @@ ver::ConstantBuffer::ConstantBuffer(Graphics& gfx, std::span<const std::byte> co
 
 	D3D11_SUBRESOURCE_DATA csd{};
 	csd.pSysMem = consts.data();
-	ver::check_graphics(GetDevice(gfx)->CreateBuffer(&cbd, &csd, pConstantBuffer.put()));
+	ver::check_hresult(GetDevice(gfx)->CreateBuffer(&cbd, &csd, pConstantBuffer.put()));
 }
 
 
@@ -35,7 +36,7 @@ ver::ConstantBuffer::ConstantBuffer(Graphics& gfx, uint32_t size, uint32_t slot)
 	cbd.ByteWidth = round_to16(size);
 	cbd.StructureByteStride = 0u;
 
-	ver::check_graphics(GetDevice(gfx)->CreateBuffer(&cbd, nullptr, pConstantBuffer.put()));
+	ver::check_hresult(GetDevice(gfx)->CreateBuffer(&cbd, nullptr, pConstantBuffer.put()));
 }
 
 void ver::ConstantBuffer::Update(Graphics& gfx, std::span<const std::byte> consts)

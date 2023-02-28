@@ -1,8 +1,8 @@
 #pragma once
-#include "Exception.h"
+#include <Shared/Exception.h>
 #include <stacktrace>
 
-#define RGC_EXCEPTION( message ) ver::make_error<ver::rg::RenderGraphCompileException>({message});
+#define RGC_EXCEPTION( message ) //ver::make_error<ver::rg::RenderGraphCompileException>({message});
 
 namespace ver::rg
 {

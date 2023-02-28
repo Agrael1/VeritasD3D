@@ -35,17 +35,22 @@ namespace ver
 		mutable std::string whatBuffer;
 	};
 
-
-	template<class E> requires ((bool)DEBUG_MODE)
-	[[nodiscard]] E make_error(E in)
+	class hr_exception :public ver::exception
 	{
-		in.WriteToOutput();
-		return in;
-	}
-	template<class E, class ... Args>requires (!(bool)DEBUG_MODE)
-	[[nodiscard]]E make_error(E in)
-	{
-		return in;
-	}
-
+	public:
+		hr_exception(winrt::hresult hr, std::source_location sl = std::source_location::current());
+	public:
+		const char* what() const noexcept override;
+		std::string_view type()const noexcept override
+		{
+			return "Vertas Window Exception";
+		}
+		winrt::hresult error_code() const noexcept
+		{
+			return hResult;
+		}
+		std::string description() const noexcept;
+	private:
+		winrt::hresult hResult;
+	};
 }

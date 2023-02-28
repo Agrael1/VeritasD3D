@@ -1,9 +1,7 @@
 #include <Engine/Bindable/PixelShader.h>
-#include <Engine/Deprecated/GraphicsThrows.h>
 #include <Engine/Bindable/Codex.h>
-#include <Engine/Util/DXGIInfoManager.h>
-#include <Engine/Util/GraphicsExceptions.h>
 #include <d3dcompiler.h>
+#include <Shared/Checks.h>
 
 using namespace ver;
 
@@ -13,7 +11,7 @@ PixelShader::PixelShader(Graphics& gfx, std::filesystem::path xpath)
 	Initialize(gfx);
 }
 
-winrt::IAsyncAction PixelShader::InitializeAsync(Graphics& gfx, std::filesystem::path path)
+ver::IAsyncAction PixelShader::InitializeAsync(Graphics& gfx, std::filesystem::path path)
 {
 	co_await winrt::resume_background();
 	this->path = std::move(path);
@@ -22,16 +20,15 @@ winrt::IAsyncAction PixelShader::InitializeAsync(Graphics& gfx, std::filesystem:
 
 void PixelShader::Initialize(Graphics& gfx)
 {
-	INFOMAN(gfx);
 	winrt::com_ptr<ID3DBlob> pBlob;
-	GFX_THROW_INFO(D3DReadFileToBlob((L"..\\WinD3D\\shaders\\" + path.native()).c_str(), pBlob.put()));
-	GFX_THROW_INFO(GetDevice(gfx)->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, pPixelShader.put()));
+	ver::check_hresult(D3DReadFileToBlob((L"..\\Shaders\\" + path.native()).c_str(), pBlob.put()));
+	ver::check_hresult(GetDevice(gfx)->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, pPixelShader.put()));
 }
 
 void PixelShader::Bind(Graphics& gfx) noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShader(pPixelShader.get(), nullptr, 0u));
+	GetContext(gfx)->PSSetShader(pPixelShader.get(), nullptr, 0u);
+	ver::check_context();
 }
 std::shared_ptr<PixelShader> PixelShader::Resolve(Graphics& gfx, std::filesystem::path path)
 {

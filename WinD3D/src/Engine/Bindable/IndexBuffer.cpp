@@ -1,6 +1,7 @@
 #include <Engine/Bindable/IndexBuffer.h>
 #include <Engine/Bindable/Codex.h>
-#include <Engine/Util/GraphicsExceptions.h>
+#include <Shared/Checks.h>
+#include <d3d11.h>
 #include <format>
 
 using namespace ver;
@@ -19,7 +20,7 @@ void ver::IndexBuffer::Initialize(Graphics& gfx, std::span<const uint16_t> indic
 	ibd.StructureByteStride = sizeof(decltype(indices)::element_type);
 	D3D11_SUBRESOURCE_DATA isd = {};
 	isd.pSysMem = indices.data();
-	ver::check_graphics(GetDevice(gfx)->CreateBuffer(&ibd, &isd, pIndexBuffer.put()));
+	ver::check_hresult(GetDevice(gfx)->CreateBuffer(&ibd, &isd, pIndexBuffer.put()));
 }
 void ver::IndexBuffer::Initialize(Graphics& gfx, std::span<const uint32_t> indices)
 {
@@ -34,7 +35,7 @@ void ver::IndexBuffer::Initialize(Graphics& gfx, std::span<const uint32_t> indic
 	ibd.StructureByteStride = sizeof(decltype(indices)::element_type);
 	D3D11_SUBRESOURCE_DATA isd = {};
 	isd.pSysMem = indices.data();
-	ver::check_graphics(GetDevice(gfx)->CreateBuffer(&ibd, &isd, pIndexBuffer.put()));
+	ver::check_hresult(GetDevice(gfx)->CreateBuffer(&ibd, &isd, pIndexBuffer.put()));
 }
 
 void IndexBuffer::Bind(Graphics& gfx)noxnd

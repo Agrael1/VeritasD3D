@@ -6,7 +6,7 @@ namespace ver
 	template <typename T>
 	concept IsAsync =
 		requires(T t) {
-			{ t.InitializeAsync() } -> std::same_as<winrt::IAsyncAction>;
+			{ t.InitializeAsync() } -> std::same_as<ver::IAsyncAction>;
 	};
 
 	template<class C, class ... Args>

@@ -7,11 +7,11 @@ namespace ver
 {
 	class VertexShader : public Bindable
 	{
-		static inline constexpr auto shader_folder = L"..\\WinD3D\\shaders\\";
+		static inline constexpr auto shader_folder = L"..\\Shaders\\";
 	public:
 		VertexShader() = default;
 		VertexShader(Graphics& gfx, std::filesystem::path path);
-		winrt::IAsyncAction InitializeAsync(Graphics& gfx, std::filesystem::path path);
+		ver::IAsyncAction InitializeAsync(Graphics& gfx, std::filesystem::path path);
 		void Initialize(Graphics& gfx);
 	public:
 		void Bind(Graphics& gfx) noxnd override;

@@ -1,9 +1,7 @@
 #include <Engine/Bindable/RenderTarget.h>
 #include <Engine/Bindable/DepthStencil.h>
-#include <Engine/Deprecated/GraphicsThrows.h>
 #include <array>
-#include <Engine/Util/DXGIInfoManager.h>
-#include <Engine/Util/GraphicsExceptions.h>
+#include <Shared/Checks.h>
 
 namespace wrl = Microsoft::WRL;
 using namespace ver;
@@ -13,8 +11,6 @@ RenderTarget::RenderTarget(Graphics& gfx, UINT width, UINT height)
 	width(width),
 	height(height)
 {
-	INFOMAN(gfx);
-
 	// create texture resource
 	D3D11_TEXTURE2D_DESC textureDesc = {};
 	textureDesc.Width = width;
@@ -29,7 +25,7 @@ RenderTarget::RenderTarget(Graphics& gfx, UINT width, UINT height)
 	textureDesc.CPUAccessFlags = 0;
 	textureDesc.MiscFlags = D3D11_RESOURCE_MISC_SHARED;
 	wrl::ComPtr<ID3D11Texture2D> pTexture;
-	GFX_THROW_INFO(GetDevice(gfx)->CreateTexture2D(
+	ver::check_hresult(GetDevice(gfx)->CreateTexture2D(
 		&textureDesc, nullptr, &pTexture
 	));
 
@@ -38,14 +34,14 @@ RenderTarget::RenderTarget(Graphics& gfx, UINT width, UINT height)
 	rtvDesc.Format = textureDesc.Format;
 	rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 	rtvDesc.Texture2D = D3D11_TEX2D_RTV{ 0 };
-	GFX_THROW_INFO(GetDevice(gfx)->CreateRenderTargetView(
+	ver::check_hresult(GetDevice(gfx)->CreateRenderTargetView(
 		pTexture.Get(), &rtvDesc, &pTargetView
 	));
 }
 
 RenderTarget::RenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture, uint32_t array_slice)
 {
-	INFOMAN(gfx);
+	
 
 	// get information from texture about dimensions
 	D3D11_TEXTURE2D_DESC textureDesc;
@@ -56,7 +52,7 @@ RenderTarget::RenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture, uint32_t ar
 	// create the target view on the texture
 	CD3D11_RENDER_TARGET_VIEW_DESC rtvDesc(D3D11_RTV_DIMENSION_TEXTURE2DARRAY,
 		textureDesc.Format, 0, array_slice);
-	GFX_THROW_INFO(GetDevice(gfx)->CreateRenderTargetView(
+	ver::check_hresult(GetDevice(gfx)->CreateRenderTargetView(
 		pTexture, &rtvDesc, &pTargetView
 	));
 }
@@ -80,7 +76,6 @@ void RenderTarget::BindAsBuffer(Graphics& gfx, ver::DepthStencil* depthStencil) 
 
 void RenderTarget::BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDepthStencilView) noxnd
 {
-	INFOMAN_NOHR(gfx);
 	GetContext(gfx)->OMSetRenderTargets(1, pTargetView.GetAddressOf(), pDepthStencilView);
 
 	// configure viewport
@@ -91,13 +86,14 @@ void RenderTarget::BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDepthSte
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0.0f;
 	vp.TopLeftY = 0.0f;
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->RSSetViewports(1u, &vp));
+	GetContext(gfx)->RSSetViewports(1u, &vp);
+	ver::check_context();
 }
 
 void RenderTarget::Clear(Graphics& gfx, const std::array<float, 4>& color) noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->ClearRenderTargetView(pTargetView.Get(), color.data()));
+	GetContext(gfx)->ClearRenderTargetView(pTargetView.Get(), color.data());
+	ver::check_context();
 }
 
 void RenderTarget::Clear(Graphics& gfx) noxnd
@@ -120,7 +116,7 @@ ShaderInputRenderTarget::ShaderInputRenderTarget(Graphics& gfx, UINT width, UINT
 	RenderTarget(gfx, width, height),
 	slot(slot)
 {
-	INFOMAN(gfx);
+	
 
 	wrl::ComPtr<ID3D11Resource> pRes;
 	pTargetView->GetResource(&pRes);
@@ -131,20 +127,20 @@ ShaderInputRenderTarget::ShaderInputRenderTarget(Graphics& gfx, UINT width, UINT
 	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MostDetailedMip = 0;
 	srvDesc.Texture2D.MipLevels = 1;
-	GFX_THROW_INFO(GetDevice(gfx)->CreateShaderResourceView(
+	ver::check_hresult(GetDevice(gfx)->CreateShaderResourceView(
 		pRes.Get(), &srvDesc, pShaderResourceView.put()
 	));
 }
 
 void ShaderInputRenderTarget::Bind(Graphics& gfx) noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(slot, 1, array_view(pShaderResourceView)));
+	GetContext(gfx)->PSSetShaderResources(slot, 1, array_view(pShaderResourceView));
+	ver::check_context();
 }
 void ShaderInputRenderTarget::BindTo(Graphics& gfx, uint32_t xslot) noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(xslot, 1, array_view(pShaderResourceView)));
+	(GetContext(gfx)->PSSetShaderResources(xslot, 1, array_view(pShaderResourceView)));
+	ver::check_context();
 }
 
 void OutputOnlyRenderTarget::Bind(Graphics& gfx) noxnd
@@ -157,7 +153,7 @@ void OutputOnlyRenderTarget::ReleaseBuffer()
 }
 void OutputOnlyRenderTarget::Reset(Graphics& gfx, ID3D11Texture2D* pTexture)
 {
-	INFOMAN(gfx);
+	
 
 	// get information from texture about dimensions
 	D3D11_TEXTURE2D_DESC textureDesc;
@@ -168,7 +164,7 @@ void OutputOnlyRenderTarget::Reset(Graphics& gfx, ID3D11Texture2D* pTexture)
 
 	CD3D11_RENDER_TARGET_VIEW_DESC rtvDesc(D3D11_RTV_DIMENSION_TEXTURE2DARRAY,
 		textureDesc.Format, 0, array_slice);
-	GFX_THROW_INFO(GetDevice(gfx)->CreateRenderTargetView(
+	ver::check_hresult(GetDevice(gfx)->CreateRenderTargetView(
 		pTexture, &rtvDesc, &pTargetView
 	));
 }
@@ -253,14 +249,13 @@ void RenderTargetArray::Clear(Graphics& gfx) noxnd
 
 void RenderTargetArray::Clear(Graphics& gfx, const std::array<float, 4>& color) noxnd
 {
-	INFOMAN_NOHR(gfx);
 	for (auto& i : targets)
-	{
-		GFX_THROW_INFO_ONLY(GetContext(gfx)->ClearRenderTargetView(i.get(), color.data()));
-	}
+		GetContext(gfx)->ClearRenderTargetView(i.get(), color.data());
+
+	ver::check_context();
 }
 
-winrt::IAsyncAction RenderTargetArray::InitializeAsync(Graphics& gfx, uint32_t width, uint32_t height, uint32_t slot)
+ver::IAsyncAction RenderTargetArray::InitializeAsync(Graphics& gfx, uint32_t width, uint32_t height, uint32_t slot)
 {
 	co_await winrt::resume_background();
 	for (auto& i : targets)
@@ -278,13 +273,12 @@ winrt::IAsyncAction RenderTargetArray::InitializeAsync(Graphics& gfx, uint32_t w
 
 void RenderTargetArray::Bind(Graphics& gfx) noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(slot, uint32_t(resource_views.size()), (ID3D11ShaderResourceView**)&resource_views));
+	(GetContext(gfx)->PSSetShaderResources(slot, uint32_t(resource_views.size()), (ID3D11ShaderResourceView**)&resource_views));
+	ver::check_context();
 }
 
 void RenderTargetArray::BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDepthStencilView) noxnd
 {
-	INFOMAN_NOHR(gfx);
 	GetContext(gfx)->OMSetRenderTargets(uint32_t(targets.size()), reinterpret_cast<ID3D11RenderTargetView* const*>(targets.data()), pDepthStencilView);
 
 	// configure viewport
@@ -295,5 +289,6 @@ void RenderTargetArray::BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDep
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0.0f;
 	vp.TopLeftY = 0.0f;
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->RSSetViewports(1u, &vp));
+	(GetContext(gfx)->RSSetViewports(1u, &vp));
+	ver::check_context();
 }
