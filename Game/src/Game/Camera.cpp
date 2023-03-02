@@ -192,6 +192,20 @@ DirectX::XMMATRIX StereoCamera::GetRightViewMatrix() const noexcept
 	/*return dx::XMMatrixLookToLH(
 		XMLoadFloat3(&pos), lookVector, dx::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)) * ShearZ(eye_dist, 0);*/
 }
+DirectX::XMMATRIX StereoCamera::GetCentralViewMatrix() const noexcept
+{
+	using namespace dx;
+	const dx::XMVECTOR forwardBaseVector = dx::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+	// apply the camera rotations to a base vector
+	const auto lookVector = dx::XMVector3Transform(forwardBaseVector,
+		dx::XMMatrixRotationRollPitchYawFromVector(dx::XMLoadFloat2(&rot))
+	);
+	// generate camera transform (applied to all objects to arrange them relative
+	// to camera position/orientation in world) from cam position and direction
+	// camera "top" always faces towards +Y (cannot do a barrel roll)
+	return dx::XMMatrixLookToLH(
+		XMLoadFloat3(&pos), lookVector, dx::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
+}
 
 void StereoCamera::SpawnControlWindow() noexcept
 {

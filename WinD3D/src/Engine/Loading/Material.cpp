@@ -285,6 +285,19 @@ Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::
 		}
 		techniques.push_back(std::move(map));
 	}
+	{
+		Technique map{ "Cursor",true };
+		{
+			Step draw("cursor");
+
+			draw.AddBindable(InputLayout::Resolve(gfx, vtxLayout, ver::VertexShader::Resolve(gfx, "solid.vs.cso")->GetBytecode()));
+
+			draw.AddBindable(std::make_shared<TransformCbuf>(gfx));
+
+			map.AddStep(std::move(draw));
+		}
+		techniques.push_back(std::move(map));
+	}
 }
 std::vector<unsigned short> Material::ExtractIndices(const aiMesh& mesh) noexcept
 {

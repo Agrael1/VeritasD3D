@@ -65,6 +65,14 @@ public:
 		camera = left ? lcamera : rcamera;
 		//camera = lcamera;
 	}
+	void SetCursor(POINTS cur)noexcept
+	{
+		cursor = cur;
+	}
+	auto GetCursor()const noexcept
+	{
+		return cursor;
+	}
 
 	DirectX::XMMATRIX GetProjection() const noexcept
 	{
@@ -111,6 +119,7 @@ private:
 	DirectX::XMMATRIX lcamera;
 	DirectX::XMMATRIX rcamera;
 	DirectX::XMFLOAT3 shadowPos;
+	POINTS cursor{0,0};
 
 	bool imguiEnabled = true;
 	bool stereoEnabled = false;

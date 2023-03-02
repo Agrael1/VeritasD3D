@@ -68,7 +68,7 @@ void Texture::Bind(Graphics& gfx)noxnd
 }
 void Texture::BindTo(Graphics& gfx, uint32_t xslot) noxnd
 {
-	(GetContext(gfx)->PSSetShaderResources(xslot, 1u, array_view(pTextureView)));	
+	(GetContext(gfx)->PSSetShaderResources(slot = xslot, 1u, array_view(pTextureView)));	
 	ver::check_context();
 }
 std::shared_ptr<Texture> Texture::Resolve(Graphics& gfx, std::filesystem::path path, uint32_t slot, bool test)
@@ -144,4 +144,27 @@ void Texture::ResolveToDefault(Graphics& gfx)
 	(
 		pTexture.get(), &srvDesc, pTextureView.put()
 	));
+}
+
+ver::StagingTexture::StagingTexture(Graphics& gfx, DXGI_FORMAT format, uint32_t width, uint32_t height, uint32_t cpu_flags)
+{
+	//create texture resource
+	D3D11_TEXTURE2D_DESC texDesc = {};
+	texDesc.Width = width;
+	texDesc.Height = height;
+	texDesc.MipLevels = 0;
+	texDesc.ArraySize = 1;
+	texDesc.Format = format;
+	texDesc.SampleDesc.Count = 1;
+	texDesc.SampleDesc.Quality = 0;
+	texDesc.Usage = D3D11_USAGE_STAGING;
+	texDesc.BindFlags = 0;
+	texDesc.CPUAccessFlags = cpu_flags;
+	texDesc.MiscFlags = 0;
+
+
+	ver::check_hresult(GetDevice(gfx)->CreateTexture2D(
+		&texDesc,
+		nullptr,
+		pTexture.put()));
 }

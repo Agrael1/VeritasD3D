@@ -20,7 +20,7 @@ ver::IAsyncAction UT::TwoWayPortal::InitializeAsync(ver::LightBuffer& lb, ver::p
 
 ver::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& gfx, std::filesystem::path map)
 {
-	static constexpr auto scale = 1.0f;
+	static constexpr auto scale = 40.0f;
 
 	co_await winrt::resume_background();
 	ver::scoped_timer t;

@@ -6,10 +6,10 @@
 
 using namespace ver;
 
-exception::exception(std::source_location sl) noexcept
+exception::exception(std::source_location sl, bool write) noexcept
 	:sl(std::move(sl))
 {
-	WriteToOutput();
+	if(write)WriteToOutput();
 }
 
 std::string exception::origin() const noexcept
@@ -33,8 +33,10 @@ void ver::exception::WriteToOutput()const noexcept
 
 //Window Exception
 hr_exception::hr_exception(winrt::hresult hr, std::source_location sl)
-	:exception(sl), hResult(hr)
-{}
+	:exception(sl, false), hResult(hr)
+{
+	WriteToOutput();
+}
 std::string hr_exception::description() const noexcept
 {
 	wil::unique_hlocal_ansistring msgBuf;

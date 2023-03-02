@@ -6,7 +6,7 @@
 namespace wrl = Microsoft::WRL;
 using namespace ver;
 
-RenderTarget::RenderTarget(Graphics& gfx, UINT width, UINT height)
+RenderTarget::RenderTarget(Graphics& gfx, UINT width, UINT height, DXGI_FORMAT format)
 	:
 	width(width),
 	height(height)
@@ -17,7 +17,7 @@ RenderTarget::RenderTarget(Graphics& gfx, UINT width, UINT height)
 	textureDesc.Height = height;
 	textureDesc.MipLevels = 1;
 	textureDesc.ArraySize = 1;
-	textureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	textureDesc.Format = format;
 	textureDesc.SampleDesc.Count = 1;
 	textureDesc.SampleDesc.Quality = 0;
 	textureDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -111,19 +111,17 @@ UINT RenderTarget::GetHeight() const noexcept
 }
 
 
-ShaderInputRenderTarget::ShaderInputRenderTarget(Graphics& gfx, UINT width, UINT height, UINT slot)
+ShaderInputRenderTarget::ShaderInputRenderTarget(Graphics& gfx, UINT width, UINT height, UINT slot, DXGI_FORMAT format)
 	:
-	RenderTarget(gfx, width, height),
+	RenderTarget(gfx, width, height, format),
 	slot(slot)
 {
-	
-
 	wrl::ComPtr<ID3D11Resource> pRes;
 	pTargetView->GetResource(&pRes);
 
 	// create the resource view on the texture
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-	srvDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	srvDesc.Format = format;
 	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MostDetailedMip = 0;
 	srvDesc.Texture2D.MipLevels = 1;

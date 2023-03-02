@@ -19,7 +19,6 @@ target_sources(${PROJECT_NAME}
 		"src/Audio/buffer_stream.cpp"
 		"src/Game/App.cpp"
 		"src/Game/Camera.cpp"
-		"src/Game/Cursor.cpp"
 		"src/Game/Flag.cpp"
 		"src/Game/Interaction.cpp"
 		"src/Game/Keyboard.cpp"
@@ -38,7 +37,6 @@ target_sources(${PROJECT_NAME}
 
 		"include/Game/App.h"
 		"include/Game/Camera.h"
-		"include/Game/Cursor.h"
 		"include/Game/Entity.h"
 		"include/Game/Flag.h"
 		"include/Game/Interaction.h"

@@ -51,6 +51,7 @@ public:
 public:
 	DirectX::XMMATRIX GetLeftViewMatrix()const noexcept;
 	DirectX::XMMATRIX GetRightViewMatrix()const noexcept;
+	DirectX::XMMATRIX GetCentralViewMatrix()const noexcept;
 
 	void SpawnControlWindow()noexcept;
 	void Reset()noexcept;

@@ -2,6 +2,7 @@
 #include <Engine/Bindable/Codex.h>
 #include <d3dcompiler.h>
 #include <Shared/Checks.h>
+#include <Shared/Log.h>
 
 using namespace ver;
 
@@ -18,7 +19,14 @@ ver::IAsyncAction ver::VertexShader::InitializeAsync(Graphics& gfx, std::filesys
 }
 void ver::VertexShader::Initialize(Graphics& gfx)
 {
-	ver::check_hresult(D3DReadFileToBlob((shader_folder + path.native()).c_str(), pBytecodeBlob.put()));
+	auto file = std::filesystem::path(shader_folder) / path;
+	if (!std::filesystem::exists(file))
+	{
+		ver::std_error(std::format("File {} was not found.", file.string()));
+		throw ver::exception{};
+	}
+
+	ver::check_hresult(D3DReadFileToBlob(file.c_str(), pBytecodeBlob.put()));
 	ver::check_hresult(GetDevice(gfx)->CreateVertexShader(
 		pBytecodeBlob->GetBufferPointer(),
 		pBytecodeBlob->GetBufferSize(),

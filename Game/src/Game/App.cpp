@@ -118,8 +118,9 @@ void App::DoFrame(float dt)
 	gfx.BeginFrame(0.2f, 0.2f, 0.2f);
 	gfx.SetLeftCamera(player->GetLeftViewMatrix());
 	gfx.SetRightCamera(player->GetRightViewMatrix());
-	gfx.SetCamera(true);
+	gfx.SetCamera(player->GetCentralCamera());
 
+	cur->Submit();
 	level.Submit(gfx);
 	rg->Execute(gfx);
 
@@ -197,6 +198,12 @@ void App::ProcessInput(float)
 			PostQuitMessage(0);
 			return;
 		}
+	}
+
+	if (wnd.CursorEnabled())
+	{
+		auto [x, y] = wnd.mouse.GetPos();
+		gfx.SetCursor({ short(x), short(y) });
 	}
 
 	if (!wnd.CursorEnabled()&&!block)

@@ -17,7 +17,7 @@
 #include <Game/Pictures.h>
 #include <Game/MediaEngine.h>
 #include <Game/Video.h>
-#include <Game/Cursor.h>
+#include <Engine/Scene/Cursor.h>
 
 namespace UT
 {
@@ -53,7 +53,7 @@ namespace UT
 		ImGUIManager imgui;
 		Window wnd;
 		Graphics gfx;
-		std::optional <ver::Cursor> cur;
+		std::optional<ver::Cursor> cur;
 
 		ver::audio::Audio audio;
 		ver::audio::ogg_stream song;

@@ -1,9 +1,9 @@
 #pragma once
-//#include <Shared/Profile.h>
-//#include <Shared/Checks.h>
+#include <Shared/Profile.h>
+#include <Shared/Checks.h>
 #include <d3d11_4.h>
-//#include <DirectXMath.h>
-//#include <format>
-//#include <filesystem>
+#include <DirectXMath.h>
+#include <format>
+#include <filesystem>
 #include <Shared/WinSetup.h>
 #include <wil/wrl.h>

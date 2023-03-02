@@ -5,12 +5,13 @@
 #include <Engine/Pass/GBufferPass.h>
 #include <Engine/Pass/LightingPass.h>
 #include <Engine/Pass/ShadowPass.h>
+#include <Engine/Pass/CursorPass.h>
 #include <Engine/Pass/AmbientPass.h>
 #include <memory>
 #include <Engine/Pass/FilteringPass.h>
 #include <Engine/Bindable/RenderTarget.h>
 
-namespace ver
+namespace ver::rg
 {
 	class AnaglyphPass : public RG::BindingPass, public ver::GraphicsResource
 	{
@@ -39,8 +40,6 @@ namespace ver
 			gfx.Draw(3u);
 		}
 	};
-
-
 
 	class CopyPass : public RG::BindingPass, public ver::GraphicsResource
 	{
@@ -104,11 +103,17 @@ namespace ver::rg
 				auto pass = std::make_unique<ver::rg::ShadowMappingPass>(gfx, "shadow");
 				AppendPass(std::move(pass));
 			}
+			
+			{
+				auto pass = std::make_unique<ver::rg::CursorPass>(gfx, "cursor");
+				pass->SetSinkLinkage("depthStencil", "clearDS.buffer");
+				AppendPass(std::move(pass));
+			}
 
 
 			{
 				auto pass = std::make_unique<StereoGBufferPass>(gfx, "lambertian");
-				pass->SetSinkLinkage("depthStencil", "clearDS.buffer");
+				pass->SetSinkLinkage("depthStencil", "cursor.depthStencil");
 				pass->SetSinkLinkage("auxDepth", "clearDS2.buffer");
 				AppendPass(std::move(pass));
 			}
@@ -152,7 +157,7 @@ namespace ver::rg
 
 			if (!gfx.StereoEnabled())
 			{
-				auto pass = std::make_unique<ver::AnaglyphPass>(gfx, "filter");
+				auto pass = std::make_unique<AnaglyphPass>(gfx, "filter");
 				pass->SetSinkLinkage("preFilterTarget", "forward.renderTarget");
 				pass->SetSinkLinkage("preFilterTarget2", "forward.renderTarget2");
 				pass->SetSinkLinkage("renderTarget", "clearRT.buffer");
@@ -171,13 +176,13 @@ namespace ver::rg
 					AppendPass(std::move(pass));
 				}
 				{
-					auto pass = std::make_unique<ver::CopyPass>(gfx, "filter");
+					auto pass = std::make_unique<CopyPass>(gfx, "filter");
 					pass->SetSinkLinkage("preFilterTarget", "forward.renderTarget");
 					pass->SetSinkLinkage("renderTarget", "clearRT.buffer");
 					AppendPass(std::move(pass));
 				}
 				{
-					auto pass = std::make_unique<ver::CopyPass>(gfx, "filter2");
+					auto pass = std::make_unique<CopyPass>(gfx, "filter2");
 					pass->SetSinkLinkage("preFilterTarget", "forward.renderTarget2");
 					pass->SetSinkLinkage("renderTarget", "clearRT2.buffer");
 					AppendPass(std::move(pass));

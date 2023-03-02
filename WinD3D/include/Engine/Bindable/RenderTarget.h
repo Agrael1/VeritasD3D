@@ -29,7 +29,7 @@ private:
 	void BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDepthStencilView) noxnd override;
 protected:
 	RenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture, uint32_t array_slice);
-	RenderTarget(Graphics& gfx, UINT width, UINT height);
+	RenderTarget(Graphics& gfx, UINT width, UINT height, DXGI_FORMAT format = DXGI_FORMAT::DXGI_FORMAT_B8G8R8A8_UNORM);
 protected:
 	UINT width;
 	UINT height;
@@ -39,11 +39,16 @@ protected:
 class ShaderInputRenderTarget : public RenderTarget
 {
 public:
-	ShaderInputRenderTarget(Graphics& gfx, UINT width, UINT height, UINT slot);
+	ShaderInputRenderTarget(Graphics& gfx, UINT width, UINT height, UINT slot, DXGI_FORMAT format = DXGI_FORMAT::DXGI_FORMAT_B8G8R8A8_UNORM);
 	void Bind(Graphics& gfx) noxnd override;
 	void BindTo(Graphics& gfx, uint32_t slot) noxnd;
 
 	auto SRV() { return pShaderResourceView; }
+	auto Resource()const noexcept {
+		winrt::com_ptr<ID3D11Resource> res;
+		pShaderResourceView->GetResource(res.put());
+		return res.as<ID3D11Texture2D>();
+	}
 private:
 	UINT slot;
 	winrt::com_ptr<ID3D11ShaderResourceView> pShaderResourceView;

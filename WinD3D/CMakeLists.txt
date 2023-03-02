@@ -76,10 +76,13 @@ target_sources(${PROJECT_NAME}
         "src/Engine/Scene/BillboardComponent.cpp"
         "src/Engine/Scene/Skybox.cpp"
         "src/Engine/Scene/SolidSphere2.cpp"
+        "src/Engine/Scene/Cursor.cpp"
+
 
         "src/Engine/Util/ImGUIManager.cpp"
         "src/Engine/Util/RenderGraphException.cpp"
         "src/Engine/Util/VFileDialog.cpp"
+
 	PUBLIC FILE_SET HEADERS 
         BASE_DIRS ${include_dir}
         FILES 
@@ -178,7 +181,7 @@ target_sources(${PROJECT_NAME}
             "include/Engine/Util/scoped_semaphore.h"
             "include/Engine/Util/Utility.h"
             "include/Engine/Util/VFileDialog.h"
-)
+ "include/Engine/Pass/CursorPass.h" "include/Engine/Bindable/CursorTransform.h" "include/Engine/Scene/Cursor.h" )
 
 
 target_link_libraries(${PROJECT_NAME} 

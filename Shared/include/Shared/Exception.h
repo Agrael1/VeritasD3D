@@ -8,7 +8,7 @@ namespace ver
 	class exception :std::exception
 	{
 	public:
-		exception(std::source_location sl = std::source_location::current())noexcept;
+		exception(std::source_location sl = std::source_location::current(), bool write = true)noexcept;
 	public:
 		void WriteToOutput()const noexcept;
 		const char* what()const noexcept override;

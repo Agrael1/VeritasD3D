@@ -86,6 +86,10 @@ namespace UT
 		{
 			return camera.GetRightViewMatrix();
 		}
+		auto GetCentralCamera()const noexcept
+		{
+			return camera.GetCentralViewMatrix();
+		}
 		auto GetPosition()const noexcept
 		{
 			return camera.GetPosition();
