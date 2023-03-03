@@ -8,6 +8,7 @@
 #include <assimp/types.h>
 #include <assimp/material.h>
 #include <assimp/mesh.h>
+#include <Engine/Util/scoped_semaphore.h>
 
 union Desc
 {
@@ -185,9 +186,16 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 winrt::Windows::Foundation::IAsyncAction
 Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noxnd
 {
-	static std::atomic<float> mesh_id = 1.0f;
-	float xmid = mesh_id;
-	mesh_id += 1.0f;
+	static float mesh_id = 1.0f;
+	static std::binary_semaphore sem{1};
+
+
+	float xmid = 0.0f;
+	{
+		ver::scoped_semaphore lock(sem);
+		xmid = mesh_id;
+		mesh_id += 1.0f;
+	}
 
 	auto desc = DescribeMaterial(material);
 	vtxLayout = CreateLayout(desc);
