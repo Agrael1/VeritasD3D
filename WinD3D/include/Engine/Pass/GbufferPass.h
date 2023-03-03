@@ -65,6 +65,7 @@ namespace RG
 		}
 		void Execute(Graphics& gfx) const noxnd override
 		{
+			gfx.SetCamera(true);
 			((std::shared_ptr<RenderTargetArray>&)(renderTarget))->Clear(gfx);
 			pShadowCBuf->Update(gfx);
 			RenderQueuePass::Execute(gfx);
