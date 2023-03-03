@@ -186,16 +186,12 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 winrt::Windows::Foundation::IAsyncAction
 Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noxnd
 {
-	static float mesh_id = 1.0f;
-	static std::binary_semaphore sem{1};
+	static std::atomic_int mesh_id = 1;
 
 
 	float xmid = 0.0f;
-	{
-		ver::scoped_semaphore lock(sem);
-		xmid = mesh_id;
-		mesh_id += 1.0f;
-	}
+	xmid = mesh_id++;
+
 
 	auto desc = DescribeMaterial(material);
 	vtxLayout = CreateLayout(desc);
@@ -228,7 +224,7 @@ Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::
 		// normal
 		if (material.GetTexture(aiTextureType_NORMALS, 0, &texFileName) == aiReturn_SUCCESS)
 			texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 2));
-		
+
 		if (material.GetTexture(aiTextureType_DISPLACEMENT, 0, &texFileName) == aiReturn_SUCCESS)
 			texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 3));
 
