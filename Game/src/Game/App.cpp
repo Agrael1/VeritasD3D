@@ -208,6 +208,7 @@ void App::ProcessInput(float)
 
 	if (!wnd.CursorEnabled()&&!block)
 	{
+		gfx.SetCursor({ short(gfx.GetWidth()/2), short(gfx.GetHeight() / 2) });
 		if (player->Flight())dt *= 3;
 		if (wnd.kbd.KeyIsPressed(VK_SHIFT))
 		{

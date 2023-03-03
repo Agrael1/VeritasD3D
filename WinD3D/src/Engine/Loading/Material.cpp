@@ -2,6 +2,7 @@
 #include <Engine/Bindable/BindableCommons.h>
 #include <Engine/Bindable/HullShader.h>
 #include <Engine/Bindable/DomainShader.h>
+#include <Engine/Bindable/ConstantBuffer.h>
 #include <Engine/Bindable/ConstantBuffersEx.h>
 #include <Engine/Dynamic/DynamicConstant.h>
 #include <assimp/types.h>
@@ -66,6 +67,7 @@ DC::Buffer CreateConstantBuffer(Desc desc)
 			{DC::Type::Bool,"useNormalMap"},
 			{DC::Type::Float,"normalMapWeight"} });
 	}
+	pscLayout.Add({ { DC::Type::Float,"meshId" } });
 	return { std::move(pscLayout) };
 }
 std::string GetShaderCode(Desc desc)
@@ -183,6 +185,10 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 winrt::Windows::Foundation::IAsyncAction
 Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noxnd
 {
+	static std::atomic<float> mesh_id = 1.0f;
+	float xmid = mesh_id;
+	mesh_id += 1.0f;
+
 	auto desc = DescribeMaterial(material);
 	vtxLayout = CreateLayout(desc);
 
@@ -231,6 +237,7 @@ Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::
 			auto pstask = ver::PixelShader::ResolveAsync(gfx, shaderCode + "ps.cso");
 
 			step.AddBindable(std::make_shared<TransformCbuf>(gfx, 0u));
+
 			if (desc.Any())
 				step.AddBindable(ver::Sampler::Resolve(gfx));
 			// PS material params (cbuf)
@@ -258,6 +265,7 @@ Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::
 			}
 			buf["useNormalMap"].SetIfExists(true);
 			buf["normalMapWeight"].SetIfExists(1.0f);
+			buf["meshId"].SetIfExists(xmid);
 			step.AddBindable(std::make_unique<CachingPixelConstantBufferEx>(gfx, std::move(buf), 1u));
 
 			auto pvs = co_await vstask;
@@ -293,6 +301,7 @@ Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::
 			draw.AddBindable(InputLayout::Resolve(gfx, vtxLayout, ver::VertexShader::Resolve(gfx, "solid.vs.cso")->GetBytecode()));
 
 			draw.AddBindable(std::make_shared<TransformCbuf>(gfx));
+			draw.AddBindable(std::make_shared<ver::PixelConstantBuffer<float>>(gfx, xmid, 3));
 
 			map.AddStep(std::move(draw));
 		}

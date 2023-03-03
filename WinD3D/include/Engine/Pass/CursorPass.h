@@ -37,6 +37,7 @@ namespace ver::rg
 		}
 		void Execute(Graphics& gfx) const noxnd override
 		{
+			renderTarget->Clear(gfx);
 			using namespace DirectX;
 			RenderQueuePass::Execute(gfx);
 
@@ -69,11 +70,19 @@ namespace ver::rg
 			auto mm = *reinterpret_cast<DirectX::XMFLOAT2A*>(sr.pData);
 			GetContext(gfx)->Unmap(dstres.get(), 0);
 
+			if (mm.y == 0.0f)
+			{
+				mm.y = 1.0f;
+				mm.x = 0.0f;
+			}
+
 			DirectX::XMFLOAT3 norm_cur{float(x), float(y), mm.y};
 			auto vec = DirectX::XMLoadFloat3(&norm_cur);
 			vec = DirectX::XMVector3Unproject(vec,
 				0, 0, w, h, 0, 1.0f, gfx.GetProjection(), gfx.GetCamera(), DirectX::XMMatrixIdentity());
 			ctm.SetTransform(vec);
+
+			//ver::std_info(std::format("Mesh {}", mm.x));
 
 			//place in buffer
 			pCursorBuffer->Update(gfx, { mm.x });

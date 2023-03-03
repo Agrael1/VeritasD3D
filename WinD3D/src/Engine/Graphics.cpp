@@ -52,18 +52,16 @@ void Graphics::GetHardwareAdapter()
 	winrt::com_ptr<IDXGIAdapter1> adapter;
 	auto factory6 = factory.as<IDXGIFactory6>();
 
-	auto queried = [&](uint32_t index) {
+	std::function<bool(uint32_t)> queried = [&](uint32_t index) {
 		return factory6->EnumAdapterByGpuPreference(index,
 			DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE,
 			__uuidof(IDXGIAdapter1), adapter.put_void()) >= 0;
 	};
-	auto fallback = [&](uint32_t index) {
+	std::function<bool(uint32_t)> fallback = [&](uint32_t index) {
 		return factory->EnumAdapters1(index, adapter.put()) >= 0;
 	};
 
-
-	decltype(queried)& x =
-		factory6 ? queried : reinterpret_cast<decltype(queried)&>(fallback);
+	auto&& x = !ver::debug_mode && factory6 ? queried : fallback;
 
 	for (UINT adapterIndex = 0; x(adapterIndex); ++adapterIndex)
 	{
