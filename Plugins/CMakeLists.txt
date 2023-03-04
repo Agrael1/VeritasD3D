@@ -19,6 +19,7 @@ include(${CMAKE_BINARY_DIR}/conan.cmake)
 add_subdirectory("WinRT")
 add_subdirectory("Wil")
 add_subdirectory("imgui")
+add_subdirectory("ImGuizmo")
 add_subdirectory("DirectXTex")
 add_subdirectory("HBAO")
 

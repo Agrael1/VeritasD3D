@@ -8,6 +8,7 @@
 namespace ver
 {
 	class GraphicsResource;
+	class Cursor;
 }
 
 class OutputOnlyRenderTarget;
@@ -17,6 +18,7 @@ class Graphics
 	inline static constexpr auto num_frames = 2;
 	inline static winrt::com_ptr<IDXGIFactory4> factory;
 	friend class ver::GraphicsResource;
+	friend class ver::Cursor;
 public:
 	Graphics(uint32_t width, uint32_t height, bool software = false);
 	Graphics(const Graphics&) = delete;

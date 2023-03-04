@@ -111,6 +111,10 @@ namespace UT
 			camera.SpawnControlWindow();
 		}
 		bool IsMidair()const noexcept { return midair; }
+		auto& GetCamera()
+		{
+			return camera;
+		}
 	private:
 		StereoCamera camera;
 		ver::ph::CharacterController physics;

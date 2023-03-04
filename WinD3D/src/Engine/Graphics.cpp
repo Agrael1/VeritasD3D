@@ -7,6 +7,7 @@
 #include <Engine/Bindable/RenderTarget.h>
 #include <dxgi1_6.h>
 #include <iostream>
+#include <ImGuizmo.h>
 
 namespace dx = DirectX;
 
@@ -156,6 +157,7 @@ void Graphics::BeginFrame(float r, float g, float b) noexcept
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
 	}
 	pLeftTarget->Clear(*this, { r,g,b,1.0 });
 	if (pRightTarget)pRightTarget->Clear(*this, { r,g,b,1.0 });

@@ -113,9 +113,11 @@ void App::GameTick()
 
 void App::DoFrame(float dt)
 {
+	using namespace DirectX;
 	if (!wnd.IsActive())return;
 
 	gfx.BeginFrame(0.2f, 0.2f, 0.2f);
+
 	gfx.SetLeftCamera(player->GetLeftViewMatrix());
 	gfx.SetRightCamera(player->GetRightViewMatrix());
 	gfx.SetCamera(player->GetCentralCamera());
@@ -137,6 +139,15 @@ void App::DoFrame(float dt)
 	ProcessInput(dt);
 	level.SpawnControlWindow();
 	player->SpawnControlWindow();
+
+	gfx.SetCamera(player->GetCentralCamera());
+	cur->SpawnControlWindow(gfx);
+
+	auto& cam = player->GetCamera();
+	auto cv = cur->GetCursorVector();
+	auto vcam = cam.GetPosition();
+	cv = DirectX::XMVector3LengthEst(DirectX::XMLoadFloat3(&vcam));
+	cam.SetFocus(cv.m128_f32[0]);
 
 	// Present
 	gfx.EndFrame();

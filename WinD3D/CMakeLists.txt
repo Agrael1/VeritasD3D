@@ -189,11 +189,11 @@ target_link_libraries(${PROJECT_NAME}
         assimp::assimp
 
         Shared
-        imgui
         DXTEX
         HBAO
         d3d11
         dxguid
+        imguizmo
 ) 
 
 target_include_directories(${PROJECT_NAME} PUBLIC

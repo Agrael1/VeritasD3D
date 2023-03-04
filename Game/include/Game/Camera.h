@@ -59,20 +59,24 @@ public:
 	void Orbit(float dx, float dy)noexcept;
 	void Translate(DirectX::XMFLOAT3 translation)noexcept;
 
-	DirectX::XMFLOAT3 GetPosition()const
+	DirectX::XMFLOAT3 GetPosition()const noexcept
 	{
 		return pos;
 	}
-	void SetPosition(DirectX::XMFLOAT3 v)
+	void SetPosition(DirectX::XMFLOAT3 v)noexcept
 	{
 		pos = v;
 	}
+	void SetFocus(float zdistance)noexcept
+	{
+		focus_distance = zdistance;
+	}
 	//in radians
-	void SetRotation(DirectX::XMFLOAT2 rotation)
+	void SetRotation(DirectX::XMFLOAT2 rotation)noexcept
 	{
 		rot = rotation;
 	}
-	DirectX::XMFLOAT3 TransformToView(DirectX::XMFLOAT3 pos)const
+	DirectX::XMFLOAT3 TransformToView(DirectX::XMFLOAT3 pos)const noexcept
 	{
 		namespace dx = DirectX;
 		dx::XMStoreFloat3(&pos, dx::XMVector3Transform(
