@@ -41,6 +41,9 @@ DirectX::XMMATRIX ver::Cursor::GetTransformXM() const noexcept
 	return ctm.GetTransform();
 }
 
+
+
+
 ver::Gizmo::Gizmo()
 	:gizmo_op(ImGuizmo::TRANSLATE),
 	gizmo_mode(ImGuizmo::WORLD),
@@ -68,7 +71,7 @@ void ver::Gizmo::Render(Graphics& gfx)
 				gizmo_mode = ImGuizmo::WORLD;
 		}
 
-		auto vmr = gfx.camera;
+		auto vmr = gfx.ccamera;
 		auto vp = gfx.GetProjection();
 
 		ImGuiIO& io = ImGui::GetIO();

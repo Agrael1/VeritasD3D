@@ -120,7 +120,7 @@ void App::DoFrame(float dt)
 
 	gfx.SetLeftCamera(player->GetLeftViewMatrix());
 	gfx.SetRightCamera(player->GetRightViewMatrix());
-	gfx.SetCamera(player->GetCentralCamera());
+	gfx.SetCentralCamera(player->GetCentralCamera());
 
 	cur->Submit();
 	level.Submit(gfx);
@@ -144,6 +144,10 @@ void App::DoFrame(float dt)
 	auto& cam = player->GetCamera();
 	auto p = cam.GetPosition();
 	cam.SetFocus(DirectX::XMVector3LengthEst(giz.GetPosition() - DirectX::XMLoadFloat3(&p)).m128_f32[0]);
+
+	auto m = giz.GetTransformXM();	
+	DirectX::XMStoreFloat4x4(&model_transform, m);
+	level.GetWorld().SetRootTransform(m);
 
 	// Present
 	gfx.EndFrame();
@@ -216,6 +220,12 @@ void App::ProcessInput(float)
 		{
 			if (e->LeftIsPressed())
 			{
+				//auto m = giz.GetTransformXM();
+				//auto prev_m = DirectX::XMLoadFloat4x4(&model_transform);
+				//m = prev_m * m;
+				//
+				//DirectX::XMStoreFloat4x4(&model_transform, m);
+				//level.GetWorld().SetRootTransform(m);
 				giz.SetPosition(cur->GetTransformXM().r[3]);
 			}
 		}

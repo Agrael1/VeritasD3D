@@ -46,10 +46,24 @@ namespace ver
 		{
 			return DirectX::XMLoadFloat3(&position);
 		}
+		DirectX::XMMATRIX GetTransformXM()const noexcept
+		{
+			using namespace DirectX;
+			auto m = DirectX::XMLoadFloat4x4(&control_matrix);
+			auto pos = DirectX::XMLoadFloat3(&position);
+			DirectX::XMVECTOR tr, rot, sc;
+			DirectX::XMMatrixDecompose(&sc, &rot, &tr, m);
+			tr -= pos;
+
+			return DirectX::XMMatrixAffineTransformation(
+				sc, pos,
+				rot, tr
+			);
+		}
 	private:
 		ImGuizmo::OPERATION gizmo_op;
 		ImGuizmo::MODE gizmo_mode;
 		DirectX::XMFLOAT4X4 control_matrix;
-		DirectX::XMFLOAT3 position;
+		DirectX::XMFLOAT3 position{};
 	};
 }
