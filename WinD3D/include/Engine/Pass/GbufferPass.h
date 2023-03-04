@@ -65,7 +65,7 @@ namespace RG
 		}
 		void Execute(Graphics& gfx) const noxnd override
 		{
-			gfx.SetCamera(true);
+			gfx.SetCamera(Graphics::left);
 			((std::shared_ptr<RenderTargetArray>&)(renderTarget))->Clear(gfx);
 			pShadowCBuf->Update(gfx);
 			RenderQueuePass::Execute(gfx);
@@ -74,7 +74,7 @@ namespace RG
 			std::swap(auxDepth, depthStencil);
 
 			//change camera
-			gfx.SetCamera(false);
+			gfx.SetCamera(Graphics::right);
 
 			((std::shared_ptr<RenderTargetArray>&)(renderTarget))->Clear(gfx);
 			pShadowCBuf->Update(gfx);
@@ -83,7 +83,7 @@ namespace RG
 			std::swap(auxBuffers, (std::shared_ptr<RenderTargetArray>&)renderTarget);
 			std::swap(auxDepth, depthStencil);
 
-			gfx.SetCamera(true);
+			gfx.SetCamera(Graphics::left);
 		}
 	private:
 		std::shared_ptr<ver::ShadowCameraCBuf> pShadowCBuf;

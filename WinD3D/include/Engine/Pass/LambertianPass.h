@@ -53,13 +53,13 @@ namespace ver::rg
 			std::swap(depthStencil, depthStencil2);
 
 			//camera
-			gfx.SetCamera(false);
+			gfx.SetCamera(Graphics::right);
 
 			RenderQueuePass::Execute(gfx);
 			std::swap(renderTarget, renderTarget2);
 			std::swap(depthStencil, depthStencil2);
 
-			gfx.SetCamera(true);
+			gfx.SetCamera(Graphics::left);
 		}
 	private:
 		mutable std::shared_ptr<IRenderTarget> renderTarget2;

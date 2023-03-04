@@ -510,10 +510,10 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_LBUTTONUP:
 	{
 		// stifle this mouse message if imgui wants to capture
-		if (imio.WantCaptureMouse)
-		{
-			break;
-		}
+		//if (imio.WantCaptureMouse)
+		//{
+		//	break;
+		//}
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.OnLeftReleased(pt.x, pt.y);
 		// release mouse if outside of window

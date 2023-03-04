@@ -8,9 +8,7 @@
 
 
 ver::Cursor::Cursor(Graphics& gfx)
-	:colorBuffer(std::make_shared<PixelConstantBuffer<PSColorConstant>>(gfx, colorConst, 1u)),
-	gizmo_op(ImGuizmo::TRANSLATE),
-	gizmo_mode(ImGuizmo::WORLD)
+	:colorBuffer(std::make_shared<PixelConstantBuffer<PSColorConstant>>(gfx, colorConst, 1u))
 {
 	namespace dx = DirectX;
 	const auto geometryTag = "$ssphere." + std::to_string(radius);
@@ -43,7 +41,12 @@ DirectX::XMMATRIX ver::Cursor::GetTransformXM() const noexcept
 	return ctm.GetTransform();
 }
 
-void ver::Cursor::SpawnControlWindow(Graphics& gfx)
+ver::Gizmo::Gizmo()
+	:gizmo_op(ImGuizmo::TRANSLATE),
+	gizmo_mode(ImGuizmo::WORLD),
+	control_matrix(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1){}
+
+void ver::Gizmo::Render(Graphics& gfx)
 {
 	if (ImGui::Begin("Cursor"))
 	{
@@ -67,12 +70,10 @@ void ver::Cursor::SpawnControlWindow(Graphics& gfx)
 
 		auto vmr = gfx.camera;
 		auto vp = gfx.GetProjection();
-		auto gp = ctm.GetTransform();
-		auto i = DirectX::XMMatrixIdentity();
 
 		ImGuiIO& io = ImGui::GetIO();
 		ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-		ImGuizmo::Manipulate((float*)&vmr, (float*)&vp, gizmo_op, gizmo_mode, (float*)&i);
+		ImGuizmo::Manipulate((float*)&vmr, (float*)&vp, gizmo_op, gizmo_mode, (float*)&control_matrix);
 	}
 	ImGui::End();
 }

@@ -8,7 +8,7 @@
 namespace ver
 {
 	class GraphicsResource;
-	class Cursor;
+	class Gizmo;
 }
 
 class OutputOnlyRenderTarget;
@@ -18,7 +18,14 @@ class Graphics
 	inline static constexpr auto num_frames = 2;
 	inline static winrt::com_ptr<IDXGIFactory4> factory;
 	friend class ver::GraphicsResource;
-	friend class ver::Cursor;
+	friend class ver::Gizmo;
+public:
+	enum Cam
+	{
+		left,
+		right,
+		central,
+	};
 public:
 	Graphics(uint32_t width, uint32_t height, bool software = false);
 	Graphics(const Graphics&) = delete;
@@ -58,14 +65,28 @@ public:
 	{
 		lcamera = Camera;
 	}
+	void SetCentralCamera(DirectX::XMMATRIX Camera)noexcept
+	{
+		ccamera = Camera;
+	}
 	void SetRightCamera(DirectX::XMMATRIX Camera)noexcept
 	{
 		rcamera = Camera;
 	}
-	void SetCamera(bool left)noexcept
+	void SetCamera(Cam c = Cam::left)noexcept
 	{
-		camera = left ? lcamera : rcamera;
-		//camera = lcamera;
+		switch (c)
+		{
+		case Graphics::left:
+			camera = lcamera;
+			break;
+		case Graphics::right:
+			camera = rcamera;
+			break;
+		default:
+			camera = ccamera;
+			break;
+		}
 	}
 	void SetCursor(POINTS cur)noexcept
 	{
@@ -120,6 +141,7 @@ private:
 	DirectX::XMMATRIX camera;
 	DirectX::XMMATRIX lcamera;
 	DirectX::XMMATRIX rcamera;
+	DirectX::XMMATRIX ccamera;
 	DirectX::XMFLOAT3 shadowPos;
 	POINTS cursor{0,0};
 

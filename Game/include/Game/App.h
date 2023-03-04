@@ -54,6 +54,7 @@ namespace UT
 		Window wnd;
 		Graphics gfx;
 		std::optional<ver::Cursor> cur;
+		ver::Gizmo giz;
 
 		ver::audio::Audio audio;
 		ver::audio::ogg_stream song;
@@ -70,6 +71,13 @@ namespace UT
 		UT::Flag flag; //to level
 
 		DirectX::XMFLOAT3 transform{};
+		DirectX::XMFLOAT4X4 model_transform
+		{
+			1,0,0,0,
+			0,1,0,0,
+			0,0,1,0,
+			0,0,0,1
+		};
 
 		std::optional<ver::rg::StereoGraph> rg;
 		bool block = false;

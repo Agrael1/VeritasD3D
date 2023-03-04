@@ -139,15 +139,11 @@ void App::DoFrame(float dt)
 	ProcessInput(dt);
 	level.SpawnControlWindow();
 	player->SpawnControlWindow();
-
-	gfx.SetCamera(player->GetCentralCamera());
-	cur->SpawnControlWindow(gfx);
+	giz.Render(gfx);
 
 	auto& cam = player->GetCamera();
-	auto cv = cur->GetCursorVector();
-	auto vcam = cam.GetPosition();
-	cv = DirectX::XMVector3LengthEst(DirectX::XMLoadFloat3(&vcam));
-	cam.SetFocus(cv.m128_f32[0]);
+	auto p = cam.GetPosition();
+	cam.SetFocus(DirectX::XMVector3LengthEst(giz.GetPosition() - DirectX::XMLoadFloat3(&p)).m128_f32[0]);
 
 	// Present
 	gfx.EndFrame();
@@ -215,6 +211,14 @@ void App::ProcessInput(float)
 	{
 		auto [x, y] = wnd.mouse.GetPos();
 		gfx.SetCursor({ short(x), short(y) });
+
+		while (const auto e = wnd.mouse.Read())
+		{
+			if (e->LeftIsPressed())
+			{
+				giz.SetPosition(cur->GetTransformXM().r[3]);
+			}
+		}
 	}
 
 	if (!wnd.CursorEnabled()&&!block)
