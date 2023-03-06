@@ -28,9 +28,9 @@ ver::IAsyncAction App::InitializeAsync()
 {
 	co_await winrt::when_all(audio.InitializeAsync(), gfx.CreateSwapChain(wnd.GetHandle()));
 	co_await UT::Loading::Execute(gfx);
-	
+
 	co_await winrt::when_all(
-		level.InitializeAsync(physics, gfx, u"../models/face/faceWIP.obj"), 
+		level.InitializeAsync(physics, gfx, u"../models/face/faceWIP.obj"),
 		song.InitializeAsync(audio, u"../music/foregone.ogg"));
 
 	pic.emplace(gfx);
@@ -86,11 +86,11 @@ int App::Go()
 		{
 			//song.pause();
 
-			if(!mp.IsPlaying())
+			if (!mp.IsPlaying())
 				mp.Play();
 
 			mp.TransferDirect(vid->SRV());;
-			
+
 			vid->Execute(gfx);
 			ProcessInput(dt);
 			break;
@@ -105,7 +105,7 @@ int App::Go()
 void App::GameTick()
 {
 	interaction.Apply();
-	if(!block)block = level.PollFinish();
+	if (!block)block = level.PollFinish();
 	float y = player->GetPosition().y;
 	if (y < -300.0f)
 		player->Respawn({ -183.0f, -36.6f, -34.8f });
@@ -130,7 +130,7 @@ void App::DoFrame(float dt)
 		ImGuiDockNodeFlags_PassthruCentralNode |
 		ImGuiDockNodeFlags_NoDockingInCentralNode);
 
-	if (ImGui::Begin("Simulation speed", nullptr, ImGuiWindowFlags_NoDecoration| ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground))
+	if (ImGui::Begin("Simulation speed", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground))
 	{
 		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	}
@@ -139,15 +139,19 @@ void App::DoFrame(float dt)
 	ProcessInput(dt);
 	level.SpawnControlWindow();
 	player->SpawnControlWindow();
-	giz.Render(gfx);
 
-	auto& cam = player->GetCamera();
-	auto p = cam.GetPosition();
-	cam.SetFocus(DirectX::XMVector3LengthEst(giz.GetPosition() - DirectX::XMLoadFloat3(&p)).m128_f32[0]);
+	if (wnd.CursorEnabled())
+	{
+		giz.Render(gfx);
 
-	auto m = giz.GetTransformXM();	
-	DirectX::XMStoreFloat4x4(&model_transform, m);
-	level.GetWorld().SetRootTransform(m);
+		auto& cam = player->GetCamera();
+		auto p = cam.GetPosition();
+		cam.SetFocus(DirectX::XMVector3LengthEst(giz.GetPosition() - DirectX::XMLoadFloat3(&p)).m128_f32[0]);
+
+		auto m = giz.GetTransformXM();
+		DirectX::XMStoreFloat4x4(&model_transform, m);
+		level.GetWorld().SetRootTransform(m);
+	}
 
 	// Present
 	gfx.EndFrame();
@@ -179,9 +183,9 @@ void App::ProcessInput(float)
 			state = State::Video;
 			break;
 		case 'M':
-			if (paused^=true)
+			if (paused ^= true)
 				song.pause();
-			else 
+			else
 				song.play();
 			break;
 		case 'F':
@@ -231,13 +235,13 @@ void App::ProcessInput(float)
 		}
 	}
 
-	if (!wnd.CursorEnabled()&&!block)
+	if (!wnd.CursorEnabled() && !block)
 	{
-		gfx.SetCursor({ short(gfx.GetWidth()/2), short(gfx.GetHeight() / 2) });
+		gfx.SetCursor({ short(gfx.GetWidth() / 2), short(gfx.GetHeight() / 2) });
 		if (player->Flight())dt *= 3;
 		if (wnd.kbd.KeyIsPressed(VK_SHIFT))
 		{
-			if(!player->IsMidair()&&!player->Flight())
+			if (!player->IsMidair() && !player->Flight())
 				dt *= 2;
 		}
 		if (wnd.kbd.KeyIsPressed('W'))
