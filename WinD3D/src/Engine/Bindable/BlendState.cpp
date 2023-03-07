@@ -36,11 +36,6 @@ BlendState::BlendState(Graphics& gfx, bool blending, std::optional<float> factor
 	ver::check_hresult(GetDevice(gfx)->CreateBlendState(&blendDesc, pBlendState.put()));
 }
 
-void BlendState::Bind(Graphics& gfx) noxnd
-{
-	Bind(*GetContext(gfx));
-}
-
 void ver::BlendState::Bind(ID3D11DeviceContext& context) noxnd
 {
 	const float* data = factors ? factors->data() : nullptr;
