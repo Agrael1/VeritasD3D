@@ -82,6 +82,7 @@ public:
 		return buffer.empty();
 	}
 	void Flush() noexcept;
+	void BoundCursor(int width, int height) noexcept;
 	void EnableRaw() noexcept;
 	void DisableRaw() noexcept;
 	bool RawEnabled() const noexcept;

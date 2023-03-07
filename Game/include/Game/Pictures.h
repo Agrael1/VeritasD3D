@@ -2,7 +2,8 @@
 #include <Engine/Graphics.h>
 #include <Engine/Bindable/BindableCommons.h>
 #include <Engine/Bindable/RenderTarget.h>
-#include <concurrent_vector.h>
+#include <Engine/Bindable/Viewport.h>
+#include <Engine/Util/scoped_semaphore.h>
 
 namespace ver
 {
@@ -23,31 +24,34 @@ namespace ver
 		}
 		ver::IAsyncAction LoadFileAsync(Graphics& gfx, std::filesystem::path p)
 		{
-			textures.push_back(co_await ver::Texture::ResolveAsync(gfx, p));
-		}
-	public:
-		void Execute(Graphics& gfx, uint32_t image)
-		{
-			gfx.BeginFrame(0, 0, 0);
-			auto& tx = textures.at(image);
-
-			auto [w, h] = tx->Dimensions();
+			auto t = std::make_unique<ver::Texture>();
+			co_await t->InitializeAsync(gfx, p);
+			auto [w, h] = t->Dimensions();
 			auto wx2 = w * 0.5f;
 			auto w2 = gfx.GetWidth() * 0.5f;
 			auto hx2 = h * 0.5f;
 			auto h2 = gfx.GetHeight() * 0.5f;
+			auto xvp = std::make_unique<ver::Viewport>(gfx, w, h, w2 - wx2, h2 - hx2);
 
-
-
-			vp = std::make_shared<ver::Viewport>(gfx, w, h, w2 - wx2, h2 - hx2);
-
-			gfx.GetLeftTarget()->BindAsBuffer(gfx);
+			{
+				ver::scoped_semaphore sem{tex_lock};
+				std::swap(vp, xvp);
+				std::swap(texture, t);
+			}
+		}
+	public:
+		void Execute(Graphics& gfx)
+		{
+			ver::scoped_semaphore sem{tex_lock};
+			gfx.BeginFrame(0, 0, 0);
 			ver::Topology::Bind(gfx);
-			vp->Bind(gfx);
 			sam->Bind(gfx);
-			tx->Bind(gfx);
+			texture->Bind(gfx);
 			vs->Bind(gfx);
 			ps->Bind(gfx);
+
+			gfx.GetLeftTarget()->BindAsBuffer(gfx);
+			vp->Bind(gfx);
 			cbuf1.Bind(gfx);
 			gfx.Draw(3u);
 
@@ -59,11 +63,14 @@ namespace ver
 			gfx.EndFrame();
 		}
 	private:
-		concurrency::concurrent_vector<std::shared_ptr<ver::Texture>> textures;
+		std::binary_semaphore tex_lock{ 1 };
+		std::unique_ptr<ver::Texture> texture;
+		std::unique_ptr<ver::Viewport> vp;
+
 		std::shared_ptr<ver::VertexShader> vs;
 		std::shared_ptr<ver::PixelShader> ps;
 		std::shared_ptr<ver::Sampler> sam;
-		std::shared_ptr<ver::Viewport> vp;
+
 		ver::PixelConstantBuffer<uint32_t> cbuf1;
 		PixelConstantBuffer<uint32_t> cbuf2;
 	};

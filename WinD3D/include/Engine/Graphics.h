@@ -88,7 +88,7 @@ public:
 			break;
 		}
 	}
-	void SetCursor(POINTS cur)noexcept
+	void SetCursor(std::pair<int, int> cur)noexcept
 	{
 		cursor = cur;
 	}
@@ -143,7 +143,7 @@ private:
 	DirectX::XMMATRIX rcamera;
 	DirectX::XMMATRIX ccamera;
 	DirectX::XMFLOAT3 shadowPos;
-	POINTS cursor{0,0};
+	std::pair<int, int> cursor{0,0};
 
 	bool imguiEnabled = true;
 	bool stereoEnabled = false;

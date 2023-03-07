@@ -3,7 +3,7 @@
 class ImGUIManager
 {
 public:
-	enum Style
+	enum class Style : uint8_t
 	{
 		VGUI,
 		Dark,

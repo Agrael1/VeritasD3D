@@ -5,8 +5,21 @@
 #include <Util/Filters.h>
 #include <Engine/Pass/FullscreenPass.h>
 #include <Engine/Bindable/Texture.h>
+#include <Engine/Util/VFileDialog.h>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+#include <assimp/Scene.h>
 
 using namespace UT;
+
+
+constexpr COMDLG_FILTERSPEC rgSpec[] =
+{
+	{ L"Image Array", L"*.dds"},
+	{ L"Videos", L"*.wmv"},
+	{ L"Models", L"*.obj"},
+	{ L"All Files", L"*.*"},
+};
 
 namespace dx = DirectX;
 
@@ -16,7 +29,7 @@ App::App(uint32_t width, uint32_t height)
 {
 	gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(height) / float(width), 0.5f, 1000.0f));
 	ResetTransform();
-	wnd.ChangeToFullScreen();
+	//wnd.ChangeToFullScreen();
 	wnd.DisableCursor();
 	wnd.mouse.EnableRaw();
 }
@@ -33,27 +46,14 @@ ver::IAsyncAction App::InitializeAsync()
 		level.InitializeAsync(physics, gfx, u"../models/face/faceWIP.obj"),
 		song.InitializeAsync(audio, u"../music/foregone.ogg"));
 
-	pic.emplace(gfx);
-	pic->InitializeAsync(gfx);
-	co_await winrt::when_all(
-		pic->LoadFileAsync(gfx, u"../models/a1.dds")
-	);
-
 	mp.Initialize(gfx.RawDevice(), gfx.RawContext());
 	mp.SetStereo(gfx.StereoEnabled());
-	mp.SetSource(L"C:\\Users\\SDIG\\source\\repos\\VeritasD3D\\Game\\models/st2.wmv");
-
-	vid.emplace(gfx);
-
-	auto [w, h] = mp.GetNativeVideoSize();
-	//co_await vid->InitializeAsync(gfx, h, w);
 
 	cur.emplace(gfx);
-
-	CreateRenderGraph();
 	level.AddToScene(scene);
 	player.emplace(scene, level.GetLightBuffer(), gfx);
 	player->Teleport({ -183.0f, -36.6f, -34.8f });
+	state = State::Game;
 }
 
 int App::Go()
@@ -65,16 +65,25 @@ int App::Go()
 		ResetTransform();
 		if (const auto a = wnd.ProcessMessages())
 			return (int)a.value();
+		ProcessEvents();
+
+		ver::scoped_semaphore xlk{lock};
 
 		switch (state)
 		{
-		case UT::App::State::Picture:
-			mp.Stop();
-			pic->Execute(gfx, 0);
+		case UT::App::State::Image:
+			pic->Execute(gfx);
 			ProcessInput(dt);
 			break;
+		case UT::App::State::Model:
+			scene.get_scene().simulate(dt);
+			DoFrameModel(dt);
+			scene.get_scene().fetchResults(true);
+			player->Update(transform, dt);
+			player->Sync();
+			GameTick();
+			break;
 		case UT::App::State::Game:
-			mp.Stop();
 			scene.get_scene().simulate(dt);
 			DoFrame(dt);
 			scene.get_scene().fetchResults(true);
@@ -83,18 +92,12 @@ int App::Go()
 			GameTick();
 			break;
 		case UT::App::State::Video:
-		{
-			//song.pause();
-
 			if (!mp.IsPlaying())
 				mp.Play();
-
-			mp.TransferDirect(vid->SRV());;
-
+			mp.TransferDirect(vid->SRV());
 			vid->Execute(gfx);
 			ProcessInput(dt);
 			break;
-		}
 		default:
 			break;
 		}
@@ -109,6 +112,144 @@ void App::GameTick()
 	float y = player->GetPosition().y;
 	if (y < -300.0f)
 		player->Respawn({ -183.0f, -36.6f, -34.8f });
+}
+
+void UT::App::ProcessEvents()
+{
+	using enum ::Event;
+	for (auto e : wnd.GetEvents())
+	{
+		switch (e)
+		{
+		case Resize:OnResize(); break;
+		case Restyle:OnRestyle(); break;
+		case LoadAsset:OnLoadAsset(); break;
+		case Play:OnPlay(); break;
+		default:break;
+		}
+	}
+}
+void UT::App::OnResize()
+{
+	gfx.OnResize(wnd.GetWidth(), wnd.GetHeight());
+	if (state == State::Model)
+	{
+		CreateRenderGraphModel();
+	}
+	else
+	{
+		CreateRenderGraph();
+	}
+	gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(wnd.GetHeight()) / float(wnd.GetWidth()), 0.5f, 1000.0f));
+	wnd.mouse.BoundCursor(wnd.GetWidth(), wnd.GetHeight());
+	gfx.SetCursor(wnd.mouse.GetPos());
+}
+void UT::App::OnRestyle()
+{
+	imgui.SetStyle(wnd.GetStyle());
+}
+void UT::App::OnPlay()
+{
+	ver::scoped_semaphore xlk{lock};
+	CreateRenderGraph();
+	player->ToggleFlight();
+	player->Teleport({ -183.0f, -36.6f, -34.8f });
+	state = State::Game;
+}
+winrt::fire_and_forget UT::App::OnLoadAsset()
+{
+	co_await winrt::resume_background();
+	ver::std_info("Loading Issued");
+	ver::VFileOpenDialog pick;
+	pick.SetFileTypes(rgSpec);
+	auto path = pick.GetFilePath();
+	if (path.empty()) { ver::std_info("Operation Cancelled."); co_return; }
+
+	auto ext = path.extension();
+	if (ext.native().contains(L"wmv"))
+		co_await LoadVideoAsync(std::move(path));
+	else if (ext.native().contains(L"dds"))
+		co_await LoadImageAsync(std::move(path));
+	else
+		co_await LoadModelAsync(std::move(path));
+	wnd.EnableLoading();
+}
+
+ver::IAsyncAction UT::App::LoadModelAsync(std::filesystem::path path)
+{
+	co_await winrt::resume_background();
+	ver::std_info("Loading Model");
+	auto m = std::make_unique<Model>();
+
+	Assimp::Importer imp;
+	const auto pScene = imp.ReadFile(path.string().data(),
+		aiProcess_Triangulate |
+		aiProcess_JoinIdenticalVertices |
+		aiProcess_ConvertToLeftHanded |
+		aiProcess_GenNormals |
+		aiProcess_CalcTangentSpace
+	);
+	if (pScene == nullptr || !pScene->HasMeshes())
+		co_return;
+
+	co_await m->InitializeAsync(gfx, *pScene, std::move(path), 10.0f);
+
+	auto skb = std::make_unique<ver::Skybox>();
+	co_await skb->InitializeAsync(gfx, u"../models/skybox.dds", false);
+	{
+		ver::scoped_semaphore xlk{lock};
+		std::swap(m, model);
+		std::swap(skb, skybox);
+
+		CreateRenderGraphModel();
+		player->Teleport({ 0, 10, 0 });
+		player->ToggleFlight();
+
+		state = State::Model;
+	}
+	ver::std_info("Loading Finished");
+}
+ver::IAsyncAction UT::App::LoadVideoAsync(std::filesystem::path path)
+{
+	co_await winrt::resume_background();
+	ver::std_info("Loading Video");
+
+	mp.SetSource(path.wstring());
+	vid.emplace(gfx);
+	auto [w, h] = mp.GetNativeVideoSize();
+	co_await vid->InitializeAsync(gfx, h, w);
+
+	state = State::Video;
+}
+ver::IAsyncAction UT::App::LoadImageAsync(std::filesystem::path path)
+{
+	co_await winrt::resume_background();
+	ver::std_info("Loading Image");
+	if (!pic)
+	{
+		pic.emplace(gfx);
+		co_await pic->InitializeAsync(gfx);
+	}
+	co_await pic->LoadFileAsync(gfx, std::move(path));
+	state = State::Image;
+}
+
+void UT::App::SetState(State st)
+{
+	if (cur_st == st)return;
+	if (cur_st == State::Video)
+	{
+		mp.Stop();
+	}
+	if (cur_st == State::Game)
+	{
+		song.pause();
+	}
+	if (st == State::Game)
+	{
+		song.play();
+	}
+	cur_st = st;
 }
 
 void App::DoFrame(float dt)
@@ -158,6 +299,56 @@ void App::DoFrame(float dt)
 	rg->Reset();
 }
 
+void UT::App::DoFrameModel(float dt)
+{
+	using namespace DirectX;
+	if (!wnd.IsActive())return;
+
+	gfx.BeginFrame(0.4f, 0.4f, 0.4f);
+
+	gfx.SetLeftCamera(player->GetLeftViewMatrix());
+	gfx.SetRightCamera(player->GetRightViewMatrix());
+	gfx.SetCentralCamera(player->GetCentralCamera());
+
+	cur->Submit();
+	model->Submit();
+	skybox->Submit();
+	rg->Execute(gfx);
+
+	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(),
+		ImGuiDockNodeFlags_PassthruCentralNode |
+		ImGuiDockNodeFlags_NoDockingInCentralNode);
+
+	if (ImGui::Begin("Simulation speed", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground))
+	{
+		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	}
+	ImGui::End();
+
+	ProcessInput(dt);
+
+	probe.SpawnWindow(*model);
+
+	player->SpawnControlWindow();
+
+	if (wnd.CursorEnabled())
+	{
+		giz.Render(gfx);
+
+		auto& cam = player->GetCamera();
+		auto p = cam.GetPosition();
+		cam.SetFocus(DirectX::XMVector3LengthEst(giz.GetPosition() - DirectX::XMLoadFloat3(&p)).m128_f32[0]);
+
+		auto m = giz.GetTransformXM();
+		DirectX::XMStoreFloat4x4(&model_transform, m);
+		model->SetRootTransform(m);
+	}
+
+	// Present
+	gfx.EndFrame();
+	rg->Reset();
+}
+
 void App::ProcessInput(float)
 {
 	float dt = gfx.GetFrameStep();
@@ -170,18 +361,6 @@ void App::ProcessInput(float)
 
 		switch (e->GetCode())
 		{
-		case 'P':
-			song.pause();
-			state = State::Picture;
-			break;
-		case 'G':
-			song.play();
-			state = State::Game;
-			break;
-		case 'V':
-			song.pause();
-			state = State::Video;
-			break;
 		case 'M':
 			if (paused ^= true)
 				song.pause();
@@ -190,7 +369,7 @@ void App::ProcessInput(float)
 			break;
 		case 'F':
 			player->ToggleFlight();
-			return;
+			break;
 		case VK_INSERT:
 			if (wnd.CursorEnabled())
 			{
@@ -217,21 +396,12 @@ void App::ProcessInput(float)
 
 	if (wnd.CursorEnabled())
 	{
-		auto [x, y] = wnd.mouse.GetPos();
-		gfx.SetCursor({ short(x), short(y) });
+		gfx.SetCursor(wnd.mouse.GetPos());
 
 		while (const auto e = wnd.mouse.Read())
 		{
 			if (e->LeftIsPressed())
-			{
-				//auto m = giz.GetTransformXM();
-				//auto prev_m = DirectX::XMLoadFloat4x4(&model_transform);
-				//m = prev_m * m;
-				//
-				//DirectX::XMStoreFloat4x4(&model_transform, m);
-				//level.GetWorld().SetRootTransform(m);
 				giz.SetPosition(cur->GetTransformXM().r[3]);
-			}
 		}
 	}
 
@@ -282,20 +452,8 @@ void App::ProcessInput(float)
 		}
 	}
 
-	if (wnd.ResizeCalled())
-	{
-		rg.reset();
-		gfx.OnResize(wnd.GetWidth(), wnd.GetHeight());
-		CreateRenderGraph();
-		gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(wnd.GetHeight()) / float(wnd.GetWidth()), 0.5f, 1000.0f));
-		wnd.ResizeComplete();
-	}
-
-	if (wnd.RestyleCalled())
-	{
-		imgui.SetStyle((ImGUIManager::Style(wnd.GetStyle())));
-		wnd.RestyleComplete();
-	}
+	wnd.kbd.Flush();
+	wnd.mouse.Flush();
 }
 
 void App::CreateRenderGraph()
@@ -303,5 +461,13 @@ void App::CreateRenderGraph()
 	rg.emplace(gfx);
 	cur->LinkTechniques(*rg);
 	level.Link(*rg);
+}
+
+void UT::App::CreateRenderGraphModel()
+{
+	rg.emplace(gfx);
+	cur->LinkTechniques(*rg);
+	model->LinkTechniques(*rg);
+	skybox->LinkTechniques(*rg);
 }
 

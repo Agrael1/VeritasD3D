@@ -14,6 +14,7 @@ enum class MenuItems :UINT_PTR
 	Style_VGUI = ID_STYLES_VGUI,
 	Style_Dark = ID_STYLES_DARK,
 	Style_Cherry = ID_STYLES_CHERRY,
+	PlayGame = ID_MODE_GAME,
 	About = ID_HELP_ABOUT,
 };
 
@@ -139,26 +140,9 @@ void Window::SetTitle(std::string_view title)
 	ver::check_windows(SetWindowText(hWnd.get(), title.data()));
 }
 
-bool Window::RestyleCalled() const noexcept
+void Window::EnableLoading() 
 {
-	return bRestyleIssued;
-}
-void Window::RestyleComplete() noexcept
-{
-	bRestyleIssued = false;
-}
-Window::Style Window::GetStyle() const noexcept
-{
-	return style;
-}
-
-UINT Window::GetWidth() const noexcept
-{
-	return width;
-}
-UINT Window::GetHeight() const noexcept
-{
-	return height;
+	menu.EnableLoading();
 }
 
 void Window::EnableCursor() noexcept
@@ -178,25 +162,6 @@ void Window::DisableCursor() noexcept
 bool Window::CursorEnabled() const noexcept
 {
 	return cursorEnabled;
-}
-
-bool Window::LoadCalled() const noexcept
-{
-	return bLoadCallIssued;
-}
-void Window::LoadingComplete() noexcept
-{
-	EnableMenuItem(FileMenu.get(), 0, MF_BYPOSITION | MF_ENABLED);
-	bLoadCallIssued = false;
-}
-
-bool Window::ResizeCalled() const noexcept
-{
-	return bResizeIssued;
-}
-void Window::ResizeComplete() noexcept
-{
-	bResizeIssued = false;
 }
 
 bool Window::DrawGrid() const noexcept
@@ -320,61 +285,38 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 		width = LOWORD(lParam);
 		height = HIWORD(lParam);
-		bResizeIssued = true;
+		events.push(Event::Resize);
 		break;
 	case WM_CREATE:
-		menu.reset(GetMenu(hWnd));
-		FileMenu.reset(GetSubMenu(menu.get(), 0));
-		OptionsMenu.reset(GetSubMenu(menu.get(), 1));
-		StylesMenu.reset(GetSubMenu(menu.get(), 2));
-		CheckMenuRadioItem(StylesMenu.get(), 0, 2, 0, MF_BYPOSITION);
+		menu.Initialize(GetMenu(hWnd));
 		break;
 	case WM_COMMAND:
 		switch (MenuItems(LOWORD(wParam)))
 		{
 		case MenuItems::Load:
-			EnableMenuItem(FileMenu.get(), 0, MF_BYPOSITION | MF_GRAYED);
-			bLoadCallIssued = true;
+			menu.DisableLoading();
+			events.push(Event::LoadAsset);
 			break;
 		case MenuItems::Exit:
 			PostQuitMessage(0);
 			return 0;
 		case MenuItems::ShowGrid:
-		{
-			bGridEnabled ^= 1;
-			MENUITEMINFO mii
-			{
-				.cbSize = sizeof(MENUITEMINFO),
-				.fMask = MIIM_STATE,
-				.fState = UINT(bGridEnabled ? MFS_CHECKED : MFS_UNCHECKED)
-			};
-			SetMenuItemInfo(OptionsMenu.get(), 0, true, &mii);
+			menu.ToggleGrid();
 			break;
-		}
 		case MenuItems::Style_VGUI:
-			CheckMenuRadioItem(StylesMenu.get(), 0, 2, 0, MF_BYPOSITION);
-			if (style != Style::VGUI)
-			{
-				style = Style::VGUI;
-				bRestyleIssued = true;
-			}
-
+			if (menu.SetStyle(UT::Menu::Style::VGUI))
+				events.push(Event::Restyle);
 			break;
 		case MenuItems::Style_Dark:
-			CheckMenuRadioItem(StylesMenu.get(), 0, 2, 1, MF_BYPOSITION);
-			if (style != Style::Dark)
-			{
-				style = Style::Dark;
-				bRestyleIssued = true;
-			}
+			if (menu.SetStyle(UT::Menu::Style::Dark))
+				events.push(Event::Restyle);
 			break;
 		case MenuItems::Style_Cherry:
-			CheckMenuRadioItem(StylesMenu.get(), 0, 2, 2, MF_BYPOSITION);
-			if (style != Style::Cherry)
-			{
-				style = Style::Cherry;
-				bRestyleIssued = true;
-			}
+			if (menu.SetStyle(UT::Menu::Style::Cherry))
+				events.push(Event::Restyle);
+			break;
+		case MenuItems::PlayGame:
+			events.push(Event::Play);
 			break;
 		case MenuItems::About:
 			DialogBox(WindowClass::GetInstance(), MAKEINTRESOURCE(IDD_DIALOG1), hWnd, About);
@@ -509,11 +451,6 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	case WM_LBUTTONUP:
 	{
-		// stifle this mouse message if imgui wants to capture
-		//if (imio.WantCaptureMouse)
-		//{
-		//	break;
-		//}
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.OnLeftReleased(pt.x, pt.y);
 		// release mouse if outside of window
@@ -526,11 +463,6 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	case WM_RBUTTONUP:
 	{
-		// stifle this mouse message if imgui wants to capture
-		if (imio.WantCaptureMouse)
-		{
-			break;
-		}
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.OnRightReleased(pt.x, pt.y);
 		// release mouse if outside of window

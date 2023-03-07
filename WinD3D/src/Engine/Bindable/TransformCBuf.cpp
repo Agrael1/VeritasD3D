@@ -77,6 +77,32 @@ SkyboxTransformCbuf::Transforms SkyboxTransformCbuf::GetTransforms(Graphics& gfx
 	};
 }
 
+
+XSkyboxTransformCbuf::XSkyboxTransformCbuf(Graphics& gfx, UINT slot)
+	:
+	pVcbuf{ std::make_unique<ver::VertexConstantBuffer<Transforms>>(gfx,slot) }
+{}
+
+void XSkyboxTransformCbuf::Bind(Graphics& gfx) noxnd
+{
+	UpdateBindImpl(gfx, GetTransforms(gfx));
+	ver::check_context();
+}
+
+void XSkyboxTransformCbuf::UpdateBindImpl(Graphics& gfx, const Transforms& tf) noxnd
+{
+	pVcbuf->Update(gfx, tf);
+	pVcbuf->Bind(gfx);
+}
+
+XSkyboxTransformCbuf::Transforms XSkyboxTransformCbuf::GetTransforms(Graphics& gfx) noxnd
+{
+	return {
+		DirectX::XMMatrixTranspose(gfx.GetCamera() * gfx.GetProjection()),
+		DirectX::XMMatrixTranspose(DirectX::XMMatrixIdentity())
+	};
+}
+
 namespace dx = DirectX;
 
 namespace ver

@@ -58,6 +58,12 @@ void Mouse::Flush() noexcept
 	buffer = std::queue<Event>();
 }
 
+void Mouse::BoundCursor(int width, int height) noexcept
+{
+	x = std::clamp(x, 0, width - 1);
+	y = std::clamp(y, 0, height - 1);
+}
+
 void Mouse::EnableRaw() noexcept
 {
 	rawEnabled = true;

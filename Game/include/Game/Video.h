@@ -49,7 +49,6 @@ namespace ver
 			gfx.EndFrame();
 		}
 	private:
-		//winrt::com_ptr<ID3D11ShaderResourceView> surface;
 		std::shared_ptr<ver::VertexShader> vs;
 		std::shared_ptr<ver::PixelShader> ps;
 		std::shared_ptr<ver::Sampler> sam;

@@ -23,9 +23,10 @@ ImGUIManager::~ImGUIManager()
 
 void ImGUIManager::SetStyle(Style s)
 {
+    using enum ImGUIManager::Style;
     switch (s)
     {
-    case ImGUIManager::VGUI:
+    case VGUI:
     {
         ImVec4* colors = ImGui::GetStyle().Colors;
         colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
@@ -90,10 +91,10 @@ void ImGUIManager::SetStyle(Style s)
         style.TabRounding = 0.0f;
     }
         break;
-    case ImGUIManager::Dark:
+    case Dark:
         ImGui::StyleColorsDark();
         break;
-    case ImGUIManager::Cherry:
+    case Cherry:
     {
         // cherry colors, 3 intensities
 #define HI(v)   ImVec4(0.502f, 0.075f, 0.256f, v)
