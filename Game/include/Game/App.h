@@ -17,6 +17,7 @@
 #include <Game/Pictures.h>
 #include <Game/MediaEngine.h>
 #include <Game/Video.h>
+#include <Game/Grid.h>
 #include <Engine/Scene/Cursor.h>
 #include <Engine/Probes/TestModelProbe.h>
 
@@ -76,6 +77,7 @@ namespace UT
 		std::unique_ptr<Model> model;
 		std::unique_ptr<ver::Skybox> skybox;
 		std::optional<ver::Cursor> cur;
+		Grid grid;
 		ver::Gizmo giz;
 		MP probe;
 

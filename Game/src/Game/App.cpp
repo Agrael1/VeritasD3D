@@ -15,10 +15,10 @@ using namespace UT;
 
 constexpr COMDLG_FILTERSPEC rgSpec[] =
 {
+	{ L"All Files", L"*.*"},
 	{ L"Image Array", L"*.dds"},
 	{ L"Videos", L"*.wmv"},
 	{ L"Models", L"*.obj"},
-	{ L"All Files", L"*.*"},
 };
 
 namespace dx = DirectX;
@@ -48,6 +48,7 @@ ver::IAsyncAction App::InitializeAsync()
 
 	mp.Initialize(gfx.RawDevice(), gfx.RawContext());
 	mp.SetStereo(gfx.StereoEnabled());
+	grid.Initialize(gfx);
 
 	cur.emplace(gfx);
 	level.AddToScene(scene);
@@ -153,7 +154,13 @@ void UT::App::OnPlay()
 	ver::scoped_semaphore xlk{lock};
 	CreateRenderGraph();
 	player->ToggleFlight();
+	player->GetCamera().SetFocus(100.0f);
 	player->Teleport({ -183.0f, -36.6f, -34.8f });
+	if (wnd.CursorEnabled())
+	{
+		wnd.DisableCursor();
+		wnd.mouse.EnableRaw();
+	}
 	state = State::Game;
 }
 winrt::fire_and_forget UT::App::OnLoadAsset()
@@ -203,7 +210,7 @@ ver::IAsyncAction UT::App::LoadModelAsync(std::filesystem::path path)
 
 		CreateRenderGraphModel();
 		player->Teleport({ 0, 10, 0 });
-		player->ToggleFlight();
+		player->SetFlight(true);
 
 		state = State::Model;
 	}
@@ -281,19 +288,6 @@ void App::DoFrame(float dt)
 	level.SpawnControlWindow();
 	player->SpawnControlWindow();
 
-	if (wnd.CursorEnabled())
-	{
-		giz.Render(gfx);
-
-		auto& cam = player->GetCamera();
-		auto p = cam.GetPosition();
-		cam.SetFocus(DirectX::XMVector3LengthEst(giz.GetPosition() - DirectX::XMLoadFloat3(&p)).m128_f32[0]);
-
-		auto m = giz.GetTransformXM();
-		DirectX::XMStoreFloat4x4(&model_transform, m);
-		level.GetWorld().SetRootTransform(m);
-	}
-
 	// Present
 	gfx.EndFrame();
 	rg->Reset();
@@ -313,6 +307,9 @@ void UT::App::DoFrameModel(float dt)
 	cur->Submit();
 	model->Submit();
 	skybox->Submit();
+	if (wnd.DrawGrid())
+		grid.Submit();
+
 	rg->Execute(gfx);
 
 	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(),
@@ -329,6 +326,8 @@ void UT::App::DoFrameModel(float dt)
 
 	probe.SpawnWindow(*model);
 
+
+
 	player->SpawnControlWindow();
 
 	if (wnd.CursorEnabled())
@@ -339,9 +338,7 @@ void UT::App::DoFrameModel(float dt)
 		auto p = cam.GetPosition();
 		cam.SetFocus(DirectX::XMVector3LengthEst(giz.GetPosition() - DirectX::XMLoadFloat3(&p)).m128_f32[0]);
 
-		auto m = giz.GetTransformXM();
-		DirectX::XMStoreFloat4x4(&model_transform, m);
-		model->SetRootTransform(m);
+		model->SetRootTransform(DirectX::XMLoadFloat4x4(&model_transform) * giz.GetTransformXM());
 	}
 
 	// Present
@@ -361,6 +358,9 @@ void App::ProcessInput(float)
 
 		switch (e->GetCode())
 		{
+		case 'R':
+			DirectX::XMStoreFloat4x4(&model_transform, DirectX::XMMatrixIdentity());
+			break;
 		case 'M':
 			if (paused ^= true)
 				song.pause();
@@ -401,7 +401,11 @@ void App::ProcessInput(float)
 		while (const auto e = wnd.mouse.Read())
 		{
 			if (e->LeftIsPressed())
+			{
+				DirectX::XMStoreFloat4x4(&model_transform,
+					DirectX::XMLoadFloat4x4(&model_transform)*giz.GetTransformXM());
 				giz.SetPosition(cur->GetTransformXM().r[3]);
+			}
 		}
 	}
 
@@ -469,5 +473,6 @@ void UT::App::CreateRenderGraphModel()
 	cur->LinkTechniques(*rg);
 	model->LinkTechniques(*rg);
 	skybox->LinkTechniques(*rg);
+	grid.LinkTechniques(*rg);
 }
 

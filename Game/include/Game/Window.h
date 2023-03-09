@@ -78,11 +78,13 @@ public:
 
 	int GetWidth() const noexcept { return width; }
 	int GetHeight() const noexcept { return height; }
+
+	bool DrawGrid()const noexcept { return menu.GridEnabled(); }
+
 	void EnableCursor() noexcept;
 	void DisableCursor() noexcept;
 	bool CursorEnabled() const noexcept;
-	bool DrawGrid()const noexcept;
-	bool IsActive()const noexcept;
+	bool IsActive()const noexcept{return bActive;}
 	void SetTitle(std::string_view title);
 	void ChangeToFullScreen();
 
@@ -106,7 +108,6 @@ public:
 	Mouse mouse;
 private:
 	bool cursorEnabled = true;
-	bool bGridEnabled = true;
 	bool bActive = true;
 	int width;
 	int height;

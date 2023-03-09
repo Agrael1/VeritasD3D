@@ -54,7 +54,9 @@ target_sources(${PROJECT_NAME}
 
 		"include/Util/Converter.h"
 		"include/Util/Filters.h"
- "include/Game/Menu.h")
+		"include/Game/Menu.h" 
+		"include/Game/Grid.h"
+)
 
 
 add_custom_target(copy_models ALL 

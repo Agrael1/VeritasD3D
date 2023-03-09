@@ -164,15 +164,6 @@ bool Window::CursorEnabled() const noexcept
 	return cursorEnabled;
 }
 
-bool Window::DrawGrid() const noexcept
-{
-	return bGridEnabled;
-}
-bool Window::IsActive() const noexcept
-{
-	return bActive;
-}
-
 void Window::ConfineCursor() noexcept
 {
 	RECT rect;

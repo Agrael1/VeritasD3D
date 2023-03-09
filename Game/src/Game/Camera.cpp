@@ -113,7 +113,7 @@ void Camera::Translate(DirectX::XMFLOAT3 translation) noexcept
 
 constexpr float ShearCoefficient(float focus_dist, float eye_dist, int conv)
 {
-	return ((int)conv) * eye_dist / focus_dist;
+	return conv * eye_dist / focus_dist;
 }
 
 StereoCamera::StereoCamera() noexcept
