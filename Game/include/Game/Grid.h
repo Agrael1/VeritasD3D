@@ -11,8 +11,8 @@ public:
 	{
 		namespace dx = DirectX;
 		const auto geometryTag = "$sgrid";
-		auto model = Plane::MakeTesselatedLined(10, 10);
-		model.Deform(dx::XMMatrixScalingFromVector(dx::XMVectorReplicate(5.0f)));
+		auto model = Plane::MakeTesselatedLined(100, 100);
+		model.Deform(dx::XMMatrixScalingFromVector(dx::XMVectorReplicate(100.0f)));
 		pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
 		pIndices = ver::IndexBuffer::Resolve(gfx, geometryTag, model.indices);
 		topology = D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP;
