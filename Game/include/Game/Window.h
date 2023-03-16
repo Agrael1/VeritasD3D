@@ -82,6 +82,8 @@ public:
 	bool DrawGrid()const noexcept { return menu.GridEnabled(); }
 
 	void EnableCursor() noexcept;
+	void HideCursor() noexcept;
+	void ShowCursor() noexcept;
 	void DisableCursor() noexcept;
 	bool CursorEnabled() const noexcept;
 	bool IsActive()const noexcept{return bActive;}
@@ -99,15 +101,16 @@ private:
 
 	void ConfineCursor() noexcept;
 	void FreeCursor() noexcept;
-	void ShowCursor() noexcept;
-	void HideCursor() noexcept;
 	void EnableImGuiMouse() noexcept;
 	void DisableImGuiMouse() noexcept;
+	void ShowImGuiMouse()noexcept;
 public:
 	Keyboard kbd;
 	Mouse mouse;
 private:
 	bool cursorEnabled = true;
+	bool cursorShown = false;
+	bool cursorActive = false;
 	bool bActive = true;
 	int width;
 	int height;

@@ -254,7 +254,7 @@ void UT::App::SetState(State st)
 	}
 	if (st == State::Game)
 	{
-		song.play();
+		//song.play();
 	}
 	cur_st = st;
 }
@@ -379,8 +379,16 @@ void App::ProcessInput(float)
 			else
 			{
 				wnd.EnableCursor();
+				//wnd.HideCursor();
 				wnd.mouse.DisableRaw();
 			}
+			break;
+		case 'J':
+			if (!bcur)
+				wnd.ShowCursor();
+			else
+				wnd.HideCursor();
+			bcur ^= true;
 			break;
 		case VK_ESCAPE:
 			if (wnd.CursorEnabled())

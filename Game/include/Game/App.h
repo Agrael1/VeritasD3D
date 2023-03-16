@@ -103,7 +103,7 @@ namespace UT
 		std::optional<ver::rg::StereoGraph> rg;
 		bool block = false;
 		bool paused = false;
-
+		bool bcur = false;
 
 		State cur_st;
 		__declspec(property(get=GetState, put=SetState))State state;

@@ -178,12 +178,18 @@ void Window::FreeCursor() noexcept
 void Window::HideCursor() noexcept
 {
 	while (::ShowCursor(FALSE) >= 0);
+	cursorShown = false;
 }
 void Window::ShowCursor() noexcept
 {
 	while (::ShowCursor(TRUE) < 0);
+	cursorShown = true;
 }
-
+void Window::ShowImGuiMouse()noexcept
+{
+	if (!cursorShown)
+		ShowCursor();
+}
 void Window::EnableImGuiMouse() noexcept
 {
 	ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
@@ -384,8 +390,12 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		// stifle this mouse message if imgui wants to capture
 		if (imio.WantCaptureMouse)
 		{
+			ShowImGuiMouse();
 			break;
 		}
+		if (cursorShown && !cursorActive)
+			HideCursor();
+
 		// in client region -> log move, and log enter + capture mouse (if not previously in window)
 		if (pt.x >= 0 && pt.x < width && pt.y >= 0 && pt.y < height)
 		{

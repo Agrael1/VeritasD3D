@@ -8,9 +8,9 @@ namespace ver
 	public:
 		CursorTransform() = default;
 	public:
-		void SetTransform(DirectX::XMVECTOR displacement)noexcept
+		void SetTransform(DirectX::XMMATRIX displacement)noexcept
 		{
-			transform = DirectX::XMMatrixTranslationFromVector(displacement);
+			transform = displacement;
 		}
 		auto GetTransform()const noexcept
 		{

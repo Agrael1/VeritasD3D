@@ -172,7 +172,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 			{
 				float gloss = 8.0f;
 				material.Get(AI_MATKEY_SHININESS, gloss);
-				r = gloss;
+				r = gloss == 0.0f ? 1.0f : 0.0f;
 			}
 			buf["useNormalMap"].SetIfExists(true);
 			buf["normalMapWeight"].SetIfExists(1.0f);

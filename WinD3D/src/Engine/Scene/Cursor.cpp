@@ -38,7 +38,8 @@ ver::Cursor::Cursor(Graphics& gfx)
 }
 DirectX::XMMATRIX ver::Cursor::GetTransformXM() const noexcept
 {
-	return ctm.GetTransform();
+	auto m = ctm.GetTransform();
+	return m ;
 }
 
 

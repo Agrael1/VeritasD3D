@@ -25,7 +25,7 @@ PixelOutDeferred main(float3 viewFragPos : Position, float3 viewNormal : Normal,
 	pOut.diffuse = color;
 	pOut.normal = float4(normalize(viewNormal), 1.0f);
 	pOut.position = float4(viewFragPos, 1.0f);
-	pOut.specular = float4(specularColor * specularWeight, specularGloss);
+	pOut.specular = float4(specularColor * specularWeight, 1.0f);
     pOut.shadow = shadowPos;
 	return pOut;
 }

@@ -70,17 +70,19 @@ namespace ver::rg
 			auto mm = *reinterpret_cast<DirectX::XMFLOAT2A*>(sr.pData);
 			GetContext(gfx)->Unmap(dstres.get(), 0);
 
+			float sc1 = std::min( - (1.0f / (1 - 1.0f / mm.y)) * 0.1f, 10.0f);
 			if (mm.y == 0.0f)
 			{
+				sc1 = 100.0f;
 				mm.y = 1.0f;
 				mm.x = 0.0f;
 			}
-
 			DirectX::XMFLOAT3 norm_cur{float(x), float(y), mm.y};
 			auto vec = DirectX::XMLoadFloat3(&norm_cur);
 			vec = DirectX::XMVector3Unproject(vec,
 				0, 0, w, h, 0, 1.0f, gfx.GetProjection(), gfx.GetCamera(), DirectX::XMMatrixIdentity());
-			ctm.SetTransform(vec);
+
+			ctm.SetTransform(DirectX::XMMatrixScaling(sc1, sc1, sc1)*DirectX::XMMatrixTranslationFromVector(vec));
 
 			//ver::std_info(std::format("Mesh {}", mm.x));
 
