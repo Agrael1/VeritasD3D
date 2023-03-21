@@ -71,6 +71,10 @@ public:
 	{
 		focus_distance = zdistance;
 	}
+	auto GetFocus()const noexcept
+	{
+		return focus_distance;
+	}
 	//in radians
 	void SetRotation(DirectX::XMFLOAT2 rotation)noexcept
 	{
@@ -90,8 +94,8 @@ private:
 	DirectX::XMFLOAT3 pos;
 	DirectX::XMFLOAT2 rot;
 
-	float eye_dist = 0.65f;
-	float focus_distance = 100.0f;
+	float eye_dist = 0.0065f;
+	float focus_distance = 0.5;
 	int conv = 1;
 
 	static constexpr const float travelSpeed = 12.0f;

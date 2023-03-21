@@ -187,22 +187,12 @@ ver::IAsyncAction UT::App::LoadModelAsync(std::filesystem::path path)
 	co_await winrt::resume_background();
 	ver::std_info("Loading Model");
 	auto m = std::make_unique<Model>();
-
-	Assimp::Importer imp;
-	const auto pScene = imp.ReadFile(path.string().data(),
-		aiProcess_Triangulate |
-		aiProcess_JoinIdenticalVertices |
-		aiProcess_ConvertToLeftHanded |
-		aiProcess_GenNormals |
-		aiProcess_CalcTangentSpace
-	);
-	if (pScene == nullptr || !pScene->HasMeshes())
-		co_return;
-
-	co_await m->InitializeAsync(gfx, *pScene, std::move(path), 10.0f);
-
 	auto skb = std::make_unique<ver::Skybox>();
-	co_await skb->InitializeAsync(gfx, u"../models/skybox.dds", false);
+
+	co_await winrt::when_all(
+		m->InitializeAsync(gfx, std::move(path), 1.0f),
+		skb->InitializeAsync(gfx, u"../models/skybox.dds", false)
+	);
 	{
 		ver::scoped_semaphore xlk{lock};
 		std::swap(m, model);
@@ -269,6 +259,8 @@ void App::DoFrame(float dt)
 	gfx.SetLeftCamera(player->GetLeftViewMatrix());
 	gfx.SetRightCamera(player->GetRightViewMatrix());
 	gfx.SetCentralCamera(player->GetCentralCamera());
+	auto ff = player->GetCamera().GetFocus();
+	gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(wnd.GetHeight()) / float(wnd.GetWidth()), ff, 1000.0f+ff));
 
 	cur->Submit();
 	level.Submit(gfx);

@@ -104,6 +104,7 @@ namespace UT
 		bool block = false;
 		bool paused = false;
 		bool bcur = false;
+		bool perfect_cam = false;
 
 		State cur_st;
 		__declspec(property(get=GetState, put=SetState))State state;

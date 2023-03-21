@@ -212,8 +212,8 @@ void StereoCamera::SpawnControlWindow() noexcept
 	if (ImGui::Begin("Stereo Camera"))
 	{
 		ImGui::Text("Stereo Parameters");
-		ImGui::SliderFloat("Eye distance", &eye_dist, -1.f, 1.f, "%.3f");
-		ImGui::SliderFloat("Focus distance", &focus_distance, -100.f, 100.f, "%.3f");
+		ImGui::SliderFloat("Eye distance", &eye_dist, 0.001f, 1.f, "%.3f");
+		ImGui::SliderFloat("Focus distance", &focus_distance, 0.001f, 10.f, "%.3f");
 		ImGui::SliderInt("Enable", &conv, 0, 1);
 		ImGui::Text("Position");
 		ImGui::SliderFloat("X", &pos.x, -80.0f, 80.0f, "%.1f");
