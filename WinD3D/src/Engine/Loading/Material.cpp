@@ -330,23 +330,14 @@ std::vector<unsigned short> Material::ExtractIndices(const aiMesh& mesh) noexcep
 #include <memory_resource>
 #include <Engine/Bindable/IndexBuffer.h>
 
-auto prescale(std::span<aiVector3D> mesh, float scale)
-{
-	std::vector<aiVector3D> copy;
-	copy.reserve(mesh.size());
-	for (auto& i : mesh)
-		copy.push_back(i * scale);
-	return copy;
-}
-
-std::shared_ptr<Bindable> Material::MakeVertexBindable(Graphics& gfx, const aiMesh& mesh, float scale) const noxnd
+std::shared_ptr<Bindable> Material::MakeVertexBindable(Graphics& gfx, const aiMesh& mesh) const noxnd
 {
 	void* a[size_t(ver::dv::ElementType::Count)]{};
 	std::pmr::monotonic_buffer_resource b{ a, sizeof(a) };
 	std::pmr::vector<void*> vb{ decltype(vb)::allocator_type{&b} };
+
 	vb.reserve(vtxLayout.count());
-	auto x = prescale({ mesh.mVertices, mesh.mNumVertices }, scale);
-	vb.push_back(x.data());
+	vb.push_back(mesh.mVertices);
 	vb.push_back(mesh.mNormals);
 	if (vtxLayout.contains(ver::dv::ElementType::Texture3D))
 		vb.push_back(mesh.mTextureCoords[0]);

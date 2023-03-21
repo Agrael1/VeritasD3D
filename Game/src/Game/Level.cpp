@@ -134,10 +134,9 @@ ver::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& gf
 	co_await rd_flg;
 	co_await bl_flg;
 
-	red.GetModel()->SetRootTransform(DirectX::XMMatrixRotationY(-float(std::numbers::pi) / 2.0f) * DirectX::XMMatrixTranslation(-147.0f, -41.0f, 15.3f));
+	red.GetModel()->PrependRootTransform(DirectX::XMMatrixRotationY(2*float(std::numbers::pi) / 3.0f));
 	red.SetColor({ 1.0f, 0, 0 });
 	red.SetTeamTag("Red");
-	blue.GetModel()->SetRootTransform(DirectX::XMMatrixRotationY(3.0f * float(std::numbers::pi) / 4.0f) * DirectX::XMMatrixTranslation(153.0f, -43.7f, -24.3f));
 	blue.SetColor({ 0, 0, 1 });
 	blue.SetTeamTag("Blue");
 

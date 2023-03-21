@@ -21,9 +21,9 @@ ver::IAsyncAction UT::Flag::InitializeAsync(ver::ph::Physics& phy, Graphics& gfx
 		//if (pScene == nullptr || !pScene->HasMeshes())
 			//throw ver::make_error<ver::ModelException>({ imp.GetErrorString() });
 
-		co_await model.InitializeAsync(gfx, *pScene, path, 5.0f);
+		co_await model.InitializeAsync(gfx, *pScene, std::move(path), 5.0f);
 
-		model.SetRootTransform(DirectX::XMMatrixRotationY(std::numbers::pi * 3.f / 4.f) * DirectX::XMMatrixTranslationFromVector(DirectX::XMLoadFloat3(&pos)));
+		model.AppendRootTransform(DirectX::XMMatrixRotationY(std::numbers::pi * 3.f / 4.f) * DirectX::XMMatrixTranslationFromVector(DirectX::XMLoadFloat3(&pos)));
 	};
 	auto phys = [&, this]()mutable ->ver::IAsyncAction {
 		co_await winrt::resume_background();

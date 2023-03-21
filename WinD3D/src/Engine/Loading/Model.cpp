@@ -17,7 +17,7 @@ DirectX::XMMATRIX ScaleTranslation(DirectX::XMMATRIX matrix, float scale)
 }
 
 
-Model::Model(Graphics& gfx, std::filesystem::path pathString, const float scale)
+Model::Model(Graphics& gfx, std::filesystem::path pathString, float scale)
 {
 	auto path_str = pathString.string();
 	Assimp::Importer imp;
@@ -35,6 +35,22 @@ Model::Model(Graphics& gfx, std::filesystem::path pathString, const float scale)
 	Initialize(gfx, *pScene, path_str, scale);
 }
 
+winrt::Windows::Foundation::IAsyncAction Model::InitializeAsync(Graphics& gfx, std::filesystem::path path, float scale)
+{
+	co_await winrt::resume_background();
+
+	auto path_str = path.string();
+	Assimp::Importer imp;
+	const auto* scene = imp.ReadFile(path_str.c_str(),
+		aiProcess_Triangulate |
+		aiProcess_JoinIdenticalVertices |
+		aiProcess_ConvertToLeftHanded |
+		aiProcess_GenNormals |
+		aiProcess_CalcTangentSpace
+	);
+	if (!scene || !scene->HasMeshes())co_return;
+	co_await InitializeAsync(gfx, *scene, std::move(path), scale);
+}
 winrt::Windows::Foundation::IAsyncAction Model::InitializeAsync(Graphics& gfx, const aiScene& scene, std::filesystem::path path, float scale)
 {
 	co_await winrt::resume_background();
@@ -47,7 +63,7 @@ winrt::Windows::Foundation::IAsyncAction Model::InitializeAsync(Graphics& gfx, c
 		const auto& mesh = *scene.mMeshes[i];
 		Material m;
 		co_await m.InitializeAsync(gfx, *scene.mMaterials[mesh.mMaterialIndex], path);
-		meshPtrs[i] = std::make_unique<Mesh>(gfx, m, mesh, scale);
+		meshPtrs[i] = std::make_unique<Mesh>(gfx, m, mesh);
 	};
 
 	for (size_t i = 0; i < scene.mNumMeshes; i++)
@@ -57,7 +73,7 @@ winrt::Windows::Foundation::IAsyncAction Model::InitializeAsync(Graphics& gfx, c
 
 	int nextId = 0;
 	pRoot = ParseNode(nextId, *scene.mRootNode, scale);
-	//SetRootTransform(DirectX::XMMatrixScaling(scale,scale, scale));
+	SetRootTransform(DirectX::XMMatrixScaling(scale,scale, scale));
 }
 void Model::Initialize(Graphics& gfx, const aiScene& scene, std::filesystem::path path, float scale)
 {
@@ -66,21 +82,17 @@ void Model::Initialize(Graphics& gfx, const aiScene& scene, std::filesystem::pat
 	{
 		const auto& mesh = *scene.mMeshes[i];
 		Material m{ gfx, *scene.mMaterials[mesh.mMaterialIndex], path };
-		meshPtrs.push_back(std::make_unique<Mesh>(gfx, m, mesh, scale));
+		meshPtrs.push_back(std::make_unique<Mesh>(gfx, m, mesh));
 	}
 
 	int nextId = 0;
 	pRoot = ParseNode(nextId, *scene.mRootNode, scale);
+	SetRootTransform(DirectX::XMMatrixScaling(scale, scale, scale));
 }
 
 void Model::Submit() const noxnd
 {
 	pRoot->Submit(DirectX::XMMatrixIdentity());
-}
-
-void Model::SetRootTransform(DirectX::FXMMATRIX tf) noexcept
-{
-	pRoot->SetAppliedTransform(tf);
 }
 
 void Model::Accept(ModelProbe& probe)
@@ -104,15 +116,15 @@ void Model::UnlinkTechniques()
 	}
 }
 
-Model::~Model() noexcept
+Model::~Model()
 {}
 
 std::unique_ptr<Node> Model::ParseNode(int& nextId, const aiNode& node, float scale) noexcept
 {
 	namespace dx = DirectX;
-	const auto transform = ScaleTranslation(dx::XMMatrixTranspose(dx::XMLoadFloat4x4(
+	const auto transform = dx::XMMatrixTranspose(dx::XMLoadFloat4x4(
 		reinterpret_cast<const dx::XMFLOAT4X4*>(&node.mTransformation)
-	)), scale);
+	));
 
 	std::vector<Mesh*> curMeshPtrs;
 	curMeshPtrs.reserve(node.mNumMeshes);
