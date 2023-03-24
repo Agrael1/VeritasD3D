@@ -14,7 +14,6 @@ target_sources(${PROJECT_NAME}
         "src/DXGIInfoManager.cpp"
         "src/Checks.cpp"
         "src/Exception.cpp"
-        "src/Log.cpp"
 	 PUBLIC FILE_SET HEADERS 
         BASE_DIRS ${include_dir}
         FILES 
@@ -42,13 +41,14 @@ target_link_libraries(${PROJECT_NAME}
         DXGI
         CPPWinRT
         Wil
+        dxguid
 ) 
 
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
-target_precompile_headers(${PROJECT_NAME} PUBLIC "include/pch.h")
+target_precompile_headers(${PROJECT_NAME} PRIVATE "include/pch.h")
 set_target_properties(${PROJECT_NAME} 
     PROPERTIES
         CXX_STANDARD 23

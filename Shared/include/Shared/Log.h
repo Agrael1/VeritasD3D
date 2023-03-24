@@ -4,51 +4,53 @@
 
 namespace ver
 {
-	class Log
-	{
-	public:
-		static Log& Instance() { static Log l; return l; }
-	public:
-		spdlog::logger& GetCoreLog() { return *core; }
-	private:
-		Log();
-	private:
-		std::shared_ptr<spdlog::logger> core;
-	};
+    inline void spd_trace(std::string message, std::source_location sl = std::source_location::current())
+    {
+        if constexpr (SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_TRACE)
+            spdlog::log(spdlog::source_loc{ sl.file_name(), int(int(sl.line())), sl.function_name() }, spdlog::level::level_enum::trace, std::move(message));
+    }
+    inline void spd_debug(std::string message, std::source_location sl = std::source_location::current())
+    {
+        if constexpr (SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_DEBUG)
+            spdlog::log(spdlog::source_loc{ sl.file_name(), int(sl.line()), sl.function_name() }, spdlog::level::level_enum::debug, std::move(message));
+    }
+    inline void spd_info(std::string message, std::source_location sl = std::source_location::current())
+    {
+        if constexpr (SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_INFO)
+            spdlog::log(spdlog::source_loc{ sl.file_name(), int(sl.line()), sl.function_name() }, spdlog::level::level_enum::info, std::move(message));
+    }
+    inline void spd_warn(std::string message, std::source_location sl = std::source_location::current())
+    {
+        if constexpr (SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_WARN)
+            spdlog::log(spdlog::source_loc{ sl.file_name(), int(sl.line()), sl.function_name() }, spdlog::level::level_enum::warn, std::move(message));
+    }
+    inline void spd_error(std::string message, std::source_location sl = std::source_location::current())
+    {
+        if constexpr (SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_ERROR)
+            spdlog::log(spdlog::source_loc{ sl.file_name(), int(sl.line()), sl.function_name() }, spdlog::level::level_enum::err, std::move(message));
+    }
+    inline void spd_critical(std::string message, std::source_location sl = std::source_location::current())
+    {
+        if constexpr (SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_CRITICAL)
+            spdlog::log(spdlog::source_loc{ sl.file_name(), int(sl.line()), sl.function_name() }, spdlog::level::level_enum::critical, std::move(message));
+    }
 
-	template<class ...Args>
-	inline void std_warn(Args&&... args) { Log::Instance().GetCoreLog().warn(std::forward<Args>(args)...); }
-	template<class ...Args>
-	inline void std_info(Args&&... args) { Log::Instance().GetCoreLog().info(std::forward<Args>(args)...); }
-	template<class ...Args>
-	inline void std_error(Args&&... args) { Log::Instance().GetCoreLog().error(std::forward<Args>(args)...); }
-	template<class ...Args>
-	inline void std_critical(Args&&... args) { Log::Instance().GetCoreLog().critical(std::forward<Args>(args)...); }
-	template<class ...Args>
-	inline void std_debug(Args&&... args) { Log::Instance().GetCoreLog().debug(std::forward<Args>(args)...); }
-	template<class ...Args>
-	inline void std_trace(Args&&... args) { Log::Instance().GetCoreLog().trace(std::forward<Args>(args)...); }
-
-	template<class ...Args>
-	inline void std_log(Severity sev, Args&&... args)
-	{
-		using enum Severity;
-		switch (sev)
-		{
-		case ver::Severity::debug:
-			return std_debug(std::forward<Args>(args)...);
-		case ver::Severity::trace:
-			return std_trace(std::forward<Args>(args)...);
-		case ver::Severity::info:
-			return std_info(std::forward<Args>(args)...);
-		case ver::Severity::warn:
-			return std_warn(std::forward<Args>(args)...);
-		case ver::Severity::error:
-			return std_error(std::forward<Args>(args)...);
-
-		default:
-		case ver::Severity::critical:
-			return std_critical(std::forward<Args>(args)...);
-		}
-	}
+    inline void spd_log(Severity sev, std::string message, std::source_location sl = std::source_location::current())
+    {
+        switch (sev) {
+        case Severity::debug:
+            return spd_debug(message, sl);
+        case Severity::trace:
+            return spd_trace(message, sl);
+        case Severity::info:
+            return spd_info(message, sl);
+        case Severity::warn:
+            return spd_warn(message, sl);
+        case Severity::error:
+            return spd_error(message, sl);
+        default:
+        case Severity::critical:
+            return spd_critical(message, sl);
+        }
+    }
 }

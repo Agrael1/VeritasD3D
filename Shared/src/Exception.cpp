@@ -25,7 +25,7 @@ const char* exception::what() const noexcept
 
 void ver::exception::WriteToOutput()const noexcept
 {
-	ver::std_critical(what());
+	ver::spd_critical(what());
 	//OutputDebugStringA(what());
 }
 

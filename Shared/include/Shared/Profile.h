@@ -18,7 +18,7 @@ namespace ver
 		}
 		~scoped_profiler_p()
 		{
-			ver::std_info(std::format("{}: {}", message, t.stop()));
+			ver::spd_info(std::format("{}: {}", message, t.stop()));
 		}
 	private:
 		ver::timer t;

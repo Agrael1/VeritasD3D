@@ -2,6 +2,7 @@
 #include <exception>
 #include <string>
 #include <source_location>
+#include <winrt/base.h>
 
 namespace ver
 {

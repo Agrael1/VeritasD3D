@@ -13,7 +13,7 @@ bool ver::log_dxgi_errors()noexcept
 	for (auto& i : messages)
 	{
 		bError |= i.severity == error || i.severity == critical;
-		std_log(i.severity, i.description);
+		spd_log(i.severity, i.description);
 	}
 	return bError;
 }

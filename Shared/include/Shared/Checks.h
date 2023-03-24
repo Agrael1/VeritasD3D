@@ -1,5 +1,6 @@
 #pragma once
 #include <Shared/Exception.h>
+#include <Shared/Definitions.h>
 #include <winrt/base.h>
 
 
@@ -9,12 +10,10 @@ namespace ver
 	bool log_dxgi_errors()noexcept;
 	winrt::hresult last_windows_error() noexcept;
 
-	template<int = 1>requires(!debug_mode)
-	inline void check_context(std::source_location sl = std::source_location::current())noexcept{}
 
-	template<int = 1>requires(debug_mode)
 	inline void check_context(std::source_location sl = std::source_location::current())
 	{
+		if constexpr(debug_mode)
 		if (log_dxgi_errors())
 			throw ver::exception{ sl };
 	}
