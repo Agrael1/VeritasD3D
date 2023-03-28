@@ -14,11 +14,11 @@ namespace ver
 	{
 		static constexpr inline bool valid = true;
 	protected: 
-		explicit Internal(winrt::com_ptr<IDXGIAdapter1> adapter)
+		explicit Internal(winrt::com_ptr<IDXGIAdapter1> adapter)noexcept
 			:adapter(std::move(adapter)) {}
 	public:
 		template<class Self>
-		auto GetAdapter(this Self&& s) {
+		[[nodiscard]] auto GetAdapter(this Self&& s) {
 			return s.adapter;
 		}
 	protected:
@@ -31,10 +31,11 @@ namespace ver
 	{
 		using intern = Internal<DX12Adapter>;
 	public:
-		explicit DX12Adapter(winrt::com_ptr<IDXGIAdapter1> adapter)
+		explicit DX12Adapter(winrt::com_ptr<IDXGIAdapter1> adapter)noexcept
 			:intern(std::move(adapter))
 		{}
 	public:
+		[[nodiscard]]
 		AdapterDesc GetDesc()const noexcept
 		{
 			DXGI_ADAPTER_DESC1 desc;
@@ -55,9 +56,10 @@ namespace ver
 			};
 		}
 	public:
-		auto& GetInternal()const
+		[[nodiscard]]
+		auto& GetInternal()const noexcept
 		{
-			return static_cast<const Internal<DX12Adapter>&>(*this);
+			return static_cast<const intern&>(*this);
 		}
 	};
 }

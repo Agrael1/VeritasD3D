@@ -30,7 +30,7 @@ target_sources(${PROJECT_NAME}
 		"include/util/flags.h" 
   
 		"include/factory.h"
- "include/dx12/dx12_device.h")
+ "include/dx12/dx12_device.h" "include/dx12/dx12_command_queue.h" "include/api/api_queue.h")
 
 
 target_link_libraries(${PROJECT_NAME} 

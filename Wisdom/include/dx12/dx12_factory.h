@@ -60,6 +60,7 @@ namespace ver
 			has_preference = bool(factory.as<IDXGIFactory6>()) && use_preference;
 		}
 	public:
+		[[nodiscard]]
 		ver::generator<DX12Adapter> EnumerateAdapters(AdapterPreference preference = AdapterPreference::Performance)const noexcept
 		{
 			auto gen = has_preference ? AdaptersByGPUPreference(to_dxgi(preference)) : Adapters();
@@ -67,7 +68,8 @@ namespace ver
 				co_yield DX12Adapter(i);
 		}
 	public:
-		auto& GetInternal()const
+		[[nodiscard]] 
+		auto& GetInternal()const noexcept
 		{
 			return static_cast<const Internal<DX12Factory>&>(*this);
 		}
