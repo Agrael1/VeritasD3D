@@ -25,10 +25,18 @@ add_library(${PROJECT_NAME}SDKLayers SHARED IMPORTED GLOBAL)
 set_property(TARGET ${PROJECT_NAME}SDKLayers PROPERTY
              IMPORTED_LOCATION ${DXA_BIN}/d3d12SDKLayers.dll)
 
-add_library(${PROJECT_NAME}Interface INTERFACE IMPORTED)
+#Header interface library
+add_library(${PROJECT_NAME}Interface INTERFACE)
 target_include_directories(${PROJECT_NAME}Interface SYSTEM BEFORE 
-    INTERFACE ${DXA_HEADERS}
+    INTERFACE         
+        $<BUILD_INTERFACE:${DXA_HEADERS}>
+        $<INSTALL_INTERFACE:include>
 )
+
+target_install_interface(${PROJECT_NAME}Interface)
+
+
+
 
 add_library(${PROJECT_NAME} STATIC)
 target_sources(${PROJECT_NAME}

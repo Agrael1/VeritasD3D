@@ -28,14 +28,4 @@ target_include_directories(${PROJECT_NAME} SYSTEM BEFORE
         $<INSTALL_INTERFACE:include>
 )
 
-install(TARGETS "${PROJECT_NAME}" EXPORT WilTargets DESTINATION include)
-install(EXPORT WilTargets
-     FILE "WilTargets.cmake"
-     NAMESPACE Ver::
-     DESTINATION "lib/cmake/${PROJECT_NAME}"
-)
-
-export(EXPORT WilTargets
-       FILE "WilTargets.cmake"
-       NAMESPACE Ver::
-)
+target_install_interface(${PROJECT_NAME})

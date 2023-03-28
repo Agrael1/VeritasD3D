@@ -15,6 +15,8 @@ if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
 endif()
 
 include(${CMAKE_BINARY_DIR}/conan.cmake)
+include(Misc.cmake)
+
 
 add_subdirectory("WinRT")
 add_subdirectory("Wil")
