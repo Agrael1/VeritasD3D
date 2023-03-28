@@ -18,7 +18,25 @@ target_sources(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} 
 	PUBLIC 
 		Ver::WinD3D12
+		DX12Agility
 )
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:DX12AgilityCore> $<TARGET_FILE_DIR:${PROJECT_NAME}>/D3D12/$<TARGET_FILE_NAME:DX12AgilityCore>
+  COMMAND_EXPAND_LISTS
+  COMMENT "Copying DX12 Agility Core..."
+)
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:DX12AgilitySDKLayers> $<TARGET_FILE_DIR:${PROJECT_NAME}>/D3D12/$<TARGET_FILE_NAME:DX12AgilitySDKLayers>
+  COMMAND_EXPAND_LISTS
+  COMMENT "Copying DX12 Agility SDKLayers..."
+)
+
+#add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:${PROJECT_NAME}> $<TARGET_FILE_DIR:${PROJECT_NAME}>
+#  COMMAND_EXPAND_LISTS
+#  COMMENT "Copying Dependencies..."
+#)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_precompile_headers(${PROJECT_NAME} PRIVATE "include/pch.h")

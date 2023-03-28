@@ -30,7 +30,7 @@ namespace ver
 		log_dxgi_errors();
 		throw ver::hr_exception{ hr, sl };
 	}
-	inline [[nodiscard]] bool check_hresult_nothrow(winrt::hresult hr, std::source_location sl = std::source_location::current())noexcept
+	inline [[nodiscard]] bool check_hresult_nothrow(winrt::hresult hr)noexcept
 	{
 		bool a = hr >= 0;
 		if(a) return true;
@@ -42,4 +42,6 @@ namespace ver
 		if (check)return;
 		throw ver::hr_exception{ last_windows_error(), sl };
 	}
+
+	inline bool succeded(winrt::hresult hr)noexcept { return check_hresult_nothrow(hr); }
 }

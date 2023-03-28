@@ -18,21 +18,25 @@ include(${CMAKE_BINARY_DIR}/conan.cmake)
 
 add_subdirectory("WinRT")
 add_subdirectory("Wil")
-add_subdirectory("imgui")
-add_subdirectory("ImGuizmo")
+#add_subdirectory("imgui")
+#add_subdirectory("ImGuizmo")
 add_subdirectory("DirectXTex")
+add_subdirectory("DX12Agility")
 add_subdirectory("HBAO")
 
 
 #Assimp
-conan_cmake_configure(REQUIRES vorbis/1.3.7 assimp/5.2.2 physx/4.1.1 spdlog/1.11.0
-                      GENERATORS cmake_find_package
-)
-
-conan_cmake_autodetect(settings)
-
-conan_cmake_install(PATH_OR_REFERENCE .
-                    BUILD missing
-                    REMOTE conancenter
-                    SETTINGS ${settings}
-)
+if(NOT PLUGINS_LOADED)
+    message("Loading packages")
+    conan_cmake_configure(REQUIRES vorbis/1.3.7 assimp/5.2.2 physx/4.1.1 spdlog/1.11.0
+                          GENERATORS cmake_find_package
+    )
+    
+    conan_cmake_autodetect(settings)
+    
+    conan_cmake_install(PATH_OR_REFERENCE .
+                        BUILD missing
+                        REMOTE conancenter
+                        SETTINGS ${settings}
+    )
+endif()

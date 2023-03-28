@@ -6,8 +6,8 @@
 //dx12 
 namespace ver
 {
-	using Factory = APIFactory<DX12Factory>;
-	using Adapter = APIAdapter<DX12Adapter>;
+	using Factory = DX12Factory;
+	using Adapter = DX12Adapter;
 }
 #elif defined(MAC)  //MAC
 //metal

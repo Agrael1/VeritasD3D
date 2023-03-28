@@ -60,7 +60,7 @@ namespace ver
 			has_preference = bool(factory.as<IDXGIFactory6>()) && use_preference;
 		}
 	public:
-		ver::generator<APIAdapter<DX12Adapter>> EnumerateAdapters(AdapterPreference preference = AdapterPreference::Performance)const noexcept
+		ver::generator<DX12Adapter> EnumerateAdapters(AdapterPreference preference = AdapterPreference::Performance)const noexcept
 		{
 			auto gen = has_preference ? AdaptersByGPUPreference(to_dxgi(preference)) : Adapters();
 			for (auto&& i : gen)
@@ -76,8 +76,11 @@ namespace ver
 		{
 			if constexpr (ver::debug_mode) {
 				winrt::com_ptr<ID3D12Debug> debugController;
-				if (ver::check_hresult_nothrow(D3D12GetDebugInterface(__uuidof(*debugController), debugController.put_void())))
+				if (ver::succeded(D3D12GetDebugInterface(__uuidof(*debugController), debugController.put_void())))
 					debugController->EnableDebugLayer();
+
+				if (auto d1 = debugController.as<ID3D12Debug1>())
+					d1->SetEnableGPUBasedValidation(true);
 			}
 		}
 
