@@ -12,6 +12,7 @@ namespace ver
 	using Adapter = DX12Adapter;
 	using Device = DX12Device;
 	using CommandQueue = DX12CommandQueue;
+	using SwapChain = DX12SwapChain;
 }
 #elif defined(MAC)  //MAC
 //metal

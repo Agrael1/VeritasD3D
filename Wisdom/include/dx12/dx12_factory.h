@@ -3,6 +3,8 @@
 #include <api/api_factory.h>
 #include <api/api_internal.h>
 #include <dx12/dx12_adapter.h>
+#include <dx12/dx12_swapchain.h>
+#include <dx12/dx12_command_queue.h>
 #include <util/generator.h>
 
 #include <dxgi1_6.h>
@@ -67,6 +69,33 @@ namespace ver
 			for (auto&& i : gen)
 				co_yield DX12Adapter(i);
 		}
+		[[nodiscard]]
+		DX12SwapChain CreateSwapchain(ver::SwapchainOptions options, ver::SurfaceParameters surface, DX12CommandQueue& queue)const
+		{
+			DXGI_SWAP_CHAIN_DESC1 desc
+			{
+				.Width = options.width,
+				.Height = options.height,
+				.Format = DXGI_FORMAT(options.format),
+				.Stereo = options.stereo,
+				.SampleDesc{.Count = 1, .Quality = 0},
+				.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT,
+				.BufferCount = SwapchainOptions::frame_count,
+				.Scaling = DXGI_SCALING::DXGI_SCALING_STRETCH,
+				.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL,
+				.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED,
+				.Flags = 0
+			};
+			
+			switch (surface.type)
+			{
+			default:
+			case SurfaceParameters::Type::Win32:
+				return SwapChainForWin32(desc, reinterpret_cast<HWND>(surface.hwnd), queue.GetInternal().GetQueue().get());
+			case SurfaceParameters::Type::WinRT:
+				return SwapChainForCoreWindow(desc, reinterpret_cast<IUnknown*>(surface.hwnd), queue.GetInternal().GetQueue().get());
+			}
+		}
 	public:
 		[[nodiscard]] 
 		auto& GetInternal()const noexcept
@@ -110,6 +139,43 @@ namespace ver
 				co_yield std::move(adapter);
 		}
 
+		winrt::com_ptr<IDXGISwapChain4> SwapChainForCoreWindow(const DXGI_SWAP_CHAIN_DESC1& desc, IUnknown* core_window, IUnknown* queue)const
+		{
+			winrt::com_ptr<IDXGISwapChain1> swap;
+			ver::check_hresult(factory->CreateSwapChainForCoreWindow(
+				queue,        // Swap chain needs the queue so that it can force a flush on it.
+				core_window,
+				&desc,
+				nullptr,
+				swap.put()
+			));
+			return swap.as<IDXGISwapChain4>();
+		}
+		winrt::com_ptr<IDXGISwapChain4> SwapChainForWin32(const DXGI_SWAP_CHAIN_DESC1& desc, HWND hwnd, IUnknown* queue)const
+		{
+			winrt::com_ptr<IDXGISwapChain1> swap;
+
+			DEVMODE moninfo;
+			EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &moninfo);
+
+			DXGI_SWAP_CHAIN_FULLSCREEN_DESC fsdesc
+			{
+				.RefreshRate = moninfo.dmDisplayFrequency,
+				.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER::DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED,
+				.Scaling = DXGI_MODE_SCALING_UNSPECIFIED,
+				.Windowed = false
+			};
+
+			ver::check_hresult(factory->CreateSwapChainForHwnd(
+				queue,        // Swap chain needs the queue so that it can force a flush on it.
+				hwnd,
+				&desc,
+				&fsdesc,
+				nullptr,
+				swap.put()
+			));
+			return swap.as<IDXGISwapChain4>();
+		}
 	private:
 		static inline bool has_preference = false;
 	};

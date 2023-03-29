@@ -3,6 +3,7 @@
 #include <util/flags.h>
 #include <string>
 #include <array>
+#include <Shared/Log.h>
 
 namespace ver
 {
@@ -43,6 +44,11 @@ namespace ver
 			return flags & AdapterFlags::Software;
 		}
 	};
+
+	inline consteval auto func(std::source_location sl = std::source_location::current())
+	{
+		return sl.function_name();
+	}
 
 	template<class Impl>
 	class APIAdapter : public APIBase<Impl>

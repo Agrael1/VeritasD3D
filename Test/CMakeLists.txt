@@ -11,9 +11,14 @@ list(APPEND CMAKE_MODULE_PATH ${PLUGINS_DIR})
 add_executable(${PROJECT_NAME})
 target_sources(${PROJECT_NAME}
 	PRIVATE
+		"resources/WinD3D.rc"
+
 		"src/EntryMain.cpp"
+		"src/Test/Window.cpp" 
+		"src/Test/Keyboard.cpp" 
+		"src/Test/Mouse.cpp"
 	PUBLIC 
-)
+ "include/Test/App.h" "include/Test/Keyboard.h" "include/Test/Menu.h" "include/Test/Mouse.h" "include/Test/Window.h" "include/resource.h" "src/Test/App.cpp")
 
 target_link_libraries(${PROJECT_NAME} 
 	PUBLIC 
