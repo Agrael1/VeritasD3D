@@ -10,6 +10,7 @@ namespace ver
 	template<>
 	class Internal<DX12SwapChain>
 	{
+		friend class DX12SwapChain;
 		static constexpr inline bool valid = true;
 	public:
 		Internal() = default;
@@ -30,6 +31,11 @@ namespace ver
 	public:
 		DX12SwapChain() = default;
 		DX12SwapChain(winrt::com_ptr<IDXGISwapChain4> chain) :intern(std::move(chain)) {};
+	public:
+		uint32_t GetBackBufferIndex()const noexcept
+		{
+			return intern.chain->GetCurrentBackBufferIndex();
+		}
 	public:
 		[[nodiscard]]
 		auto& GetInternal()const noexcept

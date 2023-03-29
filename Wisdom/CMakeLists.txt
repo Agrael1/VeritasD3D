@@ -36,7 +36,7 @@ target_sources(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} 
 	PUBLIC 
 		Shared
-		DX12AgilityInterface
+		DX12Agility
 		d3d12
 ) 
 target_include_directories(${PROJECT_NAME} PUBLIC

@@ -91,9 +91,9 @@ namespace ver
 			{
 			default:
 			case SurfaceParameters::Type::Win32:
-				return SwapChainForWin32(desc, reinterpret_cast<HWND>(surface.hwnd), queue.GetInternal().GetQueue().get());
+				return SwapChainForWin32(desc, surface.hwnd, queue.GetInternal().GetQueue().get());
 			case SurfaceParameters::Type::WinRT:
-				return SwapChainForCoreWindow(desc, reinterpret_cast<IUnknown*>(surface.hwnd), queue.GetInternal().GetQueue().get());
+				return SwapChainForCoreWindow(desc, surface.core_window, queue.GetInternal().GetQueue().get());
 			}
 		}
 	public:
@@ -155,22 +155,11 @@ namespace ver
 		{
 			winrt::com_ptr<IDXGISwapChain1> swap;
 
-			DEVMODE moninfo;
-			EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &moninfo);
-
-			DXGI_SWAP_CHAIN_FULLSCREEN_DESC fsdesc
-			{
-				.RefreshRate = moninfo.dmDisplayFrequency,
-				.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER::DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED,
-				.Scaling = DXGI_MODE_SCALING_UNSPECIFIED,
-				.Windowed = false
-			};
-
 			ver::check_hresult(factory->CreateSwapChainForHwnd(
 				queue,        // Swap chain needs the queue so that it can force a flush on it.
 				hwnd,
 				&desc,
-				&fsdesc,
+				nullptr,
 				nullptr,
 				swap.put()
 			));

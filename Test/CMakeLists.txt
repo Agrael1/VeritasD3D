@@ -7,8 +7,12 @@ project (Test CXX RC)
 
 list(APPEND CMAKE_MODULE_PATH ${PLUGINS_DIR})
 
+# SDK exports
+get_property(DX12SDKVER TARGET DX12Agility PROPERTY DX12SDKVER)
+configure_file(exports.cpp.in exports.cpp)
 
-add_executable(${PROJECT_NAME})
+
+add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_BINARY_DIR}/exports.cpp)
 target_sources(${PROJECT_NAME}
 	PRIVATE
 		"resources/WinD3D.rc"
@@ -17,13 +21,13 @@ target_sources(${PROJECT_NAME}
 		"src/Test/Window.cpp" 
 		"src/Test/Keyboard.cpp" 
 		"src/Test/Mouse.cpp"
+		"src/Test/App.cpp"
 	PUBLIC 
- "include/Test/App.h" "include/Test/Keyboard.h" "include/Test/Menu.h" "include/Test/Mouse.h" "include/Test/Window.h" "include/resource.h" "src/Test/App.cpp")
+ "include/Test/App.h" "include/Test/Keyboard.h" "include/Test/Menu.h" "include/Test/Mouse.h" "include/Test/Window.h" "include/resource.h" )
 
 target_link_libraries(${PROJECT_NAME} 
 	PUBLIC 
 		Ver::WinD3D12
-		DX12Agility
 )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
