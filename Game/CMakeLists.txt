@@ -87,6 +87,7 @@ target_link_libraries(${PROJECT_NAME}
 		PhysX 
 		Vorbis::Vorbis 
 		Mfplat
+		runtimeobject.lib
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)

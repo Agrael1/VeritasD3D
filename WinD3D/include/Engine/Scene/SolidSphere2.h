@@ -14,11 +14,12 @@ namespace ver
 		ver::IAsyncAction InitializeAsync(Graphics& gfx, float radius);
 	public:
 		void SetPos(DirectX::XMFLOAT3 pos)noexcept;
+		DirectX::XMFLOAT3 GetPos()const noexcept {return pos;}
 		void SetColor(DirectX::XMFLOAT3 color)noexcept;
 		void UpdateColor(Graphics& gfx)noexcept;
 		DirectX::XMMATRIX GetTransformXM() const noexcept override;
 	private:
-		DirectX::XMFLOAT3 pos = { 1.0f,1.0f,1.0f };
+		DirectX::XMFLOAT3 pos = { 0.0f,0.0f,0.0f };
 		struct PSColorConstant
 		{
 			DirectX::XMFLOAT3 color = { 1.0f,1.0f,1.0f };

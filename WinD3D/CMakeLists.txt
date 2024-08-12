@@ -76,6 +76,7 @@ target_sources(${PROJECT_NAME}
         "src/Engine/Scene/BillboardComponent.cpp"
         "src/Engine/Scene/Skybox.cpp"
         "src/Engine/Scene/SolidSphere2.cpp"
+        "src/Engine/Scene/SolidCube.cpp"
         "src/Engine/Scene/Cursor.cpp"
 
 
@@ -173,6 +174,7 @@ target_sources(${PROJECT_NAME}
             "include/Engine/Scene/Plane.h"
             "include/Engine/Scene/Skybox.h"
             "include/Engine/Scene/SolidSphere2.h"
+            "include/Engine/Scene/SolidCube.h"
             "include/Engine/Scene/Sphere.h"
 
             "include/Engine/Util/ImGUIManager.h"

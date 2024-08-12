@@ -23,6 +23,21 @@ namespace RG
 			AddBind(ver::Stencil::Resolve(gfx, ver::Stencil::Mode::Off));
 		}
 	};
+
+	class LambertianPass2 : public RenderQueuePass
+	{
+	public:
+		LambertianPass2(Graphics& gfx, std::string name)
+			:
+			RenderQueuePass(std::move(name))
+		{
+			RegisterSink(DirectBufferSink<IRenderTarget>::Make("renderTarget", renderTarget));
+			RegisterSink(DirectBufferSink<ver::DepthStencil>::Make("depthStencil", depthStencil));
+			RegisterSource(DirectBufferSource<IRenderTarget>::Make("renderTarget", renderTarget));
+			RegisterSource(DirectBufferSource<ver::DepthStencil>::Make("depthStencil", depthStencil));
+			AddBind(ver::Stencil::Resolve(gfx, ver::Stencil::Mode::Off));
+		}
+	};
 }
 
 namespace ver::rg
