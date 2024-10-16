@@ -12,7 +12,7 @@ namespace ver
 	public:
 		DomainShader() = default;
 		DomainShader(Graphics& gfx, std::filesystem::path path);
-		winrt::IAsyncAction InitializeAsync(Graphics& gfx, std::filesystem::path path);
+		ver::IAsyncAction InitializeAsync(Graphics& gfx, std::filesystem::path path);
 		void Initialize(Graphics& gfx);
 	public:
 		void Bind(Graphics& gfx) noxnd override;

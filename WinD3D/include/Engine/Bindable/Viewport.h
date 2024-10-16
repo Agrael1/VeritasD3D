@@ -19,6 +19,15 @@ namespace ver
 			vp.TopLeftX = 0.0f;
 			vp.TopLeftY = 0.0f;
 		}
+		Viewport(Graphics& gfx, float width, float height, float x, float y)
+		{
+			vp.Width = width;
+			vp.Height = height;
+			vp.MinDepth = 0.0f;
+			vp.MaxDepth = 1.0f;
+			vp.TopLeftX = x;
+			vp.TopLeftY = y;
+		}
 		void Bind(Graphics& gfx) noxnd override
 		{
 			Bind(*GetContext(gfx));

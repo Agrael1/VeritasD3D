@@ -12,7 +12,7 @@ namespace ver
 		static inline constexpr auto aa = 4;
 	public:
 		BillboardComponent() = default;
-		winrt::IAsyncAction InitializeAsync(Graphics& gfx, std::filesystem::path tex_path, DirectX::XMFLOAT2 dims, bool spherical = true);
+		ver::IAsyncAction InitializeAsync(Graphics& gfx, std::filesystem::path tex_path, DirectX::XMFLOAT2 dims, bool spherical = true);
 	public:
 		void SetColor(Graphics& gfx, DirectX::XMVECTOR color)
 		{
@@ -58,7 +58,7 @@ namespace ver
 		BillboardBuilder& Texture(std::filesystem::path p) { this->tex_path = std::move(p); return*this;}
 
 		BillboardComponent Make(Graphics& gfx);
-		winrt::IAsyncAction MakeAsync(Graphics& gfx, BillboardComponent& component);
+		ver::IAsyncAction MakeAsync(Graphics& gfx, BillboardComponent& component);
 	private:
 		DirectX::XMFLOAT3A position{ 0,0,0 };
 		DirectX::XMFLOAT3 color{ 1,1,1 };

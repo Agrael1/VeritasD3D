@@ -3,7 +3,7 @@
 #include <Engine/Bindable/AsyncResource.h>
 #include <Engine/Bindable/BindableCommons.h>
 
-winrt::IAsyncAction ver::Skybox::InitializeAsync(Graphics& gfx, std::filesystem::path tex_path)
+ver::IAsyncAction ver::Skybox::InitializeAsync(Graphics& gfx, std::filesystem::path tex_path, bool rot)
 {
 	co_await winrt::resume_background();
 	constexpr uint16_t a[]{ 3, 2, 6, 7, 4, 2, 0, 3, 1, 6, 5, 4, 1, 0 };
@@ -18,7 +18,11 @@ winrt::IAsyncAction ver::Skybox::InitializeAsync(Graphics& gfx, std::filesystem:
 		only.AddBindable(Stencil::Resolve(gfx, Stencil::Mode::DepthFirst));
 		pIndices = IndexBuffer::Resolve(gfx, "$GlobCube", a);
 		topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+
+		if(rot)
 		only.AddBindable(std::make_shared<SkyboxTransformCbuf>(gfx));
+		else
+		only.AddBindable(std::make_shared<XSkyboxTransformCbuf>(gfx));
 
 		only.AddBindable(co_await vs);
 		only.AddBindable(co_await ps);

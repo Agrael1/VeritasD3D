@@ -1,5 +1,5 @@
-#include <Scene.h>
-#include <Foundation.h>
+#include <PhysX/Scene.h>
+#include <PhysX/Foundation.h>
 #include <thread>
 
 using namespace physx;

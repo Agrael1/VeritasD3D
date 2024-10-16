@@ -9,7 +9,7 @@ ver::LightSphere::LightSphere(LightBuffer& allocator, Graphics& gfx, float radiu
 	Reset();
 }
 
-winrt::IAsyncAction ver::LightSphere::InitializeAsync(LightBuffer& allocator, Graphics& gfx, float radius)
+ver::IAsyncAction ver::LightSphere::InitializeAsync(LightBuffer& allocator, Graphics& gfx, float radius)
 {
 	cbData = &allocator.Allocate();
 	co_await mesh.InitializeAsync(gfx, radius);

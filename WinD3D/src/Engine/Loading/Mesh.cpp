@@ -1,9 +1,9 @@
 #include <Engine/Loading/Mesh.h>
 
 // Mesh
-Mesh::Mesh(Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale) noxnd
+Mesh::Mesh(Graphics& gfx, const Material& mat, const aiMesh& mesh) noxnd
 	:
-Drawable(gfx, mat, mesh, scale)
+Drawable(gfx, mat, mesh)
 {}
 
 void Mesh::Submit(DirectX::FXMMATRIX accumulatedTranform) const noxnd

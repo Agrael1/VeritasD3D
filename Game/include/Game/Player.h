@@ -1,6 +1,6 @@
 #pragma once
 #include <Game/Camera.h>
-#include <Character.h>
+#include <PhysX/Character.h>
 #include <PxSceneLock.h>
 #include <Util/Converter.h>
 #include <Game/Entity.h>
@@ -78,9 +78,17 @@ namespace UT
 		{
 			camera.Rotate(dx, dy);
 		}
-		auto GetViewMatrix()const
+		auto GetLeftViewMatrix()const
 		{
-			return camera.GetViewMatrix();
+			return camera.GetLeftViewMatrix();
+		}
+		auto GetRightViewMatrix()const
+		{
+			return camera.GetRightViewMatrix();
+		}
+		auto GetCentralCamera()const noexcept
+		{
+			return camera.GetCentralViewMatrix();
 		}
 		auto GetPosition()const noexcept
 		{
@@ -98,9 +106,17 @@ namespace UT
 		{
 			flight_mode ^= true;
 		}
+		void SpawnControlWindow()
+		{
+			camera.SpawnControlWindow();
+		}
 		bool IsMidair()const noexcept { return midair; }
+		auto& GetCamera()
+		{
+			return camera;
+		}
 	private:
-		Camera camera;
+		StereoCamera camera;
 		ver::ph::CharacterController physics;
 		ver::LightSphere shimmer;
 		float height = 0.0f;

@@ -1,7 +1,7 @@
 #include <Engine/Bindable/HullShader.h>
 #include <Engine/Bindable/Codex.h>
-#include <Engine/Util/GraphicsExceptions.h>
 #include <d3dcompiler.h>
+#include <Shared/Checks.h>
 
 using namespace ver;
 
@@ -11,7 +11,7 @@ HullShader::HullShader(Graphics& gfx, std::filesystem::path xpath)
 	Initialize(gfx);
 }
 
-winrt::IAsyncAction HullShader::InitializeAsync(Graphics& gfx, std::filesystem::path path)
+ver::IAsyncAction HullShader::InitializeAsync(Graphics& gfx, std::filesystem::path path)
 {
 	co_await winrt::resume_background();
 	this->path = std::move(path);
@@ -21,8 +21,8 @@ winrt::IAsyncAction HullShader::InitializeAsync(Graphics& gfx, std::filesystem::
 void HullShader::Initialize(Graphics& gfx)
 {
 	winrt::com_ptr<ID3DBlob> pBlob;
-	ver::check_graphics(D3DReadFileToBlob((L"..\\WinD3D\\shaders\\" + path.native()).c_str(), pBlob.put()));
-	ver::check_graphics(GetDevice(gfx)->CreateHullShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, pHullShader.put()));
+	ver::check_hresult(D3DReadFileToBlob((L"..\\shaders\\" + path.native()).c_str(), pBlob.put()));
+	ver::check_hresult(GetDevice(gfx)->CreateHullShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, pHullShader.put()));
 }
 
 void HullShader::Bind(Graphics& gfx) noxnd

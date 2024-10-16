@@ -11,7 +11,7 @@ IndexBuffer::IndexBuffer(Graphics& gfx, std::string tag, const std::vector<unsig
 	tag(tag),
 	count((UINT)indices.size())
 {
-	INFOMAN(gfx);
+	
 
 	D3D11_BUFFER_DESC ibd = {};
 	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
@@ -22,13 +22,13 @@ IndexBuffer::IndexBuffer(Graphics& gfx, std::string tag, const std::vector<unsig
 	ibd.StructureByteStride = sizeof(unsigned short);
 	D3D11_SUBRESOURCE_DATA isd = {};
 	isd.pSysMem = indices.data();
-	GFX_THROW_INFO(GetDevice(gfx)->CreateBuffer(&ibd, &isd, &pIndexBuffer));
+	ver::check_hresult(GetDevice(gfx)->CreateBuffer(&ibd, &isd, &pIndexBuffer));
 }
 
 void IndexBuffer::Bind(Graphics& gfx)noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT::DXGI_FORMAT_R16_UINT, 0u));
+	
+	ver::check_hresult_ONLY(GetContext(gfx)->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT::DXGI_FORMAT_R16_UINT, 0u));
 }
 UINT IndexBuffer::GetCount()const noexcept
 {

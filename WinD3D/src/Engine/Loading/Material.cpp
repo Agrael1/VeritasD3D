@@ -2,11 +2,13 @@
 #include <Engine/Bindable/BindableCommons.h>
 #include <Engine/Bindable/HullShader.h>
 #include <Engine/Bindable/DomainShader.h>
+#include <Engine/Bindable/ConstantBuffer.h>
 #include <Engine/Bindable/ConstantBuffersEx.h>
 #include <Engine/Dynamic/DynamicConstant.h>
 #include <assimp/types.h>
 #include <assimp/material.h>
 #include <assimp/mesh.h>
+#include <Engine/Util/scoped_semaphore.h>
 
 union Desc
 {
@@ -66,6 +68,7 @@ DC::Buffer CreateConstantBuffer(Desc desc)
 			{DC::Type::Bool,"useNormalMap"},
 			{DC::Type::Float,"normalMapWeight"} });
 	}
+	pscLayout.Add({ { DC::Type::Float,"meshId" } });
 	return { std::move(pscLayout) };
 }
 std::string GetShaderCode(Desc desc)
@@ -169,7 +172,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 			{
 				float gloss = 8.0f;
 				material.Get(AI_MATKEY_SHININESS, gloss);
-				r = gloss;
+				r = gloss == 0.0f ? 1.0f : 0.0f;
 			}
 			buf["useNormalMap"].SetIfExists(true);
 			buf["normalMapWeight"].SetIfExists(1.0f);
@@ -183,6 +186,13 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 winrt::Windows::Foundation::IAsyncAction
 Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noxnd
 {
+	static std::atomic_int mesh_id = 1;
+
+
+	float xmid = 0.0f;
+	xmid = mesh_id++;
+
+
 	auto desc = DescribeMaterial(material);
 	vtxLayout = CreateLayout(desc);
 
@@ -214,7 +224,7 @@ Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::
 		// normal
 		if (material.GetTexture(aiTextureType_NORMALS, 0, &texFileName) == aiReturn_SUCCESS)
 			texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 2));
-		
+
 		if (material.GetTexture(aiTextureType_DISPLACEMENT, 0, &texFileName) == aiReturn_SUCCESS)
 			texes.emplace_back(ver::Texture::ResolveAsync(gfx, rootPath + texFileName.C_Str(), 3));
 
@@ -231,6 +241,7 @@ Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::
 			auto pstask = ver::PixelShader::ResolveAsync(gfx, shaderCode + "ps.cso");
 
 			step.AddBindable(std::make_shared<TransformCbuf>(gfx, 0u));
+
 			if (desc.Any())
 				step.AddBindable(ver::Sampler::Resolve(gfx));
 			// PS material params (cbuf)
@@ -258,6 +269,7 @@ Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::
 			}
 			buf["useNormalMap"].SetIfExists(true);
 			buf["normalMapWeight"].SetIfExists(1.0f);
+			buf["meshId"].SetIfExists(xmid);
 			step.AddBindable(std::make_unique<CachingPixelConstantBufferEx>(gfx, std::move(buf), 1u));
 
 			auto pvs = co_await vstask;
@@ -285,6 +297,20 @@ Material::InitializeAsync(Graphics& gfx, const aiMaterial& material, const std::
 		}
 		techniques.push_back(std::move(map));
 	}
+	{
+		Technique map{ "Cursor",true };
+		{
+			Step draw("cursor");
+
+			draw.AddBindable(InputLayout::Resolve(gfx, vtxLayout, ver::VertexShader::Resolve(gfx, "solid.vs.cso")->GetBytecode()));
+
+			draw.AddBindable(std::make_shared<TransformCbuf>(gfx));
+			draw.AddBindable(std::make_shared<ver::PixelConstantBuffer<float>>(gfx, xmid, 3));
+
+			map.AddStep(std::move(draw));
+		}
+		techniques.push_back(std::move(map));
+	}
 }
 std::vector<unsigned short> Material::ExtractIndices(const aiMesh& mesh) noexcept
 {
@@ -304,23 +330,14 @@ std::vector<unsigned short> Material::ExtractIndices(const aiMesh& mesh) noexcep
 #include <memory_resource>
 #include <Engine/Bindable/IndexBuffer.h>
 
-auto prescale(std::span<aiVector3D> mesh, float scale)
-{
-	std::vector<aiVector3D> copy;
-	copy.reserve(mesh.size());
-	for (auto& i : mesh)
-		copy.push_back(i * scale);
-	return copy;
-}
-
-std::shared_ptr<Bindable> Material::MakeVertexBindable(Graphics& gfx, const aiMesh& mesh, float scale) const noxnd
+std::shared_ptr<Bindable> Material::MakeVertexBindable(Graphics& gfx, const aiMesh& mesh) const noxnd
 {
 	void* a[size_t(ver::dv::ElementType::Count)]{};
 	std::pmr::monotonic_buffer_resource b{ a, sizeof(a) };
 	std::pmr::vector<void*> vb{ decltype(vb)::allocator_type{&b} };
+
 	vb.reserve(vtxLayout.count());
-	auto x = prescale({ mesh.mVertices, mesh.mNumVertices }, scale);
-	vb.push_back(x.data());
+	vb.push_back(mesh.mVertices);
 	vb.push_back(mesh.mNormals);
 	if (vtxLayout.contains(ver::dv::ElementType::Texture3D))
 		vb.push_back(mesh.mTextureCoords[0]);

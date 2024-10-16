@@ -1,10 +1,11 @@
 #include <Engine/Bindable/ConstantBuffer.h>
-#include <Engine/Util/GraphicsExceptions.h>
+#include <Shared/Checks.h>
+#include <d3d11_4.h>
 
 template<std::integral T>
 inline constexpr uint32_t round_to16(T size)
 {
-	return ((size - 1) | 15) + 1;
+	return uint32_t(((size - 1) | 15) + 1);
 }
 
 ver::ConstantBuffer::ConstantBuffer(Graphics& gfx, std::span<const std::byte> consts, uint32_t slot)
@@ -20,7 +21,7 @@ ver::ConstantBuffer::ConstantBuffer(Graphics& gfx, std::span<const std::byte> co
 
 	D3D11_SUBRESOURCE_DATA csd{};
 	csd.pSysMem = consts.data();
-	ver::check_graphics(GetDevice(gfx)->CreateBuffer(&cbd, &csd, pConstantBuffer.put()));
+	ver::check_hresult(GetDevice(gfx)->CreateBuffer(&cbd, &csd, pConstantBuffer.put()));
 }
 
 
@@ -35,7 +36,7 @@ ver::ConstantBuffer::ConstantBuffer(Graphics& gfx, uint32_t size, uint32_t slot)
 	cbd.ByteWidth = round_to16(size);
 	cbd.StructureByteStride = 0u;
 
-	ver::check_graphics(GetDevice(gfx)->CreateBuffer(&cbd, nullptr, pConstantBuffer.put()));
+	ver::check_hresult(GetDevice(gfx)->CreateBuffer(&cbd, nullptr, pConstantBuffer.put()));
 }
 
 void ver::ConstantBuffer::Update(Graphics& gfx, std::span<const std::byte> consts)
@@ -51,26 +52,26 @@ void ver::ConstantBuffer::Update(Graphics& gfx, std::span<const std::byte> const
 	ver::check_context();
 }
 
-void ver::ConstantBuffer::BindToVS(Graphics& gfx)
+void ver::ConstantBuffer::BindToVS(ID3D11DeviceContext& context)
 {
-	GetContext(gfx)->VSSetConstantBuffers(slot, 1u, (ID3D11Buffer**)&pConstantBuffer);
+	context.VSSetConstantBuffers(slot, 1u, ver::array_view(pConstantBuffer));
 	ver::check_context();
 }
 
-void ver::ConstantBuffer::BindToPS(Graphics& gfx)
+void ver::ConstantBuffer::BindToPS(ID3D11DeviceContext& context)
 {
-	GetContext(gfx)->PSSetConstantBuffers(slot, 1u, (ID3D11Buffer**)&pConstantBuffer);
+	context.PSSetConstantBuffers(slot, 1u, ver::array_view(pConstantBuffer));
 	ver::check_context();
 }
 
-void ver::ConstantBuffer::BindToDS(Graphics& gfx)
+void ver::ConstantBuffer::BindToDS(ID3D11DeviceContext& context)
 {
-	GetContext(gfx)->DSSetConstantBuffers(slot, 1u, (ID3D11Buffer**)&pConstantBuffer);
+	context.DSSetConstantBuffers(slot, 1u, ver::array_view(pConstantBuffer));
 	ver::check_context();
 }
 
-void ver::ConstantBuffer::BindToHS(Graphics& gfx)
+void ver::ConstantBuffer::BindToHS(ID3D11DeviceContext& context)
 {
-	GetContext(gfx)->HSSetConstantBuffers(slot, 1u, (ID3D11Buffer**)&pConstantBuffer);
+	context.HSSetConstantBuffers(slot, 1u, ver::array_view(pConstantBuffer));
 	ver::check_context();
 }

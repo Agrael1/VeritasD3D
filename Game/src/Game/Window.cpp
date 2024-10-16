@@ -2,6 +2,7 @@
 #include <sstream>
 #include <resource.h>
 #include <bindings/imgui_impl_win32.h>
+#include <Shared/Checks.h>
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -13,6 +14,7 @@ enum class MenuItems :UINT_PTR
 	Style_VGUI = ID_STYLES_VGUI,
 	Style_Dark = ID_STYLES_DARK,
 	Style_Cherry = ID_STYLES_CHERRY,
+	PlayGame = ID_MODE_GAME,
 	About = ID_HELP_ABOUT,
 };
 
@@ -77,7 +79,7 @@ Window::Window(unsigned int width, unsigned int height, const char* name) :width
 	rWindow.top = 100;
 	rWindow.bottom = height + rWindow.top;
 	// Automatic calculation of window height and width to client region
-	WND_CALL_INFO(AdjustWindowRect(&rWindow, WS_OVERLAPPEDWINDOW, TRUE));
+	ver::check_windows(AdjustWindowRect(&rWindow, WS_OVERLAPPEDWINDOW, TRUE));
 
 	hWnd.reset(CreateWindowA(
 		WindowClass::GetName(), name,
@@ -90,20 +92,20 @@ Window::Window(unsigned int width, unsigned int height, const char* name) :width
 	));
 
 	// Error checks
-	if (!hWnd) throw WND_LAST_EXCEPT();
+	ver::check_windows(!!hWnd);
 	ShowWindow(hWnd.get(), SW_SHOWDEFAULT);
 
 	Accelerator.reset(LoadAccelerators(WindowClass::GetInstance(), MAKEINTRESOURCE(IDR_ACCELERATOR1)));
 
 	// Init GUI (only one window supported)
-	WND_CALL_INFO(ImGui_ImplWin32_Init(hWnd.get()));
+	ver::check_windows(ImGui_ImplWin32_Init(hWnd.get()));
 
 	RAWINPUTDEVICE rid;
 	rid.usUsagePage = 0x01; // mouse page
 	rid.usUsage = 0x02; // mouse usage
 	rid.dwFlags = 0;
 	rid.hwndTarget = nullptr;
-	WND_CALL_INFO(RegisterRawInputDevices(&rid, 1, sizeof(rid)));
+	ver::check_windows(RegisterRawInputDevices(&rid, 1, sizeof(rid)));
 }
 Window::~Window()
 {
@@ -135,32 +137,12 @@ void Window::ChangeToFullScreen()
 
 void Window::SetTitle(std::string_view title)
 {
-	if (!SetWindowText(hWnd.get(), title.data()))
-	{
-		throw WND_LAST_EXCEPT();
-	}
+	ver::check_windows(SetWindowText(hWnd.get(), title.data()));
 }
 
-bool Window::RestyleCalled() const noexcept
+void Window::EnableLoading() 
 {
-	return bRestyleIssued;
-}
-void Window::RestyleComplete() noexcept
-{
-	bRestyleIssued = false;
-}
-Window::Style Window::GetStyle() const noexcept
-{
-	return style;
-}
-
-UINT Window::GetWidth() const noexcept
-{
-	return width;
-}
-UINT Window::GetHeight() const noexcept
-{
-	return height;
+	menu.EnableLoading();
 }
 
 void Window::EnableCursor() noexcept
@@ -182,34 +164,6 @@ bool Window::CursorEnabled() const noexcept
 	return cursorEnabled;
 }
 
-bool Window::LoadCalled() const noexcept
-{
-	return bLoadCallIssued;
-}
-void Window::LoadingComplete() noexcept
-{
-	EnableMenuItem(FileMenu.get(), 0, MF_BYPOSITION | MF_ENABLED);
-	bLoadCallIssued = false;
-}
-
-bool Window::ResizeCalled() const noexcept
-{
-	return bResizeIssued;
-}
-void Window::ResizeComplete() noexcept
-{
-	bResizeIssued = false;
-}
-
-bool Window::DrawGrid() const noexcept
-{
-	return bGridEnabled;
-}
-bool Window::IsActive() const noexcept
-{
-	return bActive;
-}
-
 void Window::ConfineCursor() noexcept
 {
 	RECT rect;
@@ -224,12 +178,18 @@ void Window::FreeCursor() noexcept
 void Window::HideCursor() noexcept
 {
 	while (::ShowCursor(FALSE) >= 0);
+	cursorShown = false;
 }
 void Window::ShowCursor() noexcept
 {
 	while (::ShowCursor(TRUE) < 0);
+	cursorShown = true;
 }
-
+void Window::ShowImGuiMouse()noexcept
+{
+	if (!cursorShown)
+		ShowCursor();
+}
 void Window::EnableImGuiMouse() noexcept
 {
 	ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
@@ -322,61 +282,38 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 		width = LOWORD(lParam);
 		height = HIWORD(lParam);
-		bResizeIssued = true;
+		events.push(Event::Resize);
 		break;
 	case WM_CREATE:
-		menu.reset(GetMenu(hWnd));
-		FileMenu.reset(GetSubMenu(menu.get(), 0));
-		OptionsMenu.reset(GetSubMenu(menu.get(), 1));
-		StylesMenu.reset(GetSubMenu(menu.get(), 2));
-		CheckMenuRadioItem(StylesMenu.get(), 0, 2, 0, MF_BYPOSITION);
+		menu.Initialize(GetMenu(hWnd));
 		break;
 	case WM_COMMAND:
 		switch (MenuItems(LOWORD(wParam)))
 		{
 		case MenuItems::Load:
-			EnableMenuItem(FileMenu.get(), 0, MF_BYPOSITION | MF_GRAYED);
-			bLoadCallIssued = true;
+			menu.DisableLoading();
+			events.push(Event::LoadAsset);
 			break;
 		case MenuItems::Exit:
 			PostQuitMessage(0);
 			return 0;
 		case MenuItems::ShowGrid:
-		{
-			bGridEnabled ^= 1;
-			MENUITEMINFO mii
-			{
-				.cbSize = sizeof(MENUITEMINFO),
-				.fMask = MIIM_STATE,
-				.fState = UINT(bGridEnabled ? MFS_CHECKED : MFS_UNCHECKED)
-			};
-			SetMenuItemInfo(OptionsMenu.get(), 0, true, &mii);
+			menu.ToggleGrid();
 			break;
-		}
 		case MenuItems::Style_VGUI:
-			CheckMenuRadioItem(StylesMenu.get(), 0, 2, 0, MF_BYPOSITION);
-			if (style != Style::VGUI)
-			{
-				style = Style::VGUI;
-				bRestyleIssued = true;
-			}
-
+			if (menu.SetStyle(UT::Menu::Style::VGUI))
+				events.push(Event::Restyle);
 			break;
 		case MenuItems::Style_Dark:
-			CheckMenuRadioItem(StylesMenu.get(), 0, 2, 1, MF_BYPOSITION);
-			if (style != Style::Dark)
-			{
-				style = Style::Dark;
-				bRestyleIssued = true;
-			}
+			if (menu.SetStyle(UT::Menu::Style::Dark))
+				events.push(Event::Restyle);
 			break;
 		case MenuItems::Style_Cherry:
-			CheckMenuRadioItem(StylesMenu.get(), 0, 2, 2, MF_BYPOSITION);
-			if (style != Style::Cherry)
-			{
-				style = Style::Cherry;
-				bRestyleIssued = true;
-			}
+			if (menu.SetStyle(UT::Menu::Style::Cherry))
+				events.push(Event::Restyle);
+			break;
+		case MenuItems::PlayGame:
+			events.push(Event::Play);
 			break;
 		case MenuItems::About:
 			DialogBox(WindowClass::GetInstance(), MAKEINTRESOURCE(IDD_DIALOG1), hWnd, About);
@@ -453,8 +390,12 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		// stifle this mouse message if imgui wants to capture
 		if (imio.WantCaptureMouse)
 		{
+			ShowImGuiMouse();
 			break;
 		}
+		if (cursorShown && !cursorActive)
+			HideCursor();
+
 		// in client region -> log move, and log enter + capture mouse (if not previously in window)
 		if (pt.x >= 0 && pt.x < width && pt.y >= 0 && pt.y < height)
 		{
@@ -511,11 +452,6 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	case WM_LBUTTONUP:
 	{
-		// stifle this mouse message if imgui wants to capture
-		if (imio.WantCaptureMouse)
-		{
-			break;
-		}
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.OnLeftReleased(pt.x, pt.y);
 		// release mouse if outside of window
@@ -528,11 +464,6 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	case WM_RBUTTONUP:
 	{
-		// stifle this mouse message if imgui wants to capture
-		if (imio.WantCaptureMouse)
-		{
-			break;
-		}
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.OnRightReleased(pt.x, pt.y);
 		// release mouse if outside of window

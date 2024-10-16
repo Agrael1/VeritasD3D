@@ -1,6 +1,7 @@
 #pragma once
 #include <Engine/Bindable/Bindable.h>
 #include <Engine/Bindable/BufferResource.h>
+#include <d3d11.h>
 #include <span>
 
 namespace ver
@@ -27,8 +28,8 @@ public:
 private:
 	void BindAsTarget(Graphics& gfx, ID3D11DepthStencilView* pDepthStencilView) noxnd override;
 protected:
-	RenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture);
-	RenderTarget(Graphics& gfx, UINT width, UINT height);
+	RenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture, uint32_t array_slice);
+	RenderTarget(Graphics& gfx, UINT width, UINT height, DXGI_FORMAT format = DXGI_FORMAT::DXGI_FORMAT_B8G8R8A8_UNORM);
 protected:
 	UINT width;
 	UINT height;
@@ -38,11 +39,19 @@ protected:
 class ShaderInputRenderTarget : public RenderTarget
 {
 public:
-	ShaderInputRenderTarget(Graphics& gfx, UINT width, UINT height, UINT slot);
+	ShaderInputRenderTarget(Graphics& gfx, UINT width, UINT height, UINT slot, DXGI_FORMAT format = DXGI_FORMAT::DXGI_FORMAT_B8G8R8A8_UNORM);
 	void Bind(Graphics& gfx) noxnd override;
+	void BindTo(Graphics& gfx, uint32_t slot) noxnd;
+
+	auto SRV() { return pShaderResourceView; }
+	auto Resource()const noexcept {
+		winrt::com_ptr<ID3D11Resource> res;
+		pShaderResourceView->GetResource(res.put());
+		return res.as<ID3D11Texture2D>();
+	}
 private:
 	UINT slot;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pShaderResourceView;
+	winrt::com_ptr<ID3D11ShaderResourceView> pShaderResourceView;
 };
 
 // RT for Graphics to create RenderTarget for the back buffer
@@ -50,23 +59,26 @@ class OutputOnlyRenderTarget : public RenderTarget
 {
 	friend Graphics;
 protected:
-	static std::shared_ptr<OutputOnlyRenderTarget> create(Graphics& gfx, ID3D11Texture2D* pTexture)
+	static std::shared_ptr<OutputOnlyRenderTarget> create(Graphics& gfx, ID3D11Texture2D* pTexture, uint32_t array_slice = 0)
 	{
-		return std::shared_ptr<OutputOnlyRenderTarget>{ new OutputOnlyRenderTarget(gfx, pTexture) };
+		return std::shared_ptr<OutputOnlyRenderTarget>{ new OutputOnlyRenderTarget(gfx, pTexture, array_slice) };
 	}
 public:
 	void Bind(Graphics& gfx) noxnd override;
 	void ReleaseBuffer();
 	void Reset(Graphics& gfx, ID3D11Texture2D* pTexture);
 private:
-	OutputOnlyRenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture);
+	OutputOnlyRenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture, uint32_t array_slice);
+private:
+	uint32_t array_slice = 0;
 };
 
 class RenderTargetArray : public IRenderTarget
 {
+
 public:
 	RenderTargetArray() = default;
-	winrt::IAsyncAction InitializeAsync(Graphics& gfx, uint32_t xwidth, uint32_t xheight, uint32_t slot);
+	ver::IAsyncAction InitializeAsync(Graphics& gfx, uint32_t xwidth, uint32_t xheight, uint32_t slot);
 	void BindAsBuffer(Graphics& gfx) noxnd override;
 	void BindAsBuffer(Graphics& gfx, BufferResource* depthStencil) noxnd override;
 	void BindAsBuffer(Graphics& gfx, ver::DepthStencil* depthStencil) noxnd;

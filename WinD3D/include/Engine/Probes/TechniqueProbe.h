@@ -1,4 +1,5 @@
 #pragma once
+#undef max
 
 namespace DC
 {

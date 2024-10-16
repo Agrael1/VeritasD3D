@@ -1,6 +1,6 @@
 #pragma once
 #include <Engine/Loading/Model.h>
-#include <Scene.h>
+#include <PhysX/Scene.h>
 #include <Game/Entity.h>
 
 namespace UT
@@ -13,7 +13,7 @@ namespace UT
 		Flag() = default;
 		~Flag() { if (!--ref)shape.reset(); }
 	public:
-		winrt::IAsyncAction InitializeAsync(ver::ph::Physics& phy, Graphics& gfx, std::filesystem::path mpath, DirectX::XMFLOAT3 pos);
+		ver::IAsyncAction InitializeAsync(ver::ph::Physics& phy, Graphics& gfx, std::filesystem::path mpath, DirectX::XMFLOAT3 pos);
 		void AddToScene(ver::ph::Scene& scene)
 		{
 			scene.get_scene().addActor(*physics);

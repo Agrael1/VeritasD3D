@@ -1,5 +1,5 @@
-#include <Character.h>
-#include <Scene.h>
+#include <PhysX/Character.h>
+#include <PhysX/Scene.h>
 #include <numbers>
 
 using namespace physx;

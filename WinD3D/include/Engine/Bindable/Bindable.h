@@ -8,8 +8,8 @@ class Bindable : public ver::GraphicsResource
 public:
 	virtual ~Bindable() = default;
 public:
-	virtual void Bind(Graphics& gfx)noxnd = 0;
-	virtual void Bind(ID3D11DeviceContext& context) noxnd {}
+	virtual void Bind(Graphics& gfx)noxnd { Bind(*GetContext(gfx)); };
+	virtual void Bind(ID3D11DeviceContext& context)noxnd {}
 	virtual void InitializeParentReference(const class Drawable&)noexcept
 	{
 

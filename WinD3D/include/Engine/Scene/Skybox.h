@@ -9,7 +9,7 @@ namespace ver
 	{
 	public:
 		Skybox() = default;
-		winrt::IAsyncAction InitializeAsync(Graphics& gfx, std::filesystem::path tex_path);
+		ver::IAsyncAction InitializeAsync(Graphics& gfx, std::filesystem::path tex_path, bool rot = true);
 	public:
 		virtual DirectX::XMMATRIX GetTransformXM() const noexcept override { return DirectX::XMMatrixIdentity(); }
 	};

@@ -24,8 +24,8 @@ namespace ver::audio
 		ogg_stream(Audio& au, std::filesystem::path path);
 		~ogg_stream() { stop(); }
 	public:
-		winrt::IAsyncAction InitializeAsync(Audio& au, std::filesystem::path path);
-		winrt::IAsyncAction play(bool looped = true);
+		ver::IAsyncAction InitializeAsync(Audio& au, std::filesystem::path path);
+		ver::IAsyncAction play(bool looped = true);
 		void stop();
 		void pause();
 	private:

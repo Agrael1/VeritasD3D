@@ -42,6 +42,24 @@ protected:
 private:
 	std::unique_ptr<ver::VertexConstantBuffer<Transforms>> pVcbuf;
 	float f = 0.0f;
+	uint32_t c = 0;
+};
+class XSkyboxTransformCbuf : public Bindable
+{
+protected:
+	struct Transforms
+	{
+		DirectX::XMMATRIX viewProj;
+		DirectX::XMMATRIX rot;
+	};
+public:
+	XSkyboxTransformCbuf(Graphics& gfx, UINT slot = 0u);
+	void Bind(Graphics& gfx) noxnd override;
+protected:
+	void UpdateBindImpl(Graphics& gfx, const Transforms& tf) noxnd;
+	Transforms GetTransforms(Graphics& gfx) noxnd;
+private:
+	std::unique_ptr<ver::VertexConstantBuffer<Transforms>> pVcbuf;
 };
 
 namespace ver

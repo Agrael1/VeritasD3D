@@ -1,6 +1,7 @@
 #pragma once
 #include "Bindable.h"
 #include "BufferResource.h"
+#include <d3d11.h>
 
 class Graphics;
 class RenderTarget;

@@ -13,7 +13,7 @@ namespace ver::audio
 		Audio() = default;
 	public:
 		void Initialize();
-		winrt::IAsyncAction InitializeAsync();
+		ver::IAsyncAction InitializeAsync();
 		template<class Self>
 		auto&& GetAudio(this Self&& s)
 		{

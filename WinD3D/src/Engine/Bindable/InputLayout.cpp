@@ -1,17 +1,13 @@
 #include <Engine/Bindable/InputLayout.h>
 #include <Engine/Bindable/Codex.h>
-#include <Engine/Deprecated/GraphicsThrows.h>
-#include <Engine/Util/DXGIInfoManager.h>
-#include <Engine/Util/GraphicsExceptions.h>
+#include <Shared/Checks.h>
 
 InputLayout::InputLayout(Graphics & gfx, ver::dv::LayoutSpan layout, ID3DBlob * pVertexShaderBytecode, bool multi)
 	:tag(GenerateUID(layout, nullptr, multi))
 {
-	INFOMAN(gfx);
-
 	const auto d3dlayout = multi? layout.GetD3DMultilayout():layout.GetD3DLayout();
 
-	GFX_THROW_INFO(GetDevice(gfx)->CreateInputLayout(
+	ver::check_hresult(GetDevice(gfx)->CreateInputLayout(
 		d3dlayout.data(), (UINT)d3dlayout.size(),
 		pVertexShaderBytecode->GetBufferPointer(),
 		pVertexShaderBytecode->GetBufferSize(),
@@ -21,8 +17,8 @@ InputLayout::InputLayout(Graphics & gfx, ver::dv::LayoutSpan layout, ID3DBlob * 
 
 void InputLayout::Bind(Graphics& gfx) noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->IASetInputLayout(pInputLayout.Get()));
+	GetContext(gfx)->IASetInputLayout(pInputLayout.Get());
+	ver::check_context();
 }
 std::string InputLayout::GetUID() const noexcept
 {

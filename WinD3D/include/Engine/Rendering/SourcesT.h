@@ -57,3 +57,8 @@ namespace RG
 		std::shared_ptr<T>& bind;
 	};
 }
+
+namespace ver::rg
+{
+	using RG::DirectBufferSource;
+}

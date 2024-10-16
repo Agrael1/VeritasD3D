@@ -12,7 +12,7 @@ namespace ver
 			:IndexBuffer(gfx, "?", indices){}
 		IndexBuffer(Graphics& gfx, std::string tag, std::span<const uint16_t> indices);
 
-		winrt::IAsyncAction InitializeAsync(Graphics& gfx, std::string tag, std::span<const uint16_t> indices);
+		ver::IAsyncAction InitializeAsync(Graphics& gfx, std::string tag, std::span<const uint16_t> indices);
 		void Initialize(Graphics& gfx, std::span<const uint16_t> indices);
 	public:
 		void Bind(Graphics& gfx) noxnd override;

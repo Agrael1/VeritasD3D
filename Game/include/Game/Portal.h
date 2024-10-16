@@ -1,6 +1,6 @@
 #pragma once
 #include <Engine/Scene/BillboardComponent.h>
-#include <Scene.h>
+#include <PhysX/Scene.h>
 #include <Game/Entity.h>
 #include <Game/PointLight.h>
 #include <semaphore>
@@ -19,7 +19,7 @@ namespace UT
 		{
 			if (!--ref)shape.reset();
 		}
-		winrt::IAsyncAction InitializeAsync(ver::LightBuffer& lb, ver::ph::Physics& phy, Graphics& gfx, DirectX::XMFLOAT3 position, DirectX::XMFLOAT3 color);
+		ver::IAsyncAction InitializeAsync(ver::LightBuffer& lb, ver::ph::Physics& phy, Graphics& gfx, DirectX::XMFLOAT3 position, DirectX::XMFLOAT3 color);
 	public:
 		void SetBound(Portal* other) { bound = other; }
 		void Teleport(Player& pl);

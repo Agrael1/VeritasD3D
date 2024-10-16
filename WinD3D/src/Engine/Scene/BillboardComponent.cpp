@@ -7,7 +7,7 @@
 
 namespace ver
 {
-	winrt::IAsyncAction BillboardComponent::InitializeAsync(Graphics& gfx, std::filesystem::path tex_path, DirectX::XMFLOAT2 dims, bool spherical)
+	ver::IAsyncAction BillboardComponent::InitializeAsync(Graphics& gfx, std::filesystem::path tex_path, DirectX::XMFLOAT2 dims, bool spherical)
 	{
 		co_await winrt::resume_background();
 		Technique tech("Lambertian");
@@ -62,7 +62,7 @@ namespace ver
 		ImGui::End();
 	}
 
-	winrt::IAsyncAction BillboardBuilder::MakeAsync(Graphics& gfx, BillboardComponent& component)
+	ver::IAsyncAction BillboardBuilder::MakeAsync(Graphics& gfx, BillboardComponent& component)
 	{
 		component.position = position;
 		component.buffer.color = color;

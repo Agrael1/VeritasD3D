@@ -1,7 +1,8 @@
 #include <Engine/Bindable/BlendState.h>
 #include <Engine/Bindable/Codex.h>
-#include <Engine/Util/GraphicsExceptions.h>
 #include <format>
+#include <d3d11.h>
+#include <Shared/Checks.h>
 
 using namespace ver;
 
@@ -32,19 +33,14 @@ BlendState::BlendState(Graphics& gfx, bool blending, std::optional<float> factor
 			brt.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
 		}
 	}
-	ver::check_graphics(GetDevice(gfx)->CreateBlendState(&blendDesc, pBlendState.put()));
-}
-
-void BlendState::Bind(Graphics& gfx) noxnd
-{
-	Bind(*GetContext(gfx));
+	ver::check_hresult(GetDevice(gfx)->CreateBlendState(&blendDesc, pBlendState.put()));
 }
 
 void ver::BlendState::Bind(ID3D11DeviceContext& context) noxnd
 {
 	const float* data = factors ? factors->data() : nullptr;
 	context.OMSetBlendState(pBlendState.get(), data, 0xFFFFFFFFu);
-	check_context();
+	ver::check_context();
 }
 
 void BlendState::SetFactor(float factor) noxnd

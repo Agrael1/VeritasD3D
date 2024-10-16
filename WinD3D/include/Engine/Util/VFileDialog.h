@@ -1,34 +1,36 @@
 #pragma once
-#include <Engine/Util/WindowExceptions.h>
 #include <shtypes.h>
-#include <wrl.h>
+#include <ShlObj.h>
 #include <span>
+#include <filesystem>
 
-// Helper Class
-class VFileDialog
+namespace ver
 {
-public:
-	~VFileDialog();
-public:
-	void SetFileTypes(std::span<const COMDLG_FILTERSPEC> filters);
-	std::wstring GetFilePath();
-	void SetDefaultFolder(std::wstring_view FolderPath);
-protected:
-	DWORD dwFlags;
-	Microsoft::WRL::ComPtr<struct IFileDialog> pDialog;
-};
+	// Helper Class
+	class VFileDialog
+	{
+	public:
+		virtual ~VFileDialog() = default;
+	public:
+		void SetFileTypes(std::span<const COMDLG_FILTERSPEC> filters);
+		std::filesystem::path GetFilePath()noexcept;
+		void SetDefaultFolder(std::wstring_view FolderPath);
+	protected:
+		DWORD dwFlags = 0;
+		winrt::com_ptr<IFileDialog> pDialog;
+	};
 
-class VFileOpenDialog : public VFileDialog
-{
-public:
-	VFileOpenDialog();
-};
+	class VFileOpenDialog : public VFileDialog
+	{
+	public:
+		VFileOpenDialog();
+	};
 
-class VFileSaveDialog : public VFileDialog
-{
-public:
-	VFileSaveDialog();
-	void SetDefaultItem(const std::wstring& name);
-};
+	class VFileSaveDialog : public VFileDialog
+	{
+	public:
+		VFileSaveDialog();
+		void SetDefaultItem(const std::wstring& name);
+	};
+}
 
-#define VFD_THROW( hrcall ) if(FAILED(hr = hrcall)) {throw ver::make_error<ver::hr_error>( {(hr)} );}

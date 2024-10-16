@@ -1,9 +1,8 @@
 #include <Game/Level.h>
-#include <Foundation.h>
+#include <PhysX/Foundation.h>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
-#include <Engine/Util/ModelException.h>
 #include <Engine/Loading/Material.h>
 #include <Engine/Graphics.h>
 #include <numbers>
@@ -11,7 +10,7 @@
 using namespace physx;
 
 
-winrt::IAsyncAction UT::TwoWayPortal::InitializeAsync(ver::LightBuffer& lb, ver::ph::Physics& phy, Graphics& gfx, std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3> positions, DirectX::XMFLOAT3 color)
+ver::IAsyncAction UT::TwoWayPortal::InitializeAsync(ver::LightBuffer& lb, ver::ph::Physics& phy, Graphics& gfx, std::pair<DirectX::XMFLOAT3, DirectX::XMFLOAT3> positions, DirectX::XMFLOAT3 color)
 {
 	co_await winrt::when_all(first.InitializeAsync(lb, phy, gfx, positions.first, color), second.InitializeAsync(lb, phy, gfx, positions.second, color));
 	first.SetBound(&second);
@@ -19,8 +18,10 @@ winrt::IAsyncAction UT::TwoWayPortal::InitializeAsync(ver::LightBuffer& lb, ver:
 }
 
 
-winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& gfx, std::filesystem::path map)
+ver::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& gfx, std::filesystem::path map)
 {
+	static constexpr auto scale = 40.0f;
+
 	co_await winrt::resume_background();
 	ver::scoped_timer t;
 
@@ -32,12 +33,12 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 		aiProcess_GenNormals |
 		aiProcess_CalcTangentSpace
 	);
-	if (pScene == nullptr || !pScene->HasMeshes())
-		throw ver::make_error<ver::ModelException>({ imp.GetErrorString() });
+	//if (pScene == nullptr || !pScene->HasMeshes())
+		//throw ver::make_error<ver::ModelException>({ imp.GetErrorString() });
 
-	auto wrld = world.InitializeAsync(gfx, *pScene, std::move(map), 40.0f);
+	auto wrld = world.InitializeAsync(gfx, *pScene, std::move(map), scale);
 	auto sk = sky.InitializeAsync(gfx, L"../models/face.dds");
-	auto phys = [&]() ->winrt::IAsyncAction {
+	auto phys = [&]() ->ver::IAsyncAction {
 		co_await winrt::resume_background();
 		auto* mat = phy.GetMaterial("world");
 		assert(mat);
@@ -47,7 +48,7 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 			auto mesh = pScene->mMeshes[i];
 			auto y = Material::ExtractIndices(*mesh);
 			auto x = phy.MakeTriangleMesh({ (DirectX::XMFLOAT3*)mesh->mVertices, mesh->mNumVertices }, y);
-			actors.emplace_back(phy.MakeActor(std::move(x), *mat, 40.0f));
+			actors.emplace_back(phy.MakeActor(std::move(x), *mat, scale));
 		}
 	}();
 	auto rd_flg = red.InitializeAsync(phy, gfx, "../models/flag/redflag.obj", { -147.0f, -41.0f, 15.3f });
@@ -100,7 +101,7 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 	constexpr DirectX::XMFLOAT3 cols_p[2]{ { 1,0,0 }, {0,0,1} };
 
 
-	std::vector<winrt::IAsyncAction> acts;
+	std::vector<ver::IAsyncAction> acts;
 	acts.reserve(portals.size() + billboards.size() + flames.size());
 
 	for (auto& i : billboards)
@@ -133,10 +134,9 @@ winrt::IAsyncAction UT::Level::InitializeAsync(ver::ph::Physics& phy, Graphics& 
 	co_await rd_flg;
 	co_await bl_flg;
 
-	red.GetModel()->SetRootTransform(DirectX::XMMatrixRotationY(-float(std::numbers::pi) / 2.0f) * DirectX::XMMatrixTranslation(-147.0f, -41.0f, 15.3f));
+	red.GetModel()->PrependRootTransform(DirectX::XMMatrixRotationY(2*float(std::numbers::pi) / 3.0f));
 	red.SetColor({ 1.0f, 0, 0 });
 	red.SetTeamTag("Red");
-	blue.GetModel()->SetRootTransform(DirectX::XMMatrixRotationY(3.0f * float(std::numbers::pi) / 4.0f) * DirectX::XMMatrixTranslation(153.0f, -43.7f, -24.3f));
 	blue.SetColor({ 0, 0, 1 });
 	blue.SetTeamTag("Blue");
 
@@ -173,7 +173,7 @@ void UT::Level::Submit(Graphics& gfx)
 
 void UT::Level::SpawnControlWindow()
 {
-	portals[0].SpawnControlWindow();
+	//portals[0].SpawnControlWindow();
 	//probe.SpawnWindow(*red.GetModel());
 	//probe.SpawnWindow(*blue.GetModel());
 }

@@ -13,11 +13,12 @@ namespace ver
 		ConstantBuffer(Graphics& gfx, std::span<const std::byte> consts, uint32_t slot);
 		ConstantBuffer(Graphics& gfx, uint32_t size, uint32_t slot);
 	public:
+		void SetSlot(uint32_t xslot) { slot = xslot; }
 		void Update(Graphics& gfx, std::span<const std::byte> consts);
-		void BindToVS(Graphics& gfx);
-		void BindToPS(Graphics& gfx);
-		void BindToHS(Graphics& gfx);
-		void BindToDS(Graphics& gfx);
+		void BindToVS(ID3D11DeviceContext& context);
+		void BindToPS(ID3D11DeviceContext& context);
+		void BindToHS(ID3D11DeviceContext& context);
+		void BindToDS(ID3D11DeviceContext& context);
 	protected:
 		winrt::com_ptr<ID3D11Buffer> pConstantBuffer;
 		uint32_t slot = 0;
@@ -46,9 +47,10 @@ namespace ver
 	{
 	public:
 		using ConstantBufferT<C>::ConstantBufferT;
-		void Bind(Graphics& gfx)noxnd override
+		using Bindable::Bind;
+		void Bind(ID3D11DeviceContext& context)noxnd override
 		{
-			ConstantBuffer::BindToVS(gfx);
+			ConstantBuffer::BindToVS(context);
 		}
 	};
 
@@ -57,9 +59,10 @@ namespace ver
 	{
 	public:
 		using ConstantBufferT<C>::ConstantBufferT;
-		void Bind(Graphics& gfx)noxnd override
+		using Bindable::Bind;
+		void Bind(ID3D11DeviceContext& context)noxnd override
 		{
-			ConstantBuffer::BindToPS(gfx);
+			ConstantBuffer::BindToPS(context);
 		}
 	};
 
@@ -68,9 +71,10 @@ namespace ver
 	{
 	public:
 		using ConstantBufferT<C>::ConstantBufferT;
-		void Bind(Graphics& gfx)noxnd override
+		using Bindable::Bind;
+		void Bind(ID3D11DeviceContext& context)noxnd override
 		{
-			ConstantBuffer::BindToHS(gfx);
+			ConstantBuffer::BindToHS(context);
 		}
 	};
 
@@ -79,9 +83,10 @@ namespace ver
 	{
 	public:
 		using ConstantBufferT<C>::ConstantBufferT;
-		void Bind(Graphics& gfx)noxnd override
+		using Bindable::Bind;
+		void Bind(ID3D11DeviceContext& context)noxnd override
 		{
-			ConstantBuffer::BindToDS(gfx);
+			ConstantBuffer::BindToDS(context);
 		}
 	};
 }

@@ -11,7 +11,7 @@ IndexBuffer::IndexBuffer(Graphics& gfx, std::string tag, std::span<const uint16_
 	Initialize(gfx, indices);
 }
 
-winrt::IAsyncAction ver::IndexBuffer::InitializeAsync(Graphics& gfx, std::string tag, std::span<const uint16_t> indices)
+ver::IAsyncAction ver::IndexBuffer::InitializeAsync(Graphics& gfx, std::string tag, std::span<const uint16_t> indices)
 {
 	co_await winrt::resume_background();
 	tag = std::move(tag);
@@ -21,7 +21,7 @@ winrt::IAsyncAction ver::IndexBuffer::InitializeAsync(Graphics& gfx, std::string
 
 void ver::IndexBuffer::Initialize(Graphics& gfx, std::span<const uint16_t> indices)
 {
-	INFOMAN(gfx);
+	
 
 	D3D11_BUFFER_DESC ibd = {};
 	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
@@ -32,13 +32,13 @@ void ver::IndexBuffer::Initialize(Graphics& gfx, std::span<const uint16_t> indic
 	ibd.StructureByteStride = sizeof(decltype(indices)::element_type);
 	D3D11_SUBRESOURCE_DATA isd = {};
 	isd.pSysMem = indices.data();
-	GFX_THROW_INFO(GetDevice(gfx)->CreateBuffer(&ibd, &isd, pIndexBuffer.put()));
+	ver::check_hresult(GetDevice(gfx)->CreateBuffer(&ibd, &isd, pIndexBuffer.put()));
 }
 
 void IndexBuffer::Bind(Graphics& gfx)noxnd
 {
-	INFOMAN_NOHR(gfx);
-	GFX_THROW_INFO_ONLY(GetContext(gfx)->IASetIndexBuffer(pIndexBuffer.get(), format, 0u));
+	
+	ver::check_hresult_ONLY(GetContext(gfx)->IASetIndexBuffer(pIndexBuffer.get(), format, 0u));
 }
 uint32_t IndexBuffer::GetCount()const noexcept
 {

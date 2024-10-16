@@ -9,7 +9,7 @@ ver::audio::ogg_stream::ogg_stream(Audio& au, std::filesystem::path path)
 	state = state::initialized;
 }
 
-winrt::IAsyncAction ver::audio::ogg_stream::InitializeAsync(Audio& au, std::filesystem::path path)
+ver::IAsyncAction ver::audio::ogg_stream::InitializeAsync(Audio& au, std::filesystem::path path)
 {
 	co_await winrt::resume_background();
 	file.load_sound(std::move(path));
@@ -18,7 +18,7 @@ winrt::IAsyncAction ver::audio::ogg_stream::InitializeAsync(Audio& au, std::file
 	state = state::initialized;
 }
 
-winrt::IAsyncAction ver::audio::ogg_stream::play(bool looped)
+ver::IAsyncAction ver::audio::ogg_stream::play(bool looped)
 {
 	co_await winrt::resume_background();
 	this->looped = looped;

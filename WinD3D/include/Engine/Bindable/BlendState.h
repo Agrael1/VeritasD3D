@@ -12,8 +12,7 @@ namespace ver
 		BlendState() = default;
 		BlendState(Graphics& gfx, bool blending, std::optional<float> factor = {});
 	public:
-		void Bind(Graphics& gfx) noxnd override;
-		void Bind(ID3D11DeviceContext& context) noxnd;
+		void Bind(ID3D11DeviceContext& context) noxnd override;
 
 		void SetFactor(float factor) noxnd;
 		float GetFactor() const noxnd;

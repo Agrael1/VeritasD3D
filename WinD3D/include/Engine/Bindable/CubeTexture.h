@@ -2,6 +2,7 @@
 #include <Engine/Bindable/Bindable.h>
 #include <pplawait.h>
 #include <filesystem>
+#include <d3d11.h>
 
 namespace ver
 {
@@ -11,7 +12,7 @@ namespace ver
 	public:
 		CubeTexture() = default;
 		[[deprecated]] CubeTexture(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0);
-		winrt::IAsyncAction InitializeAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0);
+		ver::IAsyncAction InitializeAsync(Graphics& gfx, std::filesystem::path path, uint32_t slot = 0);
 		void Initialize(Graphics& gfx);
 	public:
 		void Bind(Graphics& gfx) noxnd override;

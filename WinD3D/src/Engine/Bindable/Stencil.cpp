@@ -1,6 +1,6 @@
 #include <Engine/Bindable/Stencil.h>
 #include <Engine/Bindable/Codex.h>
-#include <Engine/Util/GraphicsExceptions.h>
+#include <Shared/Checks.h>
 #include <format>
 
 ver::Stencil::Stencil(Graphics& gfx, Mode mode)

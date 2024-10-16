@@ -11,11 +11,11 @@
 #include <Engine/Bindable/Stencil.h>
 #include <Engine/Bindable/ShadowSampler.h>
 
-RG::LightingPass::LightingPass(Graphics& gfx, std::string name) noxnd
+RG::LightingPass::LightingPass(Graphics& gfx, std::string name, size_t slot) noxnd
 	:BindingPass(std::move(name))
 {
 	AddBindSink<RenderTargetArray>("targets");
-	renderTarget = std::make_shared<ShaderInputRenderTarget>(gfx, gfx.GetWidth(), gfx.GetHeight(), 0); //pre filter rt
+	renderTarget = std::make_shared<ShaderInputRenderTarget>(gfx, gfx.GetWidth(), gfx.GetHeight(), slot); //pre filter rt
 	RegisterSink(DirectBufferSink<ver::DepthStencil>::Make("depthStencil", depthStencil));
 	RegisterSource(DirectBufferSource<IRenderTarget>::Make("renderTarget", renderTarget));
 	RegisterSource(DirectBufferSource<ver::DepthStencil>::Make("depthStencil", depthStencil));

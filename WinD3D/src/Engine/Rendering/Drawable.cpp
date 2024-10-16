@@ -1,7 +1,6 @@
 #include <Engine/Bindable/BindableCommons.h>
 #include <Engine/Bindable/IndexBuffer.h>
 #include <Engine/Rendering/Drawable.h>
-#include <Engine/Deprecated/GraphicsThrows.h>
 #include <Engine/Loading/Material.h>
 
 void Drawable::Submit() const noexcept
@@ -12,9 +11,9 @@ void Drawable::Submit() const noexcept
 	}
 }
 
-Drawable::Drawable(Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale) noexcept
+Drawable::Drawable(Graphics& gfx, const Material& mat, const aiMesh& mesh) noexcept
 {
-	pVertices = mat.MakeVertexBindable(gfx, mesh, scale);
+	pVertices = mat.MakeVertexBindable(gfx, mesh);
 	pIndices = mat.MakeIndexBindable(gfx, mesh);
 
 	for (auto& t : mat.GetTechniques())

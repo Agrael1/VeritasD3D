@@ -78,6 +78,7 @@ public:
 		}
 		if (auto v = buf["specularGloss"]; v.Exists())
 		{
+			if(*((float*)(&v)) == 0.0) v = 1.0f;
 			dcheck(ImGui::SliderFloat(tag("Glossiness"), &v, 1.0f, 100.0f, "%.1f", ImGuiSliderFlags_Logarithmic));
 		}
 		if (auto v = buf["specularWeight"]; v.Exists())
