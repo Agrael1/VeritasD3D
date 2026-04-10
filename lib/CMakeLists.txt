@@ -1,4 +1,29 @@
 ﻿find_package(wisdom CONFIG REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
+find_package(frozen CONFIG REQUIRED)
+
+add_library(Veritas3D STATIC)
+target_link_libraries(Veritas3D
+        PUBLIC
+        wis::wisdom
+        spdlog::spdlog
+        frozen::frozen
+)
+target_sources(Veritas3D
+        PRIVATE
+        "veritas/base/settings.cpp")
+target_include_directories(Veritas3D PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+target_precompile_headers(Veritas3D PUBLIC
+        "veritas/pch.hpp"
+)
+set_target_properties(Veritas3D
+        PROPERTIES
+        CXX_STANDARD 26
+        CXX_STANDARD_REQUIRED ON
+        CXX_EXTENSIONS OFF
+)
 
 #list(APPEND CMAKE_MODULE_PATH ${PLUGINS_DIR})
 #set(include_dir "${CMAKE_CURRENT_SOURCE_DIR}/include")

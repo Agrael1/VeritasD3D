@@ -1,8 +1,25 @@
 project(OpenUT CXX)
 
+find_package(SDL3 REQUIRED)
+
 add_executable(OpenUT
-    "src/entry_main.cpp"
- "src/app.cpp")
+        "src/entry_main.cpp"
+        "src/window.cpp"
+        "src/app.cpp")
+
+target_link_libraries(OpenUT
+        PUBLIC
+        Veritas3D
+        SDL3::SDL3
+)
+
+set_target_properties(
+        OpenUT
+        PROPERTIES
+        CXX_STANDARD 26
+        CXX_STANDARD_REQUIRED ON
+        CXX_EXTENSIONS OFF
+)
 
 #project (UnrealTournament CXX RC)
 #

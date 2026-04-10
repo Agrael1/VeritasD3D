@@ -1,0 +1,39 @@
+#pragma once
+#include <spdlog/spdlog.h>
+#include <charconv>
+#include <concepts>
+
+namespace ver {
+
+template <typename TValue>
+struct ParseValue {
+    ParseValue(TValue& target, std::string_view val) {}
+};
+
+template <>
+struct ParseValue<bool> {
+    ParseValue(bool& target, std::string_view val)
+    {
+        if (val == "true" || val == "1") {
+            target = true;
+        } else if (val == "false" || val == "0") {
+            target = false;
+        } else {
+            spdlog::warn("Invalid boolean value: '{}'", val);
+        }
+    }
+};
+
+template <std::integral TIntegral>
+struct ParseValue<TIntegral> {
+    ParseValue(TIntegral& target, std::string_view val)
+    {
+        // use std::from_chars for integral types
+        auto result = std::from_chars(val.data(), val.data() + val.size(), target);
+        if (result.ec != std::errc()) {
+            spdlog::warn("Failed to parse integral value: '{}'", val);
+        }
+    }
+};
+
+} // namespace ver
