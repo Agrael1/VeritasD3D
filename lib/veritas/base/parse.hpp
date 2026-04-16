@@ -36,4 +36,13 @@ struct ParseValue<TIntegral> {
     }
 };
 
+template <typename TString>
+concept StringLike = std::is_convertible_v<TString, std::string_view>;
+
+// String parsing is trivial, just assign the value
+template <StringLike TString>
+struct ParseValue<TString> {
+    ParseValue(TString& target, std::string_view val) { target = TString{val}; }
+};
+
 } // namespace ver

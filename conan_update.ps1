@@ -1,2 +1,0 @@
-conan install . -s build_type=Release --build=missing --profile:all=profiles/x86_64-windows-clang.profile
-conan install . -s build_type=Debug --build=missing --profile:all=profiles/x86_64-windows-clang.profile
