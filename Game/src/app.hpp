@@ -6,13 +6,12 @@ namespace out {
 class App
 {
 public:
-    App(int argc, char** argv);
+    App(const out::Config& config);
 
 public:
     int Start();
 
 private:
-    Settings _settings;
-    Window _window;
+    out::Window _window;
 };
 } // namespace out

@@ -4,7 +4,6 @@
 struct SDL_Window;
 
 namespace out {
-struct Config;
 struct WindowLibrary {
     WindowLibrary();
     ~WindowLibrary();
@@ -13,7 +12,7 @@ struct WindowLibrary {
 class Window
 {
 public:
-    Window(const out::Config& settings);
+    Window(const out::WindowSettings& settings);
     ~Window();
 
 public:

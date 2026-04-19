@@ -16,7 +16,7 @@ target_link_libraries(OpenUT
 set_target_properties(
         OpenUT
         PROPERTIES
-        CXX_STANDARD 26
+        CXX_STANDARD 23
         CXX_STANDARD_REQUIRED ON
         CXX_EXTENSIONS OFF
 )

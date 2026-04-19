@@ -8,8 +8,8 @@
       "binaryDir": "${sourceDir}/build/${presetName}",
       "installDir": "${sourceDir}/install/${presetName}",
       "cacheVariables": {
-        "CMAKE_C_COMPILER": "clang.exe",
-        "CMAKE_CXX_COMPILER": "clang++.exe"
+        "CMAKE_C_COMPILER": "cl.exe",
+        "CMAKE_CXX_COMPILER": "cl.exe"
       },
       "architecture": {
         "value": "x64",
@@ -23,7 +23,7 @@
     },
     {
       "name": "x64-debug",
-      "displayName": "Windows Debug (Clang)",
+      "displayName": "Windows Debug (MSVC)",
       "inherits": "windows-base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug"
@@ -31,7 +31,7 @@
     },
     {
       "name": "x64-release",
-      "displayName": "Windows Release (Clang)",
+      "displayName": "Windows Release (MSVC)",
       "inherits": "windows-base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"

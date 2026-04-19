@@ -11,7 +11,7 @@ target_link_libraries(Veritas3D
 )
 target_sources(Veritas3D
         PRIVATE
-        "veritas/base/settings.cpp")
+        "veritas/base/serializer.cpp")
 target_include_directories(Veritas3D PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
@@ -20,7 +20,7 @@ target_precompile_headers(Veritas3D PUBLIC
 )
 set_target_properties(Veritas3D
         PROPERTIES
-        CXX_STANDARD 26
+        CXX_STANDARD 23
         CXX_STANDARD_REQUIRED ON
         CXX_EXTENSIONS OFF
 )

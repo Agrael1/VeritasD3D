@@ -12,16 +12,7 @@ struct ParseValue {
 
 template <>
 struct ParseValue<bool> {
-    ParseValue(bool& target, std::string_view val)
-    {
-        if (val == "true" || val == "1") {
-            target = true;
-        } else if (val == "false" || val == "0") {
-            target = false;
-        } else {
-            spdlog::warn("Invalid boolean value: '{}'", val);
-        }
-    }
+    ParseValue(bool& target, std::string_view val) { target = (val != "false" && val != "0"); }
 };
 
 template <std::integral TIntegral>

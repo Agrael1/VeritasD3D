@@ -12,7 +12,19 @@ if (NOT CONAN_COMPILER)
 endif()
 
 # Extract the major version number from the CMake compiler version
-string(REGEX MATCH "^[0-9]+" CONAN_COMPILER_VERSION ${CMAKE_CXX_COMPILER_VERSION})
+if (NOT CONAN_COMPILER_VERSION)
+    if (CONAN_COMPILER STREQUAL "msvc")
+        message (STATUS "Detected MSVC version: ${CMAKE_CXX_COMPILER_VERSION}")
+
+        # special handling for msvc to extract the major version (e.g., 143 from 14.3.0)
+        string (REGEX MATCH "^[0-9]+\\.[0-9]" MSVC_VERSION_MATCH ${CMAKE_CXX_COMPILER_VERSION})
+
+        # remove the dot to get the major version (e.g., 143 from 14.3)
+        string (REPLACE "." "" CONAN_COMPILER_VERSION ${MSVC_VERSION_MATCH})
+    else()
+        string(REGEX MATCH "^[0-9]+" CONAN_COMPILER_VERSION ${CMAKE_CXX_COMPILER_VERSION})
+    endif()
+endif()
 
 # Map Architectures to Conan's expected values
 if (NOT CONAN_ARCH)
@@ -38,11 +50,11 @@ endif()
 
 # Determine OS-specific Conan settings
 if(WIN32)
-    # CMake natively detects MSVC toolsets (e.g., 143, 144, 145) even when using Clang-cl
-    if(MSVC_TOOLSET_VERSION)
-        set(CONAN_OS_SPECIFIC "compiler.runtime=dynamic\ncompiler.runtime_type=${CMAKE_BUILD_TYPE}\ncompiler.runtime_version=v${MSVC_TOOLSET_VERSION}")
-    else()
-        set(CONAN_OS_SPECIFIC "compiler.runtime=dynamic\ncompiler.runtime_type=${CMAKE_BUILD_TYPE}\ncompiler.runtime_version=v145")
+    set(CONAN_OS_SPECIFIC "compiler.runtime=dynamic\ncompiler.runtime_type=${CMAKE_BUILD_TYPE}")
+    
+    # Append runtime version for Clang-cl
+    if(MSVC_TOOLSET_VERSION AND NOT CONAN_COMPILER STREQUAL "msvc")
+        set (CONAN_OS_SPECIFIC "${CONAN_OS_SPECIFIC}\ncompiler.runtime_version=v${MSVC_TOOLSET_VERSION}")
     endif()
 
 elseif(APPLE)
